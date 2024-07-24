@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: myseatdang
+
+logging:
+  level:
+    root: info
+    com.sh: debug
