@@ -1,8 +1,7 @@
 # Base Image
 FROM amazoncorretto:17
-
 # Image meta 정보
-LABEL maintainer="myseatdang<dldydwns2020@naver.com>"
+LABEL authors="myseatdang<dldydwns2020@naver.com>"
 
 # Build 시 사용할 변수 선언
 ARG JAR_FILE_PATH=build/libs/*.jar
