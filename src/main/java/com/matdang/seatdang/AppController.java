@@ -18,7 +18,8 @@ public class AppController {
     public String index() {
         log.info("GET / : appVersion = {}", appVersion);
         return """
-            <h1>🎃Welcome to Hello World Application🎃</h1>
+            <h1>🥖🥪🌯🌮맛있는 음식을 눈 앞에🍰🎂🧁🍮🍯</h1>
+            <h1>🥐🍞🥨🥯마싯당 입니다🥟🍘🥮</h1>
             <h4>version %s</h4>
             """.formatted(appVersion);
     }
