@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: seatdang
+
+logging:
+  level:
+    root: info
+
+app:
+  version: 0.1.1
