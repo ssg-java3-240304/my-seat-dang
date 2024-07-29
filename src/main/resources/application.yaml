@@ -1,6 +1,21 @@
 spring:
   application:
     name: seatdang
+# profile관리
+  profiles:
+    default: test
+  #    active: prod
+
+  # 공통 jpa 설정
+  jpa:
+    generate-ddl: true
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        hbm2ddl:
+          auto: none
+
 
 logging:
   level:
