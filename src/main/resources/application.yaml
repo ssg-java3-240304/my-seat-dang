@@ -15,7 +15,9 @@ spring:
         show_sql: true
         hbm2ddl:
           auto: none
-
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
 
 logging:
   level:
