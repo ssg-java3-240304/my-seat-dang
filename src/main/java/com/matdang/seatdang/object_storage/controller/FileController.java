@@ -36,6 +36,7 @@ public class FileController {
                 .body(fileService.uploadFilesSample(multipartFiles));
     }
 
+    // 업로드 된 파일 불러오기 ( 대신 지금 업로드한 폴더만)
     @GetMapping("/files")
     public String listFiles(Model model) {
         List<FileDto> files = fileService.listFiles("sample-folder");
