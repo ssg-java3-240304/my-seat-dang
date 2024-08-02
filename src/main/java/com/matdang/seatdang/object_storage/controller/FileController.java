@@ -25,7 +25,7 @@ public class FileController {
 
     @GetMapping("/upload")
     public String getUpload(){
-        return "storage/upload";
+        return "/storage/upload";
     }
 
     @PostMapping("/upload")
