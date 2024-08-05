@@ -24,8 +24,7 @@ public class FileController {
     // 파일 업로드
 
     @GetMapping("/upload")
-    public String getUpload(){
-        return "/storage/upload";
+    public void getUpload(){
     }
 
     @PostMapping("/upload")
