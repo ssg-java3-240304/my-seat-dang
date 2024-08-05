@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <!--    main page only css-->
+    <link th:href="@{/customer/css/home.css}" rel="stylesheet">
 </head>
 <body>
 <main layout:fragment="main">
@@ -42,5 +44,10 @@
     </div>
     <!-- /Background YouTube Parallax -->
 </main>
+<div layout:fragment="js">
+    <!-- 이 페이지 전용 스크립트 -->
+    <script th:src="@{/customer/js/jarallax.min.js}"></script>
+    <script th:src="@{/customer/js/jarallax-video.min.js}"></script>
+</div>
 </body>
 </html>

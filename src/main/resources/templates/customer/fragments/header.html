@@ -8,15 +8,15 @@
     <header th:fragment="headerFragment" class="header clearfix element_to_stick">
         <div class="container">
             <div id="logo">
-                <a th:href="@{/customer/main/main.html}">
-<!--                    <img src="/customer/img/logo.svg" width="140" height="35" alt="" class="logo_normal">-->
-                    <img th:src="@{/customer/img/logo_sticky.svg}" width="140" height="35" alt="" class="logo_sticky">
+                <a th:href="@{/}">
+<!--                    <img th:src="@{/customer/img/logo.svg}" width="140" height="35" alt="" class="logo_normal">-->
+<!--                    <img th:src="@{/customer/img/logo_sticky.svg}" width="140" height="35" alt="" class="logo_sticky">-->
                 </a>
             </div>
             <ul id="top_menu">
-<!--                <li><a href="#sign-in-dialog" id="sign-in" class="login">Sign In</a></li>-->
+                <li><a href="#sign-in-dialog" id="sign-in" class="login">Sign In</a></li>
                 <li><a href="#" id="sign-in" class="login">Sign In</a></li>
-<!--                <li><a href="@{/customer/wishlist.html}" class="wishlist_bt_top" title="Your wishlist">Your wishlist</a></li>-->
+                <li><a th:href="@{/customer/wishlist.html}" class="wishlist_bt_top" title="Your wishlist">Your wishlist</a></li>
             </ul>
             <!-- /top_menu -->
             <a href="#0" class="open_close">
@@ -27,23 +27,23 @@
                     <a href="#" class="open_close">
                         <i class="icon_close"></i><span>Menu</span>
                     </a>
-                    <a th:href="@{/customer/customer/main.html}"><img th:src="@{/customer/img/logo.svg}" width="140" height="35" alt=""></a>
+                    <a th:href="@{/}"><img th:src="@{/customer/img/logo.svg}" width="140" height="35" alt=""></a>
                 </div>
                 <ul>
                     <li class="submenu">
                         <a href="#" class="show-submenu">Home</a>
                         <ul>
-                            <li><a th:href="@{/customer/main/main.html}">Default</a></li>
+                            <li><a th:href="@{/detail}">매장상세 예시</a></li>
                             <li class="third-level"><a href="#">마시땅! <strong>New!</strong></a>
                                 <ul>
-                                    <li><a th:href="@{/customer/main/main.html}">마시쪙 <strong>New!</strong></a></li>
-                                    <li><a th:href="@{/customer/main/main.html}">마시땅</a></li>
-                                    <li><a th:href="@{/customer/main/main.html}">많이먹어</a></li>
+                                    <li><a th:href="@{/}">마시쪙 <strong>New!</strong></a></li>
+                                    <li><a th:href="@{/}">마시땅</a></li>
+                                    <li><a th:href="@{/}">많이먹어</a></li>
                                 </ul>
                             </li>
-                            <li><a th:href="@{/customer/main/main.html}">항목1</a></li>
-                            <li><a th:href="@{/customer/main/main.html}">항목2</a></li>
-                            <li><a th:href="@{/customer/main/main.html}">항목3</a></li>
+                            <li><a th:href="@{/admin/main}">관리자페이지</a></li>
+                            <li><a th:href="@{/shop/main}">점주페이지</a></li>
+                            <li><a th:href="@{/}">항목3</a></li>
                         </ul>
                     </li>
                     <li class="submenu">
@@ -51,19 +51,19 @@
                         <ul>
                             <li class="third-level"><a href="#">pages 1</a>
                                 <ul>
-                                    <li><a th:href="@{/customer/main/main.html}">대박</a></li>
-                                    <li><a th:href="@{/customer/main/main.html}">날거</a></li>
-                                    <li><a th:href="@{/customer/main/main.html}">에오</a></li>
+                                    <li><a th:href="@{/}">대박</a></li>
+                                    <li><a th:href="@{/}">날거</a></li>
+                                    <li><a th:href="@{/}">에오</a></li>
                                 </ul>
                             </li>
                             <li class="third-level"><a href="#">pages 2</a>
                                 <ul>
-                                    <li><a th:href="@{/customer/main/main.html}">Detail page 1</a></li>
-                                    <li><a th:href="@{/customer/main/main.html}">Detail page 2</a></li>
-                                    <li><a th:href="@{/customer/main/main.html}">Detail page 3</a></li>
-                                    <li><a th:href="@{/customer/main/main.html}">Detail page 4</a></li>
-                                    <li><a th:href="@{/customer/main/main.html}">Detail page 5</a></li>
-                                    <li><a th:href="@{/customer/main/main.html}">Detail page 6</a></li>
+                                    <li><a th:href="@{/}">Detail page 1</a></li>
+                                    <li><a th:href="@{/}">Detail page 2</a></li>
+                                    <li><a th:href="@{/}">Detail page 3</a></li>
+                                    <li><a th:href="@{/}">Detail page 4</a></li>
+                                    <li><a th:href="@{/}">Detail page 5</a></li>
+                                    <li><a th:href="@{/}">Detail page 6</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -71,23 +71,91 @@
                     <li class="submenu">
                         <a href="#0" class="show-submenu">Other Pages</a>
                         <ul>
-                            <li><a th:href="@{/customer/main/main.html}">test page</a></li>
-                            <li><a th:href="@{/customer/main/main.html}">test page</a></li>
-                            <li><a th:href="@{/customer/main/main.html}">test page</a></li>
-                            <li><a th:href="@{/customer/main/main.html}">test page</a></li>
-                            <li><a th:href="@{/customer/main/main.html}">test page</a></li>
-                            <li><a th:href="@{/customer/main/main.html}">test page</a></li>
-                            <li><a th:href="@{/customer/main/main.html}">test page</a></li>
-                            <li><a th:href="@{/customer/main/main.html}">test page</a></li>
-                            <li><a th:href="@{/customer/main/main.html}">test page</a></li>
-                            <li><a th:href="@{/customer/main/main.html}">test page</a></li>
+                            <li><a th:href="@{/}">test page</a></li>
+                            <li><a th:href="@{/}">test page</a></li>
+                            <li><a th:href="@{/}">test page</a></li>
+                            <li><a th:href="@{/}">test page</a></li>
+                            <li><a th:href="@{/}">test page</a></li>
+                            <li><a th:href="@{/}">test page</a></li>
+                            <li><a th:href="@{/}">test page</a></li>
+                            <li><a th:href="@{/}">test page</a></li>
+                            <li><a th:href="@{/}">test page</a></li>
+                            <li><a th:href="@{/}">test page</a></li>
                         </ul>
                     </li>
-                    <li><a th:href="@{/customer/main/main.html}">Submit</a></li>
-<!--                    <li><a th:href="@{/customer/main/main.html}"></a></li>-->
+                    <li><a th:href="@{/}">Submit</a></li>
+<!--                    <li><a th:href="@{/}"></a></li>-->
                 </ul>
             </nav>
         </div>
+
+        <!-- Logout Modal-->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <a class="btn btn-primary" href="#0">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sign In Modal -->
+        <div id="sign-in-dialog" class="zoom-anim-dialog mfp-hide">
+            <div class="modal_header">
+                <h3>Sign In</h3>
+            </div>
+            <form>
+                <div class="sign-in-wrapper">
+                    <a href="#0" class="social_bt facebook">Login with Facebook</a>
+                    <a href="#0" class="social_bt google">Login with Google</a>
+                    <div class="divider"><span>Or</span></div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" class="form-control" name="email" id="email">
+                        <i class="icon_mail_alt"></i>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" class="form-control" name="password" id="password" value="">
+                        <i class="icon_lock_alt"></i>
+                    </div>
+                    <div class="clearfix add_bottom_15">
+                        <div class="checkboxes float-start">
+                            <label class="container_check">Remember me
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="float-end"><a id="forgot" href="javascript:void(0);">Forgot Password?</a></div>
+                    </div>
+                    <div class="text-center">
+                        <input type="submit" value="Log In" class="btn_1 full-width mb_5">
+                        Don’t have an account? <a href="account.html">Sign up</a>
+                    </div>
+                    <div id="forgot_pw">
+                        <div class="form-group">
+                            <label>Please confirm login email below</label>
+                            <input type="email" class="form-control" name="email_forgot" id="email_forgot">
+                            <i class="icon_mail_alt"></i>
+                        </div>
+                        <p>You will receive an email containing a link allowing you to reset your password to a new preferred one.</p>
+                        <div class="text-center"><input type="submit" value="Reset Password" class="btn_1"></div>
+                    </div>
+                </div>
+            </form>
+            <!--form -->
+        </div>
+        <!-- /Sign In Modal -->
+
     </header>
 </body>
 </html>

@@ -13,4 +13,9 @@ public class CustomerController {
     public String index() {
         return "customer/main/main";
     }
+
+    @GetMapping("/detail")
+    public String detail() {
+        return "customer/shop/detail";
+    }
 }
