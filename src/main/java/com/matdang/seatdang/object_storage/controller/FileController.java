@@ -40,7 +40,7 @@ public class FileController {
     public String listFiles(Model model) {
         List<FileDto> files = fileService.listFiles("sample-folder");
         model.addAttribute("files", files);
-        return "/storage/list";
+        return "storage/list";
     }
 
 
