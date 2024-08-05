@@ -22,11 +22,9 @@
     <link th:href="@{/customer/css/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/customer/css/style.css}" rel="stylesheet">
 
-    <!-- SPECIFIC CSS -->
-    <link th:href="@{/customer/css/home.css}" rel="stylesheet">
-
     <!-- YOUR CUSTOM CSS -->
     <link th:href="@{/customer/css/custom.css}" rel="stylesheet">
+
 </head>
 <body>
 <header th:replace="~{customer/fragments/header::headerFragment}"></header>
@@ -37,9 +35,6 @@
 <script th:src="@{/customer/js/common_scripts.min.js}"></script>
 <script th:src="@{/customer/js/common_func.js}"></script>
 <script th:src="@{/customer/assets/validate.js}"></script>
-
-<!-- SPECIFIC SCRIPTS -->
-<script th:src="@{/customer/js/jarallax.min.js}"></script>
-<script th:src="@{/customer/js/jarallax-video.min.js}"></script>
+<script layout:fragment="js"></script>
 </body>
 </html>
