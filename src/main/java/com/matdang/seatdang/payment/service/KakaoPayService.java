@@ -2,8 +2,13 @@ package com.matdang.seatdang.payment.service;
 
 import com.matdang.seatdang.payment.dto.ApproveRequest;
 import com.matdang.seatdang.payment.dto.PayDetail;
+import com.matdang.seatdang.payment.dto.ReadyRedirect;
 import com.matdang.seatdang.payment.dto.ReadyRequest;
 import com.matdang.seatdang.payment.dto.ReadyResponse;
+import com.matdang.seatdang.payment.entity.PayReady;
+import com.matdang.seatdang.payment.repository.KakaoPayRepository;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -16,7 +21,11 @@ import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class KakaoPayService {
+    private final KakaoPayRepository kakaoPayRepository;
+
     @Value("${kakao.secret.key}")
     private String secretKey;
     @Value("${cid}")
@@ -41,9 +50,11 @@ public class KakaoPayService {
                 .quantity(payDetail.getQuantity())
                 .totalAmount(payDetail.getTotalAmount())
                 .taxFreeAmount(payDetail.getTaxFreeAmount())
-                .approvalUrl("http://localhost:8080/" + "payment/approve" ) // 결제 성공 시 redirect url, 최대 255자
-                .cancelUrl("http://localhost:8080/" + "payment/cancel" ) // 결제 취소 시 redirect url, 최대 255자
-                .failUrl("http://localhost:8080/" + "payment/fail" ) //결제 실패 시 redirect url, 최대 255자
+                .approvalUrl("http://localhost:8080/" + "payment/approve" + "?PartnerOrderId="
+                        + payDetail.getPartnerOrderId() + "&PartnerUserId="
+                        + payDetail.getPartnerUserId()) // 결제 성공 시 redirect url, 최대 255자
+                .cancelUrl("http://localhost:8080/" + "payment/cancel") // 결제 취소 시 redirect url, 최대 255자
+                .failUrl("http://localhost:8080/" + "payment/fail") //결제 실패 시 redirect url, 최대 255자
 
                 .build();
 
@@ -58,28 +69,39 @@ public class KakaoPayService {
 
         ReadyResponse readyResponse = response.getBody();
 
+        // TODO : 로직 오류 가능성 존재
+        // 저장
+        kakaoPayRepository.save(PayReady.builder().tid(readyResponse.getTid())
+                .partnerOrderId(readyRequest.getPartnerOrderId())
+                .partnerUserId(readyRequest.getPartnerUserId()).build());
+
         // 5. 응답 처리
         return readyResponse;
     }
 
-    public String approve(String tid,  String pgToken) {
+    public String approve(ReadyRedirect readyRedirect) {
         // ready할 때 저장해놓은 TID로 승인 요청
         // Call “Execute approved payment” API by pg_token, TID mapping to the current payment transaction and other parameters.
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "SECRET_KEY " + secretKey);
         headers.setContentType(MediaType.APPLICATION_JSON);
 
+        String tid = kakaoPayRepository.findTidByPartnerOrderIdAndPartnerUserId(readyRedirect.getPartnerOrderId(),
+                readyRedirect.getPartnerUserId());
         log.debug("tid = {}", tid);
+        log.debug("PartnerOrderId = {}", readyRedirect.getPartnerOrderId());
+        log.debug("PartnerUserId = {}", readyRedirect.getPartnerUserId());
+        log.debug("pg_token = {}", readyRedirect.getPg_token());
+
 
         // Request param
         ApproveRequest approveRequest = ApproveRequest.builder()
                 .cid(cid)
                 .tid(tid)
-                .partnerOrderId("1")
-                .partnerUserId("1")
-                .pgToken(pgToken)
+                .partnerOrderId(readyRedirect.getPartnerOrderId())
+                .partnerUserId(readyRedirect.getPartnerUserId())
+                .pgToken(readyRedirect.getPg_token())
                 .build();
-
 
         // Send Request
         HttpEntity<ApproveRequest> entityMap = new HttpEntity<>(approveRequest, headers);
