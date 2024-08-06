@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @Slf4j
 @RequestMapping("/")
-public class CustomerController {
+public class CustomerMainController {
     @GetMapping("/")
     public String index() {
         return "customer/main/main";
