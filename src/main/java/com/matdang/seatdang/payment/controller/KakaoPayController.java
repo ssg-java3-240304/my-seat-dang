@@ -2,17 +2,15 @@ package com.matdang.seatdang.payment.controller;
 
 
 import com.matdang.seatdang.payment.dto.PayDetail;
+import com.matdang.seatdang.payment.dto.ReadyRedirect;
 import com.matdang.seatdang.payment.dto.ReadyResponse;
 import com.matdang.seatdang.payment.service.KakaoPayService;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,8 +26,9 @@ public class KakaoPayController {
 
     private static int count = 0;
 
+
     @GetMapping("/request")
-    public String readyToKakaoPay(Model model, HttpSession session) {
+    public String readyToKakaoPay(Model model) {
         PayDetail payDetail = (PayDetail) model.getAttribute("PayDetail");
         // test code
         payDetail= PayDetail.builder()
@@ -46,21 +45,15 @@ public class KakaoPayController {
         log.info("==== payment request ====");
         // pc
         model.addAttribute("response", readyResponse);
+        model.addAttribute("payDetail", payDetail);
 
-        session.setAttribute("readyResponse", readyResponse);
-        log.debug("session id: {}", session.getId());
-        log.debug("Stored in session: {}", session.getAttribute("readyResponse"));
-        log.debug("tid =  {}",((ReadyResponse) session.getAttribute("readyResponse")).getTid());
-
-        return "payment/ready";
+        return "payment/ready" ;
     }
 
     @GetMapping("/approve")
-    public String approve(@RequestParam("pg_token") String pgToken,HttpSession session, Model model) {
+    public String approve(ReadyRedirect readyRedirect, Model model) {
         log.debug("=== approve start ===");
-        ReadyResponse response = (ReadyResponse) session.getAttribute("readyResponse");
-        log.debug("approve tid = {}", response.getTid());
-        String approveResponse = kakaoPayService.approve(response.getTid(), pgToken);
+        String approveResponse = kakaoPayService.approve(readyRedirect);
         log.info("=== payment approve ===");
         model.addAttribute("response", approveResponse);
         return  "payment/approve";
