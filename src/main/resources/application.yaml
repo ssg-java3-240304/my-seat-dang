@@ -1,6 +1,12 @@
 spring:
   application:
     name: seatdang
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: chatdb
+
 # profile관리
   profiles:
     default: test
@@ -37,5 +43,7 @@ file:
 
 ncp:
   api:
-    accessId: ${X-NCP-APIGW-API-KEY-ID}
-    secretKey: ${X-NCP-APIGW-API-KEY}
+    accessId: ${NCP_APIGW_ACCESS_ID}
+    secretKey: ${NCP_APIGW_SECRET_KEY}
+
+
