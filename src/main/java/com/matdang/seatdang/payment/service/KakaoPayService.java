@@ -1,23 +1,26 @@
 package com.matdang.seatdang.payment.service;
 
+import com.matdang.seatdang.payment.dto.ApproveRequest;
 import com.matdang.seatdang.payment.dto.PayDetail;
 import com.matdang.seatdang.payment.dto.ReadyRequest;
 import com.matdang.seatdang.payment.dto.ReadyResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
+@Slf4j
 @Service
 public class KakaoPayService {
     @Value("${kakao.secret.key}")
     private String secretKey;
     @Value("${cid}")
     private String cid;
-    private String tid;
     private static final String KAKAO_PAY_READY_URL = "https://open-api.kakaopay.com/online/v1/payment/ready";
     private static final String KAKAO_PAY_APPROVE_URL = "https://open-api.kakaopay.com/online/v1/payment/approve";
     private static final String KAKAO_PAY_CANCEL_URL = "https://open-api.kakaopay.com/online/v1/payment/cancel";
@@ -38,9 +41,9 @@ public class KakaoPayService {
                 .quantity(payDetail.getQuantity())
                 .totalAmount(payDetail.getTotalAmount())
                 .taxFreeAmount(payDetail.getTaxFreeAmount())
-                .approvalUrl("http://localhost:8080/" + "approve/" ) // 결제 성공 시 redirect url, 최대 255자
-                .cancelUrl("http://localhost:8080/" + "cancel/" ) // 결제 취소 시 redirect url, 최대 255자
-                .failUrl("http://localhost:8080/" + "fail/" ) //결제 실패 시 redirect url, 최대 255자
+                .approvalUrl("http://localhost:8080/" + "payment/approve" ) // 결제 성공 시 redirect url, 최대 255자
+                .cancelUrl("http://localhost:8080/" + "payment/cancel" ) // 결제 취소 시 redirect url, 최대 255자
+                .failUrl("http://localhost:8080/" + "payment/fail" ) //결제 실패 시 redirect url, 최대 255자
 
                 .build();
 
@@ -55,8 +58,45 @@ public class KakaoPayService {
 
         ReadyResponse readyResponse = response.getBody();
 
-        this.tid = readyResponse.getTid();
         // 5. 응답 처리
         return readyResponse;
     }
+
+    public String approve(String tid,  String pgToken) {
+        // ready할 때 저장해놓은 TID로 승인 요청
+        // Call “Execute approved payment” API by pg_token, TID mapping to the current payment transaction and other parameters.
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "SECRET_KEY " + secretKey);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        log.debug("tid = {}", tid);
+
+        // Request param
+        ApproveRequest approveRequest = ApproveRequest.builder()
+                .cid(cid)
+                .tid(tid)
+                .partnerOrderId("1")
+                .partnerUserId("1")
+                .pgToken(pgToken)
+                .build();
+
+
+        // Send Request
+        HttpEntity<ApproveRequest> entityMap = new HttpEntity<>(approveRequest, headers);
+        try {
+            ResponseEntity<String> response = new RestTemplate().postForEntity(
+                    KAKAO_PAY_APPROVE_URL,
+                    entityMap,
+                    String.class
+            );
+
+            // 승인 결과를 저장한다.
+            // save the result of approval
+            String approveResponse = response.getBody();
+            return approveResponse;
+        } catch (HttpStatusCodeException ex) {
+            return ex.getResponseBodyAsString();
+        }
+    }
+
 }

@@ -27,6 +27,8 @@ spring:
 logging:
   level:
     root: info
+    com.matdang.seatdang: debug
+
 
 app:
   version: 0.1.1
@@ -39,3 +41,5 @@ ncp:
   api:
     accessId: ${NCP_APIGW_ACCESS_ID}
     secretKey: ${NCP_APIGW_SECRET_KEY}
+
+
