@@ -20,8 +20,11 @@ spring:
         format_sql: true
         show_sql: true
         hbm2ddl:
-          auto: none
-#  thymeleaf:
+          auto: update
+        dialect: org.hibernate.dialect.MySQLDialect
+
+
+  #  thymeleaf:
 #    prefix: classpath:/templates/
 #    suffix: .html
 
