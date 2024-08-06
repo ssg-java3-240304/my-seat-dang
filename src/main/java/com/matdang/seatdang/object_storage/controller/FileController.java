@@ -24,8 +24,7 @@ public class FileController {
     // 파일 업로드
 
     @GetMapping("/upload")
-    public String getUpload(){
-        return "/storage/upload";
+    public void getUpload(){
     }
 
     @PostMapping("/upload")
@@ -41,7 +40,7 @@ public class FileController {
     public String listFiles(Model model) {
         List<FileDto> files = fileService.listFiles("sample-folder");
         model.addAttribute("files", files);
-        return "/storage/list";
+        return "storage/list";
     }
 
 
