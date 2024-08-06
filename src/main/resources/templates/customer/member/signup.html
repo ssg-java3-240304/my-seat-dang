@@ -6,21 +6,20 @@
 	<meta charset="UTF-8">
 	<title>Title</title>
 	<!--    main page only css-->
-	<link th:href="@{/customer/css/home.css}" rel="stylesheet">
-	<link href="css/booking-sign_up.css" rel="stylesheet">
+	<link th:href="@{/customer/css/booking-sign_up.css}" rel="stylesheet">
 <!--	스크롤추가-->
-	<style>
-		.scrollable-container {
-			max-height: 80vh; /* Adjust this value as needed */
-			overflow-y: scroll;
-		}
-	</style>
+<!--	<style>-->
+<!--		.scrollable-container {-->
+<!--			max-height: 80vh; /* Adjust this value as needed */-->
+<!--			overflow-y: scroll;-->
+<!--		}-->
+<!--	</style>-->
 </head>
 <body>
-<main layout:fragment="main">
-	<div class="container margin_60_40 scrollable-container">
+<main class="bg_gray pattern" layout:fragment="main">
+	<div class="container margin_60_40">
 		<div class="row justify-content-center">
-			<div class="col-lg-4">
+			<div class="col-lg-8">
 				<div class="sign_up">
 					<div class="head">
 						<div class="title">
@@ -29,9 +28,9 @@
 					</div>
 					<!-- /head -->
 					<div class="main">
-						<a href="#0" class="social_bt facebook">Sign up with Facebook</a>
-						<a href="#0" class="social_bt google">Sign up with Google</a>
-						<div class="divider"><span>Or</span></div>
+<!--						<a href="#0" class="social_bt facebook">Sign up with Facebook</a>-->
+<!--						<a href="#0" class="social_bt google">Sign up with Google</a>-->
+<!--						<div class="divider"><span>Or</span></div>-->
 <!--						이름-->
 						<h6>이름</h6>
 						<div class="form-group">
@@ -44,10 +43,10 @@
 							<i class="icon_pencil"></i>
 						</div>
 <!--						휴대전화번호 인증 -->
-						<div class="form-group">
-							<input class="form-control" placeholder="휴대전화번호를 입력해주세요">
-							<i class="icon_pencil"></i>
-							<button class="btn btn-primary" type="button">휴대폰인증</button>
+						<div class="form-group row">
+							<div class ="col-8"><i class="icon_pencil"></i><input class="form-control" placeholder="휴대전화번호를 입력해주세요">
+								</div>
+							<div class ="col-4"><button class="btn btn-primary" type="button">휴대폰인증</button></div>
 						</div>
 <!--						이메일-->
 						<div class="form-group">
