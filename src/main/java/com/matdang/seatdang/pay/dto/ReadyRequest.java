@@ -17,8 +17,7 @@ public class ReadyRequest {
     private String itemName;
     private Integer quantity;
     private Integer totalAmount;
-    private Integer taxFreeAmount;
-    private Integer vatAmount;
+    private Integer taxFreeAmount; // 상품 비과세 금액
     private String approvalUrl;
     private String cancelUrl;
     private String failUrl;
