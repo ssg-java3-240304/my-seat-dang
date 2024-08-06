@@ -4,7 +4,7 @@ VALUES ('customer@naver.com', '2024-01-01', '1234', '010-1234-5678', 'ROLE_CUSTO
 
 -- StoreOwner 데이터 삽입
 INSERT INTO tbl_member (member_email, join_date, member_password, member_phone, member_role, member_status, business_license_image, business_license, bank_account_copy, bank_account, store_id, store_name, store_type, store_address, DTYPE)
-VALUES ('storeowner@naver.com', '2024-01-01', '1234', '010-8765-4321', 'ROLE_STORE_OWNER', 'PENDING_APPROVAL', 'http://example.com/business-license.png', '123-45-67890', 'http://example.com/bank-account.png', '123-456-789', 1, 'My Store', 'CUSTOM', '서울시 강남구 역삼동', 'StoreOwner');
+VALUES ('storeowner@naver.com', '2024-01-01', '1234', '010-8765-4321', 'ROLE_STORE_OWNER', 'APPROVED', 'http://example.com/business-license.png', '123-45-67890', 'http://example.com/bank-account.png', '123-456-789', 1, '스위트 데이즈', 'CUSTOM', '서울특별시 강남구 청담동 234-56', 'StoreOwner');
 
 -- Admin 데이터 삽입
 INSERT INTO tbl_member (member_email, join_date, member_password, member_phone, member_role, member_status, DTYPE)
