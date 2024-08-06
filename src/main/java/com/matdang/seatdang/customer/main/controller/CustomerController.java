@@ -1,4 +1,4 @@
-package com.matdang.seatdang.customer.controller;
+package com.matdang.seatdang.customer.main.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
