@@ -45,5 +45,3 @@ ncp:
   api:
     accessId: ${NCP_APIGW_ACCESS_ID}
     secretKey: ${NCP_APIGW_SECRET_KEY}
-
-
