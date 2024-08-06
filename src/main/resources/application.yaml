@@ -15,9 +15,9 @@ spring:
         show_sql: true
         hbm2ddl:
           auto: none
-  thymeleaf:
-    prefix: classpath:/templates/
-    suffix: .html
+#  thymeleaf:
+#    prefix: classpath:/templates/
+#    suffix: .html
 
   s3:
     accessKey: ${SPRING_S3_ACCESSKEY}
@@ -34,3 +34,8 @@ app:
 
 file:
   upload-dir: /path/to/upload/directory
+
+ncp:
+  api:
+    accessId: ${NCP_APIGW_ACCESS_ID}
+    secretKey: ${NCP_APIGW_SECRET_KEY}
