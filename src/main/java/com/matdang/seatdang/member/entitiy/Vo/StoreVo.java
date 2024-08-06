@@ -21,14 +21,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StoreVo {
     private Long storeId;
-    @Column(nullable = false)
     private String storeName;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private StoreType storeType;
 
-    @Column(nullable = false)
     private String storeAddress;
 
 
