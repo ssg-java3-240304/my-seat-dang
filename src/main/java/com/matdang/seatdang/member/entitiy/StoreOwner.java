@@ -15,10 +15,8 @@ import lombok.*;
 @AllArgsConstructor
 @DiscriminatorValue("STORE_OWNER")
 public class StoreOwner extends Member {
-    @Column(nullable = false)
     private String businessLicenseImage ; // 사업자등록증 이미지 url
     private String businessLicense ; // 사업자등록번호
-    @Column(nullable = false)
     private String bankAccountCopy; // 통장사본 이미지 url
     private String bankAccount; // 계좌번호
 

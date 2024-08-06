@@ -13,7 +13,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @DiscriminatorValue("CUSTOMER")
 public class Customer extends Member {
-    @Column(nullable = false)
     private int imageGenLeft ; // ai생성 남은 횟수
 
     @Enumerated(EnumType.STRING)
