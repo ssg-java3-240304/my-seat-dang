@@ -37,5 +37,5 @@ file:
 
 ncp:
   api:
-    accessId: ${X-NCP-APIGW-API-KEY-ID}
-    secretKey: ${X-NCP-APIGW-API-KEY}
+    accessId: ${NCP_APIGW_ACCESS_ID}
+    secretKey: ${NCP_APIGW_SECRET_KEY}
