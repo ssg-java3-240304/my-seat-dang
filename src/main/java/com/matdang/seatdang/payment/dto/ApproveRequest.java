@@ -1,4 +1,4 @@
-package com.matdang.seatdang.pay.dto;
+package com.matdang.seatdang.payment.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -10,15 +10,10 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class ReadyRequest {
+public class ApproveRequest {
     private String cid;
+    private String tid;
     private String partnerOrderId;
     private String partnerUserId;
-    private String itemName;
-    private Integer quantity;
-    private Integer totalAmount;
-    private Integer taxFreeAmount; // 상품 비과세 금액
-    private String approvalUrl;
-    private String cancelUrl;
-    private String failUrl;
+    private String pgToken;
 }

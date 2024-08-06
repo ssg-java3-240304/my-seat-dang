@@ -1,4 +1,4 @@
-package com.matdang.seatdang.pay.dto;
+package com.matdang.seatdang.payment.dto;
 
 
 import lombok.*;

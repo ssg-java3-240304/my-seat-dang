@@ -1,38 +1,45 @@
-package com.matdang.seatdang.pay.controller;
+package com.matdang.seatdang.payment.controller;
 
 
-import com.matdang.seatdang.pay.dto.PayDetail;
-import com.matdang.seatdang.pay.dto.ReadyResponse;
-import com.matdang.seatdang.pay.service.KakaoPayService;
+import com.matdang.seatdang.payment.dto.PayDetail;
+import com.matdang.seatdang.payment.dto.ReadyResponse;
+import com.matdang.seatdang.payment.service.KakaoPayService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/pay")
+@RequestMapping("/payment")
 public class KakaoPayController {
 
     private final KakaoPayService kakaoPayService;
 
     @GetMapping("/main")
     public void pay() {
-
     }
 
-    @GetMapping("/readyToKakaoPay/pay")
+    @GetMapping("/request")
     public String readyToKakaoPay(Model model) {
         PayDetail payDetail = (PayDetail) model.getAttribute("PayDetail");
+        // test code
+        payDetail= PayDetail.builder()
+                .itemName("초코파이")
+                .partnerUserId("1")
+                .partnerOrderId("1")
+                .taxFreeAmount(0)
+                .quantity(2)
+                .totalAmount(2000)
+                .build();
+        // end ==
         ReadyResponse readyResponse = kakaoPayService.ready(payDetail);
 
         // pc
         model.addAttribute("response", readyResponse);
-        return "/ready";
+        return "/payment/ready";
     }
 
 //    @GetMapping("/approve/{openType}")

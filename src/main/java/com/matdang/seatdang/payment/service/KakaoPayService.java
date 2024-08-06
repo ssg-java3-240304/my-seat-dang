@@ -1,8 +1,8 @@
-package com.matdang.seatdang.pay.service;
+package com.matdang.seatdang.payment.service;
 
-import com.matdang.seatdang.pay.dto.PayDetail;
-import com.matdang.seatdang.pay.dto.ReadyRequest;
-import com.matdang.seatdang.pay.dto.ReadyResponse;
+import com.matdang.seatdang.payment.dto.PayDetail;
+import com.matdang.seatdang.payment.dto.ReadyRequest;
+import com.matdang.seatdang.payment.dto.ReadyResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
