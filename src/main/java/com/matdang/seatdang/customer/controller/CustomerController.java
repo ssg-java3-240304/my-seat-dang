@@ -18,4 +18,14 @@ public class CustomerController {
     public String detail() {
         return "customer/shop/detail";
     }
+
+    @GetMapping("/mypage")
+    public String mypage(){
+        return "customer/mypage/mypage";
+    }
+
+    @GetMapping("/popup")
+    public String popup() {
+        return "/customer/mypage/popup";
+    }
 }
