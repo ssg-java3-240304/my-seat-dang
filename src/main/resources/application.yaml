@@ -1,6 +1,6 @@
 spring:
   application:
-    name: myseatdang
+    name: seatdang
 # profile관리
   profiles:
     default: test
