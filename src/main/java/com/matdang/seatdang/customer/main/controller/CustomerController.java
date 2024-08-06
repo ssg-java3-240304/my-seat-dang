@@ -1,4 +1,4 @@
-package com.matdang.seatdang.customer.controller;
+package com.matdang.seatdang.customer.main.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -17,5 +17,15 @@ public class CustomerController {
     @GetMapping("/detail")
     public String detail() {
         return "customer/shop/detail";
+    }
+
+    @GetMapping("/mypage")
+    public String mypage(){
+        return "customer/mypage/mypage";
+    }
+
+    @GetMapping("/popup")
+    public String popup() {
+        return "/customer/mypage/popup";
     }
 }

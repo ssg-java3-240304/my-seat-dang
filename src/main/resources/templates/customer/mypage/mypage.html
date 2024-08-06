@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{customer/layout/default}">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <!-- main page only css -->
+  <link th:href="@{/customer/css/home.css}" rel="stylesheet">
+  <!-- Favicons -->
+  <link rel="shortcut icon" th:href="@{img/favicon.ico}" type="image/x-icon">
+  <link rel="apple-touch-icon" type="image/x-icon" th:href="@{img/apple-touch-icon-57x57-precomposed.png}">
+  <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" th:href="@{img/apple-touch-icon-72x72-precomposed.png}">
+  <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114" th:href="@{img/apple-touch-icon-114x114-precomposed.png}">
+  <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144" th:href="@{img/apple-touch-icon-144x144-precomposed.png}">
+  <!-- Bootstrap core CSS -->
+  <link href="/admin/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Main styles -->
+  <link href="/admin/css/admin.css" rel="stylesheet">
+  <!-- Icon fonts -->
+  <link href="/admin/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <!-- Plugin styles -->
+  <link href="/admin/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+  <!-- Your custom styles -->
+  <link href="/admin/css/custom.css" rel="stylesheet">
+</head>
+<body>
+<main layout:fragment="main">
+  <div class="box_general">
+    <div class="header_box">
+      <div class="filter">
+      </div>
+    </div>
+    <div class="list_general">
+      <ul>
+        <li>
+          <figure><img src="/admin/img/item_1.jpg" alt=""></figure>
+          <h4>La Monnalisa <i class="pending">Pending</i></h4>
+          <ul class="booking_list">
+            <li><strong>Booking date</strong> 5 November 2019</li>
+            <li><strong>Booking details</strong> 2 People</li>
+            <li><strong>Client</strong> Mark Twain</li>
+          </ul>
+          <p><a href="javascript:void(0)" class="btn_1 gray sendMessage"><i class="fa fa-fw fa-envelope"></i> Send Message</a></p>
+          <ul class="buttons">
+            <li><a href="#0" class="btn_1 gray approve"><i class="fa fa-fw fa-check-circle-o"></i> Approve</a></li>
+            <li><a href="#0" class="btn_1 gray delete" data-toggle="modal" data-target="#edit_booking"><i class="fa fa-fw fa-pencil"></i> Edit</a></li>
+            <li><a href="#0" class="btn_1 gray delete"><i class="fa fa-fw fa-times-circle-o"></i> Cancel</a></li>
+          </ul>
+        </li>
+        <li>
+          <figure><img src="/admin/img/item_2.jpg" alt=""></figure>
+          <h4>Da Alfredo <i class="cancel">Cancelled</i></h4>
+          <ul class="booking_list">
+            <li><strong>Booking date</strong> 11 November 2019</li>
+            <li><strong>Booking details</strong> 2 People</li>
+            <li><strong>Client</strong> Mark Twain</li>
+          </ul>
+          <p><a href="javascript:void(0)" class="btn_1 gray sendMessage"><i class="fa fa-fw fa-envelope"></i> Send Message</a></p>
+          <ul class="buttons">
+            <li><a href="#0" class="btn_1 gray approve"><i class="fa fa-fw fa-check-circle-o"></i> Approve</a></li>
+            <li><a href="#0" class="btn_1 gray delete" data-toggle="modal" data-target="#edit_booking"><i class="fa fa-fw fa-pencil"></i> Edit</a></li>
+            <li><a href="#0" class="btn_1 gray delete"><i class="fa fa-fw fa-times-circle-o"></i> Cancel</a></li>
+          </ul>
+        </li>
+        <li>
+          <figure><img src="/admin/img/item_3.jpg" alt=""></figure>
+          <h4>Sushi Gold <i class="approved">Approved</i></h4>
+          <ul class="booking_list">
+            <li><strong>Booking date</strong> 21 November 2019</li>
+            <li><strong>Booking details</strong> 2 People</li>
+            <li><strong>Client</strong> Mark Twain</li>
+          </ul>
+          <p><a href="javascript:void(0)" class="btn_1 gray sendMessage"><i class="fa fa-fw fa-envelope"></i> Send Message</a></p>
+          <ul class="buttons">
+            <li><a href="#0" class="btn_1 gray approve"><i class="fa fa-fw fa-check-circle-o"></i> Approve</a></li>
+            <li><a href="#0" class="btn_1 gray delete" data-toggle="modal" data-target="#edit_booking"><i class="fa fa-fw fa-pencil"></i> Edit</a></li>
+            <li><a href="#0" class="btn_1 gray delete"><i class="fa fa-fw fa-times-circle-o"></i> Cancel</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+</main>
+
+<div layout:fragment="js">
+  <!-- Bootstrap core JavaScript -->
+  <script src="/admin/vendor/jquery/jquery.min.js"></script>
+  <script src="/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Core plugin JavaScript -->
+  <script src="/admin/vendor/jquery-easing/jquery.easing.min.js"></script>
+  <!-- Page level plugin JavaScript -->
+  <script src="/admin/vendor/chart.js/Chart.min.js"></script>
+  <script src="/admin/vendor/datatables/jquery.dataTables.js"></script>
+  <script src="/admin/vendor/datatables/dataTables.bootstrap4.js"></script>
+  <script src="/admin/vendor/jquery.magnific-popup.min.js"></script>
+  <!-- Custom scripts for all pages -->
+  <script src="/admin/js/admin.js"></script>
+  <!-- 이 페이지 전용 스크립트 -->
+  <script th:src="@{/customer/js/jarallax.min.js}"></script>
+  <script th:src="@{/customer/js/jarallax-video.min.js}"></script>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $(".sendMessage").click(function() {
+        console.log("시발");
+        const url = "/popup";
+        window.open(url, "ChatPopup", "width=600,height=400,scrollbars=yes");
+      });
+    });
+  </script>
+</div>
+
+</body>
+</html>
+

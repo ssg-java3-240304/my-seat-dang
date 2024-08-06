@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
     <title>Uploaded Files</title>
@@ -17,7 +17,7 @@
     <tr th:each="file : ${files}">
 <!--        <td th:text="${file.originalFileName}"></td>-->
 <!--        <td><a th:href="${file.uploadFileUrl}" th:text="${file.uploadFileUrl}"></a></td>-->
-        <img th:src="@{${file.uploadFileUrl}}" alt="list Image">
+        <img th:src="${file.uploadFileUrl}" alt="list Image">
     </tr>
     </tbody>
 </table>
