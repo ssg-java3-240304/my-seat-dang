@@ -20,7 +20,7 @@ public class CustomerMainController {
     }
 
     @GetMapping("/mypage")
-    public String mypage(){
+    public String mypage() {
         return "customer/mypage/mypage";
     }
 
