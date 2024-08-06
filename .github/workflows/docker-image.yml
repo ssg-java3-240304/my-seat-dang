@@ -36,6 +36,13 @@ jobs:
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }} .
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }}
+      - name: Set Kakao Pay Yaml
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: ./src/main/resources/application-kakao-pay.yml
+        env:
+          kakao.secret.key: ${{ secrets.KAKAO_PAY_SECRET_KEY }}
+          cid: ${{ secrets.KAKAO_PAY_CID }}
 
   # 2. CD 배포
   deploy:
@@ -65,6 +72,7 @@ jobs:
             -e "PROD_DB_PASSWORD=${{ secrets.PROD_DB_PASSWORD }}" \
             -e "SPRING_S3_ACCESSKEY=${{ secrets.SPRING_S3_ACCESSKEY }}" \
             -e "SPRING_S3_SECRETKEY=${{ secrets.SPRING_S3_SECRETKEY }}" \
+            
             --name ${{ vars.APP_NAME }} \
             ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }}
             sudo docker image prune -f
