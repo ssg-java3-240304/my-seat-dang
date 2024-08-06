@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<!--원래 account.html 페이지임-->
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{customer/layout/default}">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<!--    main page only css-->
+	<link th:href="@{/customer/css/home.css}" rel="stylesheet">
+	<link href="css/booking-sign_up.css" rel="stylesheet">
+</head>
+<body>
+<main layout:fragment="main">
+	<div class="container margin_60_40">
+		<div class="row justify-content-center">
+			<div class="col-lg-4">
+				<div class="sign_up">
+					<div class="head">
+						<div class="title">
+							<h3>Sign Up</h3>
+						</div>
+					</div>
+					<!-- /head -->
+					<div class="main">
+						<a href="#0" class="social_bt facebook">Sign up with Facebook</a>
+						<a href="#0" class="social_bt google">Sign up with Google</a>
+						<div class="divider"><span>Or</span></div>
+						<h6>Personal details</h6>
+						<div class="form-group">
+							<input class="form-control" placeholder="First and Last Name">
+							<i class="icon_pencil"></i>
+						</div>
+						<div class="form-group">
+							<input class="form-control" placeholder="Email Address">
+							<i class="icon_mail"></i>
+						</div>
+						<div class="form-group add_bottom_15">
+							<input class="form-control" placeholder="Password" id="password_sign" name="password_sign">
+							<i class="icon_lock"></i>
+						</div>
+						<a href="confirm.html" class="btn_1 full-width mb_5">Sign up Now</a>
+					</div>
+				</div>
+				<!-- /box_booking -->
+			</div>
+			<!-- /col -->
+
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</main>
+<div layout:fragment="js">
+	<!-- 이 페이지 전용 스크립트 -->
+	<script th:src="@{/customer/js/jarallax.min.js}"></script>
+	<script th:src="@{/customer/js/jarallax-video.min.js}"></script>
+</div>
+</body>
+</html>
