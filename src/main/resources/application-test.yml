@@ -6,6 +6,9 @@ spring:
   data:
     mongodb:
       uri: ${MONGO_DB_URI}
+      host: localhost
+      port: 27117
+      database: chatdb
   datasource:
     url: ${TEST_DB_URL}
     username: ${TEST_DB_USERNAME}
