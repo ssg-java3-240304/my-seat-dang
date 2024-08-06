@@ -1,4 +1,0 @@
-kakao:
-  secret:
-    key: ${kakao.secret.key}
-cid: ${cid}
