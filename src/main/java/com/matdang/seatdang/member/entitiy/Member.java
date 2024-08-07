@@ -24,6 +24,8 @@ public abstract class Member {
     @Column(nullable = false)
     private LocalDate joinDate;
     @Column(nullable = false)
+    private String memberName;
+    @Column(nullable = false)
     private String memberPassword;
     @Column(nullable = false)
     private String memberPhone;
