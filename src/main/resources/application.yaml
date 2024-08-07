@@ -1,6 +1,12 @@
 spring:
   application:
     name: seatdang
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: chatdb
+
 # profile관리
   profiles:
     default: test
