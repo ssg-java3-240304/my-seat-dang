@@ -1,8 +1,6 @@
 package com.matdang.seatdang.payment.controller;
 
-import com.matdang.seatdang.payment.dto.PayDetail;
-import com.matdang.seatdang.payment.dto.ReadyRedirect;
-import com.matdang.seatdang.payment.dto.ReadyResponse;
+import com.matdang.seatdang.payment.dto.*;
 import com.matdang.seatdang.payment.entity.PayApprove;
 import com.matdang.seatdang.payment.service.KakaoPayService;
 import lombok.RequiredArgsConstructor;
@@ -54,10 +52,25 @@ public class KakaoPayController {
     @GetMapping("/approve")
     public String approve(ReadyRedirect readyRedirect, Model model) {
         log.debug("=== approve start ===");
-        PayApprove approveResponse = kakaoPayService.approve(readyRedirect);
-        log.info("=== payment approve ===");
-        model.addAttribute("response", approveResponse);
-        return  "payment/approve";
+
+        Object approveResponse = kakaoPayService.approve(readyRedirect);
+        log.debug("approveResponse type={}", approveResponse.getClass());
+
+        if (approveResponse instanceof PayApprove) {
+            log.info("=== approve success ===");
+            log.debug("approveResponse type ={}", approveResponse.getClass());
+            model.addAttribute("response",  approveResponse);
+            return "payment/approve";
+        }
+        if (approveResponse instanceof ApproveFail) {
+            log.error("=== Payment Approve Fail ===");
+            log.error("{}",approveResponse);
+
+            model.addAttribute("response", approveResponse);
+            return "payment/approve-fail";
+        }
+
+        return null;
     }
 
 //    @GetMapping("/readyToKakaoPay/refund/{openType}")
