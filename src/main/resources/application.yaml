@@ -35,7 +35,6 @@ logging:
 app:
   version: 0.1.1
 
-
 file:
   upload-dir: /path/to/upload/directory
 
