@@ -1,10 +1,13 @@
 package com.matdang.seatdang.store.entity;
 
 import com.matdang.seatdang.common.storeEnum.StoreType;
+import com.matdang.seatdang.menu.entity.GeneralMenu;
+import com.matdang.seatdang.store.vo.StoreSetting;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity(name = "store")
 @Table(name = "store")
@@ -21,8 +24,9 @@ public class Store {
     private String storeName;
     @Column(name = "store_address")
     private String storeAddress;
-    @Column(name = "store_type")
+
     @Enumerated(EnumType.STRING)
+    @Column(name = "store_type")
     private StoreType storeType;
     @Column(name = "open_time")
     private LocalTime openTime;
@@ -38,20 +42,28 @@ public class Store {
     private String regularDayOff;
     @Column(name = "thumbnail")
     private String thumbnail;
-    @Column(name = "image")
-    private String image;
+    @Column(name = "image1")
+    private String image1;
+    @Column(name = "image2")
+    private String image2;
+    @Column(name = "image3")
+    private String image3;
     @Column(name = "description")
     private String description;
     @Column(name = "notice")
     private String notice;
     @Column(name = "phone")
     private String phone;
-    @Column(name = "star_rating")
+    @Column(name = "starRating")
     private double starRating;
-//    @Column(name = "setting")
-//    @Embedded
-//    private StoreSetting setting;
+
+    @Embedded
+    @Column(name = "setting")
+    private StoreSetting setting;
 
     // menu 필요
-
+    @ElementCollection
+    @CollectionTable(name = "store_menu", joinColumns = @JoinColumn(name = "store_id"))
+    @Column(name = "menus")
+    private List<GeneralMenu> menus;
 }

@@ -96,7 +96,10 @@ public class StoreController {
     }
 
     @GetMapping("/storeDetail")
-    public void storeDetail(){
-        log.info("GET/storeDetail");
+    public void storeDetail(@RequestParam("storeId") Long storeId, Model model){
+        Store store = storeService.findByStoreId(storeId);
+        log.debug("store = {}", store);
+        model.addAttribute("store", store);
     }
+
 }

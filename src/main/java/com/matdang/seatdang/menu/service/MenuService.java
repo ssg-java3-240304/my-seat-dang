@@ -1,6 +1,6 @@
 package com.matdang.seatdang.menu.service;
 
-import com.matdang.seatdang.menu.entity.Menu;
+import com.matdang.seatdang.menu.entity.GeneralMenu;
 import com.matdang.seatdang.menu.repository.MenuRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +14,9 @@ public class MenuService {
     private final MenuRepository menuRepository;
 
     public ResponseEntity<?> findById(Long menuCode) {
-        Menu menu = menuRepository.findById(menuCode).orElse(null);
-        if(menu == null)
+        GeneralMenu generalMenu = menuRepository.findById(menuCode).orElse(null);
+        if(generalMenu == null)
             return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(menu);
+        return ResponseEntity.ok(generalMenu);
     }
 }
