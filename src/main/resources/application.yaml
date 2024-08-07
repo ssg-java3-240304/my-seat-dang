@@ -3,9 +3,7 @@ spring:
     name: seatdang
   data:
     mongodb:
-      host: localhost
-      port: 27017
-      database: chatdb
+      uri: mongodb://223.130.161.242:27017/chatdb
 
 # profile관리
   profiles:
