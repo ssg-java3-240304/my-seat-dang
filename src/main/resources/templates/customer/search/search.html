@@ -7,8 +7,9 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <!-- SPECIFIC CSS -->
-    <link th:href="@{customer/css/listing.css}" rel="stylesheet">
-    <script type="text/javascript" th:src="@{|https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${ncpAccessId}|}"></script>
+    <link th:href="@{css/customer/listing.css}" rel="stylesheet">
+    <script type="text/javascript" th:src="@{|https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${ncpAccessId}&submodules=geocoder|}"></script>
+<!--    <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=m1vrso77rm&submodules=geocoder"></script>-->
 </head>
 <body>
 <div layout:fragment="main">
@@ -239,27 +240,115 @@
 
 <div layout:fragment="js">
     <!-- 이 페이지 전용 스크립트 -->
-    <script th:src="@{/customer/js/sticky_sidebar.min.js}"></script>
-    <script th:src="@{/customer/js/specific_listing.js}"></script>
-    <script>
-        var mapOptions = {
-            center: new naver.maps.LatLng(37.514575, 127.0495556),
+    <script th:src="@{/js/customer/sticky_sidebar.min.js}"></script>
+    <script th:src="@{/js/customer/specific_listing.js}"></script>
+    <script th:inline="javascript">
+        var HOME_PATH = window.HOME_PATH || '.';
+        var map = new naver.maps.Map('map', {
+            center: new naver.maps.LatLng(37.4086418, 127.0586395),
             zoom: 15
-        };
-
-
-
-        var map = new naver.maps.Map('map', mapOptions);
-        var marker = new naver.maps.Marker({
-            position: new naver.maps.LatLng(37.514575, 127.0495556),
-            map: map
         });
 
-        naver.maps.Event.addListener(map, 'click', function(e) {
-            marker.setPosition(e.latlng);
+        var bounds = map.getBounds(),
+            southWest = bounds.getSW(),
+            northEast = bounds.getNE(),
+            lngSpan = northEast.lng() - southWest.lng(),
+            latSpan = northEast.lat() - southWest.lat();
+
+        /*<![CDATA[*/
+        const stores = /*[[${storeSearchResponseSet}]]*/ '[]';
+        /*]]>*/
+
+        var markers = [],
+            infoWindows = [];
+
+        var geocodePromises = stores.map((store) => {
+            return new Promise((resolve, reject) => {
+                naver.maps.Service.fromAddrToCoord({
+                    query: store.storeAddress
+                }, function(status, response) {
+                    if (status === naver.maps.Service.Status.OK) {
+                        var result = response.v2;
+                        var position = new naver.maps.LatLng(result.addresses[0].y, result.addresses[0].x);
+                        var marker = new naver.maps.Marker({
+                            map: map,
+                            position: position,
+                            title: store.storeName,
+                            zIndex: 100
+                        });
+
+                        var infoWindow = new naver.maps.InfoWindow({
+                            content: `<div style="width:250px;text-align:center;padding:10px;">
+                                    <h3><a href="/detail">${store.storeName}</a></h3>
+                                    <img src="https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/af4bc57e-5faa-493f-a8ea-2cf9bf2c6f13.png" data-src="https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/af4bc57e-5faa-493f-a8ea-2cf9bf2c6f13.png" class="img-fluid lazy" alt="">
+                                    <small><b>주소:</b> ${store.storeAddress}</small></div>`
+                        });
+
+                        markers.push(marker);
+                        infoWindows.push(infoWindow);
+                        resolve();
+                    } else {
+                        reject(status);
+                    }
+                });
+            });
         });
 
-        // map.fitBounds(seoul);
+        Promise.all(geocodePromises).then(() => {
+            console.log(`Markers length: ${markers.length}`);
+
+            markers.forEach((marker, index) => {
+                naver.maps.Event.addListener(marker, 'click', getClickHandler(index));
+            });
+
+            naver.maps.Event.addListener(map, 'idle', function() {
+                updateMarkers(map, markers);
+            });
+            map.setCenter(markers[0].getPosition());
+        }).catch((error) => {
+            console.error('Geocoding error:', error);
+        });
+
+        function updateMarkers(map, markers) {
+            var mapBounds = map.getBounds();
+            var marker, position;
+            for (var i = 0; i < markers.length; i++) {
+                marker = markers[i]
+                position = marker.getPosition();
+                if (mapBounds.hasLatLng(position)) {
+                    showMarker(map, marker);
+                } else {
+                    hideMarker(map, marker);
+                }
+            }
+        }
+
+        function showMarker(map, marker) {
+
+            if (marker.setMap()) return;
+            marker.setMap(map);
+        }
+
+        function hideMarker(map, marker) {
+
+            if (!marker.setMap()) return;
+            marker.setMap(null);
+        }
+
+        // 해당 마커의 인덱스를 seq라는 클로저 변수로 저장하는 이벤트 핸들러를 반환합니다.
+        function getClickHandler(seq) {
+            return function(e) {
+                var marker = markers[seq],
+                    infoWindow = infoWindows[seq];
+                console.log('이벤트온!');
+                map.setCenter(markers[0].getPosition());
+                if (infoWindow.getMap()) {
+                    infoWindow.close();
+                } else {
+                    infoWindow.open(map, marker);
+                }
+            }
+        }
     </script>
 </div>
 </body>
