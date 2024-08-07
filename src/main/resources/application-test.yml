@@ -3,6 +3,11 @@ profile:
   value: 'test'
 
 spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: chatdb
   datasource:
     url: ${TEST_DB_URL}
     username: ${TEST_DB_USERNAME}
