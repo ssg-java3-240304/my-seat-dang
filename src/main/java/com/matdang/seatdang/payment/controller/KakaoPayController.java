@@ -45,10 +45,11 @@ public class KakaoPayController {
                 .build();
         // end ==
         ReadyResponse readyResponse = kakaoPayService.ready(payDetail);
+        log.debug("ReadyResponse ={}", readyResponse);
         log.info("==== payment request ====");
         // pc
         model.addAttribute("response", readyResponse);
-        model.addAttribute("payDetail", payDetail);
+//        model.addAttribute("payDetail", payDetail);
 
         return "payment/ready" ;
     }
