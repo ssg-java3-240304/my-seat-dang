@@ -1,7 +1,8 @@
-package com.matdang.seatdang.customer.search.controller;
+package com.matdang.seatdang.search.controller;
 
-import com.matdang.seatdang.customer.search.dto.StoreSearchResponseDto;
-import com.matdang.seatdang.customer.search.service.MapService;
+import com.matdang.seatdang.common.config.NcpMapConfig;
+import com.matdang.seatdang.search.dto.StoreSearchResponseDto;
+import com.matdang.seatdang.search.service.MapService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ public class SearchController {
     public String index(Model model) {
         Set<StoreSearchResponseDto> storeSearchResponseDtoSet = CreateDummyStoreList();
         model.addAttribute("storeSearchResponseSet", storeSearchResponseDtoSet);
+        model.addAttribute("ncpAccessId", mapService.getAccessId());
+//        model.addAttribute("ncpSecretKey", mapService.getSecretKey());
         return "customer/search/search";
     }
 
