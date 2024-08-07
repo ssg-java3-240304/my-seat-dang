@@ -1,9 +1,11 @@
 package com.matdang.seatdang.payment.controller;
 
 
+import com.matdang.seatdang.payment.dto.ApproveRequest;
 import com.matdang.seatdang.payment.dto.PayDetail;
 import com.matdang.seatdang.payment.dto.ReadyRedirect;
 import com.matdang.seatdang.payment.dto.ReadyResponse;
+import com.matdang.seatdang.payment.entity.PayApprove;
 import com.matdang.seatdang.payment.service.KakaoPayService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,8 @@ public class KakaoPayController {
     }
 
     private static int count = 0;
+    private static int partnerUserID = 1;
+    private static int partnerOrderID = 1;
 
 
     @GetMapping("/request")
@@ -33,13 +37,12 @@ public class KakaoPayController {
         // test code
         payDetail= PayDetail.builder()
                 .itemName("초코파이")
-                .partnerUserId("1")
-                .partnerOrderId("1")
+                .partnerUserId(Integer.toString(partnerUserID++))
+                .partnerOrderId(Integer.toString(partnerOrderID++))
                 .taxFreeAmount(0)
                 .quantity(2)
-                .totalAmount(2000+count)
+                .totalAmount(2000+count++)
                 .build();
-        count++;
         // end ==
         ReadyResponse readyResponse = kakaoPayService.ready(payDetail);
         log.info("==== payment request ====");
@@ -53,7 +56,7 @@ public class KakaoPayController {
     @GetMapping("/approve")
     public String approve(ReadyRedirect readyRedirect, Model model) {
         log.debug("=== approve start ===");
-        String approveResponse = kakaoPayService.approve(readyRedirect);
+        PayApprove approveResponse = kakaoPayService.approve(readyRedirect);
         log.info("=== payment approve ===");
         model.addAttribute("response", approveResponse);
         return  "payment/approve";
