@@ -5,8 +5,10 @@ import com.matdang.seatdang.payment.dto.PayDetail;
 import com.matdang.seatdang.payment.dto.ReadyRedirect;
 import com.matdang.seatdang.payment.dto.ReadyRequest;
 import com.matdang.seatdang.payment.dto.ReadyResponse;
+import com.matdang.seatdang.payment.entity.PayApprove;
 import com.matdang.seatdang.payment.entity.PayReady;
 import com.matdang.seatdang.payment.repository.KakaoPayRepository;
+import com.matdang.seatdang.payment.repository.PayApproveRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class KakaoPayService {
     private final KakaoPayRepository kakaoPayRepository;
+    private final PayApproveRepository payApproveRepository;
 
     @Value("${kakao.secret.key}")
     private String secretKey;
@@ -79,7 +82,7 @@ public class KakaoPayService {
         return readyResponse;
     }
 
-    public String approve(ReadyRedirect readyRedirect) {
+    public PayApprove approve(ReadyRedirect readyRedirect) {
         // ready할 때 저장해놓은 TID로 승인 요청
         // Call “Execute approved payment” API by pg_token, TID mapping to the current payment transaction and other parameters.
         HttpHeaders headers = new HttpHeaders();
@@ -106,18 +109,21 @@ public class KakaoPayService {
         // Send Request
         HttpEntity<ApproveRequest> entityMap = new HttpEntity<>(approveRequest, headers);
         try {
-            ResponseEntity<String> response = new RestTemplate().postForEntity(
+            ResponseEntity<PayApprove> response = new RestTemplate().postForEntity(
                     KAKAO_PAY_APPROVE_URL,
                     entityMap,
-                    String.class
+                    PayApprove.class
             );
 
             // 승인 결과를 저장한다.
             // save the result of approval
-            String approveResponse = response.getBody();
-            return approveResponse;
+            PayApprove approveResponse = response.getBody();
+            payApproveRepository.save(approveResponse);
+
+            return  approveResponse;
         } catch (HttpStatusCodeException ex) {
-            return ex.getResponseBodyAsString();
+//            return ex.getResponseBodyAs();
+            return null;
         }
     }
 
