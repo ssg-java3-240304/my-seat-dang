@@ -1,32 +1,6 @@
 /*============================================================================================*/
 /* Listing */
 /*============================================================================================*/
-.category {
-  width: auto;
-  overflow: hidden;
-  height: 42px;
-  line-height: 42px; /* 글씨가 정중앙에 오도록 line-height를 height와 동일하게 설정 */
-  border: none;
-  position: relative;
-  padding: 0 27px; /* 위아래 여백을 없애고 좌우 여백만 남김 */
-  margin-bottom: 15px;
-  border: 1px solid #ededed;
-  border-radius: 3px;
-  background-color: #ffffff; /* 배경 색상을 하얀색으로 설정 */
-  color: #000000; /* 글씨 색상을 검정색으로 설정 */
-  font-size: 14px; /* 글씨 크기를 적절히 조정 */
-}
-
-/* select 태그에 스타일을 적용하기 위해 추가적인 CSS */
-.category select {
-  width: 100%; /* select 요소가 .sort_select를 꽉 채우도록 설정 */
-  height: 100%; /* 높이를 부모 요소와 동일하게 설정 */
-  border: none; /* 기본 border 제거 */
-  background: transparent; /* 배경을 투명으로 설정 */
-  color: inherit; /* 부모 요소의 글씨 색상 상속 */
-  font-size: inherit; /* 부모 요소의 글씨 크기 상속 */
-}
-
 .sort_select {
   width: auto;
   overflow: hidden;
