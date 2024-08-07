@@ -1,10 +1,6 @@
 package com.matdang.seatdang.payment.service;
 
-import com.matdang.seatdang.payment.dto.ApproveRequest;
-import com.matdang.seatdang.payment.dto.PayDetail;
-import com.matdang.seatdang.payment.dto.ReadyRedirect;
-import com.matdang.seatdang.payment.dto.ReadyRequest;
-import com.matdang.seatdang.payment.dto.ReadyResponse;
+import com.matdang.seatdang.payment.dto.*;
 import com.matdang.seatdang.payment.entity.PayApprove;
 import com.matdang.seatdang.payment.entity.PayReady;
 import com.matdang.seatdang.payment.repository.KakaoPayRepository;
@@ -82,7 +78,7 @@ public class KakaoPayService {
         return readyResponse;
     }
 
-    public PayApprove approve(ReadyRedirect readyRedirect) {
+    public Object approve(ReadyRedirect readyRedirect) {
         // ready할 때 저장해놓은 TID로 승인 요청
         // Call “Execute approved payment” API by pg_token, TID mapping to the current payment transaction and other parameters.
         HttpHeaders headers = new HttpHeaders();
@@ -120,10 +116,9 @@ public class KakaoPayService {
             PayApprove approveResponse = response.getBody();
             payApproveRepository.save(approveResponse);
 
-            return  approveResponse;
+            return approveResponse;
         } catch (HttpStatusCodeException ex) {
-//            return ex.getResponseBodyAs();
-            return null;
+            return ex.getResponseBodyAs(ApproveFail.class);
         }
     }
 
