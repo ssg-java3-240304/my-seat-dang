@@ -1,7 +1,5 @@
 package com.matdang.seatdang.payment.controller;
 
-
-import com.matdang.seatdang.payment.dto.ApproveRequest;
 import com.matdang.seatdang.payment.dto.PayDetail;
 import com.matdang.seatdang.payment.dto.ReadyRedirect;
 import com.matdang.seatdang.payment.dto.ReadyResponse;
@@ -49,7 +47,6 @@ public class KakaoPayController {
         log.info("==== payment request ====");
         // pc
         model.addAttribute("response", readyResponse);
-//        model.addAttribute("payDetail", payDetail);
 
         return "payment/ready" ;
     }
