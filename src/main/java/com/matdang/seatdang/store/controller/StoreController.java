@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import static com.matdang.seatdang.common.storeEnum.StoreType.CUSTOM;
+import static com.matdang.seatdang.common.storeEnum.StoreType.GENERAL_RESERVATION;
+
 @Controller
 @RequestMapping("/store")
 @RequiredArgsConstructor
@@ -25,7 +28,6 @@ public class StoreController {
 
     @GetMapping("/storeList")
     public void storeList(@PageableDefault(page = 1, size = 10) Pageable pageable,
-                          @RequestParam(required = false) String q,
                           Model model){
         log.info("GET/storeList?page={}", pageable.getPageNumber());
         // 1. 컨텐츠영역
@@ -33,7 +35,7 @@ public class StoreController {
                 pageable.getPageNumber() - 1,
                 pageable.getPageSize());
 
-        Page<StoreListResponseDto> storePage = storeService.findAll(q, pageable);
+        Page<StoreListResponseDto> storePage = storeService.findAll(pageable);
         log.debug("storePage = {}", storePage.getContent());
         model.addAttribute("stores", storePage.getContent());
 
@@ -42,8 +44,54 @@ public class StoreController {
         int limit = storePage.getSize();
         int totalCount = (int) storePage.getTotalElements();
         String url = "storeList"; // 상대주소
-        if(q != null)
-            url += "?q=" + q;
+//        if(q != null)
+//            url += "?q=" + q;
+        model.addAttribute("pageCriteria", new PageCriteria(page, limit, totalCount, url));
+    }
+
+    @GetMapping("/storeReservationList")
+    public void storeReservationList(@PageableDefault(page = 1, size = 10) Pageable pageable,
+                          Model model){
+        log.info("GET/storeReservationList?page={}", pageable.getPageNumber());
+        // 1. 컨텐츠영역
+        pageable = PageRequest.of(
+                pageable.getPageNumber() - 1,
+                pageable.getPageSize());
+
+        Page<StoreListResponseDto> storePage = storeService.findByStoreTypeContaining(GENERAL_RESERVATION, CUSTOM, pageable);
+        log.debug("storePage = {}", storePage.getContent());
+        model.addAttribute("stores", storePage.getContent());
+
+        // 2. 페이지바 영역
+        int page = storePage.getNumber(); // 0-based 페이지번호
+        int limit = storePage.getSize();
+        int totalCount = (int) storePage.getTotalElements();
+        String url = "storeList"; // 상대주소
+//        if(q != null)
+//            url += "?q=" + q;
+        model.addAttribute("pageCriteria", new PageCriteria(page, limit, totalCount, url));
+    }
+
+    @GetMapping("/storeWaitingList")
+    public void storeWaitingList(@PageableDefault(page = 1, size = 10) Pageable pageable,
+                                     Model model){
+        log.info("GET/storeWaitingList?page={}", pageable.getPageNumber());
+        // 1. 컨텐츠영역
+        pageable = PageRequest.of(
+                pageable.getPageNumber() - 1,
+                pageable.getPageSize());
+
+        Page<StoreListResponseDto> storePage = storeService.findAll(pageable);
+        log.debug("storePage = {}", storePage.getContent());
+        model.addAttribute("stores", storePage.getContent());
+
+        // 2. 페이지바 영역
+        int page = storePage.getNumber(); // 0-based 페이지번호
+        int limit = storePage.getSize();
+        int totalCount = (int) storePage.getTotalElements();
+        String url = "storeList"; // 상대주소
+//        if(q != null)
+//            url += "?q=" + q;
         model.addAttribute("pageCriteria", new PageCriteria(page, limit, totalCount, url));
     }
 

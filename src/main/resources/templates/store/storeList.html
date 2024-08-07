@@ -3,25 +3,25 @@
 	  layout:decorate="~{store/layout/default}" xmlns="http://www.w3.org/1999/html">
 
 <div layout:fragment="content0">
-    <!-- SPECIFIC CSS -->
-    <link th:href="@{/store/css/listing.css}" rel="stylesheet">
-    <link th:href="@{/store/css/leaflet.css}" rel="stylesheet">
+	<!-- SPECIFIC CSS -->
+	<link th:href="@{/customer/css/listing.css}" rel="stylesheet">
+	<link th:href="@{/customer/css/leaflet.css}" rel="stylesheet">
 
-    <style>
-        html,
-        body {
-            height: 100%;
-        }
-    </style>
+	<style>
+		html,
+		body {
+			height: 100%;
+		}
+	</style>
 </div>
 
 <!--body-->
-	<div layout:fragment="content">
+<div layout:fragment="content">
 	<header class="header_in is_sticky clearfix">
 		<div class="container-fluid">
 		<div id="logo">
 			<a href="index.html">
-				<img th:src="@{/store/img/logo_sticky.svg}" width="140" height="35" alt="">
+				<img th:src="@{/customer/img/logo_sticky.svg}" width="140" height="35" alt="">
 			</a>
 		</div>
 		<ul id="top_menu">
@@ -37,13 +37,13 @@
 				<a href="#0" class="open_close">
 					<i class="icon_close"></i><span>Menu</span>
 				</a>
-				<a href="index.html"><img th:src="@{/store/img/logo.svg}" width="140" height="35" alt=""></a>
+				<a href="index.html"><img th:src="@{/customer/img/logo.svg}" width="140" height="35" alt=""></a>
 			</div>
 			<ul>
 				<li class="submenu">
 					<a href="#0" class="show-submenu">Home</a>
 					<ul>
-						<li><a href="index.html">Default</a></li>			
+						<li><a href="index.html">Default</a></li>
 						<li class="third-level"><a href="#0">Sliders - Parallax <strong>New!</strong></a>
 							<ul>
 								<li><a href="index-16.html">Kenburns slider <strong>New!</strong></a></li>
@@ -106,7 +106,7 @@
 						<li><a href="confirm-delivery.html">Confirm Order</a></li>
 						<li><a href="booking-delivery-2.html">Order Delivery/Takeaway</a></li>
 						<li><a href="booking-delivery.html">Order Delivery/Takeaway 2</a></li>
-						<li><a th:href="@{/store/admin_section/index.html}" target="_blank">Admin Section</a></li>
+						<li><a th:href="@{/admin/main.html}" target="_blank">Admin Section</a></li>
 					</ul>
 				</li>
 				<li class="submenu">
@@ -119,7 +119,7 @@
 						<li><a href="user-logged-1.html">User Logged 1</a></li>
 						<li><a href="user-logged-2.html">User Logged 2</a></li>
 						<li><a href="contacts.html">Contacts</a></li>
-						<li><a th:href="@{/store/coming_soon/index.html}">Coming Soon</a></li>
+<!--						<li><a th:href="@{/store/coming_soon/index.html}">Coming Soon</a></li>-->
 						<li><a href="account.html">Sign Up</a></li>
 						<li><a href="icon-pack-1.html">Icon Pack 1</a></li>
 						<li><a href="icon-pack-2.html">Icon Pack 2</a></li>
@@ -132,246 +132,48 @@
 	</div>
 	</header>
 	<!-- /header -->
-	
+
 	<main>
 		<div class="container-fluid full-height">
 			<div class="row row-height">
-	            <div class="col-xl-4 col-lg-5 content-left order-md-last order-sm-last order-last map_view">
-	                <div class="page_header element_to_stick">
-	                    <div class="row">
-	                        <div class="col-xl-12 d-none d-md-block">
-<!--	                            <h1>145 restaurants in Convent Street 2983</h1>-->
-	                        </div>
-	                        <div class="col-xl-12">
-	                            <div class="search_bar_list">
-	                                <input type="text" class="form-control" placeholder="Search again...">
-	                                <input type="submit" value="Search">
-	                            </div>
-	                        </div>
-	                    </div>
-	                    <!-- /row -->
-	                </div>
-	                <!-- /page_header -->
-<!--예약/웨이팅 탭-->
-			<div class="tabs_detail">
-				<ul class="nav nav-tabs" role="tablist">
-					<li class="nav-item">
-						<a id="tab-A" href="#pane-A" class="nav-link active" data-bs-toggle="tab" role="tab">예약</a>
-					</li>
-					<li class="nav-item">
-						<a id="tab-B" href="#pane-B" class="nav-link" data-bs-toggle="tab" role="tab">웨이팅</a>
-					</li>
-				</ul>
-<!--정렬 시작-->
-				<div class="tab-content" role="tablist">
-					<div id="pane-A" class="card tab-pane fade show active" role="tabpanel" aria-labelledby="tab-A">
-	                <div class="filters_full clearfix">
-	                    <div class="container">
-	                        <div class="sort_select">
-	                            <select name="sort" id="sort">
-	                                <option value="popularity" selected="selected">Sort by Popularity</option>
-	                                <option value="rating">Sort by Average rating</option>
-	                                <option value="date">Sort by newness</option>
-	                                <option value="price">Sort by Price: low to high</option>
-	                                <option value="price-desc">Sort by Price: high to low</option>
-	                            </select>
-	                        </div>
-	                        <a href="#collapseFilters" data-bs-toggle="collapse" class="btn_filters"><i class="icon_adjust-vert"></i><span>Filters</span></a>
-<!--							-->
+				<div class="col-xl-4 col-lg-5 content-left order-md-last order-sm-last order-last map_view">
+					<div class="page_header element_to_stick">
+						<div class="row">
+							<!--	                        <div class="col-xl-12 d-none d-md-block">-->
+							<!--&lt;!&ndash;	                            <h1>145 restaurants in Convent Street 2983</h1>&ndash;&gt;-->
+							<!--	                        </div>-->
+							<div class="col-xl-12">
+								<div class="search_bar_list">
+									<input type="text" class="form-control" placeholder="Search">
+									<input type="submit" value="Search">
+								</div>
+							</div>
 						</div>
-	                </div>
-	                <!-- /filters_full -->
-<!--정렬 끝-->
-<!--필터 시작-->
-	                <div class="collapse filters_2" id="collapseFilters">
-	                    <div class="container margin_detail">
-	                        <div class="row">
-	                            <div class="col-md-6">
-	                                <div class="filter_type">
-	                                    <h6>Categories</h6>
-	                                    <ul>
-	                                        <li>
-	                                            <label class="container_check">일반빵 <small>12</small>
-	                                                <input type="checkbox">
-	                                                <span class="checkmark"></span>
-	                                            </label>
-	                                        </li>
-	                                        <li>
-	                                            <label class="container_check">제작케이크 <small>24</small>
-	                                                <input type="checkbox">
-	                                                <span class="checkmark"></span>
-	                                            </label>
-	                                        </li>
-	                                    </ul>
-	                                </div>
-	                            </div>
-<!--	                            <div class="col-md-6">-->
-<!--	                                <div class="filter_type">-->
-<!--	                                    <h6>Rating</h6>-->
-<!--	                                    <ul>-->
-<!--	                                        <li>-->
-<!--	                                            <label class="container_check">Superb 9+ <small>06</small>-->
-<!--	                                                <input type="checkbox">-->
-<!--	                                                <span class="checkmark"></span>-->
-<!--	                                            </label>-->
-<!--	                                        </li>-->
-<!--	                                        <li>-->
-<!--	                                            <label class="container_check">Very Good 8+ <small>12</small>-->
-<!--	                                                <input type="checkbox">-->
-<!--	                                                <span class="checkmark"></span>-->
-<!--	                                            </label>-->
-<!--	                                        </li>-->
-<!--	                                        <li>-->
-<!--	                                            <label class="container_check">Good 7+ <small>17</small>-->
-<!--	                                                <input type="checkbox">-->
-<!--	                                                <span class="checkmark"></span>-->
-<!--	                                            </label>-->
-<!--	                                        </li>-->
-<!--	                                        <li>-->
-<!--	                                            <label class="container_check">Pleasant 6+ <small>43</small>-->
-<!--	                                                <input type="checkbox">-->
-<!--	                                                <span class="checkmark"></span>-->
-<!--	                                            </label>-->
-<!--	                                        </li>-->
-<!--	                                    </ul>-->
-<!--	                                </div>-->
-<!--	                            </div>-->
-<!--	                            <div class="col-md-12">-->
-<!--	                                <div class="filter_type">-->
-<!--	                                    <h6>Distance</h6>-->
-<!--	                                    <div class="distance"> Radius around selected destination <span></span> km</div>-->
-<!--	                                    <div><input type="range" min="10" max="100" step="10" value="30" data-orientation="horizontal"></div>-->
-<!--	                                </div>-->
-<!--	                            </div>-->
-	                        </div>
-	                        <!-- /row -->
-	                    </div>
-	                </div>
-	                <!-- /filters -->
-<!--필터 끝-->
-	                <div class="row">
-	                    <div class="col-lg-12 col-sm-6">
-	                        <div class="strip" th:each="store : ${stores}">
-	                            <figure>
-	                                <img th:src="${store.thumbnail}" data-src="img/location_1.jpg" class="img-fluid lazy" alt="">
-	                                <a href="storeDetail" class="strip_info">
-	                                    <div class="item_title">
-	                                        <h3 th:text="${store.storeName}"></h3>
-	                                        <small th:text="${store.storeAddress}"></small>
-	                                    </div>
-	                                </a>
-	                            </figure>
-	                            <ul>
-	                                <li><a href="#0" data-id="1" class="address">View on Map</a></li>
-	                                <li>
-	                                    <div class="score"><span><em>350 Reviews</em></span><strong th:text="${store.starRating}"></strong></div>
-	                                </li>
-	                            </ul>
-	                        </div>
-	                    </div>
-	                    <!-- /strip grid -->
-	                </div>
-	                <!-- /row -->
+						<!-- /row -->
 					</div>
-				</div>
+					<!-- /page_header -->
 
-
-				<div id="pane-B" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-B">
-						<div class="filters_full clearfix">
-							<div class="container">
-								<div class="sort_select">
-									<select name="sort" id="sort2">
-										<option value="popularity" selected="selected">Sort by Popularity</option>
-										<option value="rating">Sort by Average rating</option>
-										<option value="date">Sort by newness</option>
-										<option value="price">Sort by Price: low to high</option>
-										<option value="price-desc">Sort by Price: high to low</option>
-									</select>
-								</div>
-								<a href="#collapseFilters" data-bs-toggle="collapse" class="btn_filters"><i class="icon_adjust-vert"></i><span>Filters</span></a>
-								<!--							-->
+					<div class="filters_full clearfix">
+						<div class="container">
+							<input class="category" type="button" value="All" th:onclick="|location.href = '@{/store/storeList}'|">
+							<input class="category" type="button" value="예약" th:onclick="|location.href = '@{/store/storeReservationList}'|">
+							<input class="category" type="button" value="웨이팅" th:onclick="|location.href = '@{/store/storeWaitingList}'|">
+							<div class="sort_select">
+								<select name="sort" id="sort">
+									<option value="rating" selected="selected">별점순</option>
+									<option value="popularity">리뷰순</option>
+								</select>
 							</div>
 						</div>
-						<!-- /filters_full -->
-						<!--정렬 끝-->
-						<!--필터 시작-->
-						<div class="collapse filters_2" id="collapseFilters2">
-							<div class="container margin_detail">
-								<div class="row">
-									<div class="col-md-6">
-										<div class="filter_type">
-											<h6>Categories</h6>
-											<ul>
-												<li>
-													<label class="container_check">예약 <small>12</small>
-														<input type="checkbox">
-														<span class="checkmark"></span>
-													</label>
-												</li>
-												<li>
-													<label class="container_check">예약_일반빵 <small>24</small>
-														<input type="checkbox">
-														<span class="checkmark"></span>
-													</label>
-												</li>
-												<li>
-													<label class="container_check">웨이팅 <small>24</small>
-														<input type="checkbox">
-														<span class="checkmark"></span>
-													</label>
-												</li>
-											</ul>
-										</div>
-									</div>
-									<!--	                            <div class="col-md-6">-->
-									<!--	                                <div class="filter_type">-->
-									<!--	                                    <h6>Rating</h6>-->
-									<!--	                                    <ul>-->
-									<!--	                                        <li>-->
-									<!--	                                            <label class="container_check">Superb 9+ <small>06</small>-->
-									<!--	                                                <input type="checkbox">-->
-									<!--	                                                <span class="checkmark"></span>-->
-									<!--	                                            </label>-->
-									<!--	                                        </li>-->
-									<!--	                                        <li>-->
-									<!--	                                            <label class="container_check">Very Good 8+ <small>12</small>-->
-									<!--	                                                <input type="checkbox">-->
-									<!--	                                                <span class="checkmark"></span>-->
-									<!--	                                            </label>-->
-									<!--	                                        </li>-->
-									<!--	                                        <li>-->
-									<!--	                                            <label class="container_check">Good 7+ <small>17</small>-->
-									<!--	                                                <input type="checkbox">-->
-									<!--	                                                <span class="checkmark"></span>-->
-									<!--	                                            </label>-->
-									<!--	                                        </li>-->
-									<!--	                                        <li>-->
-									<!--	                                            <label class="container_check">Pleasant 6+ <small>43</small>-->
-									<!--	                                                <input type="checkbox">-->
-									<!--	                                                <span class="checkmark"></span>-->
-									<!--	                                            </label>-->
-									<!--	                                        </li>-->
-									<!--	                                    </ul>-->
-									<!--	                                </div>-->
-									<!--	                            </div>-->
-									<!--	                            <div class="col-md-12">-->
-									<!--	                                <div class="filter_type">-->
-									<!--	                                    <h6>Distance</h6>-->
-									<!--	                                    <div class="distance"> Radius around selected destination <span></span> km</div>-->
-									<!--	                                    <div><input type="range" min="10" max="100" step="10" value="30" data-orientation="horizontal"></div>-->
-									<!--	                                </div>-->
-									<!--	                            </div>-->
-								</div>
-								<!-- /row -->
-							</div>
-						</div>
-						<!-- /filters -->
-						<!--필터 끝-->
+					</div>
+					<!-- /filters_full -->
+					<!--정렬 끝-->
+
 					<div class="row">
 						<div class="col-lg-12 col-sm-6">
 							<div class="strip" th:each="store : ${stores}">
 								<figure>
-									<img th:src="${store.thumbnail}" data-src="img/location_1.jpg" class="img-fluid lazy" alt="">
+									<img th:src="@{/customer/img/thumbnail/{thumbnail}(thumbnail=${store.thumbnail})}" class="img-fluid lazy" alt="">
 									<a href="storeDetail" class="strip_info">
 										<div class="item_title">
 											<h3 th:text="${store.storeName}"></h3>
@@ -388,58 +190,56 @@
 							</div>
 						</div>
 						<!-- /strip grid -->
-					</div>
-						<!-- /row -->
-					</div>
-				</div>
-					<nav class="position-relative" th:if="${pageCriteria != null}" th:object="${pageCriteria}" aria-label="Page navigation example">
-						<ul class="pagination justify-content-center">
-							<!--/* 이전 영역 */-->
-							<li th:class="|page-item *{pagebarStart == 1 ? 'disabled' : ''}|">
-								<a class="page-link" th:href="|*{url}*{pagebarStart - 1}|">이전</a>
-							</li>
 
-							<!--/* 페이지숫자 영역 */-->
-							<!--/* th:each에는 break 기능이 없다.*/-->
-							<th:block th:each="pageNo : *{#numbers.sequence(pagebarStart, pagebarEnd)}">
-								<li th:if="${pageNo <= pageCriteria.maxPage}" th:class="|page-item ${pageCriteria.page == pageNo ? 'active' : ''}|">
-									<a class="page-link" th:href="|*{url}${pageNo}|" th:text="${pageNo}"></a>
+						<nav class="position-relative" th:if="${pageCriteria != null}" th:object="${pageCriteria}" aria-label="Page navigation example">
+							<ul class="pagination justify-content-center">
+								<!--/* 이전 영역 */-->
+								<li th:class="|page-item *{pagebarStart == 1 ? 'disabled' : ''}|">
+									<a class="page-link" th:href="|*{url}*{pagebarStart - 1}|">이전</a>
 								</li>
-							</th:block>
 
-							<!--/* 다음 영역 */-->
-							<li th:class="|page-item *{pagebarEnd > maxPage ? 'disabled' : ''}|">
-								<a class="page-link" th:href="|*{url}*{pagebarEnd + 1}|">다음</a>
-							</li>
-						</ul>
-					</nav>
-<!--					<p class="text-center"><a href="#0" class="btn_1"><strong>Load more</strong></a></p>-->
+								<!--/* 페이지숫자 영역 */-->
+								<!--/* th:each에는 break 기능이 없다.*/-->
+								<th:block th:each="pageNo : *{#numbers.sequence(pagebarStart, pagebarEnd)}">
+									<li th:if="${pageNo <= pageCriteria.maxPage}" th:class="|page-item ${pageCriteria.page == pageNo ? 'active' : ''}|">
+										<a class="page-link" th:href="|*{url}${pageNo}|" th:text="${pageNo}"></a>
+									</li>
+								</th:block>
+
+								<!--/* 다음 영역 */-->
+								<li th:class="|page-item *{pagebarEnd > maxPage ? 'disabled' : ''}|">
+									<a class="page-link" th:href="|*{url}*{pagebarEnd + 1}|">다음</a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+					<!-- /row-->
+					<!--					<p class="text-center"><a href="#0" class="btn_1"><strong>Load more</strong></a></p>-->
+				</div>
+				<!-- /content-left-->
+				<div class="col-xl-8 col-lg-7 map-right">
+					<div id="map" class="map_right_listing"></div>
+					<!-- map-->
+				</div>
+				<!-- /map-right-->
 			</div>
-
-	        </div>
-	            <!-- /content-left-->
-	            <div class="col-xl-8 col-lg-7 map-right">
-	                <div id="map" class="map_right_listing"></div>
-	                <!-- map-->
-	            </div>
-	            <!-- /map-right-->
-	    	</div>
-	        <!-- /row-->
-	    <!-- /container-fluid -->
+			<!-- /row-->
+		</div>
+		<!-- /container-fluid -->
 	</main>
 	<!--/main-->
-	</div>
+</div>
 
-	<div layout:fragment="content2">
-    <!-- SPECIFIC SCRIPTS -->
-    <script th:src="@{/store/js/sticky_sidebar.min.js}"></script>
-    <script th:src="@{/store/js/specific_listing.js}"></script>
+<div layout:fragment="content2">
+	<!-- SPECIFIC SCRIPTS -->
+	<script th:src="@{/customer/js/sticky_sidebar.min.js}"></script>
+	<script th:src="@{/customer/js/specific_listing.js}"></script>
 
-    <!-- Map LeafLet + Mapbox-->
-	<script th:src="@{/store/js/leaflet_map/leaflet.min.js}"></script>
-    <script th:src="@{/store/js/leaflet_map/leaflet_markercluster.min.js}"></script>
-    <script th:src="@{/store/js/leaflet_map/leaflet_markers.js}"></script>
-    <script th:src="@{/store/js/leaflet_map/leaflet_half_screen_func.js}"></script>
-	</div>
+	<!-- Map LeafLet + Mapbox-->
+	<script th:src="@{/customer/js/leaflet_map/leaflet.min.js}"></script>
+	<script th:src="@{/customer/js/leaflet_map/leaflet_markercluster.min.js}"></script>
+	<script th:src="@{/customer/js/leaflet_map/leaflet_markers.js}"></script>
+	<script th:src="@{/customer/js/leaflet_map/leaflet_half_screen_func.js}"></script>
+</div>
 <!--body end-->
 </html>
