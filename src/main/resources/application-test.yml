@@ -5,9 +5,7 @@ profile:
 spring:
   data:
     mongodb:
-      host: localhost
-      port: 27017
-      database: chatdb
+      uri: mongodb://223.130.161.242:27017/chatdb
   datasource:
     url: ${TEST_DB_URL}
     username: ${TEST_DB_USERNAME}
