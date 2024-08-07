@@ -1,4 +1,4 @@
-package com.matdang.seatdang.customer.search.service;
+package com.matdang.seatdang.search.service;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

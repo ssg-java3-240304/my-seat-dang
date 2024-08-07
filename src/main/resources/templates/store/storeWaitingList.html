@@ -4,8 +4,8 @@
 
 <div layout:fragment="content0">
 	<!-- SPECIFIC CSS -->
-	<link th:href="@{/customer/css/listing.css}" rel="stylesheet">
-	<link th:href="@{/customer/css/leaflet.css}" rel="stylesheet">
+	<link th:href="@{/css/customer/listing.css}" rel="stylesheet">
+	<link th:href="@{/css/customer/leaflet.css}" rel="stylesheet">
 
 	<style>
 		html,
@@ -21,7 +21,7 @@
 		<div class="container-fluid">
 			<div id="logo">
 				<a href="index.html">
-					<img th:src="@{/customer/img/logo_sticky.svg}" width="140" height="35" alt="">
+					<img th:src="@{/img/customer/logo_sticky.svg}" width="140" height="35" alt="">
 				</a>
 			</div>
 			<ul id="top_menu">
@@ -37,7 +37,7 @@
 					<a href="#0" class="open_close">
 						<i class="icon_close"></i><span>Menu</span>
 					</a>
-					<a href="index.html"><img th:src="@{/customer/img/logo.svg}" width="140" height="35" alt=""></a>
+					<a href="index.html"><img th:src="@{/img/customer/logo.svg}" width="140" height="35" alt=""></a>
 				</div>
 				<ul>
 					<li class="submenu">
@@ -173,7 +173,7 @@
 						<div class="col-lg-12 col-sm-6">
 							<div class="strip" th:each="store : ${stores}" th:if="${store.storeType == T(com.matdang.seatdang.common.storeEnum.StoreType).GENERAL_WAITING}">
 								<figure>
-									<img th:src="@{/customer/img/thumbnail/{thumbnail}(thumbnail=${store.thumbnail})}" class="img-fluid lazy" alt="">
+									<img th:src="@{/img/customer/thumbnail/{thumbnail}(thumbnail=${store.thumbnail})}" class="img-fluid lazy" alt="">
 									<a href="storeDetail" class="strip_info">
 										<div class="item_title">
 											<h3 th:text="${store.storeName}"></h3>
@@ -232,14 +232,14 @@
 
 <div layout:fragment="content2">
 	<!-- SPECIFIC SCRIPTS -->
-	<script th:src="@{/customer/js/sticky_sidebar.min.js}"></script>
-	<script th:src="@{/customer/js/specific_listing.js}"></script>
+	<script th:src="@{/js/customer/sticky_sidebar.min.js}"></script>
+	<script th:src="@{/js/customer/specific_listing.js}"></script>
 
 	<!-- Map LeafLet + Mapbox-->
-	<script th:src="@{/customer/js/leaflet_map/leaflet.min.js}"></script>
-	<script th:src="@{/customer/js/leaflet_map/leaflet_markercluster.min.js}"></script>
-	<script th:src="@{/customer/js/leaflet_map/leaflet_markers.js}"></script>
-	<script th:src="@{/customer/js/leaflet_map/leaflet_half_screen_func.js}"></script>
+	<script th:src="@{/js/customer/leaflet_map/leaflet.min.js}"></script>
+	<script th:src="@{/js/customer/leaflet_map/leaflet_markercluster.min.js}"></script>
+	<script th:src="@{/js/customer/leaflet_map/leaflet_markers.js}"></script>
+	<script th:src="@{/js/customer/leaflet_map/leaflet_half_screen_func.js}"></script>
 </div>
 <!--body end-->
 </html>
