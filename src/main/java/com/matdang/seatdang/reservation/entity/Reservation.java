@@ -27,7 +27,7 @@ public class Reservation {
     private LocalDateTime createdAt;
     private LocalDateTime reservedAt;
     @ElementCollection(fetch = FetchType.EAGER)
-    private Set<OrderedMenu> orderSet;
+    private Set<OrderedMenu> orderedMenuSet;
     @Enumerated(EnumType.STRING)
     private ReservationStatus reservationStatus;
     @Embedded

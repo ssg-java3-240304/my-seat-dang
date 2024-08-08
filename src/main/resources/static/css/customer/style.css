@@ -2331,7 +2331,7 @@ ul#top_menu li a.login:before {
 }
 .hero_single.version_2 {
   height: 580px;
-  background: #ededed url(../img/home_section_1.jpg) center center no-repeat;
+  background: #ededed url(../../img/customer/home_section_1.jpg) center center no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -2339,7 +2339,7 @@ ul#top_menu li a.login:before {
 }
 .hero_single.version_3 {
   height: 580px;
-  background: #ededed url(../img/home_section_2.jpg) center center no-repeat;
+  background: #ededed url(../../img/customer/home_section_2.jpg) center center no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -3773,7 +3773,7 @@ ul#top_menu li a.login:before {
   background-color: #f4f4f4;
 }
 .bg_gray.pattern {
-  background: #f4f4f4 url(../img/pattern_2.svg) repeat;
+  background: #f4f4f4 url(../../img/customer/pattern_2.svg) repeat;
 }
 
 .mb_5 {
@@ -5136,11 +5136,11 @@ a.social_bt:hover {
 }
 
 a.social_bt.facebook {
-  background: #3B5998 url(../img/Facebook__logo.svg) 10px center no-repeat;
+  background: #3B5998 url(../../img/customer/Facebook__logo.svg) 10px center no-repeat;
 }
 
 a.social_bt.google {
-  background: #444 url(../img/Google__G__Logo.svg) 10px center no-repeat;
+  background: #444 url(../../img/customer/Google__G__Logo.svg) 10px center no-repeat;
 }
 
 .divider {

@@ -1,6 +1,7 @@
 package com.matdang.seatdang.store.entity;
 
 import com.matdang.seatdang.common.storeEnum.StoreType;
+import com.matdang.seatdang.store.vo.StoreSetting;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,6 +10,7 @@ import java.time.LocalTime;
 @Entity(name = "store")
 @Table(name = "store")
 @Data
+@Builder
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -48,9 +50,9 @@ public class Store {
     private String phone;
     @Column(name = "star_rating")
     private double starRating;
-//    @Column(name = "setting")
-//    @Embedded
-//    private StoreSetting setting;
+    @Column(name = "setting")
+    @Embedded
+    private StoreSetting setting;
 
     // menu 필요
 
