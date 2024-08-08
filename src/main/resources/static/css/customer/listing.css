@@ -659,20 +659,20 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
   display: block;
   font-weight: 500;
 }
-.marker_info:after {
-  right: 100%;
-  top: 56%;
-  border: solid transparent;
-  content: " ";
-  height: 0;
-  width: 0;
-  position: absolute;
-  pointer-events: none;
-  border-color: transparent;
-  border-right-color: white;
-  border-width: 12px;
-  margin-top: -12px;
-}
+/*.marker_info:after {*/
+/*  right: 100%;*/
+/*  top: 56%;*/
+/*  border: solid transparent;*/
+/*  content: " ";*/
+/*  height: 0;*/
+/*  width: 0;*/
+/*  position: absolute;*/
+/*  pointer-events: none;*/
+/*  border-color: transparent;*/
+/*  border-right-color: white;*/
+/*  border-width: 12px;*/
+/*  margin-top: -12px;*/
+/*}*/
 
 a.btn_infobox_detail {
   position: absolute;
