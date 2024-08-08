@@ -1,6 +1,6 @@
 package com.matdang.seatdang.member.entitiy;
 
-import com.matdang.seatdang.member.entitiy.Vo.StoreVo;
+import com.matdang.seatdang.member.vo.StoreVo;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
