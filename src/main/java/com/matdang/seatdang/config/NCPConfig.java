@@ -1,4 +1,4 @@
-package com.matdang.seatdang.object_storage.config;
+package com.matdang.seatdang.config;
 
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
