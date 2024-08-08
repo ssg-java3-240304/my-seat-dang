@@ -107,7 +107,7 @@
   font-size: 24px;
 }
 .payment_select#paypal {
-  background: #f0f0f0 url(../img/paypal_2.svg) center right no-repeat;
+  background: #f0f0f0 url(../../img/customer/paypal_2.svg) center right no-repeat;
 }
 
 #confirm {

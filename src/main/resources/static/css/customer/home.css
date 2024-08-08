@@ -250,7 +250,7 @@
 
 @media (max-width: 1024px) {
   #hero_video {
-    background: #ededed url(../img/home_section_1.jpg) center center no-repeat;
+    background: #ededed url(../../img/customer/home_section_1.jpg) center center no-repeat;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -376,7 +376,7 @@
   position: absolute;
   right: 20px;
   bottom: 20px;
-  background: url(../img/drag_icon.svg) 0 0 no-repeat;
+  background: url(../../img/customer/drag_icon.svg) 0 0 no-repeat;
   width: 50px;
   height: 30px;
   opacity: 0.6;
@@ -675,7 +675,7 @@ a.btn_explore:hover {
   font-size: 1.3125rem;
 }
 .banner.version_2 {
-  background: #589442 url(../img/pattern.svg) repeat;
+  background: #589442 url(../../img/customer/pattern.svg) repeat;
   height: 230px;
   margin: 5px 0 20px 0;
 }
@@ -852,7 +852,7 @@ a.btn_explore:hover {
 
 /* Testimonials */
 .testimonials {
-  background: #f0f0f0 url(../img/pattern_2.svg);
+  background: #f0f0f0 url(../../img/customer/pattern_2.svg);
   padding: 60px 0 45px 0;
   margin-bottom: 25px;
   -webkit-border-radius: 10px;

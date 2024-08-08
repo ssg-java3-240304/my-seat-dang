@@ -1131,7 +1131,7 @@ label.fix_spacing {
   width: 100%;
   overflow: hidden;
   height: 44px;
-  background: #fff url(../img/arrow_down.svg) no-repeat right center;
+  background: #fff url(../../img/admin/arrow_down.svg) no-repeat right center;
   border: 1px solid #ced4da;
   -webkit-border-radius: 0.25rem;
   -moz-border-radius: 0.25rem;
@@ -1140,7 +1140,7 @@ label.fix_spacing {
 }
 .styled-select.short {
   height: 36px;
-  background: #fff url(../img/arrow_down.svg) no-repeat right center;
+  background: #fff url(../../img/admin/arrow_down.svg) no-repeat right center;
 }
 
 .styled-select.short select {
