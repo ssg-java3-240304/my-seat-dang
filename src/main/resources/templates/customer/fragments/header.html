@@ -41,7 +41,14 @@
                                 </ul>
                             </li>
                             <li><a th:href="@{/admin/main}">관리자페이지</a></li>
+
                             <li><a th:href="@{/shop/main}">점주페이지</a></li>
+
+                            <li><a th:href="@{/mypage}">마이페이지</a></li>
+
+                            <li><a th:href="@{/}">항목3</a></li>
+
+                            <li><a th:href="@{/templates/storeowner/main}">점주페이지</a></li>
                             <li><a th:href="@{/mypage}">마이페이지</a></li>
                         </ul>
                     </li>
@@ -112,7 +119,7 @@
             <div class="modal_header">
                 <h3>Sign In</h3>
             </div>
-            <form>
+            <form id="login-form">
                 <div class="sign-in-wrapper">
                     <a href="#0" class="social_bt facebook">Login with Facebook</a>
                     <a href="#0" class="social_bt google">Login with Google</a>
@@ -138,7 +145,7 @@
                     </div>
                     <div class="text-center">
                         <input type="submit" value="Log In" class="btn_1 full-width mb_5">
-                        Don’t have an account? <a href="account.html">Sign up</a>
+                        계정이 없나요? <a th:href="@{/signup}">회원가입</a>
                     </div>
                     <div id="forgot_pw">
                         <div class="form-group">
@@ -155,6 +162,29 @@
         </div>
         <!-- /Sign In Modal -->
 
+<!--        <script>-->
+<!--            $(document).ready(function() {-->
+<!--                $('#login-form').on('submit', function(event) {-->
+<!--                    event.preventDefault();-->
+<!--                    const formData = {-->
+<!--                        email: $('#email').val(),-->
+<!--                        password: $('#password').val()-->
+<!--                    };-->
+<!--                    $.ajax({-->
+<!--                        type: 'POST',-->
+<!--                        url: '/loginProc',-->
+<!--                        data: formData,-->
+<!--                        success: function(response) {-->
+<!--                            alert('Login successful');-->
+<!--                            window.location.href = '/'; // 로그인 성공 시 이동할 main 페이지-->
+<!--                        },-->
+<!--                        error: function(response) {-->
+<!--                            alert('Login failed');-->
+<!--                        }-->
+<!--                    });-->
+<!--                });-->
+<!--            });-->
+<!--        </script>-->
     </header>
 </body>
 </html>
