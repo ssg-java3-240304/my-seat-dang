@@ -1,109 +1,113 @@
 <!DOCTYPE html>
 <!--원래 account.html 페이지임-->
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorate="~{customer/layout/default}">
+      layout:decorate="~{customer/layout/default}">
 <head>
-	<meta charset="UTF-8">
-	<title>Title</title>
-	<!--    main page only css-->
-	<link th:href="@{/customer/css/booking-sign_up.css}" rel="stylesheet">
-<!--	스크롤추가-->
-<!--	<style>-->
-<!--		.scrollable-container {-->
-<!--			max-height: 80vh; /* Adjust this value as needed */-->
-<!--			overflow-y: scroll;-->
-<!--		}-->
-<!--	</style>-->
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--    main page only css-->
+    <link th:href="@{/customer/css/booking-sign_up.css}" rel="stylesheet">
+    <!--	스크롤추가-->
+    <!--	<style>-->
+    <!--		.scrollable-container {-->
+    <!--			max-height: 80vh; /* Adjust this value as needed */-->
+    <!--			overflow-y: scroll;-->
+    <!--		}-->
+    <!--	</style>-->
 </head>
 <body>
 <main class="bg_gray pattern" layout:fragment="main">
-	<div class="container margin_60_40">
-		<div class="row justify-content-center">
-			<div class="col-lg-8">
-				<div class="sign_up">
-					<div class="head">
-						<div class="title">
-							<h3>회원가입</h3>
-						</div>
-					</div>
-					<!-- /head -->
-					<div class="main">
-<!--						<a href="#0" class="social_bt facebook">Sign up with Facebook</a>-->
-<!--						<a href="#0" class="social_bt google">Sign up with Google</a>-->
-<!--						<div class="divider"><span>Or</span></div>-->
-<!--						이름-->
-						<h6>이름</h6>
-						<div class="form-group">
-							<input class="form-control" placeholder="이름을 입력해주세요">
-							<i class="icon_pencil"></i>
-						</div>
-<!--						닉네임-->
-						<div class="form-group">
-							<input class="form-control" placeholder="닉네임을 입력해주세요">
-							<i class="icon_pencil"></i>
-						</div>
-<!--						휴대전화번호 인증 -->
-						<div class="form-group row">
-							<div class ="col-8"><i class="icon_pencil"></i><input class="form-control" placeholder="휴대전화번호를 입력해주세요">
-								</div>
-							<div class ="col-4"><button class="btn btn-primary" type="button">휴대폰인증</button></div>
-						</div>
-<!--						이메일-->
-						<div class="form-group">
-							<input class="form-control" placeholder="이메일을 입력해주세요">
-							<i class="icon_mail"></i>
-							<button class="btn btn-primary" type="button">이메일인증</button>
-						</div>
-<!--						비밀번호-->
-						<div class="form-group add_bottom_15">
-							<input class="form-control" placeholder="비밀번호를 입력해주세요" id="password_sign" name="password_sign">
-							<i class="icon_lock"></i>
-						</div>
-<!--						프로필이미지-->
-<!--						이미지업로드하면 미리보기기능 추가아직 안함-->
-						<h6>프로필이미지</h6>
-						<div class="form-group add_bottom_15">
-							<form method="post" th:action="@{/storage/upload}" enctype="multipart/form-data">
-								<input type="file" name="files" multiple />
-<!--								<input type="submit" value="Submit" />-->
-							</form>
-<!--							<img id="preview" class="preview-img" src="#" alt="이미지 미리보기" style="display: none;" />-->
-						</div>
-
-<!--						회원가입등록하면 확인페이지로이동-->
-						<a href="confirm.html" class="btn_1 full-width mb_5">가입하기</a>
-					</div>
-				</div>
-				<!-- /box_booking -->
-			</div>
-			<!-- /col -->
-		</div>
-		<!-- /row -->
-	</div>
-	<!-- /container -->
+    <div class="container margin_60_40">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="sign_up">
+                    <div class="head">
+                        <div class="title">
+                            <h3>일반회원가입</h3>
+                        </div>
+                    </div>
+                    <!-- /head -->
+                    <div class="main">
+                        <form th:action="@{/signupProc}" method="post" name="joinForm">
+                            <!--						<a href="#0" class="social_bt facebook">Sign up with Facebook</a>-->
+                            <!--						<a href="#0" class="social_bt google">Sign up with Google</a>-->
+                            <!--						<div class="divider"><span>Or</span></div>-->
+                            <!--						이름-->
+                            <h6>이름</h6>
+                            <div class="form-group">
+                                <input class="form-control" name="memberName" placeholder="이름을 입력해주세요">
+                                <!--							<i class="icon_pencil"></i>-->
+                            </div>
+                            <!--						닉네임-->
+                            <h6>닉네임</h6>
+                            <div class="form-group">
+                                <input class="form-control" name="customerNickName" placeholder="닉네임을 입력해주세요">
+                                <!--							<i class="icon_pencil"></i>-->
+                                <button class="btn btn-primary" type="button">닉네임 중복확인</button>
+                            </div>
+                            <!--						휴대전화번호 인증 -->
+                            <h6>휴대전화번호</h6>
+                            <div class="form-group">
+                                <!--								<i class="icon_pencil"></i>-->
+                                <input class="form-control" name="memberPhone" placeholder="휴대전화번호를 입력해주세요">
+                                <button class="btn btn-primary" type="button">휴대폰인증</button>
+                            </div>
+                            <h6>이메일</h6>
+                            <!--						이메일-->
+                            <div class="form-group col-8">
+                                <input class="form-control" name="memberEmail" placeholder="이메일을 입력해주세요">
+                                <!--							<i class="icon_mail"></i>-->
+                                <button class="btn btn-primary" type="button">이메일인증</button>
+                            </div>
+                            <h6>비밀번호</h6>
+                            <!--						비밀번호-->
+                            <div class="form-group add_bottom_15">
+                                <input class="form-control" type="password" name="memberPassword"
+                                       placeholder="비밀번호를 입력해주세요" id="password_sign">
+                                <input class="form-control" type="password" placeholder="비밀번호를 확인"
+                                       id="password_sign_check">
+                                <!--							<i class="icon_lock"></i>-->
+                                <button class="btn btn-primary" type="button">비밀번호 중복확인</button>
+                            </div>
+                            <!--						프로필이미지-->
+                            <!--						이미지업로드하면 미리보기기능 추가아직 안함-->
+                            <h6>프로필이미지(선택)</h6>
+                            <div class="form-group add_bottom_15">
+                                <input type="file" name="customerProfileImage" multiple/>
+                            </div>
+                            <h6>성별(선택)</h6>
+                            <div class="form-group col-8">
+                                <select class="form-control" name="customerGender">
+                                    <option value="NONE">선택안함</option>
+                                    <option value="MALE">남</option>
+                                    <option value="FEMALE">여</option>
+                                </select>
+                            </div>
+                            <h6>생일(선택)</h6>
+                            <div class="form-group col-8">
+                                <input class="form-control" type="date" name="customerBirthday"
+                                       placeholder="생일을 선택해주세요">
+                            </div>
+                            <input type="submit" class="btn_1 full-width mb_5" value="가입하기">
+                        </form>
+                        <div class="text-center">
+                            계정이 있나요? <a th:href="@{/login}">로그인</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- /box_booking -->
+            </div>
+            <!-- /col -->
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
 </main>
 <div layout:fragment="js">
-	<!-- 이 페이지 전용 스크립트 -->
-	<script th:src="@{/customer/js/jarallax.min.js}"></script>
-	<script th:src="@{/customer/js/jarallax-video.min.js}"></script>
+    <!-- 이 페이지 전용 스크립트 -->
+    <script th:src="@{/customer/js/jarallax.min.js}"></script>
+    <script th:src="@{/customer/js/jarallax-video.min.js}"></script>
 </div>
-<!--<script>-->
-<!--	document.getElementById('fileInput').addEventListener('change', function(event) {-->
-<!--		const files = event.target.files;-->
-<!--		if (files.length > 0) {-->
-<!--			const file = files[0];-->
-<!--			const reader = new FileReader();-->
 
-<!--			reader.onload = function(e) {-->
-<!--				const preview = document.getElementById('preview');-->
-<!--				preview.src = e.target.result;-->
-<!--				preview.style.display = 'block';-->
-<!--			};-->
-
-<!--			reader.readAsDataURL(file);-->
-<!--		}-->
-<!--	});-->
-<!--</script>-->
-<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>-->
 </body>
 </html>
