@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <title>chat</title>
@@ -11,7 +11,7 @@
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
-  <link rel="stylesheet" type="text/css" href="/customer/css/chatstyle.css">
+  <link rel="stylesheet" type="text/css" href="/css/customer/chatstyle.css">
 </head>
 
 <body>
@@ -54,9 +54,12 @@
 
         <div class="type_msg">
           <div class="input_msg_write">
+            <!-- 파일 첨부 버튼 추가 -->
+            <button id="chat-attach" class="msg_attach_btn" type="button"><i class="fa fa-paperclip" aria-hidden="true"></i></button>
+            <!-- 메시지 전송 버튼 -->
             <input id="chat-outgoing-msg" type="text" class="write_msg" placeholder="Type a message" />
-            <button id="chat-send" class="msg_send_btn" type="button"><i class="fa fa-paper-plane"
-                                                                         aria-hidden="true"></i></button>
+            <!-- 메시지 전송 버튼 -->
+            <button id="chat-send" class="msg_send_btn" type="button"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
           </div>
         </div>
 
@@ -64,7 +67,7 @@
     </div>
   </div>
 </div>
-<!--<script src="/customer/js/chat.js"></script>-->
+<!--<script src="/js/customer/chat.js"></script>-->
 
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -96,79 +99,116 @@
   }
 
   // 파란박스
-  function getSendMsgBox(data){
-    return `<div class="sent_msg">
-              <p>${data.msg}</p>
-              <span class="time_date">${data.createdAt}/${data.sender}</span>
-            </div>`
+  function getSendMsgBox(data) {
+    // 서버에서 전달받은 ISO 8601 형식의 날짜 문자열
+    const date = new Date(data.createdAt);
+
+    // 시간과 분을 추출
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+
+    // 포맷된 시간 문자열 생성
+    const timeString = `${hours}:${minutes}`;
+
+    return `<div>
+        <p style="text-align: right;">${data.sender}</p>
+        <div class="sent_msg">
+            <p style="text-align: right;">${data.msg}</p>
+            <span class="time_date">${timeString}</span>
+        </div>
+    </div>`;
   }
 
   // 회색박스
-  function getReceiveMsgBox(data){
-    return `<div class="received_withd_msg">
-              <p>${data.msg}</p>
-              <span class="time_date">${data.createdAt}/${data.sender}</span>
-            </div>`
+  function getReceiveMsgBox(data) {
+    // 서버에서 전달받은 ISO 8601 형식의 날짜 문자열
+    const date = new Date(data.createdAt);
+
+    // 시간과 분을 추출
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+
+    // 포맷된 시간 문자열 생성
+    const timeString = `${hours}:${minutes}`;
+
+    return `<div>
+        <p>${data.sender}</p>
+        <div class="received_withd_msg">
+            <p>${data.msg}</p>
+            <span class="time_date">${timeString}</span>
+        </div>
+        <div></div>
+    </div>`;
   }
 
-  // 최초 초기화될 때 1번방 3건 있으면 다 가져옴
-  // addMessage() 함수 호출시에 db에 insert되고, 그 데이터가 자동으로 흘러들어온다(SSE)
-  // 파란박스 초기화
-  function initMyMessage(data) {
-    let chatBox = document.querySelector("#chat-box");
+    // 최초 초기화될 때 1번방 3건 있으면 다 가져옴
+    // addMessage() 함수 호출시에 db에 insert되고, 그 데이터가 자동으로 흘러들어온다(SSE)
+    // 파란박스 초기화
+    function initMyMessage(data) {
+      let chatBox = document.querySelector("#chat-box");
 
-    let sendBox = document.createElement("div");
-    sendBox.className="outgoing_msg"
+      let sendBox = document.createElement("div");
+      sendBox.className = "outgoing_msg"
 
-    sendBox.innerHTML= getSendMsgBox(data);
-    chatBox.append(sendBox);
+      sendBox.innerHTML = getSendMsgBox(data);
+      chatBox.append(sendBox);
 
-    document.documentElement.scrollTop = document.body.scrollHeight;
-  }
-  // 회색박스 초기화
-  function initYourMessage(data) {
-    let chatBox = document.querySelector("#chat-box");
+      document.documentElement.scrollTop = document.body.scrollHeight;
+    }
 
-    let receivedBox = document.createElement("div");
-    receivedBox.className="received_msg"
+    // 회색박스 초기화
+    function initYourMessage(data) {
+      let chatBox = document.querySelector("#chat-box");
 
-    receivedBox.innerHTML= getReceiveMsgBox(data);
-    chatBox.append(receivedBox);
+      let receivedBox = document.createElement("div");
+      receivedBox.className = "received_msg"
 
-    document.documentElement.scrollTop = document.body.scrollHeight;
+      receivedBox.innerHTML = getReceiveMsgBox(data);
+      chatBox.append(receivedBox);
 
-  }
-  // AJAX채팅 메세지를 전송
-  async function addMessage() {
-    let msgInput = document.querySelector("#chat-outgoing-msg");
+      document.documentElement.scrollTop = document.body.scrollHeight;
 
-    let chat = {
-      sender:username,
-      roomNum:roomNum,
-      msg:msgInput.value
-    };
+    }
 
-    fetch("http://localhost:8080/chat",{
-      method:"post",//http 메서드(새로운 데이터 write)
-      body:JSON.stringify(chat),
-      headers: {
-        "Content-Type":"application/json; charset=utf-8" // JS -> JSON
+    // AJAX채팅 메세지를 전송
+    async function addMessage() {
+      let msgInput = document.querySelector("#chat-outgoing-msg");
+
+      let message = msgInput.value.trim();
+
+      // 메시지가 빈 칸인지 확인
+      if (message === "") {
+        return; // 메시지가 비어있으면 함수 종료
+      }
+
+      let chat = {
+        sender: username,
+        roomNum: roomNum,
+        msg: msgInput.value
+      };
+
+      fetch("http://localhost:8080/chat", {
+        method: "post",//http 메서드(새로운 데이터 write)
+        body: JSON.stringify(chat),
+        headers: {
+          "Content-Type": "application/json; charset=utf-8" // JS -> JSON
+        }
+      });
+      msgInput.value = "";
+    }
+
+    // 버튼 클릭시 메세지 전송
+    document.querySelector("#chat-send").addEventListener("click", () => {
+      addMessage();
+    });
+
+    // 엔터를 치면 메세지 전송
+    document.querySelector("#chat-outgoing-msg").addEventListener("keydown", (e) => {
+      if (e.keyCode === 13) {
+        e.preventDefault();
+        addMessage();
       }
     });
-    msgInput.value="";
-  }
-
-  // 버튼 클릭시 메세지 전송
-  document.querySelector("#chat-send").addEventListener("click",() => {
-    addMessage()
-  });
-
-  // 엔터를 치면 메세지 전송
-  document.querySelector("#chat-outgoing-msg").addEventListener("keydown",(e) => {
-    if(e.keyCode === 13){
-      addMessage()
-    }
-  });
 </script>
 
 </body>

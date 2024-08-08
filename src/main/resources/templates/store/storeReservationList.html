@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{store/layout/default}" xmlns="http://www.w3.org/1999/html">
+
+<div layout:fragment="content0">
+	<!-- SPECIFIC CSS -->
+	<link th:href="@{/css/customer/listing.css}" rel="stylesheet">
+	<link th:href="@{/css/customer/leaflet.css}" rel="stylesheet">
+
+	<style>
+		html,
+		body {
+			height: 100%;
+		}
+	</style>
+</div>
+
+<!--body-->
+<div layout:fragment="content">
+	<header class="header_in is_sticky clearfix">
+		<div class="container-fluid">
+			<div id="logo">
+				<a href="index.html">
+					<img th:src="@{/img/customer/logo_sticky.svg}" width="140" height="35" alt="">
+				</a>
+			</div>
+			<ul id="top_menu">
+				<li><a href="#sign-in-dialog" id="sign-in" class="login">Sign In</a></li>
+				<li><a href="wishlist.html" class="wishlist_bt_top" title="Your wishlist">Your wishlist</a></li>
+			</ul>
+			<!-- /top_menu -->
+			<a href="#0" class="open_close">
+				<i class="icon_menu"></i><span>Menu</span>
+			</a>
+			<nav class="main-menu">
+				<div id="header_menu">
+					<a href="#0" class="open_close">
+						<i class="icon_close"></i><span>Menu</span>
+					</a>
+					<a href="index.html"><img th:src="@{/img/customer/logo.svg}" width="140" height="35" alt=""></a>
+				</div>
+				<ul>
+					<li class="submenu">
+						<a href="#0" class="show-submenu">Home</a>
+						<ul>
+							<li><a href="index.html">Default</a></li>
+							<li class="third-level"><a href="#0">Sliders - Parallax <strong>New!</strong></a>
+								<ul>
+									<li><a href="index-16.html">Kenburns slider <strong>New!</strong></a></li>
+									<li><a href="index-8.html">Revolution Slider 1</a></li>
+									<li><a href="index-9.html">Revolution Slider 2</a></li>
+									<li><a href="index-3.html">Owl Carousel</a></li>
+									<li><a href="index-10.html">Parallax Youtube</a></li>
+									<li><a href="index-11.html">Parallax Vimeo</a></li>
+									<li><a href="index-12.html">Parallax Mp4 Video</a></li>
+									<li><a href="index-13.html">Parallax Video Fullscreen</a></li>
+									<li><a href="index-14.html">Parallax Image</a></li>
+								</ul>
+							</li>
+							<li><a href="index-15.html">Text Rotator</a></li>
+							<li><a href="index-5.html">Address Autocomplete</a></li>
+							<li><a href="index-6.html">Search Version 2</a></li>
+							<li><a href="index-7.html">Delivery/Takeaway version</a></li>
+							<li><a href="modal-advertise.html">Modal Advertise</a></li>
+							<li><a href="modal-newsletter.html">Modal Newsletter</a></li>
+							<li><a href="index-2.html">Video Bg Fallback Mobile</a></li>
+							<li><a href="index-4.html">GDPR Cookie Bar EU Law</a></li>
+						</ul>
+					</li>
+					<li class="submenu">
+						<a href="#0" class="show-submenu">Listing</a>
+						<ul>
+							<li class="third-level"><a href="#0">List pages</a>
+								<ul>
+									<li><a href="grid-listing-filterscol.html">List default</a></li>
+									<li><a href="grid-listing-filterscol-map.html">List with map</a></li>
+									<li><a href="listing-map.html">List side map</a></li>
+									<li><a href="grid-listing-filterscol-full-width.html">List full width</a></li>
+									<li><a href="grid-listing-filterscol-full-masonry.html">List Masonry Filter</a></li>
+									<li><a href="grid-listing-filterscol-delivery.html">List Delivery/Takeaway</a></li>
+								</ul>
+							</li>
+							<li class="third-level"><a href="#0">Detail pages</a>
+								<ul>
+									<li><a href="detail-restaurant.html">Detail page 1</a></li>
+									<li><a href="detail-restaurant-2.html">Detail page 2</a></li>
+									<li><a href="detail-restaurant-3.html">Mobile Fixed Booking</a></li>
+									<li><a href="detail-restaurant-delivery.html">Delivery/Takeaway</a></li>
+									<li><a href="storeDetail.html">Detail Menu Thumbs</a></li>
+									<li><a href="detail-restaurant-5.html">Detail Contact Form</a></li>
+								</ul>
+							</li>
+							<li class="third-level"><a href="#0">OpenStreetMap</a>
+								<ul>
+									<li><a href="grid-listing-filterscol-map-openstreetmap.html">List with map</a></li>
+									<li><a href="storeList.html">List side map</a></li>
+									<li><a href="grid-listing-filterscol-full-width-openstreetmap.html">List full width</a></li>
+									<li><a href="grid-listing-filterscol-full-masonry-openstreetmap.html">List Masonry Filter</a></li>
+								</ul>
+							</li>
+							<li><a href="submit-restaurant.html">Submit Restaurant</a></li>
+							<li><a href="submit-rider.html">Submit Rider</a></li>
+							<li><a href="wishlist.html">Wishlist</a></li>
+							<li><a href="booking.html">Booking</a></li>
+							<li><a href="confirm.html">Confirm Booking</a></li>
+							<li><a href="confirm-delivery.html">Confirm Order</a></li>
+							<li><a href="booking-delivery-2.html">Order Delivery/Takeaway</a></li>
+							<li><a href="booking-delivery.html">Order Delivery/Takeaway 2</a></li>
+							<li><a th:href="@{/admin/main.html}" target="_blank">Admin Section</a></li>
+						</ul>
+					</li>
+					<li class="submenu">
+						<a href="#0" class="show-submenu">Other Pages</a>
+						<ul>
+							<li><a href="404.html">404 Error</a></li>
+							<li><a href="help.html">Help and Faq</a></li>
+							<li><a href="blog.html">Blog</a></li>
+							<li><a href="leave-review.html">Leave a review</a></li>
+							<li><a href="user-logged-1.html">User Logged 1</a></li>
+							<li><a href="user-logged-2.html">User Logged 2</a></li>
+							<li><a href="contacts.html">Contacts</a></li>
+							<!--						<li><a th:href="@{/store/coming_soon/index.html}">Coming Soon</a></li>-->
+							<li><a href="account.html">Sign Up</a></li>
+							<li><a href="icon-pack-1.html">Icon Pack 1</a></li>
+							<li><a href="icon-pack-2.html">Icon Pack 2</a></li>
+						</ul>
+					</li>
+					<li><a href="submit-restaurant.html">Submit</a></li>
+					<li><a href="#0">Buy this template</a></li>
+				</ul>
+			</nav>
+		</div>
+	</header>
+	<!-- /header -->
+
+	<main>
+		<div class="container-fluid full-height">
+			<div class="row row-height">
+				<div class="col-xl-4 col-lg-5 content-left order-md-last order-sm-last order-last map_view">
+					<div class="page_header element_to_stick">
+						<div class="row">
+							<!--	                        <div class="col-xl-12 d-none d-md-block">-->
+							<!--&lt;!&ndash;	                            <h1>145 restaurants in Convent Street 2983</h1>&ndash;&gt;-->
+							<!--	                        </div>-->
+							<div class="col-xl-12">
+								<div class="search_bar_list">
+									<input type="text" class="form-control" placeholder="Search">
+									<input type="submit" value="Search">
+								</div>
+							</div>
+						</div>
+						<!-- /row -->
+					</div>
+					<!-- /page_header -->
+
+					<div class="filters_full clearfix">
+						<div class="container">
+							<input class="category" type="button" value="All" th:onclick="|location.href = '@{/store/storeList}'|">
+							<input class="category" type="button" value="예약" th:onclick="|location.href = '@{/store/storeReservationList}'|">
+							<input class="category" type="button" value="웨이팅" th:onclick="|location.href = '@{/store/storeWaitingList}'|">
+							<div class="sort_select">
+								<select name="sort" id="sort">
+									<option value="rating" selected="selected">별점순</option>
+									<option value="popularity">리뷰순</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<!-- /filters_full -->
+					<!--정렬 끝-->
+
+					<div class="row">
+						<div class="col-lg-12 col-sm-6">
+							<div class="strip" th:each="store : ${stores}" th:if="${store.storeType == T(com.matdang.seatdang.common.storeEnum.StoreType).GENERAL_RESERVATION || store.storeType == T(com.matdang.seatdang.common.storeEnum.StoreType).CUSTOM}">
+								<figure>
+									<img th:src="@{/img/customer/thumbnail/{thumbnail}(thumbnail=${store.thumbnail})}" class="img-fluid lazy" alt="">
+									<a href="storeDetail" class="strip_info">
+										<div class="item_title">
+											<h3 th:text="${store.storeName}"></h3>
+											<small th:text="${store.storeAddress}"></small>
+										</div>
+									</a>
+								</figure>
+								<ul>
+									<li><a href="#0" data-id="1" class="address">View on Map</a></li>
+									<li>
+										<div class="score"><span><em>350 Reviews</em></span><strong th:text="${store.starRating}"></strong></div>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<!-- /strip grid -->
+
+						<nav class="position-relative" th:if="${pageCriteria != null}" th:object="${pageCriteria}" aria-label="Page navigation example">
+							<ul class="pagination justify-content-center">
+								<!--/* 이전 영역 */-->
+								<li th:class="|page-item *{pagebarStart == 1 ? 'disabled' : ''}|">
+									<a class="page-link" th:href="|*{url}*{pagebarStart - 1}|">이전</a>
+								</li>
+
+								<!--/* 페이지숫자 영역 */-->
+								<!--/* th:each에는 break 기능이 없다.*/-->
+								<th:block th:each="pageNo : *{#numbers.sequence(pagebarStart, pagebarEnd)}">
+									<li th:if="${pageNo <= pageCriteria.maxPage}" th:class="|page-item ${pageCriteria.page == pageNo ? 'active' : ''}|">
+										<a class="page-link" th:href="|*{url}${pageNo}|" th:text="${pageNo}"></a>
+									</li>
+								</th:block>
+
+								<!--/* 다음 영역 */-->
+								<li th:class="|page-item *{pagebarEnd > maxPage ? 'disabled' : ''}|">
+									<a class="page-link" th:href="|*{url}*{pagebarEnd + 1}|">다음</a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+					<!-- /row-->
+					<!--					<p class="text-center"><a href="#0" class="btn_1"><strong>Load more</strong></a></p>-->
+				</div>
+				<!-- /content-left-->
+				<div class="col-xl-8 col-lg-7 map-right">
+					<div id="map" class="map_right_listing"></div>
+					<!-- map-->
+				</div>
+				<!-- /map-right-->
+			</div>
+			<!-- /row-->
+		</div>
+		<!-- /container-fluid -->
+	</main>
+	<!--/main-->
+</div>
+
+<div layout:fragment="content2">
+	<!-- SPECIFIC SCRIPTS -->
+	<script th:src="@{/js/customer/sticky_sidebar.min.js}"></script>
+	<script th:src="@{/js/customer/specific_listing.js}"></script>
+
+	<!-- Map LeafLet + Mapbox-->
+	<script th:src="@{/js/customer/leaflet_map/leaflet.min.js}"></script>
+	<script th:src="@{/js/customer/leaflet_map/leaflet_markercluster.min.js}"></script>
+	<script th:src="@{/js/customer/leaflet_map/leaflet_markers.js}"></script>
+	<script th:src="@{/js/customer/leaflet_map/leaflet_half_screen_func.js}"></script>
+</div>
+<!--body end-->
+</html>

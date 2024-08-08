@@ -3,9 +3,7 @@ spring:
     name: seatdang
   data:
     mongodb:
-      host: localhost
-      port: 27017
-      database: chatdb
+      uri: ${MONGO_DB_URI}
 
 # profile관리
   profiles:
@@ -20,7 +18,7 @@ spring:
         format_sql: true
         show_sql: true
         hbm2ddl:
-          auto: none
+          auto: update
 #  thymeleaf:
 #    prefix: classpath:/templates/
 #    suffix: .html
@@ -36,7 +34,6 @@ logging:
 
 app:
   version: 0.1.1
-
 
 file:
   upload-dir: /path/to/upload/directory
