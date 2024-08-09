@@ -2,8 +2,10 @@ package com.matdang.seatdang.chat.contorller;
 
 import com.matdang.seatdang.chat.entity.Chat;
 import com.matdang.seatdang.chat.repository.ChatRepository;
+import com.matdang.seatdang.chat.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -38,4 +40,5 @@ public class ChatController {
         chat.setCreatedAt(LocalDateTime.now());
         return chatRepository.save(chat); //Object를 리턴하면 자동으로 JSON 변환
     }
+
 }

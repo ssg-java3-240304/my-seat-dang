@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
 
 <head>
   <title>chat</title>
@@ -80,13 +80,18 @@
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
 
-<script>
+<script th:inline="javascript">
   // 로그인시스템 테스트용
   let username = prompt("아이디를 입력");
   let roomNum = prompt("방번호를 입력");
 
+  /*<![CDATA[*/
+  const chatUrl =  /*[[${chatAceessUrl}]]*/"";
+  /*]]>*/
+  console.log(chatUrl + "이건 url");
+
   //sse 연결하기
-  const eventSource = new EventSource(`http://localhost:8080/chat/roomNum/${roomNum}`);
+  const eventSource = new EventSource(chatUrl + `/chat/roomNum/${roomNum}`);
   eventSource.onmessage = (event) => {
     const data = JSON.parse(event.data);
     if(data.sender === username){ // 로그인한 유저가 보낸 메세지
@@ -187,7 +192,8 @@
         msg: msgInput.value
       };
 
-      fetch("http://localhost:8080/chat", {
+
+      fetch(chatUrl + "/chat", {
         method: "post",//http 메서드(새로운 데이터 write)
         body: JSON.stringify(chat),
         headers: {

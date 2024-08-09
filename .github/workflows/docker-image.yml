@@ -68,6 +68,7 @@ jobs:
             -e "NCP_APIGW_ACCESS_ID=${{ secrets.NCP_APIGW_ACCESS_ID }}" \
             -e "NCP_APIGW_SECRET_KEY=${{ secrets.NCP_APIGW_SECRET_KEY }}" \
             -e "MONGO_DB_URI=${{ secrets.MONGO_DB_URI }}" \
+            -e "CHAT_HOST_SERVER=${{ secrets.CHAT_HOST_SERVER }}" \
             --name ${{ vars.APP_NAME }} \
             ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }}
             sudo docker image prune -f
