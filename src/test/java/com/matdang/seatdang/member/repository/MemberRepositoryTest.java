@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
 
@@ -18,7 +19,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MemberRepositoryTest {
 
     @Autowired
-    private MemberRepository memberRepository;
+    private  MemberRepository memberRepository;
+
+    @Autowired
+    private  BCryptPasswordEncoder bCryptPasswordEncoder;
+
+
+
 
 
     @BeforeEach
@@ -41,7 +48,7 @@ class MemberRepositoryTest {
                 .memberEmail("customer@test.com")
                 .joinDate(LocalDate.now())
                 .memberName("Customer Name")
-                .memberPassword("password")
+                .memberPassword(bCryptPasswordEncoder.encode("1234"))
                 .memberPhone("010-1234-5678")
                 .memberRole(MemberRole.ROLE_CUSTOMER)
                 .memberStatus(MemberStatus.APPROVED)
@@ -60,10 +67,10 @@ class MemberRepositoryTest {
     @Test
     public void testCreateAdmin() {
         Admin admin = Admin.builder()
-                .memberEmail("admin@naver.com")
+                .memberEmail("1234@naver.com")
                 .joinDate(LocalDate.now())
                 .memberName("Admin Name")
-                .memberPassword("password")
+                .memberPassword(bCryptPasswordEncoder.encode("1234"))
                 .memberPhone("010-1234-5678")
                 .memberRole(MemberRole.ROLE_ADMIN)
                 .memberStatus(MemberStatus.APPROVED)
@@ -81,7 +88,7 @@ class MemberRepositoryTest {
                 .memberEmail("storeowner@naver.com")
                 .joinDate(LocalDate.now())
                 .memberName("Store Owner Name")
-                .memberPassword("password")
+                .memberPassword(bCryptPasswordEncoder.encode("1234"))
                 .memberPhone("010-1234-5678")
                 .memberRole(MemberRole.ROLE_STORE_OWNER)
                 .memberStatus(MemberStatus.APPROVED)
@@ -99,7 +106,7 @@ class MemberRepositoryTest {
     }
 
 
-
-
-
+    public void setMemberRepository(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
 }

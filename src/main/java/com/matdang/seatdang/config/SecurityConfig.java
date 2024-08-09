@@ -25,14 +25,16 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/**","/login","/signup").permitAll() // 누구나 허용 // 지금 다 허용함
-//                        .requestMatchers("/admin/**").hasRole("ADMIN") // ROLE_ADMIN 권한이 있는 사용자만 허용
-//                        .requestMatchers("/storeowner/**").hasRole("STOREOWNER") // ROLE_STOREOWNER 권한이 있는 사용자만 허용
+                        .requestMatchers("/","/login","/signup").permitAll() // 누구나 허용 // 지금 다 허용함
+                        .requestMatchers("/admin/**").hasRole("ADMIN") // ROLE_ADMIN 권한이 있는 사용자만 허용
+                        .requestMatchers("/storeowner/**").hasRole("STORE_OWNER") // ROLE_STORE_OWNER 권한이 있는 사용자만 허용
                         .anyRequest().authenticated()
                 );
         http
-                .formLogin((auth) -> auth.loginPage("/login")
+                .formLogin((auth) -> auth.loginPage("/login") // 폼 로그인이라
                         .loginProcessingUrl("/loginProc")
+                        .usernameParameter("memberEmail") // 현재 name = "memberEmail" // 기본인 username이 아니라서 써줌
+                        .passwordParameter("memberPassword") // 현재 name = "memberPassword" // 기본인 password가 아니라서 써줌
                         .permitAll() // 아무나 가능
                 );
         http
@@ -44,12 +46,15 @@ public class SecurityConfig {
     }
 
     //정적파일 무시
-    // 지금은 동ㄱ적 파일 경로 admin , customer 통과로 만듦 수정하기
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer() {
-//        return (web) -> web.ignoring()
-//                .requestMatchers("/admin/**","/customer/**","/");
-//    }
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring()
+                .requestMatchers("/assets/**","/css/**","/img/**","/js/**","/sass/**","/scss/**","/vendor/**","/video/**");
+    }
+
+
+
+
 
 
 }

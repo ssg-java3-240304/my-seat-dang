@@ -1,11 +1,12 @@
 package com.matdang.seatdang.store.entity;
 
 import com.matdang.seatdang.common.storeEnum.StoreType;
+import com.matdang.seatdang.menu.entity.MenuList;
 import com.matdang.seatdang.store.vo.StoreSetting;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalTime;
+import java.util.List;
 
 @Entity(name = "store")
 @Table(name = "store")
@@ -14,6 +15,7 @@ import java.time.LocalTime;
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,37 +25,45 @@ public class Store {
     private String storeName;
     @Column(name = "store_address")
     private String storeAddress;
-    @Column(name = "store_type")
+
     @Enumerated(EnumType.STRING)
+    @Column(name = "store_type")
     private StoreType storeType;
     @Column(name = "open_time")
-    private LocalTime openTime;
+    private String openTime;
     @Column(name = "start_break_time")
-    private LocalTime startBreakTime;
+    private String startBreakTime;
     @Column(name = "end_break_time")
-    private LocalTime endBreakTime;
+    private String endBreakTime;
     @Column(name = "last_order")
-    private LocalTime lastOrder;
+    private String lastOrder;
     @Column(name = "close_time")
-    private LocalTime closeTime;
+    private String closeTime;
     @Column(name = "regular_day_off")
     private String regularDayOff;
     @Column(name = "thumbnail")
     private String thumbnail;
-    @Column(name = "image")
-    private String image;
+    @ElementCollection
+    private List<String> images;
+//    @Column(name = "image1")
+//    private String image1;
+//    @Column(name = "image2")
+//    private String image2;
+//    @Column(name = "image3")
+//    private String image3;
     @Column(name = "description")
     private String description;
     @Column(name = "notice")
     private String notice;
     @Column(name = "phone")
     private String phone;
-    @Column(name = "star_rating")
+    @Column(name = "starRating")
     private double starRating;
-    @Column(name = "setting")
+
     @Embedded
+    @Column(name = "setting")
     private StoreSetting setting;
 
-    // menu 필요
-
+    @Column(name = "menus")
+    private Long menuListId;
 }
