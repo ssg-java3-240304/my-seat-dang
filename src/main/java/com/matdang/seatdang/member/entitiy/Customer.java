@@ -20,7 +20,6 @@ public class Customer extends Member {
 
     @Enumerated(EnumType.STRING)
     private Gender customerGender;
-
     private LocalDate customerBirthday;
     private String customerNickName; // 닉네임
     private String customerProfileImage; // 일반회원프로필이미지URL

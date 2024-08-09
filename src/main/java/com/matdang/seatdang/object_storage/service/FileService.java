@@ -31,16 +31,58 @@ public class FileService {
         return UUID.randomUUID().toString() + "." + ext;
     }
 
-    // 여기서 파일 업로드 쓰시는 분들이 폴더명 바꾸세요
-    public List<FileDto> uploadFilesSample(List<MultipartFile> multipartFiles){
 
-        return uploadFiles(multipartFiles, "sample-folder"); // 여기 폴더명
-    }
+//    public List<FileDto> uploadFilesSample(List<MultipartFile> multipartFiles,String folderName){
+//
+//        return uploadFiles(multipartFiles, folderName);
+//    }
 
-    //NOTICE: filePath의 맨 앞에 /는 안붙여도됨. ex) history/images
-    public List<FileDto> uploadFiles(List<MultipartFile> multipartFiles, String filePath) {
+//    //NOTICE: filePath의 맨 앞에 /는 안붙여도됨. ex) history/images
+//    public List<FileDto> uploadFiles(List<MultipartFile> multipartFiles, String filePath) {
+//
+//        List<FileDto> s3files = new ArrayList<>();
+//
+//        for (MultipartFile multipartFile : multipartFiles) {
+//
+//            String originalFileName = multipartFile.getOriginalFilename();
+//            String uploadFileName = getUuidFileName(originalFileName);
+//            String uploadFileUrl = "";
+//
+//            ObjectMetadata objectMetadata = new ObjectMetadata();
+//            objectMetadata.setContentLength(multipartFile.getSize());
+//            objectMetadata.setContentType(multipartFile.getContentType());
+//
+//            try (InputStream inputStream = multipartFile.getInputStream()) {
+//
+//                String keyName = filePath + "/" + uploadFileName;
+//
+//                // S3에 폴더 및 파일 업로드
+//                amazonS3Client.putObject(
+//                        new PutObjectRequest(bucketName, keyName, inputStream, objectMetadata)
+//                                .withCannedAcl(CannedAccessControlList.PublicRead));
+//
+//                // S3에 업로드한 폴더 및 파일 URL
+//                uploadFileUrl = "https://kr.object.ncloudstorage.com/"+ bucketName + "/" + keyName;
+//
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//            s3files.add(
+//                    FileDto.builder()
+//                            .originalFileName(originalFileName)
+//                            .uploadFileName(uploadFileName)
+//                            .uploadFilePath(filePath)
+//                            .uploadFileUrl(uploadFileUrl)
+//                            .build());
+//        }
+//
+//        return s3files;
+//    }
 
-        List<FileDto> s3files = new ArrayList<>();
+    public List<String> uploadFiles(List<MultipartFile> multipartFiles, String filePath) {
+
+        List<String> uploadFileUrls = new ArrayList<>();
 
         for (MultipartFile multipartFile : multipartFiles) {
 
@@ -62,23 +104,21 @@ public class FileService {
                                 .withCannedAcl(CannedAccessControlList.PublicRead));
 
                 // S3에 업로드한 폴더 및 파일 URL
-                uploadFileUrl = "https://kr.object.ncloudstorage.com/"+ bucketName + "/" + keyName;
+                uploadFileUrl = "https://kr.object.ncloudstorage.com/" + bucketName + "/" + keyName;
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            s3files.add(
-                    FileDto.builder()
-                            .originalFileName(originalFileName)
-                            .uploadFileName(uploadFileName)
-                            .uploadFilePath(filePath)
-                            .uploadFileUrl(uploadFileUrl)
-                            .build());
+            uploadFileUrls.add(uploadFileUrl);
         }
 
-        return s3files;
+        return uploadFileUrls;
     }
+
+
+
+
 
 
     //현재 업로드한 이미지들 모두 불러오기

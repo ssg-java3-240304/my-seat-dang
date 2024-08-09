@@ -8,10 +8,15 @@ import com.opencsv.exceptions.CsvValidationException;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.io.FileInputStream;
 import java.io.FileReader;
@@ -19,33 +24,77 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+//@DataJpaTest
 //@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class SearchRepositoryTest {
-//    @Autowired
-//    private SearchRepository searchRepository;
     @Autowired
-    private StoreRepository storeRepository;
+    private StoreRepository searchRepository;
 
-    @DisplayName("지역명으로 검색")
+    @DisplayName("JPA 확인")
     @Test
-    public void test2() {
+    void test1() {
+        assertThat(searchRepository).isNotNull();
+    }
+
+    @DisplayName("매장명으로 검색")
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5})
+    public void test2(int pageNumber) {
         //given
+        int pageSize = 10;
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Store> storePage = searchRepository.findByStoreNameContaining("브라우니", pageable);
+        System.out.println(storePage); // Page 1 of 7 containing com.sh.app.menu.entity.Menu instances
         //when
         //then
+        System.out.println("조회한 내용 목록 : " + storePage.getContent());
+        System.out.println("총 페이지 수 : " + storePage.getTotalPages());
+        System.out.println("총 상점 수 : " + storePage.getTotalElements());
+        System.out.println("해당 페이지에 표시 될 요소 수 : " + storePage.getSize());
+        System.out.println("해당 페이지에 실제 요소 수 : " + storePage.getNumberOfElements());
+        System.out.println("첫 페이지 여부 : " + storePage.isFirst());
+        System.out.println("마지막 페이지 여부 : " + storePage.isLast());
+        System.out.println("정렬 방식 : " + storePage.getSort());
+        System.out.println("여러 페이지 중 현재 페이지(인덱스) : " + storePage.getNumber());
+        storePage.forEach(System.out::println);
+        assertThat(storePage.getNumberOfElements()).isEqualTo(storePage.getContent().size());
+        storePage.getContent().forEach(store -> {
+            assertThat(store.getStoreName()).contains("브라우니");
+        });
     }
 
     @DisplayName("주소로 검색")
-    @Test
-    public void test3() {
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5})
+    public void test3(int pageNumber) {
         //given
+        int pageSize = 10;
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Store> storePage = searchRepository.findByStoreAddressContaining("삼성", pageable);
+        System.out.println(storePage); // Page 1 of 7 containing com.sh.app.menu.entity.Menu instances
         //when
         //then
+        System.out.println("조회한 내용 목록 : " + storePage.getContent());
+        System.out.println("총 페이지 수 : " + storePage.getTotalPages());
+        System.out.println("총 상점 수 : " + storePage.getTotalElements());
+        System.out.println("해당 페이지에 표시 될 요소 수 : " + storePage.getSize());
+        System.out.println("해당 페이지에 실제 요소 수 : " + storePage.getNumberOfElements());
+        System.out.println("첫 페이지 여부 : " + storePage.isFirst());
+        System.out.println("마지막 페이지 여부 : " + storePage.isLast());
+        System.out.println("정렬 방식 : " + storePage.getSort());
+        System.out.println("여러 페이지 중 현재 페이지(인덱스) : " + storePage.getNumber());
+        storePage.forEach(System.out::println);
+        assertThat(storePage.getNumberOfElements()).isEqualTo(storePage.getContent().size());
+        storePage.getContent().forEach(store -> {
+            assertThat(store.getStoreAddress()).contains("삼성");
+        });
     }
 
     @Disabled
@@ -62,7 +111,7 @@ class SearchRepositoryTest {
                     .image("https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/0a2e250f-1a1a-4805-bf17-559d7c4105cf.png")
                     .build();
             //when
-            store = storeRepository.save(store);
+            store = searchRepository.save(store);
             System.out.println(store);
         }
 
@@ -70,54 +119,12 @@ class SearchRepositoryTest {
 //        assertThat(store.getStoreId()).isNotZero();
     }
 
-    @Disabled
-    @DisplayName("매장데이터 생성")
-    @Test
-    public void test5() {
-        //given
-        String csvFile = "C:\\workspace\\my-seat-dang\\src\\main\\resources\\csv\\store_seoul.csv"; // CSV 파일 경로 설정
-        String[] suffixes = {"에그타르트", "브라우니", "케이크", "에클레어", "마카롱", "소라빵", "단팥빵", "식빵"};
-        Random random = new Random();
+    @DisplayName("매장명+지역명으로 검색")
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5})
+    void test6(int pageNumber) {
+        int pageSize = 10;
+        Pageable pageable = PageRequest.of(pageNumber,pageSize);
 
-        try (CSVReader reader = new CSVReader(new InputStreamReader(new FileInputStream(csvFile), Charset.forName("EUC-KR")))) {
-            String[] line;
-            while ((line = reader.readNext()) != null) {
-                // 해당 열의 인덱스에 따라 데이터 추출
-                String 사업장명 = line[18];
-                String 도로명주소 = line[16];
-                String 지번주소 = line[15];
-                String 전화번호 = line[12];
-                String 좌표정보X = line[23];
-                String 좌표정보Y = line[24];
-
-                // 무작위로 접미사를 선택하여 사업장명 뒤에 추가
-                String randomSuffix = suffixes[random.nextInt(suffixes.length)];
-                String modified사업장명 = "The" + randomSuffix +" "+사업장명;
-
-                // 수정된 사업장명과 함께 데이터 출력
-                System.out.println("사업장명: " + modified사업장명);
-                System.out.println("도로명주소: " + 도로명주소);
-                System.out.println("지번주소: " + 지번주소);
-                System.out.println("전화번호: " + 전화번호);
-                System.out.println("좌표정보(X): " + 좌표정보X);
-                System.out.println("좌표정보(Y): " + 좌표정보Y);
-                System.out.println("---------------");
-
-                String addr = String.format(도로명주소);
-                String name = String.format(modified사업장명);
-                Store store = Store.builder()
-                        .storeName(name)
-                        .storeAddress(addr)
-                        .image("https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/0a2e250f-1a1a-4805-bf17-559d7c4105cf.png")
-                        .build();
-                //when
-                store = storeRepository.save(store);
-                System.out.println(store);
-            }
-        } catch (IOException | CsvValidationException e) {
-            e.printStackTrace();
-        }
-        //when
-        //then
     }
 }

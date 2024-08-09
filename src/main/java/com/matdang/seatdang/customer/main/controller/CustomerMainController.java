@@ -19,8 +19,9 @@ public class CustomerMainController {
         return "customer/shop/detail";
     }
 
+
     @GetMapping("/mypage")
-    public String mypage(){
+    public String mypage() {
         return "customer/mypage/mypage";
     }
 

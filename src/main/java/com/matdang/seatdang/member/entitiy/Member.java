@@ -3,7 +3,6 @@ package com.matdang.seatdang.member.entitiy;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
 import java.time.LocalDate;
 
 @Entity
