@@ -42,6 +42,11 @@ public class SecurityConfig {
         // csrf라는 사이트 위변조 방지 설정 자동설정임 그래서 post요청 보낼 때 csrf 토큰도 같이 보내주어야 로그인됨
         // 이거 켜두면 개발환경에서는 토큰 보내지 않으면 로그인 진행 안되서 지금 disable 해둔거임
 
+        // 로그아웃
+        http.logout(auth -> {auth.logoutUrl("/logout")
+                .logoutSuccessUrl("/login"); // 로그인아웃하면 로그인페이지로 가기
+        });
+
         return http.build();
     }
 
