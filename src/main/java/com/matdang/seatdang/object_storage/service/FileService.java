@@ -4,6 +4,8 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.matdang.seatdang.object_storage.model.dto.FileDto;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FileService {
 
+    private static final Logger log = LoggerFactory.getLogger(FileService.class);
     private final AmazonS3Client amazonS3Client;
 
     @Value("${spring.s3.bucket}")
