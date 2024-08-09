@@ -5,6 +5,7 @@ import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
+import com.matdang.seatdang.common.storeEnum.StoreType;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,10 +25,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.LOCAL_DATE_TIME;
+import static org.assertj.core.api.InstanceOfAssertFactories.LOCAL_TIME;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -108,7 +114,7 @@ class SearchRepositoryTest {
             Store store = Store.builder()
                     .storeName(name)
                     .storeAddress(addr)
-                    .image("https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/0a2e250f-1a1a-4805-bf17-559d7c4105cf.png")
+                    .images(List.of("https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/0a2e250f-1a1a-4805-bf17-559d7c4105cf.png"))
                     .build();
             //when
             store = searchRepository.save(store);
