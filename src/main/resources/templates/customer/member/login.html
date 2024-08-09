@@ -6,7 +6,7 @@
 	<meta charset="UTF-8">
 	<title>Title</title>
 	<!--    main page only css-->
-<link th:href="@{/customer/css/booking-sign_up.css}" rel="stylesheet">
+<link th:href="@{/css/customer/booking-sign_up.css}" rel="stylesheet">
 <!--	스크롤추가-->
 <!--	<style>-->
 <!--		.scrollable-container {-->
@@ -31,18 +31,18 @@
                             <div class="modal_header">
                                 <h3>Sign In</h3>
                             </div>
-                            <form>
+                            <form th:action="@{/loginProc}" method="post" name="loginForm">
                                 <a href="#0" class="social_bt facebook">Login with Facebook</a>
                                 <a href="#0" class="social_bt google">Login with Google</a>
                                 <div class="divider"><span>Or</span></div>
                                 <div class="form-group">
                                     <label>Email</label>
-                                    <input type="email" class="form-control" name="email" id="email">
+                                    <input type="email" class="form-control" name="memberEmail" id="email">
                                     <i class="icon_mail_alt"></i>
                                 </div>
                                 <div class="form-group">
                                     <label>Password</label>
-                                    <input type="password" class="form-control" name="password" id="password" value="">
+                                    <input type="password" class="form-control" name="memberPassword" id="password" value="">
                                     <i class="icon_lock_alt"></i>
                                 </div>
                                 <div class="clearfix add_bottom_15">
@@ -80,7 +80,7 @@
     <!-- /container -->
     <div layout:fragment="js">
         <!-- 이 페이지 전용 스크립트 -->
-        <script th:src="@{/customer/js/jarallax.min.js}"></script>
-        <script th:src="@{/customer/js/jarallax-video.min.js}"></script>
+        <script th:src="@{/js/customer/jarallax.min.js}"></script>
+        <script th:src="@{/js/customer/jarallax-video.min.js}"></script>
     </div>
 </main>
