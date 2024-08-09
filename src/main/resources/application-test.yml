@@ -3,6 +3,9 @@ profile:
   value: 'test'
 
 spring:
+  data:
+    mongodb:
+      uri: ${MONGO_DB_URI}
   datasource:
     url: ${TEST_DB_URL}
     username: ${TEST_DB_USERNAME}

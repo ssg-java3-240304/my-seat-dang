@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{customer/layout/default}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- SPECIFIC CSS -->
+    <link th:href="@{css/customer/listing.css}" rel="stylesheet">
+    <script type="text/javascript" th:src="@{|https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${ncpAccessId}&submodules=geocoder|}"></script>
+<!--    <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=m1vrso77rm&submodules=geocoder"></script>-->
+</head>
+<body>
+<div layout:fragment="main">
+    <main>
+        <div class="page_header element_to_stick">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-8 col-lg-7 col-md-7 d-none d-md-block">
+                        <div class="breadcrumbs">
+                            <ul>
+                                <li><a href="#">Home</a></li>
+                                <li><a href="#">Category</a></li>
+                                <li>Page active</li>
+                            </ul>
+                        </div>
+                        <h1>145 restaurants in Convent Street 2983</h1>
+                    </div>
+                    <div class="col-xl-4 col-lg-5 col-md-5">
+                        <div class="search_bar_list">
+                            <input type="text" class="form-control" placeholder="Search again...">
+                            <input type="submit" value="Search">
+                        </div>
+                    </div>
+                </div>
+                <!-- /row -->
+            </div>
+        </div>
+        <!-- /page_header -->
+        <div class="collapse show" id="collapseMap">
+            <div id="map" class="map"></div>
+        </div>
+        <!-- /Map -->
+
+        <div class="container margin_30_40">
+            <div class="row">
+                <aside class="col-lg-3" id="sidebar_fixed">
+                    <div class="clearfix">
+<!--                        <a class="btn_map d-flex align-items-center justify-content-center" data-bs-toggle="collapse" href="#collapseMap" aria-expanded="true" aria-controls="collapseMap" ><span class="btn_map_txt" data-text-swap="View on Map" data-text-original="Hide Map">View on Map</span></a>-->
+                        <div class="sort_select">
+                            <select name="sort" id="sort">
+                                <option value="popularity" selected="selected">Sort by Popularity</option>
+                                <option value="rating">Sort by Average rating</option>
+                                <option value="date">Sort by newness</option>
+                                <option value="price">Sort by Price: low to high</option>
+                                <option value="price-desc">Sort by Price: high to low</option>
+                            </select>
+                        </div>
+                        <a class="btn_map mobile btn_filters" data-bs-toggle="collapse" href="#collapseMap"><i class="icon_pin_alt"></i></a>
+                        <a href="#0" class="open_filters btn_filters"><i class="icon_adjust-vert"></i><span>Filters</span></a>
+                    </div>
+                    <div class="filter_col">
+                        <div class="inner_bt"><a href="#" class="open_filters"><i class="icon_close"></i></a></div>
+                        <div class="filter_type">
+                            <h4><a href="#filter_1" data-bs-toggle="collapse" class="opened">Categories</a></h4>
+                            <div class="collapse show" id="filter_1">
+                                <ul>
+                                    <li>
+                                        <label class="container_check">Pizza - Italian <small>12</small>
+                                            <input type="checkbox">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="container_check">Japanese - Sushi <small>24</small>
+                                            <input type="checkbox">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="container_check">Burghers <small>23</small>
+                                            <input type="checkbox">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="container_check">Vegetarian <small>11</small>
+                                            <input type="checkbox">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="container_check">Bakery <small>18</small>
+                                            <input type="checkbox">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="container_check">Chinese <small>12</small>
+                                            <input type="checkbox">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="container_check">Mexican <small>15</small>
+                                            <input type="checkbox">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- /filter_type -->
+                        </div>
+                        <!-- /filter_type -->
+                        <div class="filter_type">
+                            <h4><a href="#filter_2" data-bs-toggle="collapse" class="closed">Rating</a></h4>
+                            <div class="collapse" id="filter_2">
+                                <ul>
+                                    <li>
+                                        <label class="container_check">Superb 9+ <small>06</small>
+                                            <input type="checkbox">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="container_check">Very Good 8+ <small>12</small>
+                                            <input type="checkbox">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="container_check">Good 7+ <small>17</small>
+                                            <input type="checkbox">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="container_check">Pleasant 6+ <small>43</small>
+                                            <input type="checkbox">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- /filter_type -->
+                        <div class="filter_type">
+                            <h4><a href="#filter_3" data-bs-toggle="collapse" class="closed">Distance</a></h4>
+                            <div class="collapse" id="filter_3">
+                                <div class="distance"> Radius around selected destination <span></span> km</div>
+                                <div class="add_bottom_15"><input type="range" min="10" max="100" step="10" value="30" data-orientation="horizontal"></div>
+                            </div>
+                        </div>
+                        <!-- /filter_type -->
+                        <div class="filter_type">
+                            <h4><a href="#filter_4" data-bs-toggle="collapse" class="closed">Price</a></h4>
+                            <div class="collapse" id="filter_4">
+                                <ul>
+                                    <li>
+                                        <label class="container_check">$0 — $50<small>11</small>
+                                            <input type="checkbox">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="container_check">$50 — $100<small>08</small>
+                                            <input type="checkbox">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="container_check">$100 — $150<small>05</small>
+                                            <input type="checkbox">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="container_check">$150 — $200<small>18</small>
+                                            <input type="checkbox">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- /filter_type -->
+                        <div class="buttons">
+                            <a href="#0" class="btn_1 full-width">Filter</a>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- /상점 블록 -->
+                <div class="col-lg-9">
+                    <div class="row">
+<!--                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6" th:each="store : ${storeSearchResponseSet}">-->
+                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6" th:each="store : ${storeSearchResponseSet}">
+                            <div class="strip">
+                                <figure>
+                                    <span class="ribbon off">Hot!</span>
+                                    <img th:src="@{https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/af4bc57e-5faa-493f-a8ea-2cf9bf2c6f13.png}" th:data-src="@{https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/af4bc57e-5faa-493f-a8ea-2cf9bf2c6f13.png}" class="img-fluid lazy" alt="">
+                                    <a th:href="@{/detail}" class="strip_info">
+                                        <small>케이크</small>
+                                        <div class="item_title">
+                                            <h3 th:text="${store.storeName}"></h3>
+                                            <small th:text="${store.storeAddress}"></small>
+                                        </div>
+                                    </a>
+                                </figure>
+                                <ul>
+                                    <li><span>웨이팅시간 N분</span></li>
+                                    <li>
+                                        <div class="score"><span>Superb<em>350 Reviews</em></span><strong>8.9</strong></div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- /strip grid -->
+                    </div>
+                    <!-- /row -->
+                    <div class="pagination_fg">
+                        <a href="#">&laquo;</a>
+                        <a href="#" class="active">1</a>
+                        <a href="#">2</a>
+                        <a href="#">3</a>
+                        <a href="#">4</a>
+                        <a href="#">5</a>
+                        <a href="#">&raquo;</a>
+                    </div>
+                </div>
+                <!-- /col -->
+            </div>
+        </div>
+        <!-- /container -->
+
+    </main>
+    <!-- /main -->
+</div>
+
+<div layout:fragment="js">
+    <!-- 이 페이지 전용 스크립트 -->
+    <script th:src="@{/js/customer/sticky_sidebar.min.js}"></script>
+    <script th:src="@{/js/customer/specific_listing.js}"></script>
+    <script th:inline="javascript">
+        var HOME_PATH = window.HOME_PATH || '.';
+        var map = new naver.maps.Map('map', {
+            center: new naver.maps.LatLng(37.4086418, 127.0586395),
+            zoom: 15
+        });
+
+        var bounds = map.getBounds(),
+            southWest = bounds.getSW(),
+            northEast = bounds.getNE(),
+            lngSpan = northEast.lng() - southWest.lng(),
+            latSpan = northEast.lat() - southWest.lat();
+
+        /*<![CDATA[*/
+        const stores = /*[[${storeSearchResponseSet}]]*/ '[]';
+        /*]]>*/
+
+        var markers = [],
+            infoWindows = [];
+
+        var geocodePromises = stores.map((store) => {
+            return new Promise((resolve, reject) => {
+                naver.maps.Service.fromAddrToCoord({
+                    query: store.storeAddress
+                }, function(status, response) {
+                    if (status === naver.maps.Service.Status.OK) {
+                        var result = response.v2;
+                        var position = new naver.maps.LatLng(result.addresses[0].y, result.addresses[0].x);
+                        var marker = new naver.maps.Marker({
+                            map: map,
+                            position: position,
+                            title: store.storeName,
+                            zIndex: 100
+                        });
+                        var infoWindow = new naver.maps.InfoWindow({
+                            content: `
+                                        <div class="infoBox" style="position: absolute; visibility: visible; width: 290px; left: 25px; bottom: -1px;">
+                                        <div class="marker_info" id="marker_info">
+<!--                                        <a th:href="@{/detail(storeName=${store.storeName})}">-->
+                                        <a th:href="@{/detail}">
+                                        <img src="https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/af4bc57e-5faa-493f-a8ea-2cf9bf2c6f13.png" alt="" style="width: 240px; height: 140px; display: block; margin: 0 auto; cursor: pointer;" onclick="window.location.href='/detail?storeName=${store.storeName}'">
+                                        </a>
+                                        <span>
+                                            <span class="infobox_rate">평점 | 7.5</span><h3>${store.storeName}</h3><em>제과점</em><strong>undefined</strong>
+                                            <a href="detail-restaurant.html" class="btn_infobox_detail"></a>
+                                            <form th:action="@{/detail}" method="get" target="_blank">
+<!--                                                <input name="saddr" value="" type="hidden">-->
+<!--                                                <input type="hidden" name="daddr" value="hiddenValue">-->
+                                                <button type="submit" value="Get directions" class="btn_infobox_get_directions">링크1</button>
+                                            </form>
+                                            <a class="btn_infobox_phone">02-1234-5678</a>
+                                        </span>
+                                       </div></div>`,
+                            backgroundColor: "transparent", // 투명 배경
+                            borderColor: "transparent",     // 투명 테두리
+                            borderWidth: 0                  // 테두리 두께 제거
+                        });
+//                         var infoWindow = new naver.maps.InfoWindow({
+//                             content: `<div class="marker_info" id="marker_info">
+// <!--                                        <a th:href="@{/detail(storeName=${store.storeName})}">-->
+//                                         <a th:href="@{/detail}">
+//                                         <img src="https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/af4bc57e-5faa-493f-a8ea-2cf9bf2c6f13.png" alt="" style="width: 240px; height: 140px; display: block; margin: 0 auto; cursor: pointer;" onclick="window.location.href='/detail?storeName=${store.storeName}'">
+//                                         </a>
+//                                         <span>
+//                                             <span class="infobox_rate">평점 | 7.5</span><h3>${store.storeName}</h3><em>제과점</em><strong>undefined</strong>
+//                                             <a href="detail-restaurant.html" class="btn_infobox_detail"></a>
+//                                             <form th:action="@{/detail}" method="get" target="_blank">
+// <!--                                                <input name="saddr" value="" type="hidden">-->
+// <!--                                                <input type="hidden" name="daddr" value="hiddenValue">-->
+//                                                 <button type="submit" value="Get directions" class="btn_infobox_get_directions">링크1</button>
+//                                             </form>
+//                                             <a class="btn_infobox_phone">02-1234-5678</a>
+//                                         </span>
+//                                        </div>`
+//                         });
+
+                        markers.push(marker);
+                        infoWindows.push(infoWindow);
+                        resolve();
+                    } else {
+                        reject(status);
+                    }
+                });
+            });
+        });
+
+        Promise.all(geocodePromises).then(() => {
+            console.log(`Markers length: ${markers.length}`);
+
+            markers.forEach((marker, index) => {
+                naver.maps.Event.addListener(marker, 'click', getClickHandler(index));
+            });
+
+            naver.maps.Event.addListener(map, 'idle', function() {
+                updateMarkers(map, markers);
+            });
+            map.setCenter(markers[0].getPosition());
+        }).catch((error) => {
+            console.error('Geocoding error:', error);
+        });
+
+        function updateMarkers(map, markers) {
+            var mapBounds = map.getBounds();
+            var marker, position;
+            for (var i = 0; i < markers.length; i++) {
+                marker = markers[i]
+                position = marker.getPosition();
+                if (mapBounds.hasLatLng(position)) {
+                    showMarker(map, marker);
+                } else {
+                    hideMarker(map, marker);
+                }
+            }
+        }
+
+        function showMarker(map, marker) {
+
+            if (marker.setMap()) return;
+            marker.setMap(map);
+        }
+
+        function hideMarker(map, marker) {
+
+            if (!marker.setMap()) return;
+            marker.setMap(null);
+        }
+
+        // 해당 마커의 인덱스를 seq라는 클로저 변수로 저장하는 이벤트 핸들러를 반환합니다.
+        function getClickHandler(seq) {
+            return function(e) {
+                var marker = markers[seq],
+                    infoWindow = infoWindows[seq];
+                console.log('이벤트온!');
+                map.setCenter(markers[0].getPosition());
+                if (infoWindow.getMap()) {
+                    infoWindow.close();
+                } else {
+                    infoWindow.open(map, marker);
+                }
+            }
+        }
+    </script>
+</div>
+</body>
+</html>

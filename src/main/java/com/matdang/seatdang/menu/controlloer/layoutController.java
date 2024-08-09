@@ -10,7 +10,7 @@ public class layoutController {
 
     }
 
-    @GetMapping("/shop/main")
+    @GetMapping("/storeowner/main")
     public void testPage2() {
 
     }
