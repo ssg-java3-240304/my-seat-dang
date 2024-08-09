@@ -99,7 +99,7 @@ header.sticky .main-menu > ul > li:hover > a, header.header_in .main-menu > ul >
 }
 
 .banner.version_2 {
-  background: #555555 url(../img/pattern.svg) repeat;
+  background: #555555 url(../../img/customer/pattern.svg) repeat;
 }
 
 .list_home ul li a:hover h3 {
@@ -331,7 +331,7 @@ a.box_topic i {
 /*============================================================================================*/
 input[type=file]::-webkit-file-upload-button, input[type=file].invalid::-webkit-file-upload-button, input[type=file].valid::-webkit-file-upload-button {
   color: #fff;
-  background: #555555 url(../img/camera.svg) 8px center no-repeat;
+  background: #555555 url(../../img/customer/camera.svg) 8px center no-repeat;
 }
 
 /*============================================================================================*/

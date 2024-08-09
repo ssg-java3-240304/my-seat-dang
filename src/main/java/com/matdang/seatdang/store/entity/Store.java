@@ -11,6 +11,7 @@ import java.util.List;
 @Entity(name = "store")
 @Table(name = "store")
 @Data
+@Builder
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor

@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface StoreRepository extends JpaRepository<Store, Long> {
 
+    Page<Store> findByStoreAddressContaining(String storeAddress, Pageable pageable);
     Page<Store> findByStoreNameContaining(String storeName, Pageable pageable);
 
     Page<Store> findAllByOrderByStarRatingDesc(Pageable pageable);
