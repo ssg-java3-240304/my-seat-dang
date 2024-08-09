@@ -57,8 +57,8 @@ public class StoreAdminController {
             @ModelAttribute StoreRegistRequestDto dto,
             RedirectAttributes redirectAttributes) throws IOException {
         log.debug("dto = {}", dto);
-        List<FileDto> uploadedImages = fileService.uploadFiles(images, "sample-folder");
-        String thumbnailUrl = fileService.uploadFiles(List.of(thumbnail), "sample-folder").get(0).getUploadFileUrl();
+        List<String> uploadedImages = fileService.uploadFiles(images, "sample-folder");
+        String thumbnailUrl = fileService.uploadFiles(List.of(thumbnail), "sample-folder").get(0);
 
         Store store = dto.toStore();
         StoreRegistRequestDto.builder()
@@ -69,7 +69,7 @@ public class StoreAdminController {
                 .phone(phone)
                 .storeAddress(storeAddress)
                 .thumbnail(thumbnailUrl)
-                .images(uploadedImages.stream().map(FileDto::getUploadFileUrl).toList())
+                .images(uploadedImages)
                 .openTime(openTime)
                 .closeTime(closeTime)
                 .startBreakTime(startBreakTime)
