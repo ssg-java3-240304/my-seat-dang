@@ -4,8 +4,13 @@ spring:
   data:
     mongodb:
       uri: mongodb://223.130.161.242:27017/chatdb
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 50MB
+      location: 
 
-# profile관리
+  # profile관리
   profiles:
     default: test
   #    active: prod
@@ -18,7 +23,7 @@ spring:
         format_sql: true
         show_sql: true
         hbm2ddl:
-          auto: create
+          auto: update
 #  thymeleaf:
 #    prefix: classpath:/templates/
 #    suffix: .html
@@ -42,3 +47,11 @@ ncp:
   api:
     accessId: ${NCP_APIGW_ACCESS_ID}
     secretKey: ${NCP_APIGW_SECRET_KEY}
+
+
+ftp:
+  server:
+    host: ssg-java3.iptime.org
+    port: 21
+    username: myftp
+    password: myftp

@@ -1,6 +1,8 @@
 package com.matdang.seatdang.store.controller;
 
 import com.matdang.seatdang.common.paging.PageCriteria;
+import com.matdang.seatdang.menu.entity.MenuList;
+import com.matdang.seatdang.menu.service.MenuService;
 import com.matdang.seatdang.store.dto.StoreListResponseDto;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.service.StoreService;
@@ -13,6 +15,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -25,6 +28,7 @@ import static com.matdang.seatdang.common.storeEnum.StoreType.GENERAL_RESERVATIO
 @Slf4j
 public class StoreController {
     private final StoreService storeService;
+    private final MenuService menuService;
 
     @GetMapping("/storeList")
     public void storeList(@PageableDefault(page = 1, size = 10) Pageable pageable,
@@ -98,8 +102,10 @@ public class StoreController {
     @GetMapping("/storeDetail")
     public void storeDetail(@RequestParam("storeId") Long storeId, Model model){
         Store store = storeService.findByStoreId(storeId);
+        MenuList menus = menuService.findAllByStoreId(storeId);
         log.debug("store = {}", store);
+        log.debug("menus = {}", menus);
         model.addAttribute("store", store);
+        model.addAttribute("menus", menus);
     }
-
 }

@@ -61,30 +61,30 @@ VALUES
     ('하이디 케이크 본점', '서울특별시 강남구 역삼동 012-34', '09:00:00', null, null, '18:00:00', '19:00:00', '화요일', 'heidi_cake_thumbnail.jpg', 'store_cake.jpg', 'store_cake2.jpg', 'store_cake3.jpg', '프리미엄 케이크와 디저트를 전문으로 하는 매장입니다.', '특별한 날에는 미리 예약 부탁드립니다.', '02-0123-4567', 4.6, 'CUSTOM');
 
 -- 일반빵 데이터 삽입
-INSERT INTO general_menu (menu_name, menu_price, image, menu_type) VALUES
-    ('치즈빵', 3000, 'cheese_bread.jpg', 일반빵),
-    ('치아바타', 3500, 'ciabatta.jpg', 일반빵),
-    ('초코빵', 3200, 'choco_bread.jpg', 일반빵),
-    ('크로와상', 4000, 'croissant.jpg', 일반빵),
-    ('식빵', 2800, 'bread.jpg', 일반빵),
-    ('초코머핀', 3700, 'choco_muffin.jpg', 일반빵),
-    ('피자빵', 4500, 'pizza_bread.jpg', 일반빵),
-    ('앙버터 라우겐', 3800, 'angbutter_laugen.jpg', 일반빵),
-    ('바게트', 3000, 'baguette.jpg', 일반빵),
-    ('호두 호밀빵', 3500, 'walnut_rye_bread.jpg', 일반빵);
-
--- 제작케이크 데이터 삽입
-INSERT INTO custom_menu (menu_name, menu_price, image, menu_type, sheet, size, cream, lettering) VALUES
-     ('커스텀 초콜릿 케이크', 35000, 'chocolate_cake.jpg', '제작케이크', '초콜릿 시트', '6', '초코 크림', 'Happy Birthday'),
-     ('커스텀 바닐라 케이크', 30000, 'vanilla_cake.jpg', '제작케이크', '바닐라 시트', '5', '바닐라 크림', 'Congratulations'),
-     ('커스텀 딸기 케이크', 32000, 'strawberry_cake.jpg', '제작케이크', '바닐라 시트', '6', '딸기 크림', 'Best Wishes'),
-     ('커스텀 레드벨벳 케이크', 36000, 'redvelvet_cake.jpg', '제작케이크', '레드벨벳 시트', '4', '크림치즈 크림', 'Love You'),
-     ('커스텀 치즈 케이크', 34000, 'cheesecake.jpg', '제작케이크', '치즈 시트', '3', '치즈 크림', 'Congratulations'),
-     ('커스텀 마카롱 케이크', 38000, 'macaron_cake.jpg', '제작케이크', '마카롱 시트', '2', '버터 크림', 'Happy Anniversary'),
-     ('커스텀 티라미수 케이크', 37000, 'tiramisu_cake.jpg', '제작케이크', '마스카포네 시트', '2', '마스카포네 크림', 'Cheers'),
-     ('커스텀 캐러멜 케이크', 33000, 'caramel_cake.jpg', '제작케이크', '카라멜 시트', '5', '카라멜 크림', 'Get Well Soon'),
-     ('커스텀 모카 케이크', 34000, 'mocha_cake.jpg', '제작케이크', '모카 시트', '1', '모카 크림', 'Happy Graduation'),
-     ('커스텀 초코 바나나 케이크', 36000, 'choco_banana_cake.jpg', '제작케이크', '초콜릿 시트', '3', '초코 바나나 크림', 'Celebrate');
+# INSERT INTO general_menu (menu_name, menu_price, image, menu_type) VALUES
+#     ('치즈빵', 3000, 'cheese_bread.jpg', 일반빵),
+#     ('치아바타', 3500, 'ciabatta.jpg', 일반빵),
+#     ('초코빵', 3200, 'choco_bread.jpg', 일반빵),
+#     ('크로와상', 4000, 'croissant.jpg', 일반빵),
+#     ('식빵', 2800, 'bread.jpg', 일반빵),
+#     ('초코머핀', 3700, 'choco_muffin.jpg', 일반빵),
+#     ('피자빵', 4500, 'pizza_bread.jpg', 일반빵),
+#     ('앙버터 라우겐', 3800, 'angbutter_laugen.jpg', 일반빵),
+#     ('바게트', 3000, 'baguette.jpg', 일반빵),
+#     ('호두 호밀빵', 3500, 'walnut_rye_bread.jpg', 일반빵);
+#
+# -- 제작케이크 데이터 삽입
+# INSERT INTO custom_menu (menu_name, menu_price, image, menu_type, sheet, size, cream, lettering) VALUES
+#      ('커스텀 초콜릿 케이크', 35000, 'chocolate_cake.jpg', '제작케이크', '초콜릿 시트', '6', '초코 크림', 'Happy Birthday'),
+#      ('커스텀 바닐라 케이크', 30000, 'vanilla_cake.jpg', '제작케이크', '바닐라 시트', '5', '바닐라 크림', 'Congratulations'),
+#      ('커스텀 딸기 케이크', 32000, 'strawberry_cake.jpg', '제작케이크', '바닐라 시트', '6', '딸기 크림', 'Best Wishes'),
+#      ('커스텀 레드벨벳 케이크', 36000, 'redvelvet_cake.jpg', '제작케이크', '레드벨벳 시트', '4', '크림치즈 크림', 'Love You'),
+#      ('커스텀 치즈 케이크', 34000, 'cheesecake.jpg', '제작케이크', '치즈 시트', '3', '치즈 크림', 'Congratulations'),
+#      ('커스텀 마카롱 케이크', 38000, 'macaron_cake.jpg', '제작케이크', '마카롱 시트', '2', '버터 크림', 'Happy Anniversary'),
+#      ('커스텀 티라미수 케이크', 37000, 'tiramisu_cake.jpg', '제작케이크', '마스카포네 시트', '2', '마스카포네 크림', 'Cheers'),
+#      ('커스텀 캐러멜 케이크', 33000, 'caramel_cake.jpg', '제작케이크', '카라멜 시트', '5', '카라멜 크림', 'Get Well Soon'),
+#      ('커스텀 모카 케이크', 34000, 'mocha_cake.jpg', '제작케이크', '모카 시트', '1', '모카 크림', 'Happy Graduation'),
+#      ('커스텀 초코 바나나 케이크', 36000, 'choco_banana_cake.jpg', '제작케이크', '초콜릿 시트', '3', '초코 바나나 크림', 'Celebrate');
 commit;
 
 # -- 테이블 삭제

@@ -3,7 +3,7 @@
 	  layout:decorate="~{store/layout/default}">
 
     <!-- SPECIFIC CSS -->
-    <link th:href="@{/customer/css/detail-page.css}" rel="stylesheet">
+    <link th:href="@{/css/customer/detail-page.css}" rel="stylesheet">
 
 <!--body-->
 	<div layout:fragment="content">
@@ -11,7 +11,7 @@
 		<div class="container">
 		<div id="logo">
 			<a href="index.html">
-				<img th:src="@{/customer/img/logo_sticky.svg}" width="140" height="35" alt="">
+				<img th:src="@{/img/customer/logo_sticky.svg}" width="140" height="35" alt="">
 			</a>
 		</div>
 		<ul id="top_menu">
@@ -27,7 +27,7 @@
 				<a href="#0" class="open_close">
 					<i class="icon_close"></i><span>Menu</span>
 				</a>
-				<a href="index.html"><img th:src="@{/customer/img/logo.svg}" width="140" height="35" alt=""></a>
+				<a href="index.html"><img th:src="@{/img/customer/logo.svg}" width="140" height="35" alt=""></a>
 			</div>
 			<ul>
 				<li class="submenu">
@@ -139,9 +139,9 @@
 							<div class="col-xl-8 col-lg-7 col-md-6 position-relative">
 								<div class="buttons clearfix">
 									<span class="magnific-gallery">
-										<a th:href="@{/customer/img/thumbnail/{thumbnail}(thumbnail=${store.thumbnail})}" class="btn_hero" title="Photo title" data-effect="mfp-zoom-in"><i class="icon_image"></i>View photos</a>
-										<a th:href="@{/customer/img/detail_2.jpg}" title="Photo title" data-effect="mfp-zoom-in"></a>
-										<a th:href="@{/customer/img/detail_3.jpg}" title="Photo title" data-effect="mfp-zoom-in"></a>
+										<a th:href="@{/img/customer/thumbnail/{thumbnail}(thumbnail=${store.thumbnail})}" class="btn_hero" title="Photo title" data-effect="mfp-zoom-in"><i class="icon_image"></i>View photos</a>
+										<a th:href="@{/img/customer/detail_2.jpg}" title="Photo title" data-effect="mfp-zoom-in"></a>
+										<a th:href="@{/img/customer/detail_3.jpg}" title="Photo title" data-effect="mfp-zoom-in"></a>
 									</span>
 									<a href="#0" class="btn_hero wishlist"><i class="icon_heart"></i>Wishlist</a>
 								</div>
@@ -330,7 +330,7 @@
 		                                    <div class="review_card">
 		                                        <div class="row">
 		                                            <div class="col-md-2 user_info">
-		                                                <figure><img th:src="@{/customer/img/avatar4.jpg}" alt=""></figure>
+		                                                <figure><img th:src="@{/img/customer/avatar4.jpg}" alt=""></figure>
 		                                                <h5>Lukas</h5>
 		                                            </div>
 		                                            <div class="col-md-10 review_content">
@@ -353,7 +353,7 @@
 		                                    <div class="review_card">
 		                                        <div class="row">
 		                                            <div class="col-md-2 user_info">
-		                                                <figure><img th:src="@{/customer/img/avatar6.jpg}" alt=""></figure>
+		                                                <figure><img th:src="@{/img/customer/avatar6.jpg}" alt=""></figure>
 		                                                <h5>Lukas</h5>
 		                                            </div>
 		                                            <div class="col-md-10 review_content">
@@ -376,7 +376,7 @@
 		                                    <div class="review_card">
 		                                        <div class="row">
 		                                            <div class="col-md-2 user_info">
-		                                                <figure><img th:src="@{/customer/img/avatar1.jpg}" alt=""></figure>
+		                                                <figure><img th:src="@{/img/customer/avatar1.jpg}" alt=""></figure>
 		                                                <h5>Marika</h5>
 		                                            </div>
 		                                            <div class="col-md-10 review_content">
@@ -396,7 +396,7 @@
 		                                        <!-- /row -->
 		                                        <div class="row reply">
 		                                            <div class="col-md-2 user_info">
-		                                                <figure><img th:src="@{/customer/img/avatar.jpg}" alt=""></figure>
+		                                                <figure><img th:src="@{/img/customer/avatar.jpg}" alt=""></figure>
 		                                            </div>
 		                                            <div class="col-md-10">
 		                                                <div class="review_content">
@@ -580,7 +580,7 @@
 					<div class="collapse dont-collapse-sm" id="collapse_4">
 						<div id="newsletter">
 							<div id="message-newsletter"></div>
-							<form method="post" th:action="@{/customer/assets/newsletter.php}" name="newsletter_form" id="newsletter_form">
+							<form method="post" th:action="@{/assets/customer/newsletter.php}" name="newsletter_form" id="newsletter_form">
 								<div class="form-group">
 									<input type="email" name="email_newsletter" id="email_newsletter" class="form-control" placeholder="Your email">
 									<button type="submit" id="submit-newsletter"><i class="arrow_carrot-right"></i></button>
@@ -643,10 +643,10 @@
 
 	<div layout:fragment="content2">
     <!-- SPECIFIC SCRIPTS -->
-    <script th:src="@{/customer/js/sticky_sidebar.min.js}"></script>
-    <script th:src="@{/customer/js/specific_detail.js}"></script>
-	<script th:src="@{/customer/js/datepicker.min.js}"></script>
-	<script th:src="@{/customer/js/datepicker_func_1.js}"></script>
+    <script th:src="@{/js/customer/sticky_sidebar.min.js}"></script>
+    <script th:src="@{/js/customer/specific_detail.js}"></script>
+	<script th:src="@{/js/customer/datepicker.min.js}"></script>
+	<script th:src="@{/js/customer/datepicker_func_1.js}"></script>
 	</div>
 <!--body end-->
 </html>

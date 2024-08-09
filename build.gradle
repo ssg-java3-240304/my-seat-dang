@@ -53,6 +53,9 @@ dependencies {
     //websocket
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     implementation 'io.projectreactor:reactor-core:3.5.0'
+
+    // ftp file upload처리를 위한 의존
+    implementation 'commons-net:commons-net:3.9.0'
 }
 
 tasks.named('test') {

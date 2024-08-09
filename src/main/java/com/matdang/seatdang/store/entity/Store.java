@@ -1,12 +1,11 @@
 package com.matdang.seatdang.store.entity;
 
 import com.matdang.seatdang.common.storeEnum.StoreType;
-import com.matdang.seatdang.menu.entity.GeneralMenu;
+import com.matdang.seatdang.menu.entity.MenuList;
 import com.matdang.seatdang.store.vo.StoreSetting;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalTime;
 import java.util.List;
 
 @Entity(name = "store")
@@ -15,6 +14,7 @@ import java.util.List;
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,25 +29,27 @@ public class Store {
     @Column(name = "store_type")
     private StoreType storeType;
     @Column(name = "open_time")
-    private LocalTime openTime;
+    private String openTime;
     @Column(name = "start_break_time")
-    private LocalTime startBreakTime;
+    private String startBreakTime;
     @Column(name = "end_break_time")
-    private LocalTime endBreakTime;
+    private String endBreakTime;
     @Column(name = "last_order")
-    private LocalTime lastOrder;
+    private String lastOrder;
     @Column(name = "close_time")
-    private LocalTime closeTime;
+    private String closeTime;
     @Column(name = "regular_day_off")
     private String regularDayOff;
     @Column(name = "thumbnail")
     private String thumbnail;
-    @Column(name = "image1")
-    private String image1;
-    @Column(name = "image2")
-    private String image2;
-    @Column(name = "image3")
-    private String image3;
+    @ElementCollection
+    private List<String> images;
+//    @Column(name = "image1")
+//    private String image1;
+//    @Column(name = "image2")
+//    private String image2;
+//    @Column(name = "image3")
+//    private String image3;
     @Column(name = "description")
     private String description;
     @Column(name = "notice")
@@ -61,9 +63,6 @@ public class Store {
     @Column(name = "setting")
     private StoreSetting setting;
 
-    // menu 필요
-    @ElementCollection
-    @CollectionTable(name = "store_menu", joinColumns = @JoinColumn(name = "store_id"))
     @Column(name = "menus")
-    private List<GeneralMenu> menus;
+    private Long menuListId;
 }
