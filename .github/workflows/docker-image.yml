@@ -65,9 +65,9 @@ jobs:
             -e "PROD_DB_PASSWORD=${{ secrets.PROD_DB_PASSWORD }}" \
             -e "SPRING_S3_ACCESSKEY=${{ secrets.SPRING_S3_ACCESSKEY }}" \
             -e "SPRING_S3_SECRETKEY=${{ secrets.SPRING_S3_SECRETKEY }}" \
-            -e "SPRING_S3_SECRETKEY=${{ secrets.NCP_APIGW_ACCESS_ID }}" \
-            -e "SPRING_S3_SECRETKEY=${{ secrets.NCP_APIGW_SECRET_KEY }}" \
-            -e "SPRING_S3_SECRETKEY=${{ secrets.MONGO_DB_URI }}" \
+            -e "NCP_APIGW_ACCESS_ID=${{ secrets.NCP_APIGW_ACCESS_ID }}" \
+            -e "NCP_APIGW_SECRET_KEY=${{ secrets.NCP_APIGW_SECRET_KEY }}" \
+            -e "MONGO_DB_URI=${{ secrets.MONGO_DB_URI }}" \
             
             --name ${{ vars.APP_NAME }} \
             ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }}
