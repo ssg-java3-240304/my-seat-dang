@@ -14,7 +14,7 @@ public class SearchStoreService {
     /**
      * 상호로 검색
      */
-    public Page<StoreListResponseDto> searchStoreBystoreName(String storeName, Pageable pageable) {
+    public Page<StoreListResponseDto> searchStoreByStoreName(String storeName, Pageable pageable) {
 
         return storeRepository.findByStoreNameContaining(storeName, pageable)
                 .map((store -> StoreListResponseDto.fromStore(store)));
