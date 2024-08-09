@@ -9,4 +9,4 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 
-hostUrl: ${HOST_SERVER}
+hostUrl: ${CHAT_HOST_SERVER}
