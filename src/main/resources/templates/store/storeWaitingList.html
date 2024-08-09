@@ -174,7 +174,7 @@
 							<div class="strip" th:each="store : ${stores}" th:if="${store.storeType == T(com.matdang.seatdang.common.storeEnum.StoreType).GENERAL_WAITING}">
 								<figure>
 									<img th:src="@{/img/customer/thumbnail/{thumbnail}(thumbnail=${store.thumbnail})}" class="img-fluid lazy" alt="">
-									<a href="storeDetail" class="strip_info">
+									<a th:href="|@{/store/storeDetail?storeId=}${store.storeId}|" class="strip_info">
 										<div class="item_title">
 											<h3 th:text="${store.storeName}"></h3>
 											<small th:text="${store.storeAddress}"></small>

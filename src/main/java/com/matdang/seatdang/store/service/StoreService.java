@@ -27,4 +27,8 @@ public class StoreService {
         Page<Store> storePage = storeRepository.findByStoreTypeContaining(GENERAL_RESERVATION, CUSTOM, pageable);
         return storePage.map(StoreListResponseDto::fromStore);
     }
+
+    public Store findByStoreId(Long storeId) {
+        return storeRepository.findByStoreId(storeId);
+    }
 }
