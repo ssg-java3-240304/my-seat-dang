@@ -5,8 +5,6 @@ import com.matdang.seatdang.admin.repository.StoreAdminRepository;
 import com.matdang.seatdang.store.entity.Store;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.net.ftp.FTP;
-import org.apache.commons.net.ftp.FTPClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

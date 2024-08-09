@@ -57,7 +57,7 @@ class SearchRepositoryTest {
         int pageSize = 10;
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<Store> storePage = searchRepository.findByStoreNameContaining("브라우니", pageable);
-        System.out.println(storePage); // Page 1 of 7 containing com.sh.app.menu.entity.Menu instances
+        System.out.println(storePage);
         //when
         //then
         System.out.println("조회한 내용 목록 : " + storePage.getContent());
@@ -84,7 +84,7 @@ class SearchRepositoryTest {
         int pageSize = 10;
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<Store> storePage = searchRepository.findByStoreAddressContaining("삼성", pageable);
-        System.out.println(storePage); // Page 1 of 7 containing com.sh.app.menu.entity.Menu instances
+        System.out.println(storePage);
         //when
         //then
         System.out.println("조회한 내용 목록 : " + storePage.getContent());
