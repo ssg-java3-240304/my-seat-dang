@@ -3,8 +3,6 @@ package com.matdang.seatdang.auth.controller;
 import com.matdang.seatdang.auth.principal.CustomerUserDetails;
 import com.matdang.seatdang.auth.service.AuthService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
