@@ -1,6 +1,6 @@
 package com.matdang.seatdang.search.service;
 
-import com.matdang.seatdang.store.dto.StoreListResponseDto;
+import com.matdang.seatdang.search.dto.SearchStoreResponseDto;
 import com.matdang.seatdang.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,16 +16,16 @@ public class SearchStoreQueryService {
     /**
      * 상호로 검색
      */
-    public Page<StoreListResponseDto> searchStoreByStoreName(String storeName, Pageable pageable) {
+    public Page<SearchStoreResponseDto> searchStoreByStoreName(String storeName, Pageable pageable) {
         log.debug("searchStoreByStoreName: {}", storeName);
         return storeRepository.findByStoreNameContaining(storeName, pageable)
-                .map((store -> StoreListResponseDto.fromStore(store)));
+                .map((store -> SearchStoreResponseDto.fromStore(store)));
     }
 
-    public Page<StoreListResponseDto> searchStoreByAddress(String storeAddress, Pageable pageable) {
+    public Page<SearchStoreResponseDto> searchStoreByAddress(String storeAddress, Pageable pageable) {
         log.debug("searchStoreByAddress: {}", storeAddress);
         return storeRepository.findByStoreAddressContaining(storeAddress, pageable)
-                .map((store -> StoreListResponseDto.fromStore(store)));
+                .map((store -> SearchStoreResponseDto.fromStore(store)));
     }
 
 

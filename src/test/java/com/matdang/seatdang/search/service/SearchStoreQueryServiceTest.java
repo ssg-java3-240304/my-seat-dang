@@ -1,5 +1,6 @@
 package com.matdang.seatdang.search.service;
 
+import com.matdang.seatdang.search.dto.SearchStoreResponseDto;
 import com.matdang.seatdang.store.dto.StoreListResponseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,7 @@ class SearchStoreQueryServiceTest {
         int pageSize = 10;
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         //when
-        Page<StoreListResponseDto> storePage = searchStoreQueryService.searchStoreByStoreName(storeName, pageable);
+        Page<SearchStoreResponseDto> storePage = searchStoreQueryService.searchStoreByStoreName(storeName, pageable);
         //then
         System.out.println(storePage.getNumberOfElements());
         assertThat(storePage.getNumberOfElements()).isEqualTo(pageSize);
@@ -44,7 +45,7 @@ class SearchStoreQueryServiceTest {
         int pageSize = 10;
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         //when
-        Page<StoreListResponseDto> storePage = searchStoreQueryService.searchStoreByStoreName(storeAddress, pageable);
+        Page<SearchStoreResponseDto> storePage = searchStoreQueryService.searchStoreByStoreName(storeAddress, pageable);
         //then
         System.out.println(storePage.getNumberOfElements());
         storePage.getContent().stream().forEach((store)-> System.out.println(store.getStoreAddress()));
