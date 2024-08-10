@@ -2,6 +2,7 @@ package com.matdang.seatdang.member.dto;
 
 import com.matdang.seatdang.member.entitiy.Gender;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
@@ -12,7 +13,7 @@ public class CustomerSignupDto {
     private String memberName; // 필수
     private String memberPassword; // 필수
     private String memberPhone; // 필수
-    private String customerProfileImage; // 프로필이미지URL // 선택
+    private MultipartFile customerProfileImage; // 프로필이미지URL // 선택
     private Gender customerGender; // 선택
     private LocalDate customerBirthday; // 선택
 

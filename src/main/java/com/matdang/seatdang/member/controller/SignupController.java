@@ -2,10 +2,12 @@ package com.matdang.seatdang.member.controller;
 
 import com.matdang.seatdang.member.dto.CustomerSignupDto;
 import com.matdang.seatdang.member.service.CustomerSignupService;
+import com.matdang.seatdang.object_storage.service.FileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @Slf4j
@@ -27,11 +29,9 @@ public class SignupController {
 
     // 사용자 회원가입 값 요청
     @PostMapping("/signupProc")
-    public String joinProcess(@ModelAttribute CustomerSignupDto customerSignupDto){
+    public String joinProcess(@ModelAttribute CustomerSignupDto customerSignupDto,@RequestParam("customerProfileImage") MultipartFile customerProfileImage){
 
-        System.out.println("컨트롤러");
-
-        customerSignupService.joinProcess(customerSignupDto);
+        customerSignupService.signupProcess(customerSignupDto,customerProfileImage);
 
         return "redirect:/login"; // 이 경로로 오면 로그인 바로 할 수 있게
     }
