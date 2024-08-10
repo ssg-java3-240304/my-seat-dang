@@ -5,9 +5,11 @@ import com.matdang.seatdang.member.entitiy.Customer;
 import com.matdang.seatdang.member.entitiy.MemberRole;
 import com.matdang.seatdang.member.entitiy.MemberStatus;
 import com.matdang.seatdang.member.repository.MemberRepository;
+import com.matdang.seatdang.object_storage.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
@@ -17,10 +19,14 @@ public class CustomerSignupService {
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    private final FileService fileService; // File 업로드를 위해
+
     @Autowired
-    public CustomerSignupService(MemberRepository memberRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public CustomerSignupService(MemberRepository memberRepository, BCryptPasswordEncoder bCryptPasswordEncoder,FileService fileService) {
         this.memberRepository = memberRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.fileService = fileService;
+
     }
 
 
@@ -30,10 +36,12 @@ public class CustomerSignupService {
      *
      */
 
-    public void joinProcess(CustomerSignupDto customerSignupDto){
+    public void signupProcess(CustomerSignupDto customerSignupDto,MultipartFile customerProfileImage){
 
+        // 파일 업로드 처리
+        String uploadedUrl = fileService.uploadSingleFile(customerProfileImage, "customer-profile-images"); // 타입 String으로 바꾸기
+        System.out.println(uploadedUrl); // 파일 업로드 확인
         System.out.println(customerSignupDto);
-        System.out.println(customerSignupDto.getMemberPassword());
 
         Customer customerEntity = Customer.builder()
                 .memberName(customerSignupDto.getMemberName())
@@ -41,7 +49,7 @@ public class CustomerSignupService {
                 .memberPassword(bCryptPasswordEncoder.encode(customerSignupDto.getMemberPassword()))
                 .memberPhone(customerSignupDto.getMemberPhone())
                 .memberEmail(customerSignupDto.getMemberEmail())
-                .customerProfileImage(customerSignupDto.getCustomerProfileImage()) // 프로필이미지
+                .customerProfileImage(uploadedUrl) // 업로드된 URL 사용
                 .customerGender(customerSignupDto.getCustomerGender())
                 .customerBirthday(customerSignupDto.getCustomerBirthday())
                 .imageGenLeft(3) // 기본 3
