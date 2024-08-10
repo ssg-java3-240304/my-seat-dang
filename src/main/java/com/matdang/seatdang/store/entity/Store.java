@@ -42,7 +42,11 @@ public class Store {
     private String regularDayOff;
     @Column(name = "thumbnail")
     private String thumbnail;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "tbl_store_images"
+            , joinColumns = @JoinColumn(name = "image_id", referencedColumnName = "store_id")
+    )
     private List<String> images;
 //    @Column(name = "image1")
 //    private String image1;
