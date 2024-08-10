@@ -27,7 +27,7 @@
                     </div>
                     <!-- /head -->
                     <div class="main">
-                        <form th:action="@{/signupProc}" method="post" name="joinForm">
+                        <form th:action="@{/signupProc}" method="post" name="joinForm" enctype="multipart/form-data">
                             <!--						<a href="#0" class="social_bt facebook">Sign up with Facebook</a>-->
                             <!--						<a href="#0" class="social_bt google">Sign up with Google</a>-->
                             <!--						<div class="divider"><span>Or</span></div>-->
@@ -72,7 +72,7 @@
                             <!--						이미지업로드하면 미리보기기능 추가아직 안함-->
                             <h6>프로필이미지(선택)</h6>
                             <div class="form-group add_bottom_15">
-                                <input type="file" name="customerProfileImage" multiple/>
+                                <input type="file" name="customerProfileImage"/>
                             </div>
                             <h6>성별(선택)</h6>
                             <div class="form-group col-8">
