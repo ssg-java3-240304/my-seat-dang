@@ -27,11 +27,11 @@ public class StoreRegistRequestDto {
 
     private String storeAddress;
 
-    private String openTime;
-    private String closeTime;
-    private String startBreakTime;
-    private String endBreakTime;
-    private String lastOrder;
+    private LocalTime openTime;
+    private LocalTime closeTime;
+    private LocalTime startBreakTime;
+    private LocalTime endBreakTime;
+    private LocalTime lastOrder;
     private String regularDayOff;
 
     public Store toStore(){

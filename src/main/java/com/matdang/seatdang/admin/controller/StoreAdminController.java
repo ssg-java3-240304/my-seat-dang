@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.time.LocalTime;
 import java.util.List;
 
 @Controller
@@ -48,11 +49,11 @@ public class StoreAdminController {
             @RequestParam("thumbnail") MultipartFile thumbnail,
             @RequestParam("images") List<MultipartFile> images,
             @RequestParam("storeAddress") String storeAddress,
-            @RequestParam("openTime") String openTime,
-            @RequestParam("closeTime") String closeTime,
-            @RequestParam(value = "startBreakTime", required = false) String startBreakTime,
-            @RequestParam(value = "endBreakTime", required = false) String endBreakTime,
-            @RequestParam(value = "lastOrder", required = false) String lastOrder,
+            @RequestParam("openTime") LocalTime openTime,
+            @RequestParam("closeTime") LocalTime closeTime,
+            @RequestParam(value = "startBreakTime", required = false) LocalTime startBreakTime,
+            @RequestParam(value = "endBreakTime", required = false) LocalTime endBreakTime,
+            @RequestParam(value = "lastOrder", required = false) LocalTime lastOrder,
             @RequestParam("regularDayOff") String regularDayOff,
             @ModelAttribute StoreRegistRequestDto dto,
             RedirectAttributes redirectAttributes) throws IOException {
