@@ -6,6 +6,7 @@ import com.matdang.seatdang.store.vo.StoreSetting;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity(name = "store")
@@ -29,20 +30,24 @@ public class Store {
     @Column(name = "store_type")
     private StoreType storeType;
     @Column(name = "open_time")
-    private String openTime;
+    private LocalTime openTime;
     @Column(name = "start_break_time")
-    private String startBreakTime;
+    private LocalTime startBreakTime;
     @Column(name = "end_break_time")
-    private String endBreakTime;
+    private LocalTime endBreakTime;
     @Column(name = "last_order")
-    private String lastOrder;
+    private LocalTime lastOrder;
     @Column(name = "close_time")
-    private String closeTime;
+    private LocalTime closeTime;
     @Column(name = "regular_day_off")
     private String regularDayOff;
     @Column(name = "thumbnail")
     private String thumbnail;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "tbl_store_images"
+            , joinColumns = @JoinColumn(name = "image_id", referencedColumnName = "store_id")
+    )
     private List<String> images;
 //    @Column(name = "image1")
 //    private String image1;
