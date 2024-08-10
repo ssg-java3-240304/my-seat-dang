@@ -1,6 +1,5 @@
 package com.matdang.seatdang.search.repository;
 
-import com.matdang.seatdang.menu.repository.MenuRepository;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
 import com.opencsv.CSVReader;
@@ -12,29 +11,20 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.InstanceOfAssertFactories.LOCAL_DATE_TIME;
-import static org.assertj.core.api.InstanceOfAssertFactories.LOCAL_TIME;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 //@DataJpaTest
@@ -69,7 +59,7 @@ class SearchRepositoryTest {
         System.out.println("마지막 페이지 여부 : " + storePage.isLast());
         System.out.println("정렬 방식 : " + storePage.getSort());
         System.out.println("여러 페이지 중 현재 페이지(인덱스) : " + storePage.getNumber());
-        storePage.forEach(System.out::println);
+//        storePage.forEach(System.out::println);
         assertThat(storePage.getNumberOfElements()).isEqualTo(storePage.getContent().size());
         storePage.getContent().forEach(store -> {
             assertThat(store.getStoreName()).contains("브라우니");
@@ -132,5 +122,80 @@ class SearchRepositoryTest {
         int pageSize = 10;
         Pageable pageable = PageRequest.of(pageNumber,pageSize);
 
+    }
+
+    @DisplayName("매장 하나 검색")
+    @Test
+    public void test7() {
+        //given
+        long id = 2L;
+        //when
+        Store store = searchRepository.findByStoreId(id);
+        //then
+        assertThat(store.getStoreId()).isEqualTo(id);
+    }
+
+    @Disabled
+    @DisplayName("더미데이터 생성")
+    @Test
+    public void test8() {
+        //given
+        String csvFile = "C:\\workspace\\my-seat-dang\\src\\main\\resources\\csv\\store_seoul.csv"; // CSV 파일 경로 설정
+        String[] suffixes = {"에그타르트", "브라우니", "케이크", "에클레어", "마카롱", "소라빵", "단팥빵", "식빵"};
+        Random random = new Random();
+        try (CSVReader reader = new CSVReader(new InputStreamReader(new FileInputStream(csvFile), Charset.forName("EUC-KR")))) {
+            String[] line;
+            while ((line = reader.readNext()) != null) {
+                // 해당 열의 인덱스에 따라 데이터 추출
+                String 사업장명 = line[18];
+                String 도로명주소 = line[16];
+                String 지번주소 = line[15];
+                String 전화번호 = line[12];
+                String 좌표정보X = line[23];
+                String 좌표정보Y = line[24];
+                // 무작위로 접미사를 선택하여 사업장명 뒤에 추가
+                String randomSuffix = suffixes[random.nextInt(suffixes.length)];
+                String modified사업장명 = "The " + randomSuffix +" "+사업장명;
+                // StoreType의 모든 값 중 하나를 무작위로 선택
+                StoreType[] storeTypes = StoreType.values();
+                StoreType randomStoreType = storeTypes[random.nextInt(storeTypes.length)];
+                // 수정된 사업장명과 함께 데이터 출력
+                System.out.println("사업장명: " + modified사업장명);
+                System.out.println("도로명주소: " + 도로명주소);
+                System.out.println("지번주소: " + 지번주소);
+                System.out.println("전화번호: " + 전화번호);
+                System.out.println("좌표정보(X): " + 좌표정보X);
+                System.out.println("좌표정보(Y): " + 좌표정보Y);
+                System.out.println("---------------");
+                String addr = String.format(도로명주소);
+                String name = String.format(modified사업장명);
+                List<String> imageList = List.of("https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/0a2e250f-1a1a-4805-bf17-559d7c4105cf.png");
+
+                Store store = Store.builder()
+                        .storeName(name)
+                        .storeAddress(addr)
+                        .images(imageList)
+                        .storeType(randomStoreType)
+                        .openTime(LocalTime.of(8, 0))
+                        .startBreakTime(LocalTime.of(15, 0))
+                        .endBreakTime(LocalTime.of(16, 0))
+                        .lastOrder(LocalTime.of(21, 30))
+                        .closeTime(LocalTime.of(22, 0))
+                        .regularDayOff("Sunday")
+                        .thumbnail("https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/0a2e250f-1a1a-4805-bf17-559d7c4105cf.png")
+                        .description("A cozy place to enjoy specialty coffee and pastries.")
+                        .notice("Closed on public holidays.")
+                        .phone("555-1234-567")
+                        .starRating(4.5)
+                        .build();
+                //when
+                store = searchRepository.save(store);
+//                System.out.println(store);
+            }
+        } catch (IOException | CsvValidationException e) {
+            e.printStackTrace();
+        }
+        //when
+        //then
     }
 }

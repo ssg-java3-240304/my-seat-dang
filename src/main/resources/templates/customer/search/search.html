@@ -194,8 +194,8 @@
                 <!-- /상점 블록 -->
                 <div class="col-lg-9">
                     <div class="row">
-<!--                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6" th:each="store : ${storeSearchResponseSet}">-->
-                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6" th:each="store : ${storeSearchResponseSet}">
+<!--                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6" th:each="store : ${storePage}">-->
+                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6" th:each="store : ${storePage}">
                             <div class="strip">
                                 <figure>
                                     <span class="ribbon off">Hot!</span>
@@ -256,7 +256,7 @@
             latSpan = northEast.lat() - southWest.lat();
 
         /*<![CDATA[*/
-        const stores = /*[[${storeSearchResponseSet}]]*/ '[]';
+        const stores = /*[[${storePage}]]*/ '[]';
         /*]]>*/
 
         var markers = [],
