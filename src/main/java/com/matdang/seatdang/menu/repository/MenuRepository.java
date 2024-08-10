@@ -6,5 +6,5 @@ import com.matdang.seatdang.menu.vo.Menu;
 import com.matdang.seatdang.store.entity.Store;
 import org.springframework.data.jpa.repository.JpaRepository;
 public interface MenuRepository extends JpaRepository<Store, Long> {
-    MenuList findAllByStoreId(Long storeId);
+    MenuList findByStoreId(Long storeId);
 }
