@@ -83,6 +83,8 @@ public class FileService {
 //        return s3files;
 //    }
 
+
+    // 여러개 파일 올릴 때 사용
     public List<String> uploadFiles(List<MultipartFile> multipartFiles, String filePath) {
 
         List<String> uploadFileUrls = new ArrayList<>();
@@ -117,6 +119,37 @@ public class FileService {
         }
 
         return uploadFileUrls;
+    }
+
+    // 하나의 파일만 올릴 때 사용
+    public String uploadSingleFile(MultipartFile multipartFile, String filePath) {
+
+        String uploadFileUrl = "";
+
+        String originalFileName = multipartFile.getOriginalFilename();
+        String uploadFileName = getUuidFileName(originalFileName);
+
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentLength(multipartFile.getSize());
+        objectMetadata.setContentType(multipartFile.getContentType());
+
+        try (InputStream inputStream = multipartFile.getInputStream()) {
+
+            String keyName = filePath + "/" + uploadFileName;
+
+            // S3에 폴더 및 파일 업로드
+            amazonS3Client.putObject(
+                    new PutObjectRequest(bucketName, keyName, inputStream, objectMetadata)
+                            .withCannedAcl(CannedAccessControlList.PublicRead));
+
+            // S3에 업로드한 폴더 및 파일 URL
+            uploadFileUrl = "https://kr.object.ncloudstorage.com/" + bucketName + "/" + keyName;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return uploadFileUrl;
     }
 
 
