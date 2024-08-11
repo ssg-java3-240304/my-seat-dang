@@ -1,5 +1,6 @@
 package com.matdang.seatdang.search.controller;
 
+import com.matdang.seatdang.common.paging.PageCriteria;
 import com.matdang.seatdang.search.dto.SearchStoreResponseDto;
 import com.matdang.seatdang.search.service.MapService;
 import com.matdang.seatdang.search.service.SearchStoreQueryService;
@@ -35,6 +36,7 @@ public class SearchController {
             Model model) {
 
         log.debug("search store controller start storeName={}, storeAddress={}", storeNameParam, storeAddressParam);
+        model.addAttribute("ncpAccessId", mapService.getAccessId());
 
         //안전하게 null 처리를 하기 위해 Optional을 사용합니다
         // ofNullable은 인자가 null인 경우 Optional.empty를 반환하고, Null인 아닌 경우 Optional로 래핑된 객체를 반환한다
@@ -43,8 +45,10 @@ public class SearchController {
         Optional<String> storeName = Optional.ofNullable(storeNameParam).filter(s -> !s.isEmpty());
         Optional<String> storeAddress = Optional.ofNullable(storeAddressParam).filter(s -> !s.isEmpty());
 
+        //Pageable을 0-based로 변환
+        pageable = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize());
+
         Page<SearchStoreResponseDto> storePageResponse;
-        model.addAttribute("ncpAccessId", mapService.getAccessId());
 
         if (storeName.isPresent() && storeAddress.isPresent()) {
             // 두 파라미터가 모두 제공된 경우
@@ -66,8 +70,16 @@ public class SearchController {
             return "customer/search/search";
         }
 
-
-
+        // 페이지바 설정
+        int page = storePageResponse.getNumber(); // 0-based 페이지번호
+        int limit = storePageResponse.getSize();
+        int totalCount = (int) storePageResponse.getTotalElements();
+        String url = "search";
+        if(storeName.isPresent() || storeAddress.isPresent()){
+            url = url + "?store_name=" + storeName.orElse("") +"&store_address="+ storeAddress.orElse(""); // 상대주소
+        }
+        model.addAttribute("pageCriteria", new PageCriteria(page, limit, totalCount, url));
+        log.debug("page url = {} page = {}", url, storePageResponse.getNumber() );
         return "customer/search/search";
     }
 }
