@@ -12,9 +12,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @Configuration
 @EnableMongoRepositories(basePackages = "com.matdang.seatdang.chat.repository")
 public class ChatConfig {
-    @Autowired
-    private MongoTemplate mongoTemplate;
-
     @Bean
     public MongoClient mongoClient() {
         // MongoDB 클라이언트를 생성하는 부분
@@ -25,20 +22,6 @@ public class ChatConfig {
     public MongoTemplate mongoTemplate(MongoClient mongoClient) {
         // MongoTemplate을 정의하는 부분, MongoDB의 데이터베이스 이름을 명시
         return new MongoTemplate(mongoClient, "chatdb");
-    }
-
-    @Bean
-    public void initializeCollections() {
-        ensureCappedCollectionExists();
-    }
-
-    public void ensureCappedCollectionExists() {
-        if (!mongoTemplate.collectionExists("chat")) {
-            mongoTemplate.createCollection("chat", CollectionOptions.empty()
-                    .capped()
-                    .maxDocuments(5000)
-                    .size(1000000));
-        }
     }
 }
 
