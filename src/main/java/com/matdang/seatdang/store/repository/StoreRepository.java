@@ -9,6 +9,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface StoreRepository extends JpaRepository<Store, Long> {
+
+
+    Page<Store> findByStoreNameContainingAndStoreAddressContainingOrderByStoreAddressDesc(String storeName, String storeAddress, Pageable pageable);
     Page<Store> findByStoreNameContainingOrderByStoreAddressDesc(String storeAddress, Pageable pageable);
     Page<Store> findByStoreAddressContainingOrderByStoreAddressDesc(String storeAddress, Pageable pageable);
     Page<Store> findByStoreNameContainingOrderByStoreAddressAsc(String storeAddress, Pageable pageable);

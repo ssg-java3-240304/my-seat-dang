@@ -36,10 +36,10 @@ public class SearchController {
 
         log.debug("search store controller start storeName={}, storeAddress={}", storeNameParam, storeAddressParam);
 
-        // 빈 문자열이 아닌 값만 Optional에 넣는다.
-        //ofNullable은 인자가 null인 경우 Optional.empty를 반환하고, Null인 아닌 경우 Optional로 래핑된 객체를 반환한다
-        //filter는 null이나 "" 공백문자인 경우 필터링 처리 되어 Optional.empty()를 반환 합니다.
-        //Optional.empty()는 내부적으로 아무런 값이 없는 Optional 객체를 반환합니다.
+        //안전하게 null 처리를 하기 위해 Optional을 사용합니다
+        // ofNullable은 인자가 null인 경우 Optional.empty를 반환하고, Null인 아닌 경우 Optional로 래핑된 객체를 반환한다
+        // filter는 null이나 "" 공백문자인 경우 필터링 처리를 하여 Optional.empty()를 반환 합니다.
+        // Optional.empty()는 내부적으로 아무런 값이 없는 Optional 객체를 반환합니다.
         Optional<String> storeName = Optional.ofNullable(storeNameParam).filter(s -> !s.isEmpty());
         Optional<String> storeAddress = Optional.ofNullable(storeAddressParam).filter(s -> !s.isEmpty());
 
@@ -49,6 +49,8 @@ public class SearchController {
         if (storeName.isPresent() && storeAddress.isPresent()) {
             // 두 파라미터가 모두 제공된 경우
             log.debug("case: name&address | storeName={}, storeAddress={}", storeName, storeAddress);
+            storePageResponse = searchStoreQueryService.searchStoreByNameAndAddress(storeName.get(), storeAddress.get(), pageable);
+            model.addAttribute("storePage", storePageResponse.getContent());
         } else if (storeName.isPresent()) {
             // storeName만 제공된 경우
             storePageResponse = searchStoreQueryService.searchStoreByStoreName(storeName.get(), pageable);
@@ -65,7 +67,7 @@ public class SearchController {
         }
 
 
-//        model.addAttribute("ncpSecretKey", mapService.getSecretKey());
+
         return "customer/search/search";
     }
 }
