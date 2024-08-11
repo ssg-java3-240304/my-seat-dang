@@ -22,6 +22,6 @@ public class MenuService {
 //    }
 
     public MenuList findAllByStoreId(Long storeId) {
-        return menuRepository.findAllByStoreId(storeId);
+        return menuRepository.findByStoreId(storeId);
     }
 }
