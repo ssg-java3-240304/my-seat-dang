@@ -2,13 +2,14 @@ package com.matdang.seatdang.admin.dto;
 
 import com.matdang.seatdang.common.storeEnum.StoreType;
 import com.matdang.seatdang.store.entity.Store;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalTime;
+import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -21,12 +22,9 @@ public class StoreRegistRequestDto {
     private String description;
     private String notice;
     private String phone;
-
-    private String thumbnail;
-    private List<String> images;
-
+    private MultipartFile thumbnail;
+    private List<MultipartFile> images;
     private String storeAddress;
-
     private LocalTime openTime;
     private LocalTime closeTime;
     private LocalTime startBreakTime;
@@ -42,8 +40,8 @@ public class StoreRegistRequestDto {
                 .notice(this.notice)
                 .phone(this.phone)
                 .storeAddress(this.storeAddress)
-                .thumbnail(this.thumbnail)
-                .images(this.images)
+                .thumbnail(String.valueOf(this.thumbnail))
+//                .images(this.images)
                 .openTime(this.openTime)
                 .closeTime(this.closeTime)
                 .startBreakTime(this.startBreakTime)
