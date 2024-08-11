@@ -5198,6 +5198,12 @@ a.social_bt.google {
   color: white;
 }
 
+.pagination_fg a.disabled {
+  pointer-events: none;
+  color: #ccc;
+  background-color: #f5f5f5;
+}
+
 /* Scroll top button */
 #toTop {
   position: fixed;
