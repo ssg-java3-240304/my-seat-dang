@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalTime;
-import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -31,23 +30,4 @@ public class StoreRegistRequestDto {
     private LocalTime endBreakTime;
     private LocalTime lastOrder;
     private String regularDayOff;
-
-    public Store toStore(){
-        return Store.builder()
-                .storeName(this.storeName)
-                .storeType(this.storeType)
-                .description(this.description)
-                .notice(this.notice)
-                .phone(this.phone)
-                .storeAddress(this.storeAddress)
-                .thumbnail(String.valueOf(this.thumbnail))
-//                .images(this.images)
-                .openTime(this.openTime)
-                .closeTime(this.closeTime)
-                .startBreakTime(this.startBreakTime)
-                .endBreakTime(this.endBreakTime)
-                .lastOrder(this.lastOrder)
-                .regularDayOff(this.regularDayOff)
-                .build();
-    }
 }

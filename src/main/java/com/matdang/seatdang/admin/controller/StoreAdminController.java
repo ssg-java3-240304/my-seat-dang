@@ -20,7 +20,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/storeowner")
 @RequiredArgsConstructor
 @Slf4j
 public class StoreAdminController {
@@ -29,53 +29,23 @@ public class StoreAdminController {
 
     @GetMapping("/storeRegist")
     public void storeRegist(){
-        log.info("GET /admin/storeRegist");
+        log.info("GET /storeowner/storeRegist");
     }
 
     @GetMapping(path = "/storeNameCheck", produces = "application/json; charset=utf-8")
     @ResponseBody
     public int storeNameCheck(@RequestParam String storeName){
-        log.info("GET /admin/storeNameCheck");
+        log.info("GET /storeowner/storeNameCheck");
         return storeAdminService.findByStoreName(storeName);
     }
 
     @PostMapping("/storeRegist")
     public String storeRegist(
-            @RequestParam("storeName") String storeName,
-            @RequestParam("category") String category,
-            @RequestParam(value = "description", required = false) String description,
-            @RequestParam(value = "notice", required = false) String notice,
-            @RequestParam("phone") String phone,
-            @RequestParam("thumbnail") MultipartFile thumbnail,
-            @RequestParam("images") List<MultipartFile> images,
-            @RequestParam("storeAddress") String storeAddress,
-            @RequestParam("openTime") LocalTime openTime,
-            @RequestParam("closeTime") LocalTime closeTime,
-            @RequestParam(value = "startBreakTime", required = false) LocalTime startBreakTime,
-            @RequestParam(value = "endBreakTime", required = false) LocalTime endBreakTime,
-            @RequestParam(value = "lastOrder", required = false) LocalTime lastOrder,
-            @RequestParam("regularDayOff") String regularDayOff,
             @ModelAttribute StoreRegistRequestDto dto,
-            RedirectAttributes redirectAttributes) throws IOException {
+            @RequestParam("thumbnail") MultipartFile thumbnail, @RequestParam("images") List<MultipartFile> images) throws IOException {
         log.debug("dto = {}", dto);
-        Store store = dto.toStore();
-        StoreRegistRequestDto.builder()
-                .storeName(storeName)
-                .storeType(StoreType.valueOf(category))
-                .description(description)
-                .notice(notice)
-                .phone(phone)
-                .storeAddress(storeAddress)
-                .openTime(openTime)
-                .closeTime(closeTime)
-                .startBreakTime(startBreakTime)
-                .endBreakTime(endBreakTime)
-                .lastOrder(lastOrder)
-                .regularDayOff(regularDayOff)
-                .build();
 
         storeAdminService.regist(dto, thumbnail, images);
-//        redirectAttributes.addFlashAttribute("message", "메뉴를 등록했습니다.");
-        return "redirect:/store/storeRegist";
+        return "redirect:/storeowner/storeRegist";
     }
 }

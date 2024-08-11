@@ -34,10 +34,22 @@ public class StoreAdminService {
     public void regist(StoreRegistRequestDto dto, MultipartFile thumbnail, List<MultipartFile> images) {
         String uploadedThumbnailUrl = fileService.uploadSingleFile(thumbnail, "store-thumbnail"); // filePath: NCP에 생성될 파일폴더명 지정
         List<String> uploadedImagesUrl = fileService.uploadFiles(images, "store-images");
-        Store store = dto.toStore();
-        StoreRegistRequestDto.builder()
-//                .thumbnail(uploadedThumbnailUrl)
-//                .images(uploadedImagesUrl)
+        System.out.println(dto);
+        Store store = Store.builder()
+                .storeName(dto.getStoreName())
+                .storeType(dto.getStoreType())
+                .description(dto.getDescription())
+                .notice(dto.getNotice())
+                .phone(dto.getPhone())
+                .storeAddress(dto.getStoreAddress())
+                .openTime(dto.getOpenTime())
+                .closeTime(dto.getCloseTime())
+                .startBreakTime(dto.getStartBreakTime())
+                .endBreakTime(dto.getEndBreakTime())
+                .lastOrder(dto.getLastOrder())
+                .regularDayOff(dto.getRegularDayOff())
+                .thumbnail(uploadedThumbnailUrl)
+                .images(uploadedImagesUrl)
                 .build();
         storeAdminRepository.save(store);
     }
