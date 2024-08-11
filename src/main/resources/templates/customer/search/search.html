@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <!-- SPECIFIC CSS -->
-    <link th:href="@{css/customer/listing.css}" rel="stylesheet">
+    <link th:href="@{/css/customer/listing.css}" rel="stylesheet">
     <script type="text/javascript" th:src="@{|https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${ncpAccessId}&submodules=geocoder|}"></script>
 <!--    <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=m1vrso77rm&submodules=geocoder"></script>-->
 </head>
@@ -25,14 +25,28 @@
                                 <li>Page active</li>
                             </ul>
                         </div>
-                        <h1>145 restaurants in Convent Street 2983</h1>
+                        <h1>검색 결과</h1>
+<!--                        검색 -->
                     </div>
-                    <div class="col-xl-4 col-lg-5 col-md-5">
-                        <div class="search_bar_list">
-                            <input type="text" class="form-control" placeholder="Search again...">
-                            <input type="submit" value="Search">
+                        <div class="col-xl-4 col-lg-5 col-md-5">
+                            <form th:action="@{/search}" method="get" >
+                                <div class="search-wrapper">
+                                    <div class="input-group">
+                                        <div class="input-field">
+                                            <i class="icon_search"></i>
+                                            <input type="text" name="store_name" class="form-control" style="padding-left: 35px" placeholder="매장명...">
+                                        </div>
+                                        <div class="input-divider"></div>
+                                        <div class="input-field">
+                                            <i class="icon_pin_alt"></i>
+                                            <input type="text" name="store_address" class="form-control" style="padding-left: 35px" placeholder="지역...">
+                                        </div>
+                                    </div>
+                                    <input type="submit" value="Search" class="search-btn">
+                                </div>
+                            </form>
                         </div>
-                    </div>
+
                 </div>
                 <!-- /row -->
             </div>
@@ -200,7 +214,7 @@
                                 <figure>
                                     <span class="ribbon off">Hot!</span>
                                     <img th:src="@{https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/af4bc57e-5faa-493f-a8ea-2cf9bf2c6f13.png}" th:data-src="@{https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/af4bc57e-5faa-493f-a8ea-2cf9bf2c6f13.png}" class="img-fluid lazy" alt="">
-                                    <a th:href="@{/detail}" class="strip_info">
+                                    <a th:href="|@{/detail?storeId=}${store.storeId}|" class="strip_info">
                                         <small>케이크</small>
                                         <div class="item_title">
                                             <h3 th:text="${store.storeName}"></h3>
@@ -282,7 +296,7 @@
                                         <div class="marker_info" id="marker_info">
 <!--                                        <a th:href="@{/detail(storeName=${store.storeName})}">-->
                                         <a th:href="@{/detail}">
-                                        <img src="https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/af4bc57e-5faa-493f-a8ea-2cf9bf2c6f13.png" alt="" style="width: 240px; height: 140px; display: block; margin: 0 auto; cursor: pointer;" onclick="window.location.href='/detail?storeName=${store.storeName}'">
+                                        <img src="https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/af4bc57e-5faa-493f-a8ea-2cf9bf2c6f13.png" alt="" style="width: 240px; height: 140px; display: block; margin: 0 auto; cursor: pointer;" onclick="window.location.href='/detail?storeId=${store.storeId}'">
                                         </a>
                                         <span>
                                             <span class="infobox_rate">평점 | 7.5</span><h3>${store.storeName}</h3><em>제과점</em><strong>undefined</strong>

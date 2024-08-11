@@ -18,13 +18,13 @@ public class SearchStoreQueryService {
      */
     public Page<SearchStoreResponseDto> searchStoreByStoreName(String storeName, Pageable pageable) {
         log.debug("searchStoreByStoreName: {}", storeName);
-        return storeRepository.findByStoreNameContaining(storeName, pageable)
+        return storeRepository.findByStoreNameContainingOrderByStoreAddressDesc(storeName, pageable)
                 .map((store -> SearchStoreResponseDto.fromStore(store)));
     }
 
     public Page<SearchStoreResponseDto> searchStoreByAddress(String storeAddress, Pageable pageable) {
         log.debug("searchStoreByAddress: {}", storeAddress);
-        return storeRepository.findByStoreAddressContaining(storeAddress, pageable)
+        return storeRepository.findByStoreAddressContainingOrderByStoreAddressDesc(storeAddress, pageable)
                 .map((store -> SearchStoreResponseDto.fromStore(store)));
     }
 
