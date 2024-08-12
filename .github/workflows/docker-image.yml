@@ -66,16 +66,13 @@ jobs:
             -e "PROD_DB_PASSWORD=${{ secrets.PROD_DB_PASSWORD }}" \
             -e "SPRING_S3_ACCESSKEY=${{ secrets.SPRING_S3_ACCESSKEY }}" \
             -e "SPRING_S3_SECRETKEY=${{ secrets.SPRING_S3_SECRETKEY }}" \
-<<<<<<< HEAD
             
             -e "KAKAO_PAY_SECRET_KEY=${{ secrets.KAKAO_PAY_SECRET_KEY}}" \
             -e "KAKAO_PAY_CID=${{ secrets.KAKAO_PAY_CID}}" \
-=======
             -e "NCP_APIGW_ACCESS_ID=${{ secrets.NCP_APIGW_ACCESS_ID }}" \
             -e "NCP_APIGW_SECRET_KEY=${{ secrets.NCP_APIGW_SECRET_KEY }}" \
             -e "MONGO_DB_URI=${{ secrets.MONGO_DB_URI }}" \
             -e "CHAT_HOST_SERVER=${{ secrets.CHAT_HOST_SERVER }}" \
->>>>>>> f5b9d3d4ebe24e54768fc9d1688b8456ba3f9184
             --name ${{ vars.APP_NAME }} \
             ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }}
             sudo docker image prune -f
