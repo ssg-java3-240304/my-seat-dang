@@ -1,4 +1,4 @@
-package com.matdang.seatdang.payment.dto;
+package com.matdang.seatdang.payment.service.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
