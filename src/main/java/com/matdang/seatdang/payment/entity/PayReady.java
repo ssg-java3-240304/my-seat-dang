@@ -18,7 +18,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PayReady {
     @Id
-    private String tid;
     private String partnerOrderId;
+    private String tid;
     private String partnerUserId;
+    private Long shopId;
 }
