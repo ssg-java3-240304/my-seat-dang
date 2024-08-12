@@ -27,7 +27,11 @@ public class Reservation {
     private LocalDateTime createdAt;
     private LocalDateTime reservedAt;
     @ElementCollection(fetch = FetchType.EAGER)
-    private Set<OrderedMenu> orderSet;
+    @CollectionTable(
+            name = "tbl_orderedMenu"
+            , joinColumns = @JoinColumn(name = "menu_id", referencedColumnName = "id")
+    )
+    private Set<OrderedMenu> orderedMenuSet;
     @Enumerated(EnumType.STRING)
     private ReservationStatus reservationStatus;
     @Embedded

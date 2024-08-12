@@ -14,7 +14,7 @@ public class AppController {
 
     @Value("${app.version}")
     private String appVersion;
-
+//
 //    @GetMapping("/")
 //    @ResponseBody
 //    public String index() {

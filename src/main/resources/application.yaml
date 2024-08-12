@@ -3,9 +3,12 @@ spring:
     name: seatdang
   data:
     mongodb:
-      host: localhost
-      port: 27017
-      database: chatdb
+      uri: ${MONGO_DB_URI}
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 50MB
+      location:
 
 # profile관리
   profiles:
@@ -25,6 +28,7 @@ spring:
 
 
   #  thymeleaf:
+
 #    prefix: classpath:/templates/
 #    suffix: .html
 
@@ -42,7 +46,6 @@ logging:
 app:
   version: 0.1.1
 
-
 file:
   upload-dir: /path/to/upload/directory
 
@@ -52,3 +55,10 @@ ncp:
     secretKey: ${NCP_APIGW_SECRET_KEY}
 
 
+
+ftp:
+  server:
+    host: ssg-java3.iptime.org
+    port: 21
+    username: myftp
+    password: myftp

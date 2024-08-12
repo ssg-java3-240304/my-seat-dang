@@ -5,9 +5,7 @@ profile:
 spring:
   data:
     mongodb:
-      host: localhost
-      port: 27017
-      database: chatdb
+      uri: ${MONGO_DB_URI}
   datasource:
     url: ${TEST_DB_URL}
     username: ${TEST_DB_USERNAME}
@@ -18,3 +16,5 @@ kakao:
   secret:
     key: ${KAKAO_PAY_SECRET_KEY}
 cid: ${KAKAO_PAY_CID}
+hostUrl: http://localhost:8080
+

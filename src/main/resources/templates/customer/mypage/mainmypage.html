@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<!--Customer 메인 마이페이지-->
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{customer/layout/default}">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<!--    main page only css-->
+<link th:href="@{/css/customer/booking-sign_up.css}" rel="stylesheet">
+<!--	스크롤추가-->
+<!--	<style>-->
+<!--		.scrollable-container {-->
+<!--			max-height: 80vh; /* Adjust this value as needed */-->
+<!--			overflow-y: scroll;-->
+<!--		}-->
+<!--	</style>-->
+</head>
+<main class="bg_gray pattern" layout:fragment="main">
+<div>
+    <br>
+    <h1>메인 Mypage입니다</h1>
+    <h1>🎈welcome🎈 <span  th:text="${memberName}"></span></h1>
+    <h2>닉네임 : <span th:text="${memberNickName}"></span></h2>
+    <img th:src="${customerProfileImage}" alt="Profile Image">
+</div>
+</main>
