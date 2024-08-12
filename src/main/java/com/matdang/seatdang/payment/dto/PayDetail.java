@@ -10,6 +10,7 @@ import lombok.*;
 public class PayDetail {
     private String partnerOrderId;
     private String partnerUserId;
+    private Long shopId;
     private String itemName;
     private Integer quantity;
     private Integer totalAmount;
