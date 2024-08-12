@@ -2,14 +2,6 @@ body {
     height: 100%;
 }
 
-.sent_msg img, .received_withd_msg img {
-    max-width: 100%;
-    max-height: 200px;
-    align-items: flex-end;
-    display: block;
-    margin: 10px 0;
-}
-
 .user {
     border-bottom: 1px solid #716d6d;
     padding: 10px;
@@ -64,13 +56,6 @@ body {
     display: inline-block; /* Automatically adjust width based on content */
     max-width: 100%; /* Ensure it doesn't exceed container width */
     word-wrap: break-word; /* Wrap long words */
-}
-
-.received_withd_msg img {
-    max-width: 100%; /* Ensure image fits within the container */
-    max-height: 200px; /* Limit the height of the image */
-    display: block; /* Remove any extra space below the image */
-    margin: 5px 0; /* Add space around the image */
 }
 
 .time_date {

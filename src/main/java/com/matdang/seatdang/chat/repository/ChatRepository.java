@@ -14,5 +14,5 @@ public interface ChatRepository extends ReactiveMongoRepository<Chat, String>{
 
     @Tailable // 커서를 안닫고 계속 유지한다.
     @Query("{roomNum: ?0}")
-    Flux<Chat> FindByRoomNum(String roomNum);
+    Flux<Chat> FindByRoomNum(Integer roomNum);
 }
