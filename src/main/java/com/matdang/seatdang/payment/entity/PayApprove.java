@@ -50,6 +50,11 @@ public class PayApprove {
     private String paymentMethodType;
     private LocalDateTime createdAt;
     private LocalDateTime approvedAt;
+    private Long shopId;
+
+    public void registerShopId(Long shopId) {
+        this.shopId = shopId;
+    }
 
 
 }
