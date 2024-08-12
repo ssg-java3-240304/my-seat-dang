@@ -25,10 +25,26 @@
     <link th:href="@{/vendor/admin/datatables/dataTables.bootstrap4.css}" rel="stylesheet">
     <!-- Your custom styles -->
     <link th:href="@{/css/admin/custom.css}" rel="stylesheet">
+    <style>
+        .photo-preview {
+            margin-top: 10px;
+            width: 200px;
+            height: 200px;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ced4da;
+        }
+        .photo-preview img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+    </style>
 </head>
 <body class="fixed-nav sticky-footer" id="page-top">
 
-<div th:replace="admin/fragments/aside::aside"></div>
+<div th:replace="~{admin/fragments/aside::aside}"></div>
 <div class="content-wrapper">
     <div class="container-fluid">
         <div layout:fragment="content" ></div>
@@ -36,17 +52,15 @@
 </div>
 
 
-<div th:replace="admin/fragments/footer::footer"></div>
-<div th:replace="admin/fragments/topLogout::topLogout"></div>
+<div th:replace="~{admin/fragments/footer::footer}"></div>
+<div th:replace="~{admin/fragments/topLogout::topLogout}"></div>
 
 <!-- Scroll to Top Button-->
 <a class="scroll-to-top rounded" href="#page-top">
     <i class="fa fa-angle-up"></i>
 </a>
 
-
-
-<th:block layout:fragment="script"></th:block>
+<!--<th:block layout:fragment="script"></th:block>-->
 
 <!-- Bootstrap core JavaScript-->
 <script th:src="@{/vendor/admin/jquery/jquery.min.js}"></script>
@@ -58,9 +72,7 @@
 <script th:src="@{/vendor/admin/datatables/jquery.dataTables.js}"></script>
 <script th:src="@{/vendor/admin/datatables/dataTables.bootstrap4.js}"></script>
 <script th:src="@{/vendor/admin/jquery.magnific-popup.min.js}"></script>
-<!-- Custom scripts for all pages-->
-<script th:src="@{/js/admin/admin.js}"></script>
-<!-- Custom scripts for this page-->
-<script th:src="@{/js/admin/admin-charts.js}"></script>
+
+<div layout:fragment="script"></div>
 </body>
 </html>

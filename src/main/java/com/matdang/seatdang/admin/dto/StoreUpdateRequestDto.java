@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class StoreRegistRequestDto {
+public class StoreUpdateRequestDto {
     private String storeName;
     private StoreType storeType;
     private String description;
