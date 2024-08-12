@@ -12,9 +12,9 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @Setter(AccessLevel.PRIVATE)
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class PayApprove {
     /**
@@ -37,6 +37,7 @@ public class PayApprove {
      * "created_at":"2024-08-07T10:39:01",
      * "approved_at":"2024-08-07T10:39:40"}
      */
+    // TODO :  Persistable 구현
     @Id
     private String aid; // 현재는 삭제해도 무방
     private String tid;

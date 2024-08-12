@@ -8,11 +8,9 @@ import lombok.*;
 @Embeddable
 @Data
 @Setter(AccessLevel.PRIVATE)
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-
-public  class Amount {
+public class Amount {
     private Integer total;
     private Integer taxFree;
     private Integer vat;

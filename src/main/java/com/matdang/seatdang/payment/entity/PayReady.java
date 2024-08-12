@@ -14,9 +14,10 @@ import lombok.Setter;
 @Data
 @Setter(AccessLevel.PRIVATE)
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class PayReady {
+    // TODO :  Persistable 구현
     @Id
     private String partnerOrderId;
     private String tid;
