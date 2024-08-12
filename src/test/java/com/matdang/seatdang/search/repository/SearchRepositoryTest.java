@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +27,8 @@ import java.nio.charset.Charset;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -117,12 +121,37 @@ class SearchRepositoryTest {
 //        assertThat(store.getStoreId()).isNotZero();
     }
 
+
+    static Set<String> storeNames = Set.of("마카롱", "케이크", "에클레어", "식빵", "소라빵");
+    static Set<String> storeAddresses = Set.of("선릉", "마포", "노량진", "중랑", "공덕");
+
+    /**
+     * storeNames로 스트림을 생성
+     * 스트림의 스트림을 생성하고 2차원 스트림을 하나의 스트림으로 만들기 위해 flatMap을 사용
+     * storeNames의 각 요소에 대해 storeAddresses 스트림 생성
+     * storeAddress와 storeName 쌍에 대해 Arguments.of()를 생성
+     */
+    static Stream<Arguments> storeDataProvider() {
+        return storeNames.stream()
+                .flatMap(storeName -> storeAddresses.stream()
+                        .map(storeAddress -> Arguments.of(storeName, storeAddress)));
+    }
+
     @DisplayName("매장명+지역명으로 검색")
     @ParameterizedTest
-    @ValueSource(ints = {0, 1, 2, 3, 4, 5})
-    void test6(int pageNumber) {
-        int pageSize = 10;
-        Pageable pageable = PageRequest.of(pageNumber,pageSize);
+    @MethodSource("storeDataProvider")
+    void test6(String storeName, String storeAddress) {
+        //given
+        Pageable pageable = PageRequest.of(0, 10);
+        //when
+        Page<Store> storePage = searchRepository.findByStoreNameContainingAndStoreAddressContainingOrderByStoreAddressDesc(storeName, storeAddress, pageable);
+        //then
+        assertThat(storePage).isNotNull();
+        assertThat(storePage.getNumberOfElements()).isEqualTo(storePage.getContent().size());
+        assertThat(storePage.getContent()).allMatch(store->
+            store.getStoreName().contains(storeName)
+                &&store.getStoreAddress().contains(storeAddress)
+        );
 
     }
 
