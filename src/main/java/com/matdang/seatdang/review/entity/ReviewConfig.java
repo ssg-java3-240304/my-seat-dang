@@ -1,3 +1,4 @@
+
 //package com.matdang.seatdang.review.entity;
 //
 //
@@ -23,3 +24,4 @@
 //    @LastModifiedDate
 //    private LocalDateTime lastModifiedDate;
 //}
+

@@ -1,3 +1,4 @@
+
 //package com.matdang.seatdang.review.entity;
 //
 //
@@ -69,3 +70,4 @@
 //        return new Review(member,store,content,image,rate);
 //    }
 //}
+
