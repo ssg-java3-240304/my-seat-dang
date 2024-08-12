@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Embeddable
 public class ChatRoom {
-    private String roomName;
+    private String roomNum;
 }

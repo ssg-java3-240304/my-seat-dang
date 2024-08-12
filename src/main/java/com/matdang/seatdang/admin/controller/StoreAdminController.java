@@ -40,7 +40,7 @@ public class StoreAdminController {
     }
 
     @PostMapping("/storeRegist")
-    public ResponseEntity<String> storeRegist(
+    public String storeRegist(
             @RequestParam("storeName") String storeName,
             @RequestParam("category") String category,
             @RequestParam(value = "description", required = false) String description,
@@ -58,9 +58,6 @@ public class StoreAdminController {
             @ModelAttribute StoreRegistRequestDto dto,
             RedirectAttributes redirectAttributes) throws IOException {
         log.debug("dto = {}", dto);
-        List<String> uploadedImages = fileService.uploadFiles(images, "sample-folder");
-        String thumbnailUrl = fileService.uploadFiles(List.of(thumbnail), "sample-folder").get(0);
-
         Store store = dto.toStore();
         StoreRegistRequestDto.builder()
                 .storeName(storeName)
@@ -69,8 +66,6 @@ public class StoreAdminController {
                 .notice(notice)
                 .phone(phone)
                 .storeAddress(storeAddress)
-                .thumbnail(thumbnailUrl)
-                .images(uploadedImages)
                 .openTime(openTime)
                 .closeTime(closeTime)
                 .startBreakTime(startBreakTime)
@@ -79,8 +74,8 @@ public class StoreAdminController {
                 .regularDayOff(regularDayOff)
                 .build();
 
-        storeAdminService.regist(store);
+        storeAdminService.regist(dto, thumbnail, images);
 //        redirectAttributes.addFlashAttribute("message", "메뉴를 등록했습니다.");
-        return ResponseEntity.status(HttpStatus.OK).body("매장 등록 성공");
+        return "redirect:/store/storeRegist";
     }
 }
