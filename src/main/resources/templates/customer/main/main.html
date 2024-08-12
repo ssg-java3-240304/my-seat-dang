@@ -16,17 +16,17 @@
                     <div class="col-xl-9 col-lg-10 col-md-8">
                         <h1>마 싯 당</h1>
                         <p>우리는 빵에 살고 빵에 죽는다</p>
-                        <form method="post" action="/templates/customer/grid-listing-filterscol.html">
+                        <form method="get" th:action="@{/search}">
                             <div class="row g-0 custom-search-input">
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <input class="form-control" type="text" placeholder="매장명...">
+                                        <input name="store_name" class="form-control" type="text" placeholder="매장명...">
                                         <i class="icon_search"></i>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <input class="form-control no_border_r" type="text" placeholder="주소, 지역...">
+                                        <input name="store_address" class="form-control no_border_r" type="text" placeholder="주소, 지역...">
                                         <i class="icon_pin_alt"></i>
                                     </div>
                                 </div>

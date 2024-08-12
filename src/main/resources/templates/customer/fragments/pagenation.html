@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div th:fragment="pagenationFragment">
+        <div class="pagination_fg" th:if="${pageCriteria != null}" th:object="${pageCriteria}" aria-label="Page navigation">
+            <a th:classappend="*{pagebarStart == 1 ? 'disabled' : ''}" th:href="|*{url}*{pagebarStart - 1}|">&laquo;</a>
+            <!--/* 페이지숫자 영역 */-->
+            <!--/* th:each에는 break 기능이 없다.*/-->
+            <th:block th:each="pageNo : *{#numbers.sequence(pagebarStart, pagebarEnd)}">
+                <a th:if="${pageNo <= pageCriteria.maxPage}" th:classappend="${pageCriteria.page == pageNo ? 'active' : ''}" th:href="|*{url}${pageNo}|" th:text="${pageNo}"></a>
+            </th:block>
+            <a th:classappend="|page-item *{pagebarEnd > maxPage ? 'disabled' : ''}|" th:href="|*{url}*{pagebarEnd + 1}|">&raquo;</a>
+        </div>
+    </div>
+</body>
+</html>
