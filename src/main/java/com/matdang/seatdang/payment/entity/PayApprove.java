@@ -6,17 +6,18 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.*;
-
 import java.time.LocalDateTime;
+import org.springframework.data.domain.Persistable;
 
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Setter(AccessLevel.PRIVATE)
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class PayApprove {
+public class PayApprove extends BaseEntity implements Persistable<String> {
     /**
      * 저장 해야할 것
      * 승인 테이블
@@ -37,7 +38,6 @@ public class PayApprove {
      * "created_at":"2024-08-07T10:39:01",
      * "approved_at":"2024-08-07T10:39:40"}
      */
-    // TODO :  Persistable 구현
     @Id
     private String aid; // 현재는 삭제해도 무방
     private String tid;
@@ -57,5 +57,13 @@ public class PayApprove {
         this.shopId = shopId;
     }
 
+    @Override
+    public String getId() {
+        return aid;
+    }
 
+    @Override
+    public boolean isNew() {
+        return getCreatedDate() == null;
+    }
 }
