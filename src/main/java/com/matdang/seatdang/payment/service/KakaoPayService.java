@@ -6,6 +6,7 @@ import com.matdang.seatdang.payment.entity.PayReady;
 import com.matdang.seatdang.payment.repository.KakaoPayRepository;
 import com.matdang.seatdang.payment.repository.PayApproveRepository;
 import jakarta.transaction.Transactional;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,15 +44,14 @@ public class KakaoPayService {
         // 2. 요청 본문 설정
         ReadyRequest readyRequest = ReadyRequest.builder()
                 .cid(cid)
-                .partnerOrderId(payDetail.getPartnerOrderId())
+                .partnerOrderId(String.valueOf(payDetail.getPartnerOrderId()))
                 .partnerUserId(payDetail.getPartnerUserId())
                 .itemName(payDetail.getItemName())
                 .quantity(payDetail.getQuantity())
                 .totalAmount(payDetail.getTotalAmount())
                 .taxFreeAmount(payDetail.getTaxFreeAmount())
                 .approvalUrl("http://localhost:8080/" + "payment/approve" + "?PartnerOrderId="
-                        + payDetail.getPartnerOrderId() + "&PartnerUserId="
-                        + payDetail.getPartnerUserId()) // 결제 성공 시 redirect url, 최대 255자
+                        + payDetail.getPartnerOrderId()) // 결제 성공 시 redirect url, 최대 255자
                 .cancelUrl("http://localhost:8080/" + "payment/cancel") // 결제 취소 시 redirect url, 최대 255자
                 .failUrl("http://localhost:8080/" + "payment/fail") //결제 실패 시 redirect url, 최대 255자
 
@@ -70,10 +70,11 @@ public class KakaoPayService {
 
         // TODO : 로직 오류 가능성 존재
         // 저장
-        kakaoPayRepository.save(PayReady.builder().tid(readyResponse.getTid())
+        kakaoPayRepository.save(PayReady.builder()
                 .partnerOrderId(readyRequest.getPartnerOrderId())
+                .shopId(payDetail.getShopId())
+                .tid(readyResponse.getTid())
                 .partnerUserId(readyRequest.getPartnerUserId()).build());
-
         // 5. 응답 처리
         return readyResponse;
     }
@@ -85,20 +86,18 @@ public class KakaoPayService {
         headers.add("Authorization", "SECRET_KEY " + secretKey);
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        String tid = kakaoPayRepository.findTidByPartnerOrderIdAndPartnerUserId(readyRedirect.getPartnerOrderId(),
-                readyRedirect.getPartnerUserId());
-        log.debug("tid = {}", tid);
-        log.debug("PartnerOrderId = {}", readyRedirect.getPartnerOrderId());
-        log.debug("PartnerUserId = {}", readyRedirect.getPartnerUserId());
-        log.debug("pg_token = {}", readyRedirect.getPg_token());
+        PayReady findPayReady = kakaoPayRepository.findById(readyRedirect.getPartnerOrderId()).get();
 
+        log.debug("tid = {}", findPayReady.getTid());
+        log.debug("PartnerOrderId = {}", readyRedirect.getPartnerOrderId());
+        log.debug("pg_token = {}", readyRedirect.getPg_token());
 
         // Request param
         ApproveRequest approveRequest = ApproveRequest.builder()
                 .cid(cid)
-                .tid(tid)
+                .tid(findPayReady.getTid())
                 .partnerOrderId(readyRedirect.getPartnerOrderId())
-                .partnerUserId(readyRedirect.getPartnerUserId())
+                .partnerUserId(findPayReady.getPartnerUserId())
                 .pgToken(readyRedirect.getPg_token())
                 .build();
 
@@ -114,6 +113,7 @@ public class KakaoPayService {
             // 승인 결과를 저장한다.
             // save the result of approval
             PayApprove approveResponse = response.getBody();
+            approveResponse.registerShopId(findPayReady.getShopId());
             payApproveRepository.save(approveResponse);
 
             return approveResponse;
