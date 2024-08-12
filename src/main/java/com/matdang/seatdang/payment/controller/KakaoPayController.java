@@ -42,11 +42,11 @@ public class KakaoPayController {
                 .shopId(shopId++)
                 .totalAmount(2000 + count++)
                 .build();
-        // end ==
+
         ReadyResponse readyResponse = kakaoPayService.ready(payDetail);
         log.debug("ReadyResponse ={}", readyResponse);
         log.info("==== payment request ====");
-        // pc
+
         model.addAttribute("response", readyResponse);
 
         return "payment/ready" ;
