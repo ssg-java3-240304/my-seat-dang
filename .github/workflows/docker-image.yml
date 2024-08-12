@@ -59,6 +59,7 @@ jobs:
             sudo docker rm -f $(sudo docker ps -a -q)
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }}
             sudo docker run -d -p 8080:8080 -p 27017:27017 \
+            -e TZ=Asia/Seoul \
             -e "SPRING_PROFILES_ACTIVE=prod" \
             -e "PROD_DB_URL=${{ secrets.PROD_DB_URL }}" \
             -e "PROD_DB_USERNAME=${{ secrets.PROD_DB_USERNAME }}" \
