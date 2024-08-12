@@ -7,7 +7,9 @@
 # show grants for 'sh'@'%';
 
 # DROP TABLE IF EXISTS store CASCADE;
-
+# DROP TABLE IF EXISTS tbl_store_images CASCADE;
+# DROP TABLE IF EXISTS store_images CASCADE;
+#
 # CREATE TABLE store (
 #     store_id int auto_increment PRIMARY KEY,
 #     store_name VARCHAR(100),
@@ -19,7 +21,7 @@
 #     close_time TIME,
 #     regular_day_off VARCHAR(50),
 #     thumbnail VARCHAR(255),
-#     image VARCHAR(255),
+#     images VARCHAR(255),
 #     description TEXT,
 #     notice TEXT,
 #     phone VARCHAR(20),

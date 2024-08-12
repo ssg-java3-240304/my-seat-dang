@@ -48,6 +48,7 @@ public class Store {
             name = "tbl_store_images"
             , joinColumns = @JoinColumn(name = "image_id", referencedColumnName = "store_id")
     )
+    @Column(name = "images")
     private List<String> images;
     @Column(name = "description")
     private String description;
@@ -61,7 +62,4 @@ public class Store {
     @Embedded
     @Column(name = "setting")
     private StoreSetting setting;
-
-    @Column(name = "menus")
-    private Long menuListId;
 }
