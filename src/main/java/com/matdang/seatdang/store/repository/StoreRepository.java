@@ -10,6 +10,12 @@ import java.util.List;
 
 public interface StoreRepository extends JpaRepository<Store, Long> {
 
+
+    Page<Store> findByStoreNameContainingAndStoreAddressContainingOrderByStoreAddressDesc(String storeName, String storeAddress, Pageable pageable);
+    Page<Store> findByStoreNameContainingOrderByStoreAddressDesc(String storeAddress, Pageable pageable);
+    Page<Store> findByStoreAddressContainingOrderByStoreAddressDesc(String storeAddress, Pageable pageable);
+    Page<Store> findByStoreNameContainingOrderByStoreAddressAsc(String storeAddress, Pageable pageable);
+    Page<Store> findByStoreAddressContainingOrderByStoreAddressAsc(String storeAddress, Pageable pageable);
     Page<Store> findByStoreAddressContaining(String storeAddress, Pageable pageable);
     Page<Store> findByStoreNameContaining(String storeName, Pageable pageable);
 

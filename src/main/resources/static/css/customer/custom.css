@@ -1,3 +1,71 @@
 /*============================================================================================*/
 /* Your custom styles below */
 /*============================================================================================*/
+
+.search-wrapper {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid #ccc;
+}
+
+.input-group {
+    display: flex;
+    flex: 1;
+    align-items: center;
+}
+
+.input-field {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    border-right: 1px solid #ccc; /* 오른쪽 경계선 */
+}
+
+.input-field:last-child {
+    border-right: none; /* 마지막 input-field은 오른쪽 경계선 제거 */
+}
+
+.input-field i {
+    position: absolute;
+    left: 10px;
+    font-size: 18px;
+    color: #888;
+    pointer-events: none;
+}
+
+.input-field input {
+    width: 100%;
+    padding-left: 35px; /* 아이콘과 텍스트의 간격 */
+    padding-right: 10px;
+    border: none;
+    height: 40px;
+}
+
+.input-divider {
+    width: 1px;
+    background-color: #ccc;
+    height: 40px;
+}
+
+.search-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 0 20px;
+    height: 40px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 0 5px 5px 0;
+}
+
+.input-field input:focus {
+    outline: none;
+}
+
+.search-btn:hover {
+    background-color: #45a049;
+}
