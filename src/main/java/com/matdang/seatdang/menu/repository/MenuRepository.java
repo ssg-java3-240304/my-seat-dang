@@ -1,27 +1,14 @@
 package com.matdang.seatdang.menu.repository;
 
 
-import com.matdang.seatdang.menu.entity.MenuList;
-import com.matdang.seatdang.menu.vo.Menu;
-import com.matdang.seatdang.store.entity.Store;
+import com.matdang.seatdang.menu.entity.Menu;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
-public interface MenuRepository extends JpaRepository<MenuList, Long> {
-//    @Query("""
-//        select
-//            new com.matdang.seatdang.menu.entity.MenuList(
-//            m.menus)
-//        from
-//            Store s left join MenuList m
-//            on s.storeId = m.menuListId
-//        where
-//            s.storeId = :storeId
-//
-//    """)
-    MenuList findByStoreId(@Param("storeId") Long storeId);
+import java.util.Set;
 
-
-    MenuList findByMenuListId(Long storeId);
+public interface MenuRepository extends JpaRepository<Menu, Long> {
+    Set<Menu> findByStoreId(Long storeId);
+    Page<Menu> findByStoreId(Long storeId, Pageable pageable);
 }
