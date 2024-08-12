@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Slf4j
@@ -23,21 +24,23 @@ public class KakaoPayController {
     }
 
     private static int count = 0;
-    private static int partnerUserID = 1;
-    private static int partnerOrderID = 1;
+    private static Long partnerUserID = 1L;
+    private static Long partnerOrderID = 1L;
+    private static Long shopId = 1L;
 
 
     @GetMapping("/request")
-    public String readyToKakaoPay(Model model) {
+    public String readyToKakaoPay(@ModelAttribute PayDetail PayDetail, Model model) {
         PayDetail payDetail = (PayDetail) model.getAttribute("PayDetail");
         // test code
-        payDetail= PayDetail.builder()
+        payDetail = PayDetail.builder()
                 .itemName("초코파이")
-                .partnerUserId(Integer.toString(partnerUserID++))
-                .partnerOrderId(Integer.toString(partnerOrderID++))
+                .partnerUserId(Long.toString(partnerUserID++))
+                .partnerOrderId(Long.toString(partnerOrderID++))
                 .taxFreeAmount(0)
                 .quantity(2)
-                .totalAmount(2000+count++)
+                .shopId(shopId++)
+                .totalAmount(2000 + count++)
                 .build();
         // end ==
         ReadyResponse readyResponse = kakaoPayService.ready(payDetail);
