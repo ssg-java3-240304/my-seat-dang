@@ -2,6 +2,8 @@ package com.matdang.seatdang.search.repository;
 
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
+import com.matdang.seatdang.store.vo.ReservationOnOff;
+import com.matdang.seatdang.store.vo.StoreSetting;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import com.matdang.seatdang.common.storeEnum.StoreType;
@@ -153,6 +155,12 @@ class SearchRepositoryTest {
                 String 전화번호 = line[12];
                 String 좌표정보X = line[23];
                 String 좌표정보Y = line[24];
+
+                // 도로명주소가 비어있거나 null인 경우, 다음 루프로 넘어감
+                if (도로명주소 == null || 도로명주소.trim().isEmpty()) {
+                    continue;
+                }
+
                 // 무작위로 접미사를 선택하여 사업장명 뒤에 추가
                 String randomSuffix = suffixes[random.nextInt(suffixes.length)];
                 String modified사업장명 = "The " + randomSuffix +" "+사업장명;
@@ -171,23 +179,92 @@ class SearchRepositoryTest {
                 String name = String.format(modified사업장명);
                 List<String> imageList = List.of("https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/0a2e250f-1a1a-4805-bf17-559d7c4105cf.png");
 
-                Store store = Store.builder()
-                        .storeName(name)
-                        .storeAddress(addr)
-                        .images(imageList)
-                        .storeType(randomStoreType)
-                        .openTime(LocalTime.of(8, 0))
-                        .startBreakTime(LocalTime.of(15, 0))
-                        .endBreakTime(LocalTime.of(16, 0))
-                        .lastOrder(LocalTime.of(21, 30))
-                        .closeTime(LocalTime.of(22, 0))
-                        .regularDayOff("Sunday")
-                        .thumbnail("https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/0a2e250f-1a1a-4805-bf17-559d7c4105cf.png")
-                        .description("A cozy place to enjoy specialty coffee and pastries.")
-                        .notice("Closed on public holidays.")
-                        .phone("555-1234-567")
-                        .starRating(4.5)
-                        .build();
+                Store store;
+                if(randomStoreType.equals(StoreType.GENERAL_WAITING)){
+                    store = Store.builder()
+                            .storeName(name)
+                            .storeAddress(addr)
+                            .images(imageList)
+                            .storeType(randomStoreType)
+                            .openTime(LocalTime.of(8, 0))
+                            .startBreakTime(LocalTime.of(15, 0))
+                            .endBreakTime(LocalTime.of(16, 0))
+                            .lastOrder(LocalTime.of(21, 30))
+                            .closeTime(LocalTime.of(22, 0))
+                            .regularDayOff("Sunday")
+                            .thumbnail("https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/0a2e250f-1a1a-4805-bf17-559d7c4105cf.png")
+                            .description("A cozy place to enjoy specialty coffee and pastries.")
+                            .notice("Closed on public holidays.")
+                            .phone("555-1234-567")
+                            .starRating(4.5)
+                            .setting(StoreSetting.builder()
+                                    .reservationOpenTime(LocalTime.of(10,0))
+                                    .reservationCloseTime(LocalTime.of(20,0))
+                                    .reservationOnOff(ReservationOnOff.OFF)
+                                    .waitingOpenTime(LocalTime.of(10,0))
+                                    .waitingCloseTime(LocalTime.of(20,0))
+                                    .waitingOnOff(ReservationOnOff.ON)
+                                    .expectedWaitingTime(LocalTime.of(0,10))
+                                    .build()
+                            )
+                            .build();
+                }else if(randomStoreType.equals(StoreType.GENERAL_RESERVATION)){
+                    store = Store.builder()
+                            .storeName(name)
+                            .storeAddress(addr)
+                            .images(imageList)
+                            .storeType(randomStoreType)
+                            .openTime(LocalTime.of(8, 0))
+                            .startBreakTime(LocalTime.of(15, 0))
+                            .endBreakTime(LocalTime.of(16, 0))
+                            .lastOrder(LocalTime.of(21, 30))
+                            .closeTime(LocalTime.of(22, 0))
+                            .regularDayOff("Sunday")
+                            .thumbnail("https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/0a2e250f-1a1a-4805-bf17-559d7c4105cf.png")
+                            .description("A cozy place to enjoy specialty coffee and pastries.")
+                            .notice("Closed on public holidays.")
+                            .phone("555-1234-567")
+                            .starRating(4.5)
+                            .setting(StoreSetting.builder()
+                                    .reservationOpenTime(LocalTime.of(10,0))
+                                    .reservationCloseTime(LocalTime.of(20,0))
+                                    .reservationOnOff(ReservationOnOff.ON)
+                                    .waitingOpenTime(LocalTime.of(10,0))
+                                    .waitingCloseTime(LocalTime.of(20,0))
+                                    .waitingOnOff(ReservationOnOff.OFF)
+                                    .expectedWaitingTime(LocalTime.of(0,10))
+                                    .build()
+                            )
+                            .build();
+                }else{
+                    store = Store.builder()
+                            .storeName(name)
+                            .storeAddress(addr)
+                            .images(imageList)
+                            .storeType(randomStoreType)
+                            .openTime(LocalTime.of(8, 0))
+                            .startBreakTime(LocalTime.of(15, 0))
+                            .endBreakTime(LocalTime.of(16, 0))
+                            .lastOrder(LocalTime.of(21, 30))
+                            .closeTime(LocalTime.of(22, 0))
+                            .regularDayOff("Sunday")
+                            .thumbnail("https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/0a2e250f-1a1a-4805-bf17-559d7c4105cf.png")
+                            .description("A cozy place to enjoy specialty coffee and pastries.")
+                            .notice("Closed on public holidays.")
+                            .phone("555-1234-567")
+                            .starRating(4.5)
+                            .setting(StoreSetting.builder()
+                                    .reservationOpenTime(LocalTime.of(10,0))
+                                    .reservationCloseTime(LocalTime.of(20,0))
+                                    .reservationOnOff(ReservationOnOff.ON)
+                                    .waitingOpenTime(LocalTime.of(10,0))
+                                    .waitingCloseTime(LocalTime.of(20,0))
+                                    .waitingOnOff(ReservationOnOff.OFF)
+                                    .expectedWaitingTime(LocalTime.of(0,10))
+                                    .build()
+                            )
+                            .build();
+                }
                 //when
                 store = searchRepository.save(store);
 //                System.out.println(store);
