@@ -21,10 +21,9 @@
     <p class="header">Payment Details</p>
     <p></p>
     <p><strong>주문 번호:</strong> <span th:text="${response.partnerOrderId}"></span></p>
-    <!--    <p><strong>고객 id:</strong> <span th:text="${response.partnerUserId}"></span></p>-->
     <p><strong>상품명 :</strong> <span th:text="${response.itemName}"></span></p>
     <p><strong>수량: </strong> <span th:text="${response.quantity}"></span></p>
-    <p><strong>결제 금액: </strong> <span th:text="${response.amount.total}"></span></p>
+    <p><strong>결제 금액: </strong> <span th:text="${response.totalAmount}"></span></p>
     <p><strong>결제 수단: </strong> <span th:text="${response.paymentMethodType}"></span></p>
     <p><strong>결제 일시: </strong> <span th:text="${#temporals.format(response.approvedAt, 'yyyy.MM.dd HH:mm')}"></span>
     </p>

@@ -23,11 +23,12 @@
     <p><strong>주문 번호:</strong> <span th:text="${response.partnerOrderId}"></span></p>
     <p><strong>상품명 :</strong> <span th:text="${response.itemName}"></span></p>
     <p><strong>수량: </strong> <span th:text="${response.quantity}"></span></p>
-    <p><strong>결제 금액: </strong> <span th:text="${response.amount.total}"></span></p>
+    <p><strong>결제 금액: </strong> <span th:text="${response.payAmount}"></span></p>
     <p><strong>결제 수단: </strong> <span th:text="${response.paymentMethodType}"></span></p>
     <p><strong>결제 일시: </strong> <span th:text="${#temporals.format(response.approvedAt, 'yyyy.MM.dd HH:mm')}"></span>
-    <p><strong>환불 금액: </strong> <span th:text="${response.approvedCancelAmount.total}"></span></p>
-    <p><strong>환불 총 금액: </strong> <span th:text="${response.canceledAmount.total}"></span></p>
+    <p><strong>환불 금액: </strong> <span th:text="${response.approvedCancelAmount}"></span></p>
+    <p><strong>환불 총 금액: </strong> <span th:text="${response.canceledTotalAmount}"></span></p>
+    <p><strong>환불 상태: </strong> <span th:text="${response.status}"></span></p>
     <p><strong>환불 일시: </strong> <span th:text="${#temporals.format(response.canceledAt, 'yyyy.MM.dd HH:mm')}"></span>
 
 
