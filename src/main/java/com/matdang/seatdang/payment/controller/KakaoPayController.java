@@ -1,5 +1,7 @@
 package com.matdang.seatdang.payment.controller;
 
+import com.matdang.seatdang.payment.controller.dto.ApproveSuccessResponse;
+import com.matdang.seatdang.payment.controller.dto.RefundSuccessResponse;
 import com.matdang.seatdang.payment.dto.*;
 import com.matdang.seatdang.payment.entity.PayApprove;
 import com.matdang.seatdang.payment.entity.RefundResult;
@@ -57,7 +59,6 @@ public class KakaoPayController {
         return "payment/ready" ;
     }
 
-    // TODO : 엔티티는 컨트롤러까지 사용하기 => 수정 필요
     // TODO : 새로고침 방지
     @GetMapping("/approve")
     public String approve(ReadyRedirect readyRedirect, Model model) {
@@ -68,8 +69,8 @@ public class KakaoPayController {
 
         if (approveResponse instanceof PayApprove) {
             log.info("=== approve success ===");
-            log.debug("approveResponse type ={}", approveResponse.getClass());
-            model.addAttribute("response",  approveResponse);
+
+            model.addAttribute("response", ApproveSuccessResponse.create((PayApprove) approveResponse));
             return "payment/approve";
         }
         if (approveResponse instanceof ApproveFail) {
@@ -97,11 +98,10 @@ public class KakaoPayController {
         Object refundResult = kakaoPayService.refund(refundDetail);
         log.debug("refundResult type={}", refundResult.getClass());
 
-
         if (refundResult instanceof RefundResult) {
             log.info("=== Refund success ===");
-            log.debug("refundResult type ={}", refundResult.getClass());
-            model.addAttribute("response", refundResult);
+
+            model.addAttribute("response", RefundSuccessResponse.create((RefundResult) refundResult));
             return "payment/refund";
         }
         if (refundResult instanceof ApproveFail) {
