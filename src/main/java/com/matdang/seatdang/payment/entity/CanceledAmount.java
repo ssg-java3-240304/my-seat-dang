@@ -14,5 +14,5 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CanceledAmount {
     @Column(name = "canceled_total_amount")
-    private Long total;
+    private Integer total;
 }

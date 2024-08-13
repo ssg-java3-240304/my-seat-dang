@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.*;
 import org.springframework.data.domain.Persistable;
 
@@ -50,7 +51,7 @@ public class RefundResult extends BaseEntity implements Persistable<String> {
     private String status;
     private String paymentMethodType;
     private String itemName;
-    private String quantity;
+    private Integer quantity;
     @Embedded
     private Amount amount;
     @Embedded
