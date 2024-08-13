@@ -13,6 +13,7 @@ import java.time.LocalTime;
 public class StoreSetting {
     private LocalTime reservationOpenTime;
     private LocalTime reservationCloseTime;
+
     private ReservationOnOff onOff;
     private LocalTime waitingOpenTime;
     private LocalTime waitingCloseTime;

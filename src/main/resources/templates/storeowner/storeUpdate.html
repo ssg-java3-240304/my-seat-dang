@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{admin/layout/default}" xmlns="http://www.w3.org/1999/html">
+      layout:decorate="~{storeowner/layout/default}" xmlns="http://www.w3.org/1999/html">
 
 <div layout:fragment="content">
-    <form action="admin/storeRegist" method="post">
+    <form th:action="@{/storeowner/storeRegist}" th:each="store : ${stores}" th:object="${stores}" method="post" enctype="multipart/form-data">
         <!-- Breadcrumbs-->
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
@@ -11,7 +11,7 @@
             </li>
             <li class="breadcrumb-item active">Add listing</li>
         </ol>
-        <div class="box_general padding_bottom">
+        <div class="box_general padding_bottom" >
             <div class="header_box version_2">
                 <h2><i class="fa fa-file"></i>Basic info</h2>
             </div>
@@ -19,7 +19,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>매장명</label>
-                        <input type="text" id="storeName" class="form-control" placeholder="매장명을 입력하세요." required><br>
+                        <input th:value="*{store.storeName}" type="text" id="storeName" class="form-control" placeholder="매장명을 입력하세요." required><br>
                         <div class="input-group-append">
                             <button class="btn_1 medium" type="button" id="checkStoreNameBtn">중복 체크</button>
                         </div>
@@ -30,9 +30,9 @@
                         <label>카테고리</label>
                         <div class="styled-select">
                             <select id="category" required>
-                                <option value="GENERAL_RESERVATION">예약(베이커리)</option>
-                                <option value="CUSTOM">예약(제작케이크)</option>
-                                <option value="GENERAL_WAITING">웨이팅(베이커리)</option>
+                                <option value="GENERAL_RESERVATION" th:selected="${store.storeType == 'GENERAL_RESERVATION'}">예약(베이커리)</option>
+                                <option value="CUSTOM" th:selected="${store.storeType == 'CUSTOM'}">예약(제작케이크)</option>
+                                <option value="GENERAL_WAITING" th:selected="${store.storeType == 'GENERAL_WAITING'}">웨이팅(베이커리)</option>
                             </select>
                         </div>
                     </div>
@@ -43,7 +43,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>매장소개</label>
-                        <textarea id="description" class="form-control"></textarea>
+                        <textarea th:text="*{store.description}" id="description" class="form-control"></textarea>
                     </div>
                 </div>
             </div>
@@ -52,7 +52,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>공지사항</label>
-                        <textarea id="notice" class="form-control"></textarea>
+                        <textarea th:text="*{store.notice}" id="notice" class="form-control"></textarea>
                     </div>
                 </div>
             </div>
@@ -61,7 +61,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>매장 전화번호</label>
-                        <input type="text" id="phone" class="form-control" placeholder="02-000-0000" required>
+                        <input th:text="*{store.phone}" type="text" id="phone" class="form-control" placeholder="02-000-0000" required>
                     </div>
                 </div>
             </div>
@@ -69,7 +69,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label>대표 매장 이미지</label>
+                        <label>대표 매장 이미지 (필수/ 최대 1개)</label>
                         <form enctype="multipart/form-data">
                             <img src="" class="photo-preview" id="preview" width="200px" height="200px" alt="이미지 미리보기"/><br>
                             <input type="file" id="thumbnail" required>
@@ -81,10 +81,10 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label>추가 매장 이미지</label>
+                        <label>추가 매장 이미지 (최대 3개)</label>
                         <form enctype="multipart/form-data">
-                            <img src="" class="photo-preview" id="preview2" width="200px" height="200px" alt="이미지 미리보기"/><br>
-                            <input type="file" id="extraImage">
+                            <div id="previewContainer"></div> <!-- 이미지 미리보기 -->
+                            <input type="file" id="images" multiple>
                         </form>
                     </div>
                 </div>
@@ -164,14 +164,14 @@
                     <div class="form-group">
                         <div class="styled-select">
                             <select id="regularDayOff">
-                                <option value="none">없음</option>
-                                <option value="monday">월요일</option>
-                                <option value="tuesday">화요일</option>
-                                <option value="wednesday">수요일</option>
-                                <option value="thursday">목요일</option>
-                                <option value="friday">금요일</option>
-                                <option value="saturday">토요일</option>
-                                <option value="sunday">일요일</option>
+                                <option value="없음" th:selected="${store.regularDayOff == '없음'}">없음</option>
+                                <option value="월요일" th:selected="${store.regularDayOff == '월요일'}">월요일</option>
+                                <option value="화요일" th:selected="${store.regularDayOff == '화요일'}">화요일</option>
+                                <option value="수요일" th:selected="${store.regularDayOff == '수요일'}">수요일</option>
+                                <option value="목요일" th:selected="${store.regularDayOff == '목요일'}">목요일</option>
+                                <option value="금요일" th:selected="${store.regularDayOff == '금요일'}">금요일</option>
+                                <option value="토요일" th:selected="${store.regularDayOff == '토요일'}">토요일</option>
+                                <option value="일요일" th:selected="${store.regularDayOff == '일요일'}">일요일</option>
                             </select>
                         </div>
                     </div>
@@ -180,7 +180,7 @@
             <!-- /row-->
         </div>
         <!-- /box_general-->
-        <button type="submit" id="submitBtn" class="btn_1 medium">등록</button>
+        <button type="submit" id="submitBtn" class="btn_1 medium">수정</button>
     </form>
 </div>
 
@@ -272,8 +272,12 @@
             }
         };
 
-        document.getElementById('extraImage').addEventListener('change', function(event) {
+        document.getElementById('images').addEventListener('change', function(event) {
             const files = event.target.files;
+            const previewContainer = document.getElementById('previewContainer');
+
+            // 기존 미리보기 이미지 삭제
+            previewContainer.innerHTML = '';
             const maxFiles = 3;
 
             // 파일 수 제한
@@ -284,22 +288,28 @@
             }
 
             // 이미지 미리보기
-            const previewContainer = document.getElementById('preview2');
-            previewContainer.src = ''; // 미리보기 초기화
-            const file = files[0]; // 첫 번째 파일 선택
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    previewContainer.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        // 이미지 엘리먼트 생성
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'photo-preview';
+                        img.style.width = '200px'; // 미리보기 크기 설정
+                        img.style.height = '200px'; // 미리보기 크기 설정
+                        previewContainer.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                }
             }
         });
 
         let isclicked = 0;
         document.querySelector("#checkStoreNameBtn").onclick = () => {
             $.ajax({
-                url: '[[@{/admin/storeNameCheck}]]',
+                url: '[[@{/storeowner/storeNameCheck}]]',
                 method: 'get',
                 data: {storeName: $('#storeName').val()},
                 dataType: 'json',
@@ -349,7 +359,7 @@
 
             formData.append('thumbnail', $('#thumbnail')[0].files[0]);
 
-            const extraFiles = document.getElementById('extraImage').files;
+            const extraFiles = document.getElementById('images').files;
             if (extraFiles.length >= 1){
                 for (let i = 0; i < extraFiles.length; i++) {
                     formData.append('images', extraFiles[i]);
@@ -365,7 +375,7 @@
             formData.append('regularDayOff', $('#regularDayOff').val());
 
             $.ajax({
-                url: '[[@{/admin/storeRegist}]]',
+                url: '[[@{/storeowner/storeRegist}]]',
                 method: 'post',
                 contentType: false,
                 processData: false,
@@ -373,7 +383,7 @@
                 success (data){
                     console.log(data);
                     alert("매장을 성공적으로 등록했습니다.");
-                    // window.location.reload();
+                    window.location.reload();
                 },
                 error (error){
                     console.log(error);
@@ -382,7 +392,6 @@
             });
         }
     </script>
-
 </div>
 <!--</body>-->
 </html>

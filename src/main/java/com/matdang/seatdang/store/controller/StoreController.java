@@ -23,14 +23,14 @@ import static com.matdang.seatdang.common.storeEnum.StoreType.CUSTOM;
 import static com.matdang.seatdang.common.storeEnum.StoreType.GENERAL_RESERVATION;
 
 @Controller
-@RequestMapping("/store")
+@RequestMapping("/customer")
 @RequiredArgsConstructor
 @Slf4j
 public class StoreController {
     private final StoreService storeService;
     private final MenuService menuService;
 
-    @GetMapping("/storeList")
+    @GetMapping("/store/storeList")
     public void storeList(@PageableDefault(page = 1, size = 10) Pageable pageable,
                           Model model){
         log.info("GET/storeList?page={}", pageable.getPageNumber());
@@ -99,10 +99,11 @@ public class StoreController {
         model.addAttribute("pageCriteria", new PageCriteria(page, limit, totalCount, url));
     }
 
-    @GetMapping("/storeDetail")
+    @GetMapping("/store/detail")
     public void storeDetail(@RequestParam("storeId") Long storeId, Model model){
         Store store = storeService.findByStoreId(storeId);
-        MenuList menus = menuService.findAllByStoreId(storeId);
+//        MenuList menus = menuService.findByMenuListId();
+        MenuList menus = menuService.findByMenuListId(storeId);
         log.debug("store = {}", store);
         log.debug("menus = {}", menus);
         model.addAttribute("store", store);

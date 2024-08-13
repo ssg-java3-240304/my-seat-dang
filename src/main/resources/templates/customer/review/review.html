@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{customer/layout/default}">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <!--    main page only css-->
+  <link th:href="@{/css/customer/home.css}" rel="stylesheet">
+</head>
+
+<body>
+
+<main layout:fragment="main">
+
+  <div class="container margin_60_40">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="box_general write_review">
+          <h1 class="add_bottom_15">Write a review for "Pizzeria Da Alfredo"</h1>
+
+          <label class="d-block add_bottom_15">Overall rating</label>
+          <div class="row">
+            <div class="col-md-3 add_bottom_25">
+              <div class="add_bottom_15">Food Quality <strong class="food_quality_val"></strong></div>
+              <input type="range" min="0" max="10" step="1" value="0" data-orientation="horizontal" id="food_quality" name="food_quality">
+            </div>
+            <div class="col-md-3 add_bottom_25">
+              <div class="add_bottom_15">Service <strong class="service_val"></strong></div>
+              <input type="range" min="0" max="10" step="1" value="0" data-orientation="horizontal" id="service" name="service">
+            </div>
+            <div class="col-md-3 add_bottom_25">
+              <div class="add_bottom_15">Location <strong class="location_val"></strong></div>
+              <input type="range" min="0" max="10" step="1" value="0" data-orientation="horizontal" id="location" name="location">
+            </div>
+            <div class="col-md-3 add_bottom_25">
+              <div class="add_bottom_15">Price <strong class="price_val"></strong></div>
+              <input type="range" min="0" max="10" step="1" value="0" data-orientation="horizontal" id="price" name="price">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Title of your review</label>
+            <input class="form-control" type="text" placeholder="If you could say it in one sentence, what would you say?">
+          </div>
+          <div class="form-group">
+            <label>Your review</label>
+            <textarea class="form-control" style="height: 180px;" placeholder="Write your review to help others learn about this online business"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Add your photo (optional)</label>
+            <div class="fileupload"><input type="file" name="fileupload" accept="image/*"></div>
+          </div>
+          <div class="form-group">
+            <div class="checkboxes float-start add_bottom_15 add_top_15">
+              <label class="container_check">Eos tollit ancillae ea, lorem consulatu qui ne, eu eros eirmod scaevola sea. Et nec tantas accusamus salutatus, sit commodo veritus te, erat legere fabulas has ut. Rebum laudem cum ea, ius essent fuisset ut. Viderer petentium cu his.
+                <input type="checkbox">
+                <span class="checkmark"></span>
+              </label>
+            </div>
+          </div>
+          <a href="confirm.html" class="btn_1">Submit review</a>
+        </div>
+      </div>
+    </div>
+    <!-- /row -->
+  </div>
+  <!-- /container -->
+
+</main>
+<!-- /main -->
+<div id="toTop"></div><!-- Back to top button -->
+
+<div class="layer"></div><!-- Opacity Mask Menu Mobile -->
+
+<!-- Sign In Modal -->
+<div id="sign-in-dialog" class="zoom-anim-dialog mfp-hide">
+  <div class="modal_header">
+    <h3>Sign In</h3>
+  </div>
+  <form>
+    <div class="sign-in-wrapper">
+      <a href="#0" class="social_bt facebook">Login with Facebook</a>
+      <a href="#0" class="social_bt google">Login with Google</a>
+      <div class="divider"><span>Or</span></div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" class="form-control" name="email" id="email">
+        <i class="icon_mail_alt"></i>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" class="form-control" name="password" id="password" value="">
+        <i class="icon_lock_alt"></i>
+      </div>
+      <div class="clearfix add_bottom_15">
+        <div class="checkboxes float-start">
+          <label class="container_check">Remember me
+            <input type="checkbox">
+            <span class="checkmark"></span>
+          </label>
+        </div>
+        <div class="float-end"><a id="forgot" href="javascript:void(0);">Forgot Password?</a></div>
+      </div>
+      <div class="text-center">
+        <input type="submit" value="Log In" class="btn_1 full-width mb_5">
+        Don’t have an account? <a href="account.html">Sign up</a>
+      </div>
+      <div id="forgot_pw">
+        <div class="form-group">
+          <label>Please confirm login email below</label>
+          <input type="email" class="form-control" name="email_forgot" id="email_forgot">
+          <i class="icon_mail_alt"></i>
+        </div>
+        <p>You will receive an email containing a link allowing you to reset your password to a new preferred one.</p>
+        <div class="text-center"><input type="submit" value="Reset Password" class="btn_1"></div>
+      </div>
+    </div>
+  </form>
+  <!--form -->
+</div>
+<!-- /Sign In Modal -->
+
+<!-- COMMON SCRIPTS -->
+<script src="js/common_scripts.min.js"></script>
+<script src="js/common_func.js"></script>
+<script src="assets/validate.js"></script>
+
+<!-- SPECIFIC SCRIPTS -->
+<script src="js/specific_review.js"></script>
+
+</body>
+</html>

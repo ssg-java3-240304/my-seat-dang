@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Embeddable
-public class CustomMenuOpt extends Menu {
+public class CustomMenuOpt{
     private String sheet;
     private String size;
     private String cream;

@@ -9,7 +9,6 @@ import java.util.List;
 
 @Entity(name = "menu_list")
 @Table(name = "menu_list")
-@Embeddable
 @Data
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
@@ -30,4 +29,7 @@ public class MenuList {
     @Column(name = "menu_type")
     @Enumerated(EnumType.STRING)
     private MenuType menuType;
+
+    @Column(name = "store_id")
+    private Long storeId;
 }

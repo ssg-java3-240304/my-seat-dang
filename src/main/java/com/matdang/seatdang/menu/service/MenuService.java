@@ -21,7 +21,7 @@ public class MenuService {
 //        return ResponseEntity.ok(menu);
 //    }
 
-    public MenuList findAllByStoreId(Long storeId) {
-        return menuRepository.findAllByStoreId(storeId);
+    public MenuList findByMenuListId(Long storeId) {
+        return menuRepository.findByMenuListId(storeId);
     }
 }
