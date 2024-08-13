@@ -69,6 +69,8 @@ jobs:
             -e "NCP_APIGW_SECRET_KEY=${{ secrets.NCP_APIGW_SECRET_KEY }}" \
             -e "MONGO_DB_URI=${{ secrets.MONGO_DB_URI }}" \
             -e "CHAT_HOST_SERVER=${{ secrets.CHAT_HOST_SERVER }}" \
+            -e "OAUTH2_NAVER_CLIENT_ID=${{ secrets.OAUTH2_NAVER_CLIENT_ID }}" \
+            -e "OAUTH2_NAVER_CLIENT_SECRET=${{ secrets.OAUTH2_NAVER_CLIENT_SECRET }}" \
             --name ${{ vars.APP_NAME }} \
             ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }}
             sudo docker image prune -f
