@@ -13,6 +13,11 @@ import lombok.Setter;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class ApproveFail {
     private Integer errorCode;
+    private Status status;
     private String errorMessage;
     private Extras extras;
+
+    public void registerStatus(Status status) {
+        this.status = status;
+    }
 }
