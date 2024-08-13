@@ -1,6 +1,7 @@
 package com.matdang.seatdang.store.vo;
 
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,5 +21,4 @@ public class StoreSetting {
     private LocalTime waitingCloseTime;
     private ReservationOnOff waitingOnOff;
     private LocalTime expectedWaitingTime;
-    // waitingOnOff 필요
 }

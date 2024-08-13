@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -20,9 +21,9 @@ import java.util.stream.Collectors;
 public class MenuQueryService {
     private final MenuRepository menuRepository;
 
-    public Set<MenuDetailResponseDto> findMenuSetByStoreId(Long storeId) {
-        Set<Menu> menus = menuRepository.findByStoreId(storeId);
-        return menus.stream().map(MenuDetailResponseDto::toDto).collect(Collectors.toSet());
+    public List<MenuDetailResponseDto> findMenuSetByStoreId(Long storeId) {
+        List<Menu> menus = menuRepository.findByStoreId(storeId);
+        return menus.stream().map(MenuDetailResponseDto::toDto).collect(Collectors.toList());
     }
 
     public Page<MenuDetailResponseDto> findMenuPageByStoreId(Long storeId, Pageable pageable) {
@@ -33,6 +34,11 @@ public class MenuQueryService {
         return menuRepository.findById(menuId)
                 .map(MenuDetailResponseDto::toDto)
                 .orElse(null);
+    }
+
+    public List<MenuDetailResponseDto> findMenuSetByStoreIdAndMenuName(Long storeId, String menuName) {
+        List<Menu> menus = menuRepository.findByStoreIdAndMenuNameContaining(storeId, menuName);
+        return menus.stream().map(MenuDetailResponseDto::toDto).collect(Collectors.toList());
     }
 
 }

@@ -5,6 +5,7 @@ import com.matdang.seatdang.menu.vo.MenuType;
 import jakarta.persistence.*;
 import lombok.*;
 
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,4 +31,5 @@ public class Menu {
     private String menuDesc;
     @Embedded
     private CustomMenuOpt customMenuOpt;
+
 }
