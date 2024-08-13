@@ -6,7 +6,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Setter;
-
+// TODO : @Setter 테스트 필요
 @Data
 @Setter(AccessLevel.PRIVATE)
 @AllArgsConstructor
