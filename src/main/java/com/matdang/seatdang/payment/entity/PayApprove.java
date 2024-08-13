@@ -2,6 +2,7 @@ package com.matdang.seatdang.payment.entity;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.matdang.seatdang.payment.entity.vo.Amount;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
