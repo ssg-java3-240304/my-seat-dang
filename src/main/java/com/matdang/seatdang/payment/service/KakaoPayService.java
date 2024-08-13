@@ -72,6 +72,7 @@ public class KakaoPayService {
         // Call “Execute approved payment” API by pg_token, TID mapping to the current payment transaction and other parameters.
         HttpHeaders headers = initHttpHeaders();
 
+
         PayReady findPayReady = kakaoPayRepository.findById(readyRedirect.getPartnerOrderId()).get();
 
         log.debug("tid = {}", findPayReady.getTid());
