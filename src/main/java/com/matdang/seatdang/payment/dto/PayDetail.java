@@ -4,7 +4,6 @@ package com.matdang.seatdang.payment.dto;
 import lombok.*;
 
 @Data
-@Setter(AccessLevel.PRIVATE)
 @Builder
 @AllArgsConstructor
 public class PayDetail {
