@@ -21,10 +21,14 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        show_sql: true
+#        show_sql: true
         hbm2ddl:
-          auto: update
-#  thymeleaf:
+          auto: create
+        dialect: org.hibernate.dialect.MySQLDialect
+
+
+  #  thymeleaf:
+
 #    prefix: classpath:/templates/
 #    suffix: .html
 
@@ -56,6 +60,8 @@ logging:
   level:
     root: info
     com.matdang.seatdang: debug
+    org.hibernate.SQL: debug
+
 
 app:
   version: 0.1.1

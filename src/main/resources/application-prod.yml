@@ -8,5 +8,9 @@ spring:
     password: ${PROD_DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+kakao:
+  secret:
+    key: ${KAKAO_PAY_SECRET_KEY}
+cid: ${KAKAO_PAY_CID}
 
 hostUrl: ${CHAT_HOST_SERVER}
