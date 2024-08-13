@@ -1,4 +1,5 @@
-package com.matdang.seatdang.payment.dto;
+package com.matdang.seatdang.payment.service.dto;
+
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -11,8 +12,8 @@ import lombok.Data;
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class RefundRequest {
-    private String cid;
     private String tid;
-    private String cancelAmount;
-    private String cancelTaxFreeAmount;
+    private String cid;
+    private Integer cancelAmount;
+    private Integer cancelTaxFreeAmount;
 }
