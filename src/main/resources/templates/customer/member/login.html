@@ -32,8 +32,12 @@
                                 <h3>Sign In</h3>
                             </div>
                             <form th:action="@{/loginProc}" method="post" name="loginForm">
-                                <a href="#0" class="social_bt facebook">Login with Facebook</a>
-                                <a href="#0" class="social_bt google">Login with Google</a>
+<!--                                <a href="#0" class="social_bt facebook">Login with Facebook</a>-->
+<!--                                <a href="#0" class="social_bt google">Login with Google</a>-->
+                                <a th:href="@{/oauth2/authorization/naver}" class="social_bt naver">
+                                    <img th:src="@{/img/customer/naverBtnG_ok.png}" alt="Login with Naver" style="width: 100%; height: auto; vertical-align: middle">
+                                    Login with Naver
+                                </a>
                                 <div class="divider"><span>Or</span></div>
                                 <div class="form-group">
                                     <label>Email</label>
