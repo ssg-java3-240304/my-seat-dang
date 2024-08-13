@@ -15,21 +15,21 @@ public class RefundSuccessResponse {
     private String itemName;
     private Integer quantity;
     private Integer payAmount;
-    private String paymentMethodType;
+    private PaymentType paymentMethodType;
     private LocalDateTime approvedAt;
     private Integer approvedCancelAmount;
     private Integer canceledTotalAmount;
-    private String status;
+    private RefundStatus status;
     private LocalDateTime canceledAt;
 
     public static RefundSuccessResponse create(RefundResult refundResult) {
         RefundSuccessResponse refundSuccessResponse = new RefundSuccessResponse();
         refundSuccessResponse.partnerOrderId = refundResult.getPartnerOrderId();
         refundSuccessResponse.itemName = refundResult.getItemName();
-        refundSuccessResponse.status = refundResult.getStatus();
+        refundSuccessResponse.status = RefundStatus.valueOf(refundResult.getStatus());
         refundSuccessResponse.quantity = refundResult.getQuantity();
         refundSuccessResponse.payAmount = refundResult.getAmount().getTotal();
-        refundSuccessResponse.paymentMethodType = refundResult.getPaymentMethodType();
+        refundSuccessResponse.paymentMethodType = PaymentType.valueOf(refundResult.getPaymentMethodType());
         refundSuccessResponse.approvedAt = refundResult.getApprovedAt();
         refundSuccessResponse.approvedCancelAmount = refundResult.getApprovedCancelAmount().getTotal();
         refundSuccessResponse.canceledTotalAmount = refundResult.getCanceledAmount().getTotal();
