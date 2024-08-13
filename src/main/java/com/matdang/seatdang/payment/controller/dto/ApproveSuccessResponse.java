@@ -12,7 +12,7 @@ public class ApproveSuccessResponse {
     private String itemName;
     private int quantity;
     private int totalAmount;
-    private String paymentMethodType;
+    private PaymentType paymentMethodType;
     private LocalDateTime approvedAt;
 
 
@@ -22,7 +22,7 @@ public class ApproveSuccessResponse {
         approveSuccessResponse.itemName = payApprove.getItemName();
         approveSuccessResponse.quantity = payApprove.getQuantity();
         approveSuccessResponse.totalAmount = payApprove.getAmount().getTotal();
-        approveSuccessResponse.paymentMethodType = payApprove.getPaymentMethodType();
+        approveSuccessResponse.paymentMethodType = PaymentType.valueOf(payApprove.getPaymentMethodType());
         approveSuccessResponse.approvedAt = payApprove.getApprovedAt();
 
         return approveSuccessResponse;
