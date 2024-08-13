@@ -31,6 +31,7 @@ public class KakaoPayService {
     private String secretKey;
     @Value("${cid}")
     private String cid;
+    private String tid;
     private static final String KAKAO_PAY_READY_URL = "https://open-api.kakaopay.com/online/v1/payment/ready";
     private static final String KAKAO_PAY_APPROVE_URL = "https://open-api.kakaopay.com/online/v1/payment/approve";
     private static final String KAKAO_PAY_CANCEL_URL = "https://open-api.kakaopay.com/online/v1/payment/cancel";
@@ -61,6 +62,8 @@ public class KakaoPayService {
                 .shopId(payDetail.getShopId())
                 .tid(readyResponse.getTid())
                 .partnerUserId(readyRequest.getPartnerUserId()).build());
+
+         tid = readyResponse.getTid();
         // 5. 응답 처리
         return readyResponse;
     }
@@ -137,7 +140,8 @@ public class KakaoPayService {
     private ApproveRequest createApprove(ReadyRedirect readyRedirect, PayReady findPayReady) {
         ApproveRequest approveRequest = ApproveRequest.builder()
                 .cid(cid)
-                .tid(findPayReady.getTid())
+//                .tid(findPayReady.getTid())
+                .tid(tid)
                 .partnerOrderId(readyRedirect.getPartnerOrderId())
                 .partnerUserId(findPayReady.getPartnerUserId())
                 .pgToken(readyRedirect.getPg_token())
