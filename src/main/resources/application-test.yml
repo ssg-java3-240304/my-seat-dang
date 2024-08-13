@@ -7,9 +7,18 @@ spring:
     mongodb:
       uri: ${MONGO_DB_URI}
   datasource:
-    url: ${TEST_DB_URL}
-    username: ${TEST_DB_USERNAME}
-    password: ${TEST_DB_PASSWORD}
+#    url: ${TEST_DB_URL}
+#    username: ${TEST_DB_USERNAME}
+#    password: ${TEST_DB_PASSWORD}
+    url: jdbc:mysql://localhost:3306/myseatdangdb
+    username: root
+    password: mysql
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+kakao:
+  secret:
+    key: ${KAKAO_PAY_SECRET_KEY}
+cid: ${KAKAO_PAY_CID}
+
 hostUrl: http://localhost:8080
+
