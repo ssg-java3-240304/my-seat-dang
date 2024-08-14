@@ -1,5 +1,6 @@
 package com.matdang.seatdang.auth.dto;
 
+import com.matdang.seatdang.member.entitiy.Gender;
 import com.matdang.seatdang.member.entitiy.MemberRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -73,5 +74,17 @@ public class CustomOAuth2User implements OAuth2User {
         return oAuth2Response.getProvider()+" "+oAuth2Response.getProviderId();
     }
 
+    public String getNickname() {
+        if (oAuth2Response instanceof NaverResponse) {
+            return ((NaverResponse) oAuth2Response).getNickname();
+        }
+        return null;  // Naver가 아닌 경우 null 반환
+    }
 
+    public String getMobile() {
+        if (oAuth2Response instanceof NaverResponse) {
+            return ((NaverResponse) oAuth2Response).getMobile();
+        }
+        return null;  // Naver가 아닌 경우 null 반환
+    }
 }

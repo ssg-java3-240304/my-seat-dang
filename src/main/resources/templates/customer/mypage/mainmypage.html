@@ -19,8 +19,12 @@
 <div>
     <br>
     <h1>메인 Mypage입니다</h1>
-    <h1>🎈welcome🎈 <span  th:text="${memberName}"></span></h1>
+    <h1>🎈환영합니다🎈 <span  th:text="${memberName}"> 님 !</span></h1>
     <h2>닉네임 : <span th:text="${memberNickName}"></span></h2>
+    <h2>아이디 : <span th:text="${memberEmail}"></span></h2>
+    <h2>핸드폰번호 : <span th:text="${memberNickName}"></span></h2>
+    <h2>성별 : <span th:text="${memberPhone}"></span></h2>
+    <h2>생일 : <span th:text="${customerBirthday}"></span></h2>
     <img th:src="${customerProfileImage}" alt="Profile Image">
 </div>
 </main>
