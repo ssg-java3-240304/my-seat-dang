@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{storeowner/layout/default}">
+<head>
+    <meta charset="UTF-8">
+    <title>메뉴</title>
+    <!-- Plugin styles -->
+    <link th:href="@{/vendor/admin/animate.min.css}" rel="stylesheet">
+    <link th:href="@{/vendor/admin/magnific-popup.css}" rel="stylesheet">
+</head>
+<body>
+    <main layout:fragment="content">
+        <div class="container-fluid">
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active">
+                    <a th:href="@{/storeowner/menu/menuList.html}">메뉴</a>
+                </li>
+            </ol>
+            <div class="box_general">
+                <div class="header_box">
+                    <h2 class="d-inline-block">메뉴 목록</h2>
+                </div>
+                <div class="list_general reviews">
+                    <ul>
+                        <li th:each="menu, stat : ${menus}" th:object="${menu}" class="row">
+                            <figure><img th:src="*{image}" alt=""></figure>
+                            <div class="col-sm-8">
+                                <h4 th:text="*{menuName}"></h4>
+                                <h4 th:text="*{menuPrice}"></h4>
+                                <p th:text="*{menuDesc}"></p>
+                            </div>
+                            <div class="col-4 row">
+                                <div class="col-6">
+                                    <button type="submit" class="btn_1 medium">수정</button>
+                                </div>
+                                <div class="col-6">
+                                    <button type="submit" class="btn_1 medium" style="background-color: #bd2130">삭제</button>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- /box_general-->
+            <div th:replace="~{storeowner/fragments/pagenation::pagenationFragment}"></div>
+            <!-- /pagination-->
+        </div>
+    </main>
+</body>
+</html>
