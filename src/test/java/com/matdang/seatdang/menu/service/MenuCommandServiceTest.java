@@ -72,7 +72,7 @@ class MenuCommandServiceTest {
             if(random.nextInt(10)>3) {
                 Menu menu = Menu.builder()
                         .storeId(i)
-                        .menuName("menuName")
+                        .menuName(menuName)
                         .menuPrice(random.nextInt(500000))
                         .image("https://cdn.paris.spl.li/wp-content/uploads/201126_%E1%84%92%E1%85%A9%E1%86%B7%E1%84%91%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%8C%E1%85%B5%E1%84%8E%E1%85%A9%E1%84%8F%E1%85%A9%E1%84%89%E1%85%A9%E1%84%85%E1%85%A1%E1%84%88%E1%85%A1%E1%86%BC_01-1-1280x1280.jpg")
                         .menuType(MenuType.NORMAL)

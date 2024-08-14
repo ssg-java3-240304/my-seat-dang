@@ -166,7 +166,7 @@ class SearchRepositoryTest {
         assertThat(store.getStoreId()).isEqualTo(id);
     }
 
-//    @Disabled
+    @Disabled
     @DisplayName("더미데이터 생성")
     @Test
     public void test8() {
@@ -175,6 +175,9 @@ class SearchRepositoryTest {
         String[] suffixes = {"에그타르트", "브라우니", "케이크", "에클레어", "마카롱", "소라빵", "단팥빵", "식빵"};
         Random random = new Random();
         try (CSVReader reader = new CSVReader(new InputStreamReader(new FileInputStream(csvFile), Charset.forName("EUC-KR")))) {
+            // 첫 번째 라인을 읽어서 헤더로 처리, 저장하지 않음
+            reader.readNext();
+
             String[] line;
             while ((line = reader.readNext()) != null) {
                 // 해당 열의 인덱스에 따라 데이터 추출
