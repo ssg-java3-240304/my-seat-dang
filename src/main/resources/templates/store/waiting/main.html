@@ -19,11 +19,42 @@
         th {
             background-color: #f2f2f2;
         }
+        .button-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .button-container button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        .button-container button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
 
 <h2>Waiting List</h2>
+
+<div class="button-container">
+    <!-- Use Thymeleaf to build the URL with the current request URI -->
+    <form th:action="@{/store/waiting}" method="get" style="display:inline;">
+        <input type="hidden" name="status" value="0" />
+        <button type="submit">웨이팅 중</button>
+    </form>
+    <form th:action="@{/store/waiting}" method="get" style="display:inline;">
+        <input type="hidden" name="status" value="1" />
+        <button type="submit">입장</button>
+    </form>
+    <form th:action="@{/store/waiting}" method="get" style="display:inline;">
+        <input type="hidden" name="status" value="2" />
+        <button type="submit">취소</button>
+    </form>
+</div>
 
 <table>
     <thead>
