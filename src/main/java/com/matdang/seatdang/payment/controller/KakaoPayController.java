@@ -1,7 +1,10 @@
 package com.matdang.seatdang.payment.controller;
 
+import com.matdang.seatdang.payment.controller.dto.ApproveSuccessResponse;
+import com.matdang.seatdang.payment.controller.dto.RefundSuccessResponse;
 import com.matdang.seatdang.payment.dto.*;
 import com.matdang.seatdang.payment.entity.PayApprove;
+import com.matdang.seatdang.payment.entity.RefundResult;
 import com.matdang.seatdang.payment.service.KakaoPayService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,10 +31,12 @@ public class KakaoPayController {
     private static Long partnerOrderID = 1L;
     private static Long shopId = 1L;
 
+    // refund test용
+    private static String tid;
+
 
     @GetMapping("/request")
-    public String readyToKakaoPay(@ModelAttribute PayDetail PayDetail, Model model) {
-        PayDetail payDetail = (PayDetail) model.getAttribute("PayDetail");
+    public String readyToKakaoPay(@ModelAttribute PayDetail payDetail, Model model) {
         // test code
         payDetail = PayDetail.builder()
                 .itemName("초코파이")
@@ -44,6 +49,8 @@ public class KakaoPayController {
                 .build();
 
         ReadyResponse readyResponse = kakaoPayService.ready(payDetail);
+        // refund test용
+        tid = readyResponse.getTid();
         log.debug("ReadyResponse ={}", readyResponse);
         log.info("==== payment request ====");
 
@@ -52,6 +59,7 @@ public class KakaoPayController {
         return "payment/ready" ;
     }
 
+    // TODO : 새로고침 방지
     @GetMapping("/approve")
     public String approve(ReadyRedirect readyRedirect, Model model) {
         log.debug("=== approve start ===");
@@ -61,14 +69,15 @@ public class KakaoPayController {
 
         if (approveResponse instanceof PayApprove) {
             log.info("=== approve success ===");
-            log.debug("approveResponse type ={}", approveResponse.getClass());
-            model.addAttribute("response",  approveResponse);
+
+            model.addAttribute("response", ApproveSuccessResponse.create((PayApprove) approveResponse));
             return "payment/approve";
         }
         if (approveResponse instanceof ApproveFail) {
             log.error("=== Payment Approve Fail ===");
             log.error("{}",approveResponse);
 
+            ((ApproveFail) approveResponse).registerStatus(Status.PAYMENT_FAILED);
             model.addAttribute("response", approveResponse);
             return "payment/approve-fail";
         }
@@ -76,13 +85,39 @@ public class KakaoPayController {
         return null;
     }
 
-//    @GetMapping("/readyToKakaoPay/refund/{openType}")
-//    public String refund( @PathVariable("openType") String openType, Model model) {
-//        String refundRequest = kakaoPayService.refund();
-//        model.addAttribute("response", refundRequest);
-//        return  openType + "/refund";
-//    }
-//
+    @GetMapping("/refund")
+    public String refund(@ModelAttribute RefundDetail refundDetail, Model model) {
+        refundDetail = refundDetail.builder()
+                .partnerUserId(partnerUserID)
+                .partnerOrderId(partnerOrderID)
+                .tid(tid)
+                .cancelAmount(1000)
+                .cancelTaxFreeAmount(0)
+                .build();
+
+        Object refundResult = kakaoPayService.refund(refundDetail);
+        log.debug("refundResult type={}", refundResult.getClass());
+
+        if (refundResult instanceof RefundResult) {
+            log.info("=== Refund success ===");
+
+            model.addAttribute("response", RefundSuccessResponse.create((RefundResult) refundResult));
+            return "payment/refund";
+        }
+        if (refundResult instanceof ApproveFail) {
+            log.error("=== Refund Approve Fail ===");
+            log.error("{}", refundResult);
+
+            ((ApproveFail) refundResult).registerStatus(Status.REFUND_FAILED);
+            model.addAttribute("response", refundResult);
+            return "redirect:/payment/approve-fail";
+        }
+
+
+        return null;
+    }
+
+
 //    @GetMapping("/cancel/{openType}")
 //    public String cancel( @PathVariable("openType") String openType) {
 //        // 주문건이 진짜 취소되었는지 확인 후 취소 처리
