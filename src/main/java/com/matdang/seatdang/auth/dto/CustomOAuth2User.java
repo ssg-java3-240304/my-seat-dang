@@ -15,9 +15,9 @@ public class CustomOAuth2User implements OAuth2User {
 
     private final MemberRole role;
 
-    public CustomOAuth2User(OAuth2Response oAuth2Response, MemberRole role) {
+    public CustomOAuth2User(OAuth2Response oAuth2Response) {
         this.oAuth2Response = oAuth2Response;
-        this.role = role;
+        this.role =  MemberRole.ROLE_CUSTOMER;;
     }
 
     // 로그인 진행하면 resource 서버로 부터 넘어오는 모든 데이터
