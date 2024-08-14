@@ -3,11 +3,9 @@ package com.matdang.seatdang.auth.service;
 import com.matdang.seatdang.auth.dto.CustomOAuth2User;
 import com.matdang.seatdang.auth.dto.NaverResponse;
 import com.matdang.seatdang.auth.dto.OAuth2Response;
-import com.matdang.seatdang.member.entitiy.Customer;
-import com.matdang.seatdang.member.entitiy.Member;
-import com.matdang.seatdang.member.entitiy.MemberRole;
-import com.matdang.seatdang.member.entitiy.MemberStatus;
+import com.matdang.seatdang.member.entitiy.*;
 import com.matdang.seatdang.member.repository.MemberRepository;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -16,6 +14,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 
@@ -32,6 +31,17 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
+    // 권한에서 MemberRole을 추출
+    private MemberRole extractRoleFromAuthorities(Collection<? extends GrantedAuthority> authorities) {
+        if (authorities != null && !authorities.isEmpty()) {
+            String roleName = authorities.iterator().next().getAuthority(); // 첫 번째 권한만 사용
+            return MemberRole.valueOf(roleName); // MemberRole로 변환
+        }
+        return MemberRole.ROLE_CUSTOMER; // 기본값
+    }
+
+
+
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
@@ -39,9 +49,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         System.out.println(oAuth2User.getAttributes());
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
-        OAuth2Response oAuth2Response = null;
-
-
+        OAuth2Response oAuth2Response;
 
         // 현재 네이버 밖에 안했지만 추후 다른 OAuth를 사용할 경우 여기다가 추가하면된다.
 
@@ -52,21 +60,21 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             return null;
         }
 
-        String oauthIdentifier = oAuth2Response.getProvider() + " " + oAuth2Response.getProviderId();
-        String email = oAuth2Response.getEmail();
-        MemberRole role = MemberRole.ROLE_CUSTOMER;
 
         //1. OAuth 식별자로 사용자 조회 (OAuth로 회원가입 한적 있는지?)
-        Customer customerByOauth = memberRepository.findByOauthIdentifier(oauthIdentifier);
+        CustomOAuth2User customOAuth2User = new CustomOAuth2User(oAuth2Response);
+        String oauthIdentifier = customOAuth2User.getUsername();
+        Customer customerByOauth = memberRepository.findByOauthIdentifier(oauthIdentifier); // ouath 식별 아이디 oauthIdentifier
+
 
         if (customerByOauth != null) {
             // OAuth 식별자로 이미 가입된 사용자라면 해당 사용자 반환 (현재 중복검증을 이메일 검증으로 할거라서 이메일로 찾음)
-            return new CustomOAuth2User(oAuth2Response, customerByOauth.getMemberRole());
+            return customOAuth2User;
         }
 
         // 2. 이메일로 사용자 조회 (기존세션으로 가입했는지?)
 
-        Customer customerByEmail = (Customer) memberRepository.findByMemberEmail(email);
+        Customer customerByEmail = (Customer) memberRepository.findByMemberEmail(oAuth2Response.getEmail());
 
         if (customerByEmail != null) {
             // 기존 이메일 계정이 있을 경우, OAuth 식별자를 추가하고 업데이트
@@ -74,7 +82,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             customerByEmail.getOauthIdentifiers().add(oauthIdentifier);
             memberRepository.save(customerByEmail);
 
-            return new CustomOAuth2User(oAuth2Response, customerByEmail.getMemberRole());
+            return new CustomOAuth2User(oAuth2Response);
         }
 
 //        if (customerByEmail != null) {
@@ -92,17 +100,20 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         // 3: 새로운 사용자 생성
 
+        MemberRole memberRole = extractRoleFromAuthorities(customOAuth2User.getAuthorities());
+
         Customer newCustomer = Customer.builder()
-                .memberName(oAuth2Response.getName()) // name (네이버 OAuth)에서 받음
-                .customerNickName(((NaverResponse) oAuth2Response).getNickname()) // nickname (네이버 OAuth)에서 받음
+                .memberName(customOAuth2User.getName()) // name (네이버 OAuth)에서 받음
+                .customerNickName(customOAuth2User.getNickname()) // nickname (네이버 OAuth)에서 받음
                 .memberPassword(bCryptPasswordEncoder.encode("oauth"))// oauth전용 비밀번호 설정 (로그인할땐 막음)
-                .memberPhone(((NaverResponse) oAuth2Response).getMobile()) // memberPhone (네이버 OAuth)에서 받음
-                .memberEmail(email) // email (네이버 OAuth)에서 받음
+                .memberPhone(customOAuth2User.getMobile()) // memberPhone (네이버 OAuth)에서 받음
+                .memberEmail(customOAuth2User.getEmail()) // email (네이버 OAuth)에서 받음
                 .memberStatus(MemberStatus.APPROVED) // 항상 승인
                 .oauthIdentifiers(new HashSet<>()) // 명시적으로 초기화 (필요한 경우)
                 .joinDate(LocalDate.now()) // 가입신청한 현재 시간
                 .imageGenLeft(3) // 기본 3
-                .memberRole(role) // CUSTOMER (OAuth 로그인은 CUSTOMER만 됨
+                .memberRole(memberRole) // CUSTOMER (OAuth 로그인은 CUSTOMER만 됨)
+                .customerGender(Gender.NONE) // 성별
                 .build();
 
         newCustomer.getOauthIdentifiers().add(oauthIdentifier); // OAuth 가입하면 넣는 식별값 넣기
@@ -110,7 +121,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 
 
-        return new CustomOAuth2User(oAuth2Response, role);
+        return new CustomOAuth2User(oAuth2Response);
     }
 }
 
