@@ -1,6 +1,7 @@
 package com.matdang.seatdang.auth.principal;
 
 import com.matdang.seatdang.member.entitiy.StoreOwner;
+import com.matdang.seatdang.member.vo.StoreVo;
 
 
 /**
@@ -35,11 +36,11 @@ public class StoreOwnerUserDetails extends MemberUserDetails {
         return ((StoreOwner) member).getStoreOwnerProfileImage();
     }
 
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        Collection<GrantedAuthority> authorities = new ArrayList<>();
-//        authorities.add(() -> "ROLE_STORE_OWNER"); // 특정 역할 설정
-//        return authorities;
-//    }
+    // StoreVo 객체를 반환하는 메서드 추가
+    public StoreVo getStore() {
+        return ((StoreOwner) member).getStore();
+    }
+
+
 }
 

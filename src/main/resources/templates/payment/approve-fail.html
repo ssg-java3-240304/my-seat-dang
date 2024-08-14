@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        <span th:if="${response.status == T(com.matdang.seatdang.payment.dto.Status).PAYMENT_FAILED}">결제 실패</span>
+        <span th:if="${response.status == T(com.matdang.seatdang.payment.dto.Status).REFUND_FAILED}">환불 실패</span>
+    </title>
+    <style>
+        .header {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .margin-bottom {
+            margin-bottom: 20px;
+        }
+        .detail {
+            margin-bottom: 100px;
+        }
+    </style>
+</head>
+<body>
+<h1 th:if="${response.status == T(com.matdang.seatdang.payment.dto.Status).PAYMENT_FAILED}">결제 실패</h1>
+<h1 th:if="${response.status == T(com.matdang.seatdang.payment.dto.Status).REFUND_FAILED}">환불 실패</h1>
+
+<p th:if="${response.status == T(com.matdang.seatdang.payment.dto.Status).PAYMENT_FAILED}">😂 결제가 실패했습니다. 😂</p>
+<p th:if="${response.status == T(com.matdang.seatdang.payment.dto.Status).REFUND_FAILED}">😥 환불이 실패했습니다. 😥</p>
+
+<div class="header margin-bottom" th:if="${response.status == T(com.matdang.seatdang.payment.dto.Status).PAYMENT_FAILED}">Payment Failure Details</div>
+<div class="header margin-bottom" th:if="${response.status == T(com.matdang.seatdang.payment.dto.Status).REFUND_FAILED}">Refund Failure Details</div>
+
+<div class="detail" th:if="${response.extras != null}">
+    <div><strong>실패 코드:</strong> <span th:text="${response.extras.methodResultCode}"></span></div>
+    <div><strong>실패 메시지:</strong> <span th:text="${response.extras.methodResultMessage}"></span></div>
+</div>
+
+<div class="detail" th:unless="${response.extras != null}">
+    <div>🤦🏻‍♀️서버 오류 입니다.ㅠㅠ🤦🏻‍♂️</div>
+</div>
+
+<a href="/" target="_parent">메인 페이지로</a>
+</body>
+</html>
