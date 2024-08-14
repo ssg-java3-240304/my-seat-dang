@@ -1,13 +1,40 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org/">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Kakaopay Sample</title>
+    <title>결제 취소</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width" />
+    <style>
+        .header {
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-<h1>취소 결과(result of approval)</h1>
-<p th:text="${response}"></p>
-<a href="/" target="_parent">go to index page</a>
+
+<h1>결제 취소</h1>
+
+<div>
+    <p> 결제가 취소되었어요. </p>
+    <p></p>
+    <p class="header">Refund Details</p>
+    <p></p>
+    <p><strong>주문 번호:</strong> <span th:text="${response.partnerOrderId}"></span></p>
+    <p><strong>상품명 :</strong> <span th:text="${response.itemName}"></span></p>
+    <p><strong>수량: </strong> <span th:text="${response.quantity}"></span></p>
+    <p><strong>결제 금액: </strong> <span th:text="${response.payAmount}"></span></p>
+    <p><strong>결제 수단: </strong> <span th:text="${response.paymentMethodType.type}"></span></p>
+    <p><strong>결제 일시: </strong> <span th:text="${#temporals.format(response.approvedAt, 'yyyy.MM.dd HH:mm')}"></span>
+    <p><strong>환불 금액: </strong> <span th:text="${response.approvedCancelAmount}"></span></p>
+    <p><strong>환불 총 금액: </strong> <span th:text="${response.canceledTotalAmount}"></span></p>
+    <p><strong>환불 상태: </strong> <span th:text="${response.status.status}"></span></p>
+    <p><strong>환불 일시: </strong> <span th:text="${#temporals.format(response.canceledAt, 'yyyy.MM.dd HH:mm')}"></span>
+
+
+    </p>
+</div>
+
+<a href="/" target="_parent">메인 페이지로</a>
 </body>
 </html>
