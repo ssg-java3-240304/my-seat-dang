@@ -1,14 +1,13 @@
 package com.matdang.seatdang.menu.repository;
 
 
-import com.matdang.seatdang.menu.entity.MenuList;
-import com.matdang.seatdang.menu.vo.Menu;
-import com.matdang.seatdang.store.entity.Store;
+import com.matdang.seatdang.menu.entity.Menu;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface MenuRepository extends JpaRepository<MenuList, Long> {
+import java.util.List;
+
+public interface MenuRepository extends JpaRepository<Menu, Long> {
 //    @Query("""
 //        select
 //            new com.matdang.seatdang.menu.entity.MenuList(
@@ -20,8 +19,5 @@ public interface MenuRepository extends JpaRepository<MenuList, Long> {
 //            s.storeId = :storeId
 //
 //    """)
-    MenuList findByStoreId(@Param("storeId") Long storeId);
-
-
-    MenuList findByMenuListId(Long storeId);
+    List<Menu> findByStoreId(@Param("storeId") Long storeId);
 }
