@@ -1,6 +1,6 @@
 package com.matdang.seatdang.customer.main.controller;
 
-import com.matdang.seatdang.auth.principal.StoreOwnerUserDetails;
+import com.matdang.seatdang.auth.principal.MemberUserDetails;
 import com.matdang.seatdang.customer.main.model.ResponseDto;
 import com.matdang.seatdang.reservation.service.ReservationService;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -37,10 +36,11 @@ public class CustomerMainController {
     @GetMapping("/mypage")
     public String mypage(Model model) {
             // 고객 ID가 제공되면 해당 고객의 예약 목록을 가져와서 모델에 추가합니다.
-            List<ResponseDto> reservations = reservationService.getReservationsByCustomerId();
-            model.addAttribute("reservations", reservations);
-            System.out.println(reservations);
-            System.out.println("나다");
+        Long customerId = ((MemberUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        List<ResponseDto> reservations = reservationService.getReservationsByCustomerId(customerId);
+        model.addAttribute("reservations", reservations);
+        System.out.println(reservations);
+        System.out.println("나다");
         return "customer/mypage/mypage";
     }
 }

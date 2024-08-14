@@ -1,6 +1,6 @@
 package com.matdang.seatdang.reservation.service;
 
-import com.matdang.seatdang.auth.principal.StoreOwnerUserDetails;
+import com.matdang.seatdang.auth.principal.MemberUserDetails;
 import com.matdang.seatdang.customer.main.model.ResponseDto;
 import com.matdang.seatdang.reservation.entity.Reservation;
 import com.matdang.seatdang.reservation.repository.ReservationRepository;
@@ -16,13 +16,13 @@ public class ReservationService {
     @Autowired
     private ReservationRepository reservationRepository;
 
-//    public List<ResponseDto> getReservationsByCustomerId(Long customerId) {
-//        StoreOwnerUserDetails userDetails = (StoreOwnerUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        List<Reservation> reservations = reservationRepository.findByCustomer_CustomerId(userDetails);
-//        return reservations.stream()
-//                .map(this::convertToResponseDto)
-//                .collect(Collectors.toList());
-//    }
+    public List<ResponseDto> getReservationsByCustomerId(Long customerId) {
+        MemberUserDetails userDetails = (MemberUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<Reservation> reservations = reservationRepository.findByCustomer_CustomerId(userDetails.getId());
+        return reservations.stream()
+                .map(this::convertToResponseDto)
+                .collect(Collectors.toList());
+    }
 
     private ResponseDto convertToResponseDto(Reservation reservation) {
         ResponseDto responseDto = new ResponseDto();

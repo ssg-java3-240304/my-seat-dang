@@ -3,7 +3,6 @@ package com.matdang.seatdang.chat.contorller;
 import com.matdang.seatdang.chat.entity.Chat;
 import com.matdang.seatdang.chat.repository.ChatRepository;
 import com.matdang.seatdang.chat.service.ChatService;
-//import com.matdang.seatdang.reservation.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
