@@ -4,6 +4,7 @@ import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
+import com.matdang.seatdang.waiting.service.WaitingService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,11 +23,11 @@ import java.util.List;
 @RequestMapping("/store/waiting")
 public class WaitingController {
     private final WaitingRepository waitingRepository;
-
+    private final WaitingService waitingService;
 
     @GetMapping
-    public String showWaiting(@RequestParam int statusIndex, Model model) {
-        List<Waiting> waitings = waitingRepository.findAllByStoreIdAndWaitingStatus(1L,WaitingStatus.findWaiting(statusIndex));
+    public String showWaiting(@RequestParam(defaultValue = "0") int status, Model model) {
+        List<Waiting> waitings =waitingService.showWaiting(1L, status);
         model.addAttribute("waitings", waitings);
         return "store/waiting/main";
     }
@@ -36,17 +37,25 @@ public class WaitingController {
      */
     @PostConstruct
     public void initData() {
-        for (long i = 0; i < 10; i++) {
-            waitingRepository.save(Waiting.builder()
-                    .waitingId(i)
-                    .waitingNumber(i)
-                    .storeId(1L)
-                    .customerInfo(new CustomerInfo(i, "010-1111-1111"))
-                    .waitingStatus(WaitingStatus.WAITING)
-                    .createdAt(LocalDateTime.now())
-                    .visitedTime(null)
-                    .build());
+        {
+            long i = 0;
+            for (WaitingStatus value : WaitingStatus.values()) {
+                for (int j = 0; j < 10; j++, i++) {
+                    waitingRepository.save(Waiting.builder()
+                            .waitingId(i)
+                            .waitingNumber(i)
+                            .storeId(1L)
+                            .customerInfo(new CustomerInfo(i, "010-1111-1111"))
+                            .waitingStatus(value)
+                            .createdAt(LocalDateTime.now())
+                            .visitedTime(null)
+                            .build());
 
+                }
+            }
+        }
+
+        for (long i = 0; i < 10; i++) {
             waitingRepository.save(Waiting.builder()
                     .waitingId(i)
                     .waitingNumber(i)
@@ -58,26 +67,5 @@ public class WaitingController {
                     .build());
         }
 
-        for (long i = 10; i < 20; i++) {
-            waitingRepository.save(Waiting.builder()
-                    .waitingId(i)
-                    .waitingNumber(i)
-                    .storeId(1L)
-                    .customerInfo(new CustomerInfo(i, "010-1111-1111"))
-                    .waitingStatus(WaitingStatus.VISITED)
-                    .createdAt(LocalDateTime.now())
-                    .visitedTime(null)
-                    .build());
-
-            waitingRepository.save(Waiting.builder()
-                    .waitingId(i)
-                    .waitingNumber(i)
-                    .storeId(1L)
-                    .customerInfo(new CustomerInfo(i, "010-1111-1111"))
-                    .waitingStatus(WaitingStatus.NO_SHOW)
-                    .createdAt(LocalDateTime.now())
-                    .visitedTime(null)
-                    .build());
-        }
     }
 }
