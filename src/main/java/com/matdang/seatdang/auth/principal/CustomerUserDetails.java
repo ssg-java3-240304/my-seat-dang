@@ -2,6 +2,7 @@ package com.matdang.seatdang.auth.principal;
 
 import com.matdang.seatdang.member.entitiy.Customer;
 import com.matdang.seatdang.member.entitiy.Gender;
+import com.matdang.seatdang.member.entitiy.Member;
 
 import java.time.LocalDate;
 
@@ -35,6 +36,11 @@ public class CustomerUserDetails extends MemberUserDetails {
         return ((Customer) member).getCustomerBirthday();
     }
 
+    // Member 객체를 반환
+    public Customer getMember() {
+        return (Customer) this.member;
+    }
+
 
 //    @Override
 //    public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -42,4 +48,6 @@ public class CustomerUserDetails extends MemberUserDetails {
 //        authorities.add(() -> "ROLE_CUSTOMER"); // 특정 역할 설정
 //        return authorities;
 //    }
+
+
 }
