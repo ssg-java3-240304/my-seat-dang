@@ -1,5 +1,6 @@
 package com.matdang.seatdang.chat.service;
 
+import com.matdang.seatdang.chat.chatconfig.ChatConfig;
 import com.matdang.seatdang.chat.entity.Chat;
 import com.matdang.seatdang.chat.repository.ChatRepository;
 import com.matdang.seatdang.member.repository.MemberRepository;
@@ -14,15 +15,11 @@ import reactor.core.publisher.Mono;
 import java.time.LocalDateTime;
 
 @Service
-@Getter
-@Setter
 @RequiredArgsConstructor
 public class ChatService {
     private final ChatRepository chatRepository; // MongoDB Repository
     private final FileService fileService;
 
-    @Value("${hostUrl}")
-    private String serverUrl;
 
     public Mono<Chat> saveChatWithImage(Chat chat, MultipartFile customerImage) {
         // 이미지 업로드
