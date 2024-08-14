@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Waiting List</title>
+    <style>
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Waiting List</h2>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Waiting ID</th>
+        <th>Waiting Number</th>
+        <th>Store ID</th>
+        <th>Customer ID</th>
+        <th>Customer Phone Number</th>
+        <th>Waiting Status</th>
+        <th>Created At</th>
+        <th>Visited Time</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="waiting : ${waitings}">
+        <td th:text="${waiting.id}"></td>
+        <td th:text="${waiting.waitingId}"></td>
+        <td th:text="${waiting.waitingNumber}"></td>
+        <td th:text="${waiting.storeId}"></td>
+        <td th:text="${waiting.customerInfo.customerId}"></td>
+        <td th:text="${waiting.customerInfo.customerPhone}"></td>
+        <td th:text="${waiting.waitingStatus}"></td>
+        <td th:text="${waiting.createdAt}"></td>
+        <td th:text="${waiting.visitedTime}"></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
