@@ -32,6 +32,7 @@ public class MenuController {
     private final MenuCommandService menuCommandService;
     private final MenuQueryService menuQueryService;
 
+    //메뉴 목록 조회
     @GetMapping
     public String list(@PageableDefault(page = 1, size = 10) Pageable pageable, Model model) {
         log.debug("Get request menu");
@@ -76,5 +77,14 @@ public class MenuController {
 
         menuCommandService.regist(menuRequestDto);
         return "redirect:/storeowner/menu/regist";
+    }
+
+    @GetMapping("/update/{menuId}")
+    public String update(@PathVariable Long menuId, Model model) {
+        log.debug("Get menu/update");
+        log.debug("menuId: {}", menuId);
+        MenuDetailResponseDto menuDTO = menuQueryService.findByMenuId(menuId);
+        model.addAttribute("menu", menuDTO);
+        return "storeowner/menu/menuUpdate";
     }
 }

@@ -29,7 +29,8 @@
                     <div class="col-xl-3">
                         <div id="preview-container">
                             <div class="preview-item">
-                                <div class="placeholder">이미지 미리보기</div>
+                                <div th:if="${menu.image == null}" class="placeholder">이미지 미리보기</div>
+                                <img th:if="${menu.image != null}" th:src="${menu.image}" alt="미리보기 이미지" class="img-preview"/>
                             </div>
                         </div>
                     </div>
@@ -38,26 +39,26 @@
                             <div class="col-md-8">
                                 <div class="form-group">
                                     <label>메뉴 이름</label>
-                                    <input type="text" name="menuName" class="form-control">
+                                    <input th:value="${menu.menuName}" type="text" name="menuName" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>가격</label>
-                                    <input type="text" name="menuPrice" class="form-control">
+                                    <input th:value="${menu.menuPrice}" type="text" name="menuPrice" class="form-control">
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>메뉴 소개</label>
-                            <input type="text" name="menuDesc" class="form-control">
+                            <input th:value="${menu.menuDesc}" type="text" name="menuDesc" class="form-control">
                         </div>
                         <div class="form-group">
                             <label>메뉴 이미지</label>
                             <input type="file" name="files" multiple id="file-input" />
                         </div>
                         <div class="">
-                            <button type="submit" class="btn_1 medium">저장</button>
+                            <button type="submit" class="btn_1 medium">수정</button>
                             <a th:href="@{|/storeowner/menu|}" class="btn_1 medium gray">목록으로</a>
                         </div>
                     </div><!-- End row -->
