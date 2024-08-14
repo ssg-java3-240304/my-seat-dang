@@ -1,7 +1,6 @@
 package com.matdang.seatdang.admin.dto;
 
 import com.matdang.seatdang.common.storeEnum.StoreType;
-import com.matdang.seatdang.menu.entity.MenuList;
 import com.matdang.seatdang.store.entity.Store;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
