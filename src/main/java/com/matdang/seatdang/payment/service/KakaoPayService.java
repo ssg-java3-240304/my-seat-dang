@@ -35,7 +35,6 @@ public class KakaoPayService {
     private String secretKey;
     @Value("${cid}")
     private String cid;
-
     @Value("${hostUrl}")
     private String hostUrl;
 
@@ -62,7 +61,7 @@ public class KakaoPayService {
 
         ReadyResponse readyResponse = response.getBody();
 
-        // TODO : 로직 오류 가능성 존재
+
         // 저장
         kakaoPayRepository.save(PayReady.builder()
                 .partnerOrderId(readyRequest.getPartnerOrderId())
@@ -124,26 +123,6 @@ public class KakaoPayService {
                 .build();
         log.debug("refundRequest ={}", refundRequest);
 
-        //취소 결과(result of approval)
-        //{"tid":"T6a8d38329fd342cdd38",
-        // "cid":"TC0ONETIME",
-        // "status":"PART_CANCEL_PAYMENT",
-        // "partner_order_id":"1",
-        // "partner_user_id":"1",
-        // "payment_method_type":"CARD",
-        // "item_name":"초코파이",
-        // "aid":"A6a8d6a129fd342cdd3c",
-        // "quantity":1,
-        // "amount":{"total":1100000,
-        // "tax_free":0,"vat":100000,
-        // "point":0,"discount":0,
-        // "green_deposit":0},
-        // "canceled_amount":{"total":1100,"tax_free":0,"vat":100,"point":0,"discount":0,"green_deposit":0},
-        // "cancel_available_amount":{"total":1098900,"tax_free":0,"vat":99900,"point":0,"discount":0,"green_deposit":0},
-        // "approved_cancel_amount":{"total":1100,"tax_free":0,"vat":100,"point":0,"discount":0,"green_deposit":0},
-        // "created_at":"2024-07-30T20:50:27",
-        // "approved_at":"2024-07-30T20:51:01",
-        // "canceled_at":"2024-07-30T21:03:45"}
         // Send Request
         HttpEntity<RefundRequest> entityMap = new HttpEntity<>(refundRequest, headers);
         try {
@@ -163,7 +142,6 @@ public class KakaoPayService {
             return ex.getResponseBodyAs(ApproveFail.class);
         }
     }
-
 
     private HttpHeaders initHttpHeaders() {
         HttpHeaders headers = new HttpHeaders();
@@ -189,8 +167,7 @@ public class KakaoPayService {
                 .build();
     }
 
-    // TODO : 메서드 중복 제거하기
-    private static PayApprove createApproveResult(ResponseEntity<PayApprove> response, PayReady findPayReady) {
+    private PayApprove createApproveResult(ResponseEntity<PayApprove> response, PayReady findPayReady) {
         PayApprove approveResponse = response.getBody();
         approveResponse.registerShopId(findPayReady.getShopId());
         return approveResponse;
