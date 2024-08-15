@@ -37,9 +37,9 @@
           <ul class="booking_list">
             <li><strong>Booking date</strong>Date</li>
             <li><strong>Booking details</strong>Details</li>
-            <li><strong>Client</strong> <span th:text="*{customerName}"></span></li>
+            <li><strong>Client</strong> <span th:text="*{storeOwnerName}"></span></li>
           </ul>
-          <p> <a th:href="@{/popup(reservationId=${reservation.reservationId}, storeName=${reservation.storeName}, customerName=${reservation.customerName}, chatUrl=${chatAccessUrl})}">
+          <p> <a th:href="@{/popup(reservationId=${reservation.reservationId}, storeName=${reservation.storeName}, customerName=${reservation.storeOwnerName}, chatUrl=${chatAccessUrl})}">
             채팅하기
             <span id="chat-badge" class="badge badge-danger" style="display: none;">0</span>
           </a></p>
