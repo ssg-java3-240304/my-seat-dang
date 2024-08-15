@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Embeddable
 public class CustomerInfo {
-    private Long CustomerId;
-    private String CustomerName;
-    private String CustomerPhone;
+    private Long customerId;
+    private String customerName;
+    private String customerPhone;
 }
