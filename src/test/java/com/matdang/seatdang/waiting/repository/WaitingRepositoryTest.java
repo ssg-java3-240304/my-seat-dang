@@ -28,7 +28,7 @@ class WaitingRepositoryTest {
     private EntityManager em;
 
     @BeforeEach
-    void setUp()  {
+    void setUp() {
         {
             long i = 0;
             for (WaitingStatus value : WaitingStatus.values()) {
@@ -42,7 +42,6 @@ class WaitingRepositoryTest {
                             .createdAt(LocalDateTime.now())
                             .visitedTime(null)
                             .build());
-
                 }
             }
         }
@@ -64,7 +63,7 @@ class WaitingRepositoryTest {
     }
 
     @ParameterizedTest
-    @CsvSource(value = {"1,50","2,10"})
+    @CsvSource(value = {"1,50", "2,10"})
     @DisplayName("상점 id로 웨이팅 전체 조회")
     void findAllByStoreId(long shopId, int size) {
         // given
@@ -76,19 +75,20 @@ class WaitingRepositoryTest {
     }
 
     @ParameterizedTest
-    @CsvSource(value = {"1,WAITING,10","2,WAITING,10", "1,VISITED,10", "2,VISITED,0", "1,NO_SHOW,10"})
+    @CsvSource(value = {"1,WAITING,10", "2,WAITING,10", "1,VISITED,10", "2,VISITED,0", "1,NO_SHOW,10"})
     @DisplayName("상점 id로 특정 상태인 웨이팅 모두 조회 ")
     void findAllByStoreIdAndWaitingStatus(long shopId, String status, int size) {
         // given
         // when
-        List<Waiting> findWaitings = waitingRepository.findAllByStoreIdAndWaitingStatus(shopId, WaitingStatus.valueOf(status));
+        List<Waiting> findWaitings = waitingRepository.findAllByStoreIdAndWaitingStatus(shopId,
+                WaitingStatus.valueOf(status));
 
         // then
         assertThat(findWaitings.size()).isEqualTo(size);
     }
 
     @ParameterizedTest
-    @CsvSource(value = {"1,30","2,0"})
+    @CsvSource(value = {"1,30", "2,0"})
     @DisplayName("상점 id로 취소 상태(노쇼, 점주, 고객) 웨이팅 모두 조회")
     void findAllByCancelStatus(Long storeId, int size) {
         // given
@@ -97,4 +97,45 @@ class WaitingRepositoryTest {
         // then
         assertThat(findWaitings.size()).isEqualTo(size);
     }
+
+    @ParameterizedTest
+    @CsvSource(value = {"1,NO_SHOW", "2,VISITED", "3,CUSTOMER_CANCELED", "4,SHOP_CANCELED"})
+    @DisplayName("id로 상태 변경")
+    void updateStatus(int index, String status) {
+        // given
+        List<Waiting> findWaiting = waitingRepository.findAll();
+        em.clear();
+
+        // when
+        int result = waitingRepository.updateStatus(WaitingStatus.valueOf(status), findWaiting.get(index).getId());
+        // then
+        assertThat(result).isEqualTo(1);
+        assertThat(waitingRepository.findById(findWaiting.get(index).getId()).get().getWaitingStatus()).isEqualTo(
+                WaitingStatus.valueOf(status));
+    }
+
+    @Test
+    @DisplayName("상점 id로 웨이팅 중인 모든 웨이팅 번호 1 감소")
+    void updateAllWaitingNumberByVisit() {
+        // given
+        List<Waiting> findWaiting = waitingRepository.findAll();
+        em.clear();
+        // when
+        int result = waitingRepository.updateAllWaitingNumberByVisit(1L);
+        // then
+        assertThat(result).isEqualTo(10);
+        assertThat(waitingRepository.findById(findWaiting.get(0).getId()).get().getWaitingNumber()).isEqualTo(
+                -1L);
+    }
+
+    @Test
+    @DisplayName("웨이팅 취소시, 해당 웨이팅 번호 이후로 웨이팅 번호 1 감소")
+    void updateWaitingNumberByCancel() {
+        // given
+        // when
+        int result = waitingRepository.updateWaitingNumberByCancel(1L, 5L);
+        // then
+        assertThat(result).isEqualTo(4);
+    }
+
 }
