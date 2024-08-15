@@ -35,6 +35,10 @@ public class KakaoPayService {
     private String secretKey;
     @Value("${cid}")
     private String cid;
+
+    @Value("${hostUrl}")
+    private String hostUrl;
+
     private static final String KAKAO_PAY_READY_URL = "https://open-api.kakaopay.com/online/v1/payment/ready";
     private static final String KAKAO_PAY_APPROVE_URL = "https://open-api.kakaopay.com/online/v1/payment/approve";
     private static final String KAKAO_PAY_CANCEL_URL = "https://open-api.kakaopay.com/online/v1/payment/cancel";
@@ -177,10 +181,10 @@ public class KakaoPayService {
                 .quantity(payDetail.getQuantity())
                 .totalAmount(payDetail.getTotalAmount())
                 .taxFreeAmount(payDetail.getTaxFreeAmount())
-                .approvalUrl("http://localhost:8080/" + "payment/approve" + "?PartnerOrderId="
+                .approvalUrl(hostUrl + "/payment/approve" + "?PartnerOrderId="
                         + payDetail.getPartnerOrderId()) // 결제 성공 시 redirect url, 최대 255자
-                .cancelUrl("http://localhost:8080/" + "payment/cancel") // 결제 취소 시 redirect url, 최대 255자
-                .failUrl("http://localhost:8080/" + "payment/fail") //결제 실패 시 redirect url, 최대 255자
+                .cancelUrl(hostUrl + "/payment/cancel") // 결제 취소 시 redirect url, 최대 255자
+                .failUrl(hostUrl + "/payment/fail") //결제 실패 시 redirect url, 최대 255자
 
                 .build();
     }
