@@ -17,14 +17,6 @@ import reactor.core.scheduler.Schedulers;
 public class RestChatController {
     private final ChatRepository chatRepository;
     private final ChatService chatService;
-//    private final ReservationService reservationService;
-    // 귓속말 할떄 사용
-    @CrossOrigin
-    @GetMapping(value = "/sender/{sender}/receiver/{receiver}",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<Chat> getMsg(@PathVariable String sender, @PathVariable String receiver){
-        return chatRepository.FindBySender(sender,receiver)
-                .subscribeOn(Schedulers.boundedElastic());
-    }
 
     @CrossOrigin
     @GetMapping(value = "/chat/roomNum/{roomNum}",produces = MediaType.TEXT_EVENT_STREAM_VALUE)

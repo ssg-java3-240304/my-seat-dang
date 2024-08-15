@@ -9,4 +9,6 @@ public class ResponseDto {
     private Long customerId;
     private Long storeId;
     private String storeName;
+    private Long storeOwnerId;
+    private String storeOwnerName;
 }

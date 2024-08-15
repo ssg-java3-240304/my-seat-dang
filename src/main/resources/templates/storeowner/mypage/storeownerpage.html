@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{customer/layout/default}">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <!-- main page only css -->
+  <link th:href="@{/css/customer/home.css}" rel="stylesheet">
+  <!-- Favicons -->
+  <link rel="shortcut icon" th:href="@{img/favicon.ico}" type="image/x-icon">
+  <link rel="apple-touch-icon" type="image/x-icon" th:href="@{img/apple-touch-icon-57x57-precomposed.png}">
+  <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" th:href="@{img/apple-touch-icon-72x72-precomposed.png}">
+  <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114" th:href="@{img/apple-touch-icon-114x114-precomposed.png}">
+  <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144" th:href="@{img/apple-touch-icon-144x144-precomposed.png}">
+  <!-- Bootstrap core CSS -->
+  <link href="/vendor/admin/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Main styles -->
+  <link href="/css/admin/admin.css" rel="stylesheet">
+  <!-- Icon fonts -->
+  <link href="/vendor/admin/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <!-- Plugin styles -->
+  <link href="/vendor/admin/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+  <!-- Your custom styles -->
+  <link href="/css/admin/custom.css" rel="stylesheet">
+</head>
+<body>
+<main layout:fragment="main">
+  <div class="box_general">
+    <div class="header_box">
+      <div class="filter">
+      </div>
+    </div>
+    <div class="list_general">
+      <ul>
+        <li th:each="reservation, stat : ${reservations}" th:object="${reservation}">
+          <figure><img src="/img/admin/item_1.jpg" alt=""></figure>
+          <h4 th:text="*{storeName}">Store Name</h4>
+          <ul class="booking_list">
+            <li><strong>Booking date</strong>Date</li>
+            <li><strong>Booking details</strong>Details</li>
+            <li><strong>Client</strong> <span th:text="*{storeOwnerName}"></span></li>
+          </ul>
+          <p> <a th:href="@{/popup(reservationId=${reservation.reservationId}, storeName=${reservation.storeName}, customerName=${reservation.storeOwnerName}, chatUrl=${chatAccessUrl})}">
+            채팅하기
+            <span id="chat-badge" class="badge badge-danger" style="display: none;">0</span>
+          </a></p>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+</main>
+
+<div layout:fragment="js">
+  <!-- Bootstrap core JavaScript -->
+  <script src="/vendor/admin/jquery/jquery.min.js"></script>
+  <script src="/vendor/admin/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Core plugin JavaScript -->
+  <script src="/vendor/admin/jquery-easing/jquery.easing.min.js"></script>
+  <!-- Page level plugin JavaScript -->
+  <script src="/vendor/admin/chart.js/Chart.min.js"></script>
+  <script src="/vendor/admin/datatables/jquery.dataTables.js"></script>
+  <script src="/vendor/admin/datatables/dataTables.bootstrap4.js"></script>
+  <script src="/vendor/admin/jquery.magnific-popup.min.js"></script>
+  <!-- Custom scripts for all pages -->
+  <script src="/js/admin/admin.js"></script>
+  <!-- 이 페이지 전용 스크립트 -->
+  <script th:src="@{/js/customer/jarallax.min.js}"></script>
+  <script th:src="@{/js/customer/jarallax-video.min.js}"></script>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script>
+    // 변수로 새로운 메시지 수를 관리
+    let newMessageCount = 0;
+
+    function updateChatBadge(count) {
+      const badge = document.querySelector("#chat-badge");
+      if (count > 0) {
+        badge.style.display = "inline";
+        badge.textContent = count;
+      } else {
+        badge.style.display = "none";
+      }
+    }
+
+    // SSE 연결하기
+    const chatUrl = /*[[${chatAccessUrl}]]*/ ""; //
+    const reservationId = /*[[${reservationId}]]*/ 0; //
+    const customerName = /*[[${customerName}]]*/ ""; //
+
+    const eventSource = new EventSource(`${chatUrl}/chat/roomNum/${reservationId}`);
+    eventSource.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      console.log("Received data:", data);
+
+      // 메시지 수 업데이트
+      newMessageCount++;
+      updateChatBadge(newMessageCount);
+
+      if (data.sender === customerName) {
+        initMyMessage(data);
+      } else {
+        initYourMessage(data);
+      }
+    };
+
+    // 채팅 버튼 클릭 시 새로운 메시지 수 초기화
+    document.querySelector("#chat-button").addEventListener("click", () => {
+      newMessageCount = 0;
+      updateChatBadge(newMessageCount);
+    });
+  </script>
+</div>
+</body>
+</html>
+
