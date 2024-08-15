@@ -6,33 +6,76 @@
     <style>
         table {
             width: 80%;
-            border-collapse: collapse;
+            border-collapse: collapse; /* 테두리 병합 설정 */
             margin: 20px 0;
         }
+
         table, th, td {
-            border: 1px solid black;
+            border: 1px solid black; /* 테두리 설정 */
         }
+
         th, td {
             padding: 10px;
             text-align: left;
         }
+
         th {
             background-color: #f2f2f2;
         }
+
         .button-container {
             margin: 20px 0;
             text-align: center;
         }
+
         .button-container button {
             padding: 10px 20px;
             margin: 0 10px;
-            border: none;
-            background-color: #4CAF50;
+            border: none; /* 테두리 제거 */
+            background-color: #ae10d3; /* 보라색 배경 */
             color: white;
             cursor: pointer;
         }
+
         .button-container button:hover {
-            background-color: #45a049;
+            background-color: #9932CC; /* 보라색 hover */
+        }
+
+        .row-buttons {
+            display: flex;
+            gap: 10px; /* 버튼 사이의 간격 */
+        }
+
+        .row-buttons button {
+            padding: 0; /* 안쪽 여백 제거 */
+            border: none; /* 테두리 제거 */
+            background-color: transparent; /* 투명 배경 */
+            color: inherit; /* 텍스트 색상 상속 */
+            cursor: pointer;
+            outline: none; /* 포커스 아웃라인 제거 */
+            box-shadow: none; /* 박스 그림자 제거 */
+            width: 60px; /* 버튼 너비 고정 */
+            height: 40px; /* 버튼 높이 고정 */
+            text-align: center; /* 텍스트 중앙 정렬 */
+            line-height: 40px; /* 버튼 높이와 동일하게 설정하여 텍스트 수직 중앙 정렬 */
+        }
+
+        .row-buttons button.entry-button-secondary {
+            background-color: #1E90FF; /* 파란색 배경 */
+            color: white;
+        }
+
+        .row-buttons button.entry-button-secondary:hover {
+            background-color: #1C86EE; /* 파란색 배경 - hover */
+        }
+
+        .row-buttons button.cancel-button {
+            background-color: #f44336; /* 빨간색 배경 */
+            color: white;
+        }
+
+        .row-buttons button.cancel-button:hover {
+            background-color: #d32f2f; /* 빨간색 배경 - hover */
         }
     </style>
 </head>
@@ -41,17 +84,16 @@
 <h2>Waiting List</h2>
 
 <div class="button-container">
-    <!-- Use Thymeleaf to build the URL with the current request URI -->
     <form th:action="@{/store/waiting}" method="get" style="display:inline;">
-        <input type="hidden" name="status" value="0" />
+        <input type="hidden" name="status" value="0"/>
         <button type="submit">웨이팅 중</button>
     </form>
     <form th:action="@{/store/waiting}" method="get" style="display:inline;">
-        <input type="hidden" name="status" value="1" />
+        <input type="hidden" name="status" value="1"/>
         <button type="submit">입장</button>
     </form>
     <form th:action="@{/store/waiting}" method="get" style="display:inline;">
-        <input type="hidden" name="status" value="2" />
+        <input type="hidden" name="status" value="2"/>
         <button type="submit">취소</button>
     </form>
 </div>
@@ -60,7 +102,6 @@
     <thead>
     <tr>
         <th>ID</th>
-        <th>Waiting ID</th>
         <th>Waiting Number</th>
         <th>Store ID</th>
         <th>Customer ID</th>
@@ -68,11 +109,11 @@
         <th>Waiting Status</th>
         <th>Created At</th>
         <th>Visited Time</th>
+        <th th:if="${status == 0}">Status Change</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="waiting : ${waitings}">
-        <td th:text="${waiting.id}"></td>
         <td th:text="${waiting.waitingId}"></td>
         <td th:text="${waiting.waitingNumber}"></td>
         <td th:text="${waiting.storeId}"></td>
@@ -80,7 +121,24 @@
         <td th:text="${waiting.customerInfo.customerPhone}"></td>
         <td th:text="${waiting.waitingStatus}"></td>
         <td th:text="${waiting.createdAt}"></td>
-        <td th:text="${waiting.visitedTime}"></td>
+        <td th:text="${{waiting.visitedTime}}"></td>
+        <td th:if="${status == 0}">
+            <div class="row-buttons">
+                <form th:if="${waiting.waitingNumber == 1}" th:action="@{/store/waiting}"  method="post">
+                    <input type="hidden" name="id" th:value="${waiting.id}"/>
+                    <input type="hidden" name="storeId" th:value="${waiting.storeId}"/>
+                    <input type="hidden" name="changeStatus" value="1"/>
+                    <button type="submit" class="entry-button-secondary">입장</button>
+                </form>
+                <form th:action="@{/store/waiting}" method="post">
+                    <input type="hidden" name="id" th:value="${waiting.id}"/>
+                    <input type="hidden" name="storeId" th:value="${waiting.storeId}"/>
+                    <input type="hidden" name="waitingNumber" th:value="${waiting.waitingNumber}"/>
+                    <input type="hidden" name="changeStatus" value="2"/>
+                    <button type="submit" class="cancel-button">취소</button>
+                </form>
+            </div>
+        </td>
     </tr>
     </tbody>
 </table>
