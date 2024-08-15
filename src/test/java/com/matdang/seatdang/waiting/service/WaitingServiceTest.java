@@ -1,6 +1,7 @@
 package com.matdang.seatdang.waiting.service;
 
 import com.matdang.seatdang.waiting.dto.UpdateRequest;
+import com.matdang.seatdang.waiting.repository.query.dto.WaitingDto;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
@@ -8,7 +9,6 @@ import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +38,10 @@ class WaitingServiceTest {
             for (WaitingStatus value : WaitingStatus.values()) {
                 for (int j = 0; j < 10; j++, i++) {
                     waitingRepository.save(Waiting.builder()
-                            .waitingId(i)
                             .waitingNumber(i)
+                            .waitingOrder(i)
                             .storeId(1L)
-                            .customerInfo(new CustomerInfo(i, "010-1111-1111"))
+                            .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
                             .waitingStatus(value)
                             .createdAt(LocalDateTime.now())
                             .visitedTime(null)
@@ -53,10 +53,10 @@ class WaitingServiceTest {
 
         for (long i = 0; i < 10; i++) {
             waitingRepository.save(Waiting.builder()
-                    .waitingId(i)
                     .waitingNumber(i)
+                    .waitingOrder(i)
                     .storeId(2L)
-                    .customerInfo(new CustomerInfo(i, "010-1111-1111"))
+                    .customerInfo(new CustomerInfo(i, "010-1111-1111",((long) (Math.random() * 3 + 1))))
                     .waitingStatus(WaitingStatus.WAITING)
                     .createdAt(LocalDateTime.now())
                     .visitedTime(null)
@@ -73,7 +73,7 @@ class WaitingServiceTest {
     void showWaiting(long storeId, int status, int size) {
         // given
         // when
-        List<Waiting> waitings = waitingService.showWaiting(storeId, status);
+        List<WaitingDto> waitings = waitingService.showWaiting(storeId, status);
         // then
         assertThat(waitings.size()).isEqualTo(size);
     }

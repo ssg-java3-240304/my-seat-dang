@@ -1,7 +1,8 @@
 package com.matdang.seatdang.waiting.service;
 
 import com.matdang.seatdang.waiting.dto.UpdateRequest;
-import com.matdang.seatdang.waiting.entity.Waiting;
+import com.matdang.seatdang.waiting.repository.query.WaitingQueryRepository;
+import com.matdang.seatdang.waiting.repository.query.dto.WaitingDto;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,13 +16,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WaitingService {
     private final WaitingRepository waitingRepository;
+    private final WaitingQueryRepository waitingQueryRepository;
 
-    public List<Waiting> showWaiting(Long storeId, int status) {
+    public List<WaitingDto> showWaiting(Long storeId, int status) {
         if (status == 2) {
-            return waitingRepository.findAllByCancelStatus(storeId);
+            return waitingQueryRepository.findAllByCancelStatus(storeId);
         }
 
-        List<Waiting> waitings = waitingRepository.findAllByStoreIdAndWaitingStatus(storeId,
+        List<WaitingDto> waitings = waitingQueryRepository.findAllByStoreIdAndWaitingStatus(storeId,
                 WaitingStatus.findWaiting(status));
         return waitings;
     }

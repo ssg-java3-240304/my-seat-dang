@@ -103,8 +103,6 @@
     <tr>
         <th>Waiting Number</th>
         <th>Waiting Order</th>
-        <th>Store ID</th>
-        <th>Customer ID</th>
         <th>Customer Phone Number</th>
         <th>People Count</th>
         <th>Waiting Status</th>
@@ -115,27 +113,25 @@
     </thead>
     <tbody>
     <tr th:each="waiting : ${waitings}">
-        <td th:text="${waiting.getWaitingNumber}"></td>
-        <td th:text="${waiting.getWaitingOrder}"></td>
-        <td th:text="${waiting.storeId}"></td>
-        <td th:text="${waiting.customerInfo.customerId}"></td>
-        <td th:text="${waiting.customerInfo.customerPhone}"></td>
-        <td th:text="${waiting.customerInfo.peopleCount}"></td>
+        <td th:text="${waiting.waitingNumber}"></td>
+        <td th:text="${waiting.waitingOrder}"></td>
+        <td th:text="${waiting.customerPhone}"></td>
+        <td th:text="${waiting.peopleCount}"></td>
         <td th:text="${waiting.waitingStatus}"></td>
         <td th:text="${waiting.createdAt}"></td>
         <td th:text="${waiting.visitedTime}"></td>
         <td th:if="${status == 0}">
             <div class="row-buttons">
-                <form th:if="${waiting.getWaitingOrder == 1}" th:action="@{/store/waiting}" method="post">
+                <form th:if="${waiting.waitingOrder == 1}" th:action="@{/store/waiting}" method="post">
                     <input type="hidden" name="id" th:value="${waiting.id}"/>
-                    <input type="hidden" name="storeId" th:value="${waiting.storeId}"/>
+                    <input type="hidden" name="storeId" th:value="${storeId}"/>
                     <input type="hidden" name="changeStatus" value="1"/>
                     <button type="submit" class="entry-button-secondary">입장</button>
                 </form>
                 <form th:action="@{/store/waiting}" method="post">
                     <input type="hidden" name="id" th:value="${waiting.id}"/>
-                    <input type="hidden" name="storeId" th:value="${waiting.storeId}"/>
-                    <input type="hidden" name="waitingNumber" th:value="${waiting.getWaitingOrder}"/>
+                    <input type="hidden" name="storeId" th:value="${storeId}"/>
+                    <input type="hidden" name="waitingNumber" th:value="${waiting.waitingOrder}"/>
                     <input type="hidden" name="changeStatus" value="2"/>
                     <button type="submit" class="cancel-button">취소</button>
                 </form>

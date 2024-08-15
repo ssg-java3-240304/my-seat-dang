@@ -1,5 +1,7 @@
 package com.matdang.seatdang.waiting.repository;
 
+import com.matdang.seatdang.waiting.repository.query.WaitingQueryRepository;
+import com.matdang.seatdang.waiting.repository.query.dto.WaitingDto;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
@@ -23,6 +25,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class WaitingRepositoryTest {
     @Autowired
     private WaitingRepository waitingRepository;
+    @Autowired
+    private WaitingQueryRepository waitingQueryRepository;
 
     @Autowired
     private EntityManager em;
@@ -34,10 +38,10 @@ class WaitingRepositoryTest {
             for (WaitingStatus value : WaitingStatus.values()) {
                 for (int j = 0; j < 10; j++, i++) {
                     waitingRepository.save(Waiting.builder()
-                            .waitingId(i)
                             .waitingNumber(i)
+                            .waitingOrder(i)
                             .storeId(1L)
-                            .customerInfo(new CustomerInfo(i, "010-1111-1111"))
+                            .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
                             .waitingStatus(value)
                             .createdAt(LocalDateTime.now())
                             .visitedTime(null)
@@ -48,10 +52,10 @@ class WaitingRepositoryTest {
 
         for (long i = 0; i < 10; i++) {
             waitingRepository.save(Waiting.builder()
-                    .waitingId(i)
                     .waitingNumber(i)
+                    .waitingOrder(i)
                     .storeId(2L)
-                    .customerInfo(new CustomerInfo(i, "010-1111-1111"))
+                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
                     .waitingStatus(WaitingStatus.WAITING)
                     .createdAt(LocalDateTime.now())
                     .visitedTime(null)
@@ -80,7 +84,7 @@ class WaitingRepositoryTest {
     void findAllByStoreIdAndWaitingStatus(long shopId, String status, int size) {
         // given
         // when
-        List<Waiting> findWaitings = waitingRepository.findAllByStoreIdAndWaitingStatus(shopId,
+        List<WaitingDto> findWaitings = waitingQueryRepository.findAllByStoreIdAndWaitingStatus(shopId,
                 WaitingStatus.valueOf(status));
 
         // then
@@ -93,7 +97,7 @@ class WaitingRepositoryTest {
     void findAllByCancelStatus(Long storeId, int size) {
         // given
         // when
-        List<Waiting> findWaitings = waitingRepository.findAllByCancelStatus(storeId);
+        List<WaitingDto> findWaitings = waitingQueryRepository.findAllByCancelStatus(storeId);
         // then
         assertThat(findWaitings.size()).isEqualTo(size);
     }

@@ -13,13 +13,7 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
     List<Waiting> findAllByStoreId(Long storeId);
 
 
-    List<Waiting> findAllByStoreIdAndWaitingStatus(Long storeId, WaitingStatus waitingStatus);
 
-    @Query("select w from Waiting w where w.storeId = :storeId and w.waitingStatus in ("
-            + "com.matdang.seatdang.waiting.entity.WaitingStatus.SHOP_CANCELED, "
-            + "com.matdang.seatdang.waiting.entity.WaitingStatus.NO_SHOW, "
-            + "com.matdang.seatdang.waiting.entity.WaitingStatus.CUSTOMER_CANCELED)")
-    List<Waiting> findAllByCancelStatus(@Param("storeId") Long storeId);
 
 
     @Modifying

@@ -1,6 +1,7 @@
 package com.matdang.seatdang.waiting.controller;
 
 import com.matdang.seatdang.waiting.dto.UpdateRequest;
+import com.matdang.seatdang.waiting.repository.query.dto.WaitingDto;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,11 +28,13 @@ public class WaitingController {
     private final WaitingRepository waitingRepository;
     private final WaitingService waitingService;
 
+    // TODO : storeId 받는과정 수정
     @GetMapping
     public String showWaiting(@RequestParam(defaultValue = "0") int status,
                               Model model) {
-        List<Waiting> waitings = waitingService.showWaiting(1L, status);
+        List<WaitingDto> waitings = waitingService.showWaiting(1L, status);
         model.addAttribute("waitings", waitings);
+        model.addAttribute("storeId", 1L);
         model.addAttribute("status", status);
         return "store/waiting/main";
     }
@@ -40,8 +42,9 @@ public class WaitingController {
     @PostMapping
     public String updateStatus(@ModelAttribute UpdateRequest updateRequest, Model model) {
         waitingService.updateStatus(updateRequest);
-        List<Waiting> waitings = waitingService.showWaiting(1L, updateRequest.getStatus());
+        List<WaitingDto> waitings = waitingService.showWaiting(1L, updateRequest.getStatus());
         model.addAttribute("waitings", waitings);
+        model.addAttribute("storeId", 1L);
         model.addAttribute("status", updateRequest.getStatus());
         return "store/waiting/main";
     }
