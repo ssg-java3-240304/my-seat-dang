@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.matdang.seatdang.common.storeEnum.StoreType.CUSTOM;
 import static com.matdang.seatdang.common.storeEnum.StoreType.GENERAL_RESERVATION;
@@ -95,43 +96,19 @@ public class StoreController {
     }
 
     @GetMapping("/store/storeDetail/{storeId}")
-    public String detail(@PageableDefault(page = 1, size = 10) Pageable pageable, @PathVariable Long storeId, Model model){
-//        log.info("GET/storeList?page={}", pageable.getPageNumber());
-
-
-        String folderName = "store-thumbnail"; // 업로드한 폴더명
-        String folderName2 = "store-images";
-        List<StoreListResponseDto> thumbnail = storeService.thumbnail(folderName); // 특정 폴더의 파일만 가져오기
-        List<StoreListResponseDto> images = storeService.images(folderName2); // 특정 폴더의 파일만 가져오기
-
+    public String detail(@PathVariable Long storeId, Model model){
         Store store = storeService.findByStoreId(storeId);
-
-
         List<MenuResponseDto> menus = menuService.findByStoreId(storeId);
+
         log.debug("store = {}", store);
         log.debug("menus = {}", menus);
+        log.debug("thumbnail = {}", store.getThumbnail());
+        log.debug("images = {}", store.getImages());
+
         model.addAttribute("store", store);
         model.addAttribute("menus", menus);
-
-        model.addAttribute("thumbnail", thumbnail);
-        model.addAttribute("images", images);
-
-
-        // 1. 컨텐츠영역
-//        pageable = PageRequest.of(
-//                pageable.getPageNumber() - 1,
-//                pageable.getPageSize());
-//
-//        Page<MenuResponseDto> menusPage = menuService.findByStoreId(storeId);
-//        log.debug("menusPage = {}", menusPage.getContent());
-//        model.addAttribute("menus", menusPage.getContent());
-//
-//        // 2. 페이지바 영역
-//        int page = menusPage.getNumber(); // 0-based 페이지번호
-//        int limit = menusPage.getSize();
-//        int totalCount = (int) menusPage.getTotalElements();
-//        String url = "storeList"; // 상대주소
-//        model.addAttribute("pageCriteria", new PageCriteria(page, limit, totalCount, url));
+        model.addAttribute("thumbnail", store.getThumbnail());
+        model.addAttribute("images", store.getImages());
 
         return "customer/store/storeDetail";
     }

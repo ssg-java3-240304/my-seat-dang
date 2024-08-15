@@ -22,14 +22,10 @@
                         </div>
                         <div class="col-xl-8 col-lg-7 col-md-6 position-relative">
                             <div class="buttons clearfix" >
-<!--                                <span>-->
-<!--                                    <a th:href="${thumbnail[0]}"><i class="icon_image"></i>View photos</a>-->
-<!--                                </span>-->
-
-									<span class="magnific-gallery" >
-										<a th:href="${thumbnail[0]}" class="btn_hero" title="Photo title" data-effect="mfp-zoom-in"><i class="icon_image"></i>View photos</a>
-                                        <a th:each="image : ${images}" th:href="${image}" title="Photo title" data-effect="mfp-zoom-in"></a>
-									</span>
+									<span class="magnific-gallery">
+                                        <a th:href="${thumbnail}" class="btn_hero" data-effect="mfp-zoom-in"><i class="icon_image"></i>View photos</a>
+                                        <a th:each="image : ${images}" th:href="${image}" data-effect="mfp-zoom-in"></a>
+                                    </span>
                                 <a href="#0" class="btn_hero wishlist"><i class="icon_heart"></i>Wishlist</a>
                             </div>
                         </div>
@@ -84,8 +80,8 @@
                                     <div class="menu-gallery">
                                         <div class="menu_item thumbs" th:each="menu, iter : ${menus}" th:if="${iter.index < 5}">
                                             <figure>
-                                                <a th:href="@{/img/customer/menu_item_large_1.jpg}" title="Photo title" data-effect="mfp-zoom-in">
-                                                    <img th:src="@{/img/customer/menu-thumb-placeholder.jpg}" th:data-src="@{/img/customer/menu-thumb-4.jpg}" alt="" class="lazy">
+                                                <a th:href="${menu.image}" title="Photo title" data-effect="mfp-zoom-in">
+                                                    <img th:src="${menu.image}" alt="" class="lazy">
                                                 </a>
                                             </figure>
                                             <div>
@@ -97,9 +93,10 @@
 
                                         <div class="content_more">
                                             <div class="menu_item thumbs" th:each="menu, iter : ${menus}" th:if="${iter.index >= 5}">
+<!--                                                th:each="menu, iter : ${menus}" th:if="${iter.index >= 5}"-->
                                                 <figure>
-                                                    <a th:href="@{/img/customer/menu_item_large_4.jpg}" title="Photo title" data-effect="mfp-zoom-in">
-                                                        <img th:src="@{/img/customer/menu-thumb-placeholder.jpg}" th:data-src="@{/img/customer/menu-thumb-7.jpg}" alt="" class="lazy">
+                                                    <a th:href="${menu.image}" title="Photo title" data-effect="mfp-zoom-in">
+                                                        <img th:src="${menu.image}" alt="" class="lazy">
                                                     </a>
                                                 </figure>
                                                 <div>
@@ -110,8 +107,10 @@
                                             </div>
                                         </div>
                                         <!-- /content_more -->
-                                        <a href="#0" class="read_more" data-content="toggle-text" style="display: none;">더보기</a>
-                                        <a href="#0" class="read_more_close" data-content="toggle-text" style="display: none;">닫기</a>
+                                        <a href="#0" class="show_hide" data-content="toggle-text" >더보기</a>
+<!--
+class="read_more", style="display: none;"-->
+<!--                                        <a href="#0" class="read_more_close" data-content="toggle-text" style="display: none;">닫기</a>-->
                                     </div>
                                     <!-- /menu-gallery -->
                                     <br>
@@ -384,41 +383,41 @@
     <script th:src="@{/js/customer/datepicker_func_1.js}"></script>
     <script>
         // 더보기
-        $(document).ready(function() {
-            var items = $('.menu_item');
-            var itemsToShow = 5;
-
-            function updateMenuDisplay() {
-                var totalItems = items.length;
-                if (totalItems <= itemsToShow) {
-                    items.addClass('show'); // Show all items if 5 or fewer
-                    $('.read_more').hide(); // Hide 'Show More' button
-                    $('.read_more_close').hide(); // Hide 'Show Less' button
-                } else {
-                    items.slice(0, itemsToShow).addClass('show'); // Show first 5 items
-                    $('.read_more').show(); // Show 'Show More' button
-                    $('.read_more_close').hide(); // Hide 'Show Less' button
-                }
-            }
-
-            $('.read_more').click(function() {
-                var visibleItems = items.filter('.show').length;
-                items.slice(visibleItems, visibleItems + itemsToShow).addClass('show').slideDown();
-
-                if (items.filter('.show').length === items.length) {
-                    $(this).hide(); // Hide 'Show More' button if all items are visible
-                    $('.read_more_close').show(); // Show 'Show Less' button if all items are visible
-                }
-            });
-
-            $('.read_more_close').click(function() {
-                items.removeClass('show').hide(); // Hide all items
-                items.slice(0, itemsToShow).addClass('show').slideDown(); // Show first 5 items
-                $('.read_more').show(); // Show 'Show More' button
-                $(this).hide(); // Hide 'Show Less' button
-            });
-            updateMenuDisplay();
-        });
+        // $(document).ready(function() {
+        //     var items = $('.menu_item');
+        //     var itemsToShow = 5;
+        //
+        //     function updateMenuDisplay() {
+        //         var totalItems = items.length;
+        //         if (totalItems <= itemsToShow) {
+        //             items.addClass('show'); // Show all items if 5 or fewer
+        //             $('.read_more').hide(); // Hide 'Show More' button
+        //             $('.read_more_close').hide(); // Hide 'Show Less' button
+        //         } else {
+        //             items.slice(0, itemsToShow).addClass('show'); // Show first 5 items
+        //             $('.read_more').show(); // Show 'Show More' button
+        //             $('.read_more_close').hide(); // Hide 'Show Less' button
+        //         }
+        //     }
+        //
+        //     $('.read_more').click(function() {
+        //         var visibleItems = items.filter('.show').length;
+        //         items.slice(visibleItems, visibleItems + itemsToShow).addClass('show').slideDown();
+        //
+        //         if (items.filter('.show').length === items.length) {
+        //             $(this).hide(); // Hide 'Show More' button if all items are visible
+        //             $('.read_more_close').show(); // Show 'Show Less' button if all items are visible
+        //         }
+        //     });
+        //
+        //     $('.read_more_close').click(function() {
+        //         items.removeClass('show').hide(); // Hide all items
+        //         items.slice(0, itemsToShow).addClass('show').slideDown(); // Show first 5 items
+        //         $('.read_more').show(); // Show 'Show More' button
+        //         $(this).hide(); // Hide 'Show Less' button
+        //     });
+        //     updateMenuDisplay();
+        // });
 
         // 예약시 시간 선택
         document.addEventListener('DOMContentLoaded', function () {
@@ -458,7 +457,6 @@
 
             generateTimes();
         });
-
     </script>
 </div>
 </body>
