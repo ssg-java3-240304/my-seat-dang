@@ -1,6 +1,9 @@
 package com.matdang.seatdang.auth.service;
 
+import com.matdang.seatdang.auth.dto.CustomOAuth2User;
 import com.matdang.seatdang.auth.principal.CustomerUserDetails;
+import com.matdang.seatdang.member.entitiy.Member;
+import com.matdang.seatdang.member.repository.MemberRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -15,17 +18,36 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthService {
 
-    //getAuthenticatedUserDetails 이게 사용자가 로그인 한 후 인증된 상태에서 호출 되는 메서드이다.
+    //사용자가 로그인 한 후 인증된 상태에서 호출 되는 메서드들이다.
 
-    public CustomerUserDetails getAuthenticatedUserDetails() {
+    private final MemberRepository memberRepository;
+
+    public AuthService(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
+
+    public Member getAuthenticatedMember() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication != null && authentication.getPrincipal() instanceof CustomerUserDetails) {
-            return (CustomerUserDetails) authentication.getPrincipal();
-        } else {
-            return null;
+        if (authentication != null) {
+            Object principal = authentication.getPrincipal();
+
+            if (principal instanceof CustomerUserDetails) {
+                return ((CustomerUserDetails) principal).getMember(); // 세션 로그인 사용자
+            } else if (principal instanceof CustomOAuth2User) {
+                String email = ((CustomOAuth2User) principal).getEmail();
+                return memberRepository.findByMemberEmail(email); // OAuth2 로그인 사용자
+            }
         }
+
+        return null; // 인증된 사용자가 없으면 null 반환
     }
+
+
+
+
+
+
 
 
 }

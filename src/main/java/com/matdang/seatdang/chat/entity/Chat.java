@@ -13,7 +13,6 @@ public class Chat {
     private String id; // 자동으로 생성되는 bson 몽고 id
     private String msg; // 컨텐츠 내용
     private String sender; // 보내는 사람 : 회원 -- 보류
-    private String receiver; // 받는 사람 : 점주 -- 보류
     private String roomNum; // 방 번호
 
     private String customerImage; // 사용자가 점주에게 보낼 시안 사진

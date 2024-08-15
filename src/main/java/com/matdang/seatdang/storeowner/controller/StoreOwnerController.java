@@ -1,6 +1,6 @@
-package com.matdang.seatdang.customer.main.controller;
+package com.matdang.seatdang.storeowner.controller;
 
-import com.matdang.seatdang.auth.principal.MemberUserDetails;
+import com.matdang.seatdang.auth.principal.StoreOwnerUserDetails;
 import com.matdang.seatdang.customer.main.model.ResponseDto;
 import com.matdang.seatdang.reservation.service.ReservationService;
 import lombok.RequiredArgsConstructor;
@@ -18,27 +18,17 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/")
 @RequiredArgsConstructor
-public class CustomerMainController {
+public class StoreOwnerController {
 
     @Autowired
     private ReservationService reservationService;
-    @GetMapping("/")
-    public String index() {
-        return "customer/main/main";
-    }
 
-    @GetMapping("/detail")
-    public String detail() {
-        return "customer/shop/detail";
-    }
-
-
-    @GetMapping("/mypage")
-    public String mypage(Model model) {
+    @GetMapping("/storeownerpage")
+    public String storeownerpage(Model model) {
             // 고객 ID가 제공되면 해당 고객의 예약 목록을 가져와서 모델에 추가합니다.
-        Long customerId = ((MemberUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
-        List<ResponseDto> reservations = reservationService.getReservationsByCustomerId(customerId);
+        Long storeOwnerId = ((StoreOwnerUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        List<ResponseDto> reservations = reservationService.getReservationsByStoreOwnerId(storeOwnerId);
         model.addAttribute("reservations", reservations);
-        return "customer/mypage/mypage";
+        return "storeowner/mypage/storeownerpage";
     }
 }

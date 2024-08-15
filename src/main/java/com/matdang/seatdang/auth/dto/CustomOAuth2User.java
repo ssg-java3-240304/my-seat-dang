@@ -1,5 +1,6 @@
 package com.matdang.seatdang.auth.dto;
 
+import com.matdang.seatdang.member.entitiy.Gender;
 import com.matdang.seatdang.member.entitiy.MemberRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -14,9 +15,9 @@ public class CustomOAuth2User implements OAuth2User {
 
     private final MemberRole role;
 
-    public CustomOAuth2User(OAuth2Response oAuth2Response, MemberRole role) {
+    public CustomOAuth2User(OAuth2Response oAuth2Response) {
         this.oAuth2Response = oAuth2Response;
-        this.role = role;
+        this.role =  MemberRole.ROLE_CUSTOMER;;
     }
 
     // 로그인 진행하면 resource 서버로 부터 넘어오는 모든 데이터
@@ -73,5 +74,17 @@ public class CustomOAuth2User implements OAuth2User {
         return oAuth2Response.getProvider()+" "+oAuth2Response.getProviderId();
     }
 
+    public String getNickname() {
+        if (oAuth2Response instanceof NaverResponse) {
+            return ((NaverResponse) oAuth2Response).getNickname();
+        }
+        return null;  // Naver가 아닌 경우 null 반환
+    }
 
+    public String getMobile() {
+        if (oAuth2Response instanceof NaverResponse) {
+            return ((NaverResponse) oAuth2Response).getMobile();
+        }
+        return null;  // Naver가 아닌 경우 null 반환
+    }
 }
