@@ -18,6 +18,7 @@ spring:
         hbm2ddl:
           auto: update
         dialect: org.hibernate.dialect.MySQLDialect
+    open-in-view: false
 
 kakao:
   secret:

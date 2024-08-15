@@ -24,6 +24,7 @@ spring:
         hbm2ddl:
           auto: create
         dialect: org.hibernate.dialect.MySQLDialect
+    open-in-view: false
 kakao:
   secret:
     key: ${KAKAO_PAY_SECRET_KEY}
