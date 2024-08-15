@@ -123,6 +123,7 @@
   async function addMessage() {
     let msgInput = document.querySelector("#chat-outgoing-msg");
     let fileInput = document.querySelector("#chat-file-input");
+    let filePreview = document.querySelector("#file-preview");
     let message = msgInput.value.trim();
 
     // 파일이 첨부되었거나 메시지가 비어있지 않을 경우에만 전송
@@ -150,10 +151,13 @@
       method: "post",
       body: formData
     });
-    msgInput.value = "";
-    fileInput.value = ""; // 파일 입력 필드 초기화
 
+    // 입력 필드와 파일 필드 초기화
+    msgInput.value = "";
+    fileInput.value = "";
+    filePreview.innerHTML = ""; // 파일 미리보기 영역 초기화
   }
+
 
   document.querySelector("#chat-send").addEventListener("click", () => {
     addMessage();
