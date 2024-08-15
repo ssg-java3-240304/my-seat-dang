@@ -124,7 +124,7 @@ class WaitingRepositoryTest {
         int result = waitingRepository.updateAllWaitingNumberByVisit(1L);
         // then
         assertThat(result).isEqualTo(10);
-        assertThat(waitingRepository.findById(findWaiting.get(0).getId()).get().getWaitingNumber()).isEqualTo(
+        assertThat(waitingRepository.findById(findWaiting.get(0).getId()).get().getWaitingOrder()).isEqualTo(
                 -1L);
     }
 

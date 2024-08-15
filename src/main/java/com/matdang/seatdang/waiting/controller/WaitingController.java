@@ -31,7 +31,7 @@ public class WaitingController {
     @GetMapping
     public String showWaiting(@RequestParam(defaultValue = "0") int status,
                               Model model) {
-        List<Waiting> waitings =waitingService.showWaiting(1L, status);
+        List<Waiting> waitings = waitingService.showWaiting(1L, status);
         model.addAttribute("waitings", waitings);
         model.addAttribute("status", status);
         return "store/waiting/main";
@@ -40,7 +40,7 @@ public class WaitingController {
     @PostMapping
     public String updateStatus(@ModelAttribute UpdateRequest updateRequest, Model model) {
         waitingService.updateStatus(updateRequest);
-        List<Waiting> waitings =waitingService.showWaiting(1L, updateRequest.getStatus());
+        List<Waiting> waitings = waitingService.showWaiting(1L, updateRequest.getStatus());
         model.addAttribute("waitings", waitings);
         model.addAttribute("status", updateRequest.getStatus());
         return "store/waiting/main";
@@ -57,10 +57,10 @@ public class WaitingController {
                 if (value != WaitingStatus.VISITED) {
                     for (int j = 0; j < 10; j++, i++) {
                         waitingRepository.save(Waiting.builder()
-                                .waitingId(i)
                                 .waitingNumber(i)
+                                .waitingOrder(i)
                                 .storeId(1L)
-                                .customerInfo(new CustomerInfo(i, "010-1111-1111"))
+                                .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
                                 .waitingStatus(value)
                                 .createdAt(LocalDateTime.now())
                                 .visitedTime(null)
@@ -73,10 +73,10 @@ public class WaitingController {
 
         for (long i = 1; i <= 10; i++) {
             waitingRepository.save(Waiting.builder()
-                    .waitingId(i)
                     .waitingNumber(i)
+                    .waitingOrder(i)
                     .storeId(2L)
-                    .customerInfo(new CustomerInfo(i, "010-1111-1111"))
+                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
                     .waitingStatus(WaitingStatus.WAITING)
                     .createdAt(LocalDateTime.now())
                     .visitedTime(null)

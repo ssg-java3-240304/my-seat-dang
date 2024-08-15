@@ -15,8 +15,8 @@ public class Waiting {
     @Id @GeneratedValue
     private Long id;
 
-    private Long waitingId;
     private Long waitingNumber;
+    private Long waitingOrder;
     private Long storeId;
 
     @Embedded

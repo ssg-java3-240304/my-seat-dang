@@ -23,16 +23,16 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
 
 
     @Modifying
-    @Query("update Waiting w set w.waitingNumber = w.waitingNumber-1"
+    @Query("update Waiting w set w.waitingOrder = w.waitingOrder-1"
             + " where w.waitingStatus = com.matdang.seatdang.waiting.entity.WaitingStatus.WAITING"
             + " and w.storeId = :storeId")
     int updateAllWaitingNumberByVisit(@Param("storeId") Long storeId);
 
     @Modifying
-    @Query("update Waiting w set w.waitingNumber = w.waitingNumber-1"
+    @Query("update Waiting w set w.waitingOrder = w.waitingOrder-1"
             + " where w.waitingStatus  = com.matdang.seatdang.waiting.entity.WaitingStatus.WAITING"
             + " and w.storeId = :storeId"
-            + " and w.waitingNumber > :waitingNumber")
+            + " and w.waitingOrder > :waitingNumber")
     int updateWaitingNumberByCancel(@Param("storeId") Long storeId, @Param("waitingNumber") Long waitingNumber);
 
     @Modifying
