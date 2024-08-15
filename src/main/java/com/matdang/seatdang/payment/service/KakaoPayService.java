@@ -61,7 +61,6 @@ public class KakaoPayService {
 
         ReadyResponse readyResponse = response.getBody();
 
-
         // 저장
         kakaoPayRepository.save(PayReady.builder()
                 .partnerOrderId(readyRequest.getPartnerOrderId())
@@ -74,12 +73,10 @@ public class KakaoPayService {
     }
 
 
-
     public Object approve(ReadyRedirect readyRedirect) {
         // ready할 때 저장해놓은 TID로 승인 요청
         // Call “Execute approved payment” API by pg_token, TID mapping to the current payment transaction and other parameters.
         HttpHeaders headers = initHttpHeaders();
-
 
         PayReady findPayReady = kakaoPayRepository.findById(readyRedirect.getPartnerOrderId()).get();
 
@@ -189,6 +186,4 @@ public class KakaoPayService {
                 .build();
         return approveRequest;
     }
-
-
 }
