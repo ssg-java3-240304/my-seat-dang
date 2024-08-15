@@ -29,7 +29,7 @@
                     <div class="form-group">
                         <label>카테고리</label>
                         <div class="styled-select">
-                            <select id="category" required>
+                            <select id="storeType" required>
                                 <option value="GENERAL_RESERVATION">예약(베이커리)</option>
                                 <option value="CUSTOM">예약(제작케이크)</option>
                                 <option value="GENERAL_WAITING">웨이팅(베이커리)</option>
@@ -352,7 +352,7 @@
 
             const formData = new FormData();
             formData.append('storeName', $('#storeName').val());
-            formData.append('category', $('#category').val());
+            formData.append('storeType', $('#storeType').val());
             formData.append('description', $('#description').val());
             formData.append('notice', $('#notice').val());
             formData.append('phone', $('#phone').val());
