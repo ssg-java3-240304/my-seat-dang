@@ -106,7 +106,7 @@
         <th>Customer Phone Number</th>
         <th>People Count</th>
         <th>Waiting Status</th>
-        <th>Created At</th>
+        <th>Created Date</th>
         <th>Visited Time</th>
         <th th:if="${status == 0}">Status Change</th>
     </tr>
@@ -118,8 +118,8 @@
         <td th:text="${waiting.customerPhone}"></td>
         <td th:text="${waiting.peopleCount}"></td>
         <td th:text="${waiting.waitingStatus}"></td>
-        <td th:text="${waiting.createdAt}"></td>
-        <td th:text="${waiting.visitedTime}"></td>
+        <td th:text="${{waiting.createdDate}}"></td>
+        <td th:text="${{waiting.visitedTime}}"></td>
         <td th:if="${status == 0}">
             <div class="row-buttons">
                 <form th:if="${waiting.waitingOrder == 1}" th:action="@{/store/waiting}" method="post">
