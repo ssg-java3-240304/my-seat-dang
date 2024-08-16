@@ -52,10 +52,12 @@ public class StoreAdminController {
     }
 
     @GetMapping(path = "/storeUpdate")
-    public void storeUpdate(@RequestParam Long storeId, Model model){
+    public void storeUpdate(Model model){
+//        @RequestParam Long storeId
+        Long storeId = 1050L;
         StoreDetailReponseDto dto = storeAdminService.findByStoreId(storeId);
         log.info("GET /storeowner/storeUpdate");
-        log.debug("storeId = {}", storeId);
-        model.addAttribute("storeId", storeId);
+        log.debug("dto = {}", dto);
+        model.addAttribute("store", dto);
     }
 }

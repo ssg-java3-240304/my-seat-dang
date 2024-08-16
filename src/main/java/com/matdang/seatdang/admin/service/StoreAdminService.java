@@ -58,6 +58,6 @@ public class StoreAdminService {
 
 
     public StoreDetailReponseDto findByStoreId(Long storeId) {
-        return StoreDetailReponseDto.fromStore(storeAdminRepository.findByStoreId(storeId));
+        return StoreDetailReponseDto.fromStore(storeAdminRepository.findById(storeId).orElseThrow());
     }
 }
