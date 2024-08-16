@@ -6,6 +6,7 @@ import com.matdang.seatdang.member.entitiy.MemberStatus;
 import com.matdang.seatdang.member.entitiy.StoreOwner;
 import com.matdang.seatdang.member.repository.MemberRepository;
 import com.matdang.seatdang.member.vo.StoreVo;
+import com.matdang.seatdang.waiting.controller.dto.WaitingPeople;
 import com.matdang.seatdang.waiting.dto.UpdateRequest;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingDto;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
@@ -48,11 +49,15 @@ public class WaitingController {
         log.info("===  showWaiting  ===");
 
         List<WaitingDto> waitings = waitingService.showWaiting(storeId, status);
+
+        model.addAttribute("waitingPeople", WaitingPeople.create(waitings));
         model.addAttribute("waitings", waitings);
         model.addAttribute("storeId", storeId);
         model.addAttribute("status", status);
         return "store/waiting/main";
     }
+
+
 
     @PostMapping
     public String updateStatus(@ModelAttribute UpdateRequest updateRequest, Model model) {
@@ -60,12 +65,13 @@ public class WaitingController {
 
         if (result == 0) {
             log.error("=== not update ===");
-        }else {
+        } else {
             log.info("===  update Waiting Status  ===");
-            log.info("storeId = {},  total update = {}", updateRequest.getStoreId(),result);
+            log.info("storeId = {},  total update = {}", updateRequest.getStoreId(), result);
         }
 
         List<WaitingDto> waitings = waitingService.showWaiting(updateRequest.getStoreId(), updateRequest.getStatus());
+        model.addAttribute("waitingPeople", WaitingPeople.create(waitings));
         model.addAttribute("waitings", waitings);
         model.addAttribute("storeId", updateRequest.getStoreId());
         model.addAttribute("status", updateRequest.getStatus());
@@ -77,7 +83,7 @@ public class WaitingController {
      */
     @PostConstruct
     public void initData() {
-        StoreVo storeVo = new StoreVo(1L,"달콤커피", StoreType.CUSTOM, "서울시강남구");
+        StoreVo storeVo = new StoreVo(1L, "달콤커피", StoreType.CUSTOM, "서울시강남구");
         StoreOwner storeOwner = StoreOwner.builder()
                 .memberEmail("storeowner@naver.com")
                 .joinDate(LocalDate.now())
