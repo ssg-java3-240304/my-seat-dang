@@ -38,10 +38,18 @@ public class CustomerSignupService {
 
     public void signupProcess(CustomerSignupDto customerSignupDto,MultipartFile customerProfileImage){
 
-        // 파일 업로드 처리
-        String uploadedUrl = fileService.uploadSingleFile(customerProfileImage, "customer-profile-images"); // 타입 String으로 바꾸기
-        System.out.println(uploadedUrl); // 파일 업로드 확인
-        System.out.println(customerSignupDto);
+        // 기본 프로필 이미지 URL 설정
+        String basicProfileImageUrl = "https://kr.object.ncloudstorage.com/myseatdang-bucket/member/3539241b-bf4c-474b-abdd-3d32f9841d9c.jpg";
+
+        // 파일 업로드 처리 (회원가입할 때 업로드 했다면 업로드한 url, 아니면 basicProfileImageUrl)
+        String uploadedUrl;
+        if (customerProfileImage != null && !customerProfileImage.isEmpty()) {
+            uploadedUrl = fileService.uploadSingleFile(customerProfileImage, "customer-profile-images");
+        } else {
+            uploadedUrl = basicProfileImageUrl;
+        }
+
+        //회원(Customer) 생성
 
         Customer customerEntity = Customer.builder()
                 .memberName(customerSignupDto.getMemberName())
