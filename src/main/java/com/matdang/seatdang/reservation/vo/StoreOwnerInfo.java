@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Embeddable
 public class StoreOwnerInfo {
-    private Long StoreOwnerId;
-    private String StoreOwnerName;
+    private Long storeOwnerId;
+    private String storeOwnerName;
 }

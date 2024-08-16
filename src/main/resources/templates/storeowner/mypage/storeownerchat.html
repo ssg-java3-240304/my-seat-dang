@@ -51,13 +51,13 @@
   const chatUrl = /*[[${chatAccessUrl}]]*/ "";
   var reservationId = /*[[${reservationId}]]*/ 0;
   const storeName = /*[[${storeName}]]*/ "";
-  const customerName = /*[[${customerName}]]*/ "";
+  const storeOwnerName = /*[[${storeOwnerName}]]*/ "";
   /*]]>*/
 
   console.log(`Chat URL: ${chatUrl}`);
   console.log(`Reservation ID: ${reservationId}`);
   console.log(`Store Name: ${storeName}`);
-  console.log(`Customer Name: ${customerName}`);
+  console.log(`StoreOwner Name: ${storeOwnerName}`);
 
   // SSE 연결하기
   const eventSource = new EventSource(`${chatUrl}/chat/roomNum/${reservationId}`);
@@ -66,7 +66,7 @@
     console.log("Received data:", data);
 
 
-    if (data.sender === customerName) {
+    if (data.sender === storeOwnerName) {
       initMyMessage(data);
     } else {
       initYourMessage(data);
