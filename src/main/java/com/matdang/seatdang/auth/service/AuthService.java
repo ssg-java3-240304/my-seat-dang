@@ -2,7 +2,7 @@ package com.matdang.seatdang.auth.service;
 
 import com.matdang.seatdang.auth.dto.CustomOAuth2User;
 import com.matdang.seatdang.auth.principal.CustomerUserDetails;
-import com.matdang.seatdang.member.entitiy.Member;
+import com.matdang.seatdang.member.entity.Member;
 import com.matdang.seatdang.member.repository.MemberRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

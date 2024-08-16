@@ -1,16 +1,11 @@
 package com.matdang.seatdang.auth.controller;
 
-import com.matdang.seatdang.auth.dto.CustomOAuth2User;
 import com.matdang.seatdang.auth.dto.CustomerDto;
-import com.matdang.seatdang.auth.principal.CustomerUserDetails;
 import com.matdang.seatdang.auth.service.AuthService;
 import com.matdang.seatdang.auth.service.CustomerService;
-import com.matdang.seatdang.member.entitiy.Customer;
-import com.matdang.seatdang.member.entitiy.Member;
+import com.matdang.seatdang.member.entity.Customer;
+import com.matdang.seatdang.member.entity.Member;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

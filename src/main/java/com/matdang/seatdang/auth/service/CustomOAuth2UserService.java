@@ -3,7 +3,7 @@ package com.matdang.seatdang.auth.service;
 import com.matdang.seatdang.auth.dto.CustomOAuth2User;
 import com.matdang.seatdang.auth.dto.NaverResponse;
 import com.matdang.seatdang.auth.dto.OAuth2Response;
-import com.matdang.seatdang.member.entitiy.*;
+import com.matdang.seatdang.member.entity.*;
 import com.matdang.seatdang.member.repository.MemberRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Optional;
 
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {

@@ -1,8 +1,7 @@
 package com.matdang.seatdang.auth.principal;
 
-import com.matdang.seatdang.member.entitiy.Customer;
-import com.matdang.seatdang.member.entitiy.Gender;
-import com.matdang.seatdang.member.entitiy.Member;
+import com.matdang.seatdang.member.entity.Customer;
+import com.matdang.seatdang.member.entity.Gender;
 
 import java.time.LocalDate;
 

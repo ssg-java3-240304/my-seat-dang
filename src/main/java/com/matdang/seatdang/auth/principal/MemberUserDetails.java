@@ -1,7 +1,7 @@
 package com.matdang.seatdang.auth.principal;
 
-import com.matdang.seatdang.member.entitiy.Member;
-import com.matdang.seatdang.member.entitiy.MemberStatus;
+import com.matdang.seatdang.member.entity.Member;
+import com.matdang.seatdang.member.entity.MemberStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

@@ -1,8 +1,7 @@
 package com.matdang.seatdang.auth.service;
 
 import com.matdang.seatdang.auth.dto.CustomerDto;
-import com.matdang.seatdang.member.entitiy.Customer;
-import com.matdang.seatdang.member.entitiy.Member;
+import com.matdang.seatdang.member.entity.Customer;
 import org.springframework.stereotype.Service;
 
 

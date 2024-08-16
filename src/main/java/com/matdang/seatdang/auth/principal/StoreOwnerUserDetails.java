@@ -1,6 +1,6 @@
 package com.matdang.seatdang.auth.principal;
 
-import com.matdang.seatdang.member.entitiy.StoreOwner;
+import com.matdang.seatdang.member.entity.StoreOwner;
 import com.matdang.seatdang.member.vo.StoreVo;
 
 

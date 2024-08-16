@@ -1,9 +1,9 @@
 package com.matdang.seatdang.member.service;
 
 import com.matdang.seatdang.member.dto.CustomerSignupDto;
-import com.matdang.seatdang.member.entitiy.Customer;
-import com.matdang.seatdang.member.entitiy.MemberRole;
-import com.matdang.seatdang.member.entitiy.MemberStatus;
+import com.matdang.seatdang.member.entity.Customer;
+import com.matdang.seatdang.member.entity.MemberRole;
+import com.matdang.seatdang.member.entity.MemberStatus;
 import com.matdang.seatdang.member.repository.MemberRepository;
 import com.matdang.seatdang.object_storage.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,4 +72,7 @@ public class CustomerSignupService {
 
     }
 
+    public boolean isNicknameDuplicate(String customerNickName) {
+        return memberRepository.existsByCustomerNickName(customerNickName);
+    }
 }
