@@ -1,6 +1,8 @@
 package com.matdang.seatdang.admin.dto;
 
 import com.matdang.seatdang.common.storeEnum.StoreType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +18,7 @@ import java.util.List;
 @Builder
 public class StoreRegistRequestDto {
     private String storeName;
+    @Enumerated(EnumType.STRING)
     private StoreType storeType;
     private String description;
     private String notice;
