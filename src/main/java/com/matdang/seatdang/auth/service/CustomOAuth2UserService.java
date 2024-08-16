@@ -51,6 +51,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         OAuth2Response oAuth2Response;
 
+        // 기본 프로필 이미지 URL 설정
+        String basicProfileImageUrl = "https://kr.object.ncloudstorage.com/myseatdang-bucket/member/3539241b-bf4c-474b-abdd-3d32f9841d9c.jpg";
+
+
+
+
         // 현재 네이버 밖에 안했지만 추후 다른 OAuth를 사용할 경우 여기다가 추가하면된다.
 
         if (registrationId.equals("naver")) {
@@ -114,6 +120,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .imageGenLeft(3) // 기본 3
                 .memberRole(memberRole) // CUSTOMER (OAuth 로그인은 CUSTOMER만 됨)
                 .customerGender(Gender.NONE) // 성별
+                .customerProfileImage(basicProfileImageUrl)// 기본이미지
                 .build();
 
         newCustomer.getOauthIdentifiers().add(oauthIdentifier); // OAuth 가입하면 넣는 식별값 넣기
