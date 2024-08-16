@@ -12,10 +12,6 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
 
     List<Waiting> findAllByStoreId(Long storeId);
 
-
-
-
-
     @Modifying
     @Query("update Waiting w set w.waitingOrder = w.waitingOrder-1"
             + " where w.waitingStatus = com.matdang.seatdang.waiting.entity.WaitingStatus.WAITING"

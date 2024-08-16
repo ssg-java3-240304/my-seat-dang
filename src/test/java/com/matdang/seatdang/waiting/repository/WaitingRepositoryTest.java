@@ -43,7 +43,6 @@ class WaitingRepositoryTest {
                             .storeId(1L)
                             .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
                             .waitingStatus(value)
-                            .createdAt(LocalDateTime.now())
                             .visitedTime(null)
                             .build());
                 }
@@ -57,7 +56,6 @@ class WaitingRepositoryTest {
                     .storeId(2L)
                     .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
                     .waitingStatus(WaitingStatus.WAITING)
-                    .createdAt(LocalDateTime.now())
                     .visitedTime(null)
                     .build());
         }
