@@ -26,7 +26,7 @@ class StoreAdminControllerTest {
 //        storeAdminRepository.findByStoreId(storeId);
 //        assertThat(store).allMatch
 
-//    }
+    }
 
 
 

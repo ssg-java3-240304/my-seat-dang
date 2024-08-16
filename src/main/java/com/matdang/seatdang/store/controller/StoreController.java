@@ -1,7 +1,7 @@
 package com.matdang.seatdang.store.controller;
 
 import com.matdang.seatdang.common.paging.PageCriteria;
-import com.matdang.seatdang.menu.dto.MenuDetailResponseDto;
+import com.matdang.seatdang.menu.dto.MenuDto;
 import com.matdang.seatdang.menu.service.MenuQueryService;
 import com.matdang.seatdang.store.dto.StoreListResponseDto;
 import com.matdang.seatdang.store.entity.Store;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
-import java.util.Set;
 
 import static com.matdang.seatdang.common.storeEnum.StoreType.CUSTOM;
 import static com.matdang.seatdang.common.storeEnum.StoreType.GENERAL_RESERVATION;
@@ -104,7 +103,7 @@ public class StoreController {
     @GetMapping("/store/detail")
     public void storeDetail(@RequestParam("storeId") Long storeId, Model model){
         Store store = storeService.findByStoreId(storeId);
-        List<MenuDetailResponseDto> menuList = menuService.findMenuSetByStoreId(storeId);
+        List<MenuDto> menuList = menuService.findMenuSetByStoreId(storeId);
         log.debug("store = {}", store);
         model.addAttribute("store", store);
         model.addAttribute("menus", menuList);

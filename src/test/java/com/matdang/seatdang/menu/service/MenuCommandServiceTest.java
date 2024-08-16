@@ -1,7 +1,6 @@
 package com.matdang.seatdang.menu.service;
 
-import com.matdang.seatdang.menu.dto.MenuDetailResponseDto;
-import com.matdang.seatdang.menu.dto.MenuRequestDto;
+import com.matdang.seatdang.menu.dto.MenuDto;
 import com.matdang.seatdang.menu.entity.Menu;
 import com.matdang.seatdang.menu.vo.MenuType;
 import org.junit.jupiter.api.Disabled;
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -49,10 +47,10 @@ class MenuCommandServiceTest {
                 .menuDesc("딸기 달달해 맛있어요")
                 .customMenuOpt(null)
                 .build();
-        MenuRequestDto requestDto = MenuRequestDto.toDto(menu);
+        MenuDto requestDto = MenuDto.entityToDto(menu);
         //when
         menuCommandService.regist(requestDto);
-        List<MenuDetailResponseDto> result = menuQueryService.findMenuSetByStoreId(2L);
+        List<MenuDto> result = menuQueryService.findMenuSetByStoreId(2L);
         //then
         assertThat(result).isNotEmpty();
         result.forEach(menuDetailResponseDto ->
@@ -79,7 +77,7 @@ class MenuCommandServiceTest {
                         .menuDesc("달달해 맛있어요")
                         .customMenuOpt(null)
                         .build();
-                MenuRequestDto requestDto = MenuRequestDto.toDto(menu);
+                MenuDto requestDto = MenuDto.entityToDto(menu);
                 //when
                 menuCommandService.regist(requestDto);
             }

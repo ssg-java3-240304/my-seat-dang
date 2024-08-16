@@ -1,7 +1,7 @@
 package com.matdang.seatdang.menu.service;
 
 
-import com.matdang.seatdang.menu.dto.MenuDetailResponseDto;
+import com.matdang.seatdang.menu.dto.MenuDto;
 import com.matdang.seatdang.menu.entity.Menu;
 import com.matdang.seatdang.menu.repository.MenuRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -21,24 +19,28 @@ import java.util.stream.Collectors;
 public class MenuQueryService {
     private final MenuRepository menuRepository;
 
-    public List<MenuDetailResponseDto> findMenuSetByStoreId(Long storeId) {
+    public List<MenuDto> findMenuSetByStoreId(Long storeId) {
         List<Menu> menus = menuRepository.findByStoreId(storeId);
-        return menus.stream().map(MenuDetailResponseDto::toDto).collect(Collectors.toList());
+        return menus.stream().map(MenuDto::entityToDto).collect(Collectors.toList());
     }
 
-    public Page<MenuDetailResponseDto> findMenuPageByStoreId(Long storeId, Pageable pageable) {
-        return menuRepository.findByStoreId(storeId, pageable).map(MenuDetailResponseDto::toDto);
+    public Page<MenuDto> findMenuPageByStoreId(Long storeId, Pageable pageable) {
+        return menuRepository.findByStoreId(storeId, pageable).map(MenuDto::entityToDto);
     }
 
-    public MenuDetailResponseDto findByMenuId(Long menuId) {
+    public Page<MenuDto>  findMenuPageByStoreIdNotDeleted(Long storeId, Pageable pageable) {
+        return menuRepository.findByStoreIdAndMenuStatusNotDeleted(storeId, pageable).map(MenuDto::entityToDto);
+    }
+
+    public MenuDto findByMenuId(Long menuId) {
         return menuRepository.findById(menuId)
-                .map(MenuDetailResponseDto::toDto)
+                .map(MenuDto::entityToDto)
                 .orElse(null);
     }
 
-    public List<MenuDetailResponseDto> findMenuSetByStoreIdAndMenuName(Long storeId, String menuName) {
+    public List<MenuDto> findMenuSetByStoreIdAndMenuName(Long storeId, String menuName) {
         List<Menu> menus = menuRepository.findByStoreIdAndMenuNameContaining(storeId, menuName);
-        return menus.stream().map(MenuDetailResponseDto::toDto).collect(Collectors.toList());
+        return menus.stream().map(MenuDto::entityToDto).collect(Collectors.toList());
     }
 
 }

@@ -24,7 +24,7 @@
             <div class="header_box version_2">
                 <h2><i class="fa fa-list"></i>메뉴 등록</h2>
             </div>
-            <form th:action="@{/storeowner/menu/regist}" name="menu" method="POST" enctype="multipart/form-data" class="strip_menu_items myDropzone">
+            <form th:action="@{/storeowner/menu/update}" name="menu" method="POST" enctype="multipart/form-data" class="strip_menu_items myDropzone">
                 <div class="row">
                     <div class="col-xl-3">
                         <div id="preview-container">
@@ -36,16 +36,17 @@
                     </div>
                     <div class="col-xl-9">
                         <div class="row">
+                            <input hidden="hidden" th:value="${menu.menuId}" type="text" name="menuId" class="form-control">
                             <div class="col-md-8">
                                 <div class="form-group">
                                     <label>메뉴 이름</label>
-                                    <input th:value="${menu.menuName}" type="text" name="menuName" class="form-control">
+                                    <input th:value="${menu.menuName}" type="text" name="menuName" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>가격</label>
-                                    <input th:value="${menu.menuPrice}" type="text" name="menuPrice" class="form-control">
+                                    <input th:value="${menu.menuPrice}" type="number" min="0" name="menuPrice" class="form-control" required>
                                 </div>
                             </div>
                         </div>
@@ -53,9 +54,22 @@
                             <label>메뉴 소개</label>
                             <input th:value="${menu.menuDesc}" type="text" name="menuDesc" class="form-control">
                         </div>
-                        <div class="form-group">
-                            <label>메뉴 이미지</label>
-                            <input type="file" name="files" multiple id="file-input" />
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>판매 상태</label>
+                                    <select id="inputState" name="menuStatus" class="form-select-lg">
+                                        <option selected>주문가능</option>
+                                        <option>주문불가</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-group">
+                                    <label>메뉴 이미지</label>
+                                    <input type="file" name="files" multiple id="file-input" />
+                                </div>
+                            </div>
                         </div>
                         <div class="">
                             <button type="submit" class="btn_1 medium">수정</button>

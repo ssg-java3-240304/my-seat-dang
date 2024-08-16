@@ -1,7 +1,8 @@
 package com.matdang.seatdang.menu.entity;
 
-import com.matdang.seatdang.menu.dto.MenuRequestDto;
+import com.matdang.seatdang.menu.dto.MenuDto;
 import com.matdang.seatdang.menu.vo.CustomMenuOpt;
+import com.matdang.seatdang.menu.vo.MenuStatus;
 import com.matdang.seatdang.menu.vo.MenuType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,17 +29,36 @@ public class Menu {
     @Column(name = "menu_type")
     @Enumerated(EnumType.STRING)
     private MenuType menuType;
+    @Column(name="menu_status")
+    @Enumerated(EnumType.STRING)
+    private MenuStatus menuStatus;
     @Column(name="menu_desc")
     private String menuDesc;
     @Embedded
     private CustomMenuOpt customMenuOpt;
 
-    public void update(MenuRequestDto dto){
-        this.menuName = dto.getMenuName();
-        this.menuPrice = dto.getMenuPrice();
-        this.image = dto.getImage();
-        this.menuType = dto.getMenuType();
-        this.menuDesc = dto.getMenuDesc();
-        this.customMenuOpt = dto.getCustomMenuOpt();
+
+    public void update(MenuDto dto) {
+        if (dto.getMenuName() != null) {
+            this.menuName = dto.getMenuName();
+        }
+        if (dto.getMenuPrice() != null) {
+            this.menuPrice = dto.getMenuPrice();
+        }
+        if (dto.getImage() != null) {
+            this.image = dto.getImage();
+        }
+        if (dto.getMenuStatus() != null) {
+            this.menuStatus = dto.getMenuStatus();
+        }
+        if (dto.getMenuDesc() != null) {
+            this.menuDesc = dto.getMenuDesc();
+        }
+    }
+
+    public void changeStatusToDelete(Long menuId) {
+        if (this.menuId != null) {
+            this.menuStatus = MenuStatus.DELETED;
+        }
     }
 }
