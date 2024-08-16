@@ -1,8 +1,10 @@
 package com.matdang.seatdang.auth.controller;
 
 import com.matdang.seatdang.auth.dto.CustomOAuth2User;
+import com.matdang.seatdang.auth.dto.CustomerDto;
 import com.matdang.seatdang.auth.principal.CustomerUserDetails;
 import com.matdang.seatdang.auth.service.AuthService;
+import com.matdang.seatdang.auth.service.CustomerService;
 import com.matdang.seatdang.member.entitiy.Customer;
 import com.matdang.seatdang.member.entitiy.Member;
 import lombok.extern.slf4j.Slf4j;
@@ -20,9 +22,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AuthController {
 
     private final AuthService authService;
-
-    public AuthController(AuthService authService) {
-        this.authService = authService; //
+    private final CustomerService customerService;
+    public AuthController(AuthService authService,CustomerService customerService) {
+        this.authService = authService;
+        this.customerService = customerService;
     }
 
 
@@ -43,15 +46,14 @@ public class AuthController {
         Member member = authService.getAuthenticatedMember();
 
         if (member != null) {
+
+            Customer customer = (Customer) member;
+
             // Member 정보를 모델에 추가
-            model.addAttribute("memberName", member.getMemberName()); // 사용자 이름
-            model.addAttribute("memberNickName", member instanceof Customer ? ((Customer) member).getCustomerNickName() : ""); // 닉네임 (Customer일 경우)
-            model.addAttribute("customerProfileImage", member instanceof Customer ? ((Customer) member).getCustomerProfileImage() : ""); // 프로필 이미지
-            model.addAttribute("memberEmail", member.getMemberEmail()); // 이메일
-            model.addAttribute("memberPhone", member.getMemberPhone()); // 휴대폰 번호
-            model.addAttribute("customerGender", member instanceof Customer ? ((Customer) member).getCustomerGender() : ""); // 성별 (Customer일 경우)
-            model.addAttribute("customerBirthday", member instanceof Customer ? ((Customer) member).getCustomerBirthday() : ""); // 생일 (Customer일 경우)
-            model.addAttribute("imageGenLeft", member instanceof Customer ? ((Customer) member).getImageGenLeft() : ""); // ai생성횟수 (Customer일 경우)
+            CustomerDto customerDto = customerService.convertToDto(customer);
+
+            // DTO를 모델에 추가
+            model.addAttribute("customer", customerDto);
         } else {
             // 인증되지 않은 경우 로그인 페이지로 리다이렉트
             return "redirect:/login";
