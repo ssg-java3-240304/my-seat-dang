@@ -34,6 +34,20 @@
                 <li class="nav-item" data-toggle="tooltip" data-placement="right" title="My listings">
                     <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMylistings">
                         <i class="fa fa-fw fa-list"></i>
+                        <span class="nav-link-text">메뉴 관리</span>
+                    </a>
+                    <ul class="sidenav-second-level" id="collapseMenuListing">
+                        <li>
+                            <a th:href="@{/storeowner/menu}">메뉴 목록</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/storeowner/menu/regist}">메뉴 등록</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="My listings">
+                    <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMylistings">
+                        <i class="fa fa-fw fa-list"></i>
                         <span class="nav-link-text">My listings</span>
                     </a>
                     <ul class="sidenav-second-level collapse" id="collapseMylistings">

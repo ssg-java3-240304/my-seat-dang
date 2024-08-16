@@ -9,6 +9,7 @@
 # DROP TABLE IF EXISTS store CASCADE;
 # DROP TABLE IF EXISTS tbl_store_images CASCADE;
 # DROP TABLE IF EXISTS store_images CASCADE;
+# DROP TABLE IF EXISTS menu CASCADE;
 #
 # CREATE TABLE store (
 #     store_id int auto_increment PRIMARY KEY,
@@ -31,10 +32,30 @@
 # );
 # alter table store auto_increment = 1000;
 
+# create table tbl_store_images
+# (
+#     image_id int,
+#     image varchar(500)
+# );
+#
+# create table menu
+# (
+#     menu_id int,
+#     menu_name varchar(255),
+#     menu_price int,
+#     image varchar(500),
+#     menu_desc text,
+#     store_id int,
+#     sheet varchar(255),
+#     size varchar(255),
+#     cream varchar(255),
+#     lettering varchar(255)
+# );
+
 INSERT INTO store
 (store_name, store_address, open_time, start_break_time, end_break_time, last_order, close_time, regular_day_off, thumbnail, images, description, notice, phone, star_rating, store_type)
 VALUES
-    ('강남 베이커리 본점', '서울특별시 강남구 역삼동 123-45', '08:00:00', '15:00:00', '15:30:00', '20:30:00', '21:00:00', '일요일', 'gangnam_bakery_thumbnail.jpg', 'store_bakery.jpg','강남의 인기 베이커리로, 다양한 종류의 빵과 커피를 제공합니다.', '주말에는 대기시간이 길어질 수 있습니다.', '02-1234-5678', 4.5, 'GENERAL_WAITING'),
+    ('강남 베이커리 본점', '서울특별시 강남구 역삼동 123-45', '08:00:00', '15:00:00', '15:30:00', '20:30:00', '21:00:00', '일요일', 'https://kr.object.ncloudstorage.com/myseatdang-bucket/store-thumbnail/87947da0-d8b9-4b88-9158-c43b7d30d759.png', 'store_bakery.jpg','강남의 인기 베이커리로, 다양한 종류의 빵과 커피를 제공합니다.', '주말에는 대기시간이 길어질 수 있습니다.', '02-1234-5678', 4.5, 'GENERAL_WAITING'),
     ('스위트 데이즈 청담동', '서울특별시 강남구 청담동 234-56', '09:00:00', '14:00:00', '14:30:00', '19:00:00', '20:00:00', '월요일', 'sweet_days_thumbnail.jpg', 'store_cake.jpg', '프리미엄 케이크와 디저트를 제공하는 고급 베이커리입니다.', '예약이 필요할 수 있습니다.', '02-2345-6789', 4.7, 'CUSTOM'),
     ('디저트 월드 삼성점', '서울특별시 강남구 삼성동 345-67', '10:00:00', '15:00:00', '15:30:00', '21:00:00', '22:00:00', '화요일', 'dessert_world_thumbnail.jpg', 'store_cake.jpg', '다양한 디저트와 스낵을 제공하는 카페형 베이커리입니다.', '주말에는 혼잡할 수 있습니다.', '02-3456-7890', 4.3, 'CUSTOM'),
     ('강남 케이크 하우스 강남역점', '서울특별시 강남구 서초동 456-78', '11:00:00', null, null, '20:00:00', '21:00:00', '매월 첫째 월요일', 'cake_house_thumbnail.jpg', 'store_cake.jpg', '맞춤형 케이크 전문 매장으로, 특별한 날을 위한 케이크를 제작합니다.', '예약 필수.', '02-4567-8901', 4.6, 'CUSTOM'),
@@ -61,6 +82,39 @@ VALUES
     ('캔디 케이크 구룡역점', '서울특별시 강남구 개포동 890-12', '10:00:00', null, null, '19:00:00', '20:00:00', '일요일', 'candy_cake_thumbnail.jpg', 'store_cake.jpg', '다양한 맞춤형 케이크를 제공하는 전문 매장입니다.', '예약 필수.', '02-8901-2345', 4.8, 'CUSTOM'),
     ('크리스탈 베이커리 삼성역점', '서울특별시 강남구 삼성동 901-23', '07:00:00', '14:00:00', '14:30:00', '20:00:00', '21:00:00', '월요일', 'crystal_bakery_thumbnail.jpg',  'store_bakery.jpg', '아침 일찍부터 운영하는 베이커리로, 다양한 빵과 커피를 제공합니다.', '정기휴일에 유의하세요.', '02-9012-3456', 4.4, 'GENERAL_RESERVATION'),
     ('하이디 케이크 본점', '서울특별시 강남구 역삼동 012-34', '09:00:00', null, null, '18:00:00', '19:00:00', '화요일', 'heidi_cake_thumbnail.jpg', 'store_cake.jpg', '프리미엄 케이크와 디저트를 전문으로 하는 매장입니다.', '특별한 날에는 미리 예약 부탁드립니다.', '02-0123-4567', 4.6, 'CUSTOM');
+
+# 매장 이미지 더미 데이터
+insert into tbl_store_images
+values (1000, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/store-images/75f97d70-6abf-4803-a782-bf08494ee7d5.png'),
+       (1000, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/store-images/54b20dd1-5437-45ea-bf25-40f96a722685.png');
+
+
+-- 제작 케이크 항목
+INSERT INTO menu (menu_id, menu_name, menu_price, image, menu_desc, store_id, sheet, size, cream, lettering)
+VALUES
+    (1, '초코 케이크', 15000, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/cake.jpg', '맛있는 쪼꼬', 1000, '딸기잼', '6인치', '생크림', '생일 축하합니다'),
+    (2, '레드벨벳 케이크', 17000, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/711695a2-ece7-4270-86de-f1e300972c52.jpg', '빠바빨간맛', 1000, '크림치즈', '8인치', '크림치즈', '사랑합니다'),
+    (3, '망고 케이크', 16000, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/cake.jpg', '달콤한 망고', 1000, '망고잼', '7인치', '휘핑크림', '축하합니다'),
+    (4, '녹차 케이크', 18000, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/6b96ac81-2eaf-4eee-92c4-bbcd9b113d8c.jpg', '상큼한 녹차', 1000, '고소한 녹차', '8인치', '생크림', '행복한 하루 되세요'),
+    (11, '딸기 케이크', 14000, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/cake.jpg', '신선한 딸기', 1000, '딸기잼', '6인치', '생크림', '행복한 생일'),
+    (12, '레몬 케이크', 15500, 'lemon_cake.jpg', '상큼한 레몬', 1002, '레몬커드', '7인치', '휘핑크림', '기분 좋은 하루'),
+    (13, '호두 케이크', 17500, 'walnut_cake.jpg', '고소한 호두', 1003, '호두잼', '8인치', '생크림', '사랑합니다'),
+    (14, '카라멜 케이크', 16500, 'caramel_cake.jpg', '달콤한 카라멜', 1004, '카라멜소스', '8인치', '생크림', '축하합니다'),
+
+-- 베이커리 항목
+    (5, '블루베리 머핀', 5000, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/c3ad439e-c012-4a86-ad8e-58cd66ac066f.jpg', '블루베리~~', 1000, NULL, NULL, NULL, NULL),
+    (6, '프랑스식 바게트', 4000, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/6b96ac81-2eaf-4eee-92c4-bbcd9b113d8c.jpg', '봉쥬르', 1000, NULL, NULL, NULL, NULL),
+    (7, '커스터드 도넛', 6000, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/711695a2-ece7-4270-86de-f1e300972c52.jpg', '맛있어여ㅎ', 1000, NULL, NULL, NULL, NULL),
+    (8, '치아바타', 5500, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/c3ad439e-c012-4a86-ad8e-58cd66ac066f.jpg', '부드럽고 담백', 1000, NULL, NULL, NULL, NULL),
+    (9, '크로와상', 4500, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/6b96ac81-2eaf-4eee-92c4-bbcd9b113d8c.jpg', '바삭하고 고소한', 1000, NULL, NULL, NULL, NULL),
+    (10, '프레첼', 3000, 'pretzel.jpg', '짭짤한 간식', 1001, NULL, NULL, NULL, NULL),
+    (15, '자몽 머핀', 5200, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/711695a2-ece7-4270-86de-f1e300972c52.jpg', '상큼한 자몽', 1000, NULL, NULL, NULL, NULL),
+    (16, '호두빵', 4700, 'walnut_bread.jpg', '고소한 호두빵', 1002, NULL, NULL, NULL, NULL),
+    (17, '시나몬 롤', 6200, 'cinnamon_roll.jpg', '달콤한 시나몬', 1003, NULL, NULL, NULL, NULL),
+    (18, '치즈케이크', 5500, 'cheesecake.jpg', '부드러운 치즈', 1004, NULL, NULL, NULL, NULL),
+    (19, '파운드 케이크', 5300, 'pound_cake.jpg', '진한 맛', 1005, NULL, NULL, NULL, NULL),
+    (20, '바나나 브레드', 5000, 'banana_bread.jpg', '부드러운 바나나', 1006, NULL, NULL, NULL, NULL);
+
 
 -- 일반빵 데이터 삽입
 # INSERT INTO general_menu (menu_name, menu_price, image, menu_type) VALUES

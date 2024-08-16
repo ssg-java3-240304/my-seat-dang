@@ -1,7 +1,6 @@
 package com.matdang.seatdang.store.entity;
 
 import com.matdang.seatdang.common.storeEnum.StoreType;
-import com.matdang.seatdang.menu.entity.MenuList;
 import com.matdang.seatdang.store.vo.StoreSetting;
 import jakarta.persistence.*;
 import lombok.*;

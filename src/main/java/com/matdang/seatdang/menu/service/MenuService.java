@@ -1,12 +1,14 @@
 package com.matdang.seatdang.menu.service;
 
-import com.matdang.seatdang.menu.entity.MenuList;
-import com.matdang.seatdang.menu.vo.Menu;
+import com.matdang.seatdang.menu.dto.MenuResponseDto;
+import com.matdang.seatdang.menu.entity.Menu;
 import com.matdang.seatdang.menu.repository.MenuRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +23,8 @@ public class MenuService {
 //        return ResponseEntity.ok(menu);
 //    }
 
-    public MenuList findByMenuListId(Long storeId) {
-        return menuRepository.findByMenuListId(storeId);
+    public List<MenuResponseDto> findByStoreId(Long storeId) {
+        List<Menu> menus = menuRepository.findByStoreId(storeId);
+        return MenuResponseDto.fromMenuList(menus);
     }
 }
