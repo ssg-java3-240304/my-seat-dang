@@ -24,6 +24,8 @@ class MemberRepositoryTest {
     @Autowired
     private  BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    String basicProfileImageUrl = "https://kr.object.ncloudstorage.com/myseatdang-bucket/member/3539241b-bf4c-474b-abdd-3d32f9841d9c.jpg";
+
 
 
 
@@ -44,6 +46,8 @@ class MemberRepositoryTest {
 
     @Test
     public void testCreateCustomer() {
+
+
         Customer customer = Customer.builder()
                 .memberEmail("customer@test.com")
                 .joinDate(LocalDate.now())
@@ -56,7 +60,7 @@ class MemberRepositoryTest {
                 .customerGender(Gender.MALE)
                 .customerBirthday(LocalDate.of(1990, 1, 1))
                 .customerNickName("nickname")
-                .customerProfileImage("profile.jpg")
+                .customerProfileImage(basicProfileImageUrl)
                 .build();
 
         Customer savedCustomer = (Customer) memberRepository.save(customer);
@@ -92,11 +96,11 @@ class MemberRepositoryTest {
                 .memberPhone("010-1234-5678")
                 .memberRole(MemberRole.ROLE_STORE_OWNER)
                 .memberStatus(MemberStatus.APPROVED)
-                .businessLicenseImage("business_license.jpg")
+                .businessLicenseImage(basicProfileImageUrl) // 원래 아닌데 그냥 아무사진이나 넣어둔거에요(엑박방지)
                 .businessLicense("123-45-67890")
-                .bankAccountCopy("bank_account.jpg")
+                .bankAccountCopy(basicProfileImageUrl) // 원래 아닌데 그냥 아무사진이나 넣어둔거에요 (엑박방지)
                 .bankAccount("123-456-789")
-                .storeOwnerProfileImage("profile.jpg")
+                .storeOwnerProfileImage(basicProfileImageUrl) //// 원래 아닌데 그냥 아무사진이나 넣어둔거에요
                 .store(storeVo)
                 .build();
 
