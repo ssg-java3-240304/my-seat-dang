@@ -12,7 +12,7 @@ $('#sidebar_fixed').theiaStickySidebar({
 // Read more 
 $(".content_more").hide();
     $(".show_hide").on("click", function () {
-        var txt = $(".content_more").is(':visible') ? 'Read More' : 'Read Less';
+        var txt = $(".content_more").is(':visible') ? '더보기' : '닫기';
         $(this).text(txt);
         $(this).prev('.content_more').slideToggle(200);
 });

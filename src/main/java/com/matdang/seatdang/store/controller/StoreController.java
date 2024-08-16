@@ -1,8 +1,9 @@
 package com.matdang.seatdang.store.controller;
 
 import com.matdang.seatdang.common.paging.PageCriteria;
-import com.matdang.seatdang.menu.dto.MenuDto;
-import com.matdang.seatdang.menu.service.MenuQueryService;
+import com.matdang.seatdang.menu.dto.MenuResponseDto;
+import com.matdang.seatdang.menu.service.MenuService;
+import com.matdang.seatdang.object_storage.model.dto.FileDto;
 import com.matdang.seatdang.store.dto.StoreListResponseDto;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.service.StoreService;
@@ -14,11 +15,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.matdang.seatdang.common.storeEnum.StoreType.CUSTOM;
 import static com.matdang.seatdang.common.storeEnum.StoreType.GENERAL_RESERVATION;
@@ -29,7 +30,7 @@ import static com.matdang.seatdang.common.storeEnum.StoreType.GENERAL_RESERVATIO
 @Slf4j
 public class StoreController {
     private final StoreService storeService;
-    private final MenuQueryService menuService;
+    private final MenuService menuService;
 
     @GetMapping("/store/storeList")
     public void storeList(@PageableDefault(page = 1, size = 10) Pageable pageable,
@@ -49,8 +50,6 @@ public class StoreController {
         int limit = storePage.getSize();
         int totalCount = (int) storePage.getTotalElements();
         String url = "storeList"; // 상대주소
-//        if(q != null)
-//            url += "?q=" + q;
         model.addAttribute("pageCriteria", new PageCriteria(page, limit, totalCount, url));
     }
 
@@ -72,8 +71,6 @@ public class StoreController {
         int limit = storePage.getSize();
         int totalCount = (int) storePage.getTotalElements();
         String url = "storeList"; // 상대주소
-//        if(q != null)
-//            url += "?q=" + q;
         model.addAttribute("pageCriteria", new PageCriteria(page, limit, totalCount, url));
     }
 
@@ -95,17 +92,24 @@ public class StoreController {
         int limit = storePage.getSize();
         int totalCount = (int) storePage.getTotalElements();
         String url = "storeList"; // 상대주소
-//        if(q != null)
-//            url += "?q=" + q;
         model.addAttribute("pageCriteria", new PageCriteria(page, limit, totalCount, url));
     }
 
-    @GetMapping("/store/detail")
-    public void storeDetail(@RequestParam("storeId") Long storeId, Model model){
+    @GetMapping("/store/storeDetail/{storeId}")
+    public String detail(@PathVariable Long storeId, Model model){
         Store store = storeService.findByStoreId(storeId);
-        List<MenuDto> menuList = menuService.findMenuSetByStoreId(storeId);
+        List<MenuResponseDto> menus = menuService.findByStoreId(storeId);
+
         log.debug("store = {}", store);
+        log.debug("menus = {}", menus);
+        log.debug("thumbnail = {}", store.getThumbnail());
+        log.debug("images = {}", store.getImages());
+
         model.addAttribute("store", store);
-        model.addAttribute("menus", menuList);
+        model.addAttribute("menus", menus);
+        model.addAttribute("thumbnail", store.getThumbnail());
+        model.addAttribute("images", store.getImages());
+
+        return "customer/store/storeDetail";
     }
 }

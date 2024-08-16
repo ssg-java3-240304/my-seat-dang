@@ -2,11 +2,12 @@ package com.matdang.seatdang.admin.dto;
 
 import com.matdang.seatdang.common.storeEnum.StoreType;
 import com.matdang.seatdang.store.entity.Store;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
 @Builder
 public class StoreDetailReponseDto {
     private String storeName;
+    @Enumerated(EnumType.STRING)
     private StoreType storeType;
     private String description;
     private String notice;
