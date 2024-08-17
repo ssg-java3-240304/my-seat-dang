@@ -14,7 +14,7 @@
                     statusText = "웨이팅 마감";
                     break;
                 case 3:
-                    statusText = "웨이팅 불가";
+                    statusText = "웨이팅 이용불가";
                     break;
             }
 
@@ -29,6 +29,7 @@
 <body>
 <h1>Change Waiting Status</h1>
 
+<p>현재 상태: <span th:text="${waitingStatus.waitingStatus}"></span></p>
 <!-- 상태 변경 폼 -->
 <form id="statusForm" th:action="@{/store/setting/waiting-status}" method="post">
     <!-- 상태 값을 전송할 숨겨진 필드 -->
@@ -42,7 +43,7 @@
         <button type="button" onclick="confirmStatusChange(2)">웨이팅 마감</button>
     </div>
     <div>
-        <button type="button" onclick="confirmStatusChange(3)">웨이팅 불가</button>
+        <button type="button" onclick="confirmStatusChange(3)">웨이팅 이용불가</button>
     </div>
 </form>
 </body>
