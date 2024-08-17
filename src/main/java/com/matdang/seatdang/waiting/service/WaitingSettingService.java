@@ -36,18 +36,19 @@ public class WaitingSettingService {
         return findResult;
     }
 
-    public void changeWaitingStatus(int status, Long storeId) {
+    @Transactional
+    public int changeWaitingStatus(int status, Long storeId) {
         if (status == 1) {
-            storeRepository.updateWaitingStatus(Status.ON, storeId);
-            return;
+            return storeRepository.updateWaitingStatus(Status.ON, storeId);
         }
         if (status == 2) {
-            storeRepository.updateWaitingStatus(Status.OFF, storeId);
-            return;
+            return storeRepository.updateWaitingStatus(Status.OFF, storeId);
         }
         if (status == 3) {
-            storeRepository.updateWaitingStatus(Status.OFF, storeId);
-            waitingRepository.cancelAllWaiting(storeId);
+            int result = storeRepository.updateWaitingStatus(Status.OFF, storeId);
+            return waitingRepository.cancelAllWaiting(storeId) + result;
         }
+
+        return 0;
     }
 }
