@@ -6,6 +6,8 @@ import com.matdang.seatdang.member.entitiy.MemberStatus;
 import com.matdang.seatdang.member.entitiy.StoreOwner;
 import com.matdang.seatdang.member.repository.MemberRepository;
 import com.matdang.seatdang.member.vo.StoreVo;
+import com.matdang.seatdang.store.entity.Store;
+import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.waiting.controller.dto.WaitingPeople;
 import com.matdang.seatdang.waiting.dto.UpdateRequest;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingDto;
@@ -40,6 +42,7 @@ public class WaitingController {
     // test 코드
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final StoreRepository storeRepository;
 
     @GetMapping
     public String showWaiting(@RequestParam(defaultValue = "0") int status,
@@ -131,5 +134,8 @@ public class WaitingController {
                     .build());
         }
 
+        storeRepository.save(Store.builder()
+                .storeId(1L)
+                .build());
     }
 }
