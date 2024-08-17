@@ -2,6 +2,7 @@ package com.matdang.seatdang.store.repository;
 
 import com.matdang.seatdang.common.storeEnum.StoreType;
 import com.matdang.seatdang.store.entity.Store;
+import com.matdang.seatdang.store.vo.Status;
 import java.time.LocalTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -51,4 +52,11 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
             + " where s.storeId = :storeId")
     int updateEstimatedWaitingTime(@Param("estimatedWaitingTime") LocalTime estimatedWaitingTime,
                                    @Param("storeId") Long storeId);
+
+    @Modifying
+    @Transactional
+    @Query("update Store s"
+            + " set s.storeSetting.waitingStatus = :waitingStatus"
+            + " where s.storeId = :storeId")
+    int updateWaitingStatus(@Param("waitingStatus") Status status, @Param("storeId") Long storeId);
 }
