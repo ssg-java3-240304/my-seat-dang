@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Slf4j
 @Controller
@@ -72,4 +73,24 @@ public class WaitingSettingController {
 
         return "redirect:/store/setting/estimated-waiting-time";
     }
+
+    @GetMapping("/waiting-status")
+    public String waitingStatusSetting() {
+
+        return "store/setting/waiting-status";
+    }
+
+    @PostMapping("/waiting-status")
+    public String changeWaitingStatus(@RequestParam int status) {
+        Long storeId = authService.getAuthenticatedStoreId();
+        int result = waitingSettingService.changeWaitingStatus(status, storeId);
+
+        if (result>=1) {
+            log.info("=== Change Waiting Status ===");
+        }
+        log.debug("result ={}", result);
+
+        return "redirect:/store/setting/waiting-status";
+    }
+
 }
