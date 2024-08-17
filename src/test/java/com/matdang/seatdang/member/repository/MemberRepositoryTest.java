@@ -2,7 +2,7 @@ package com.matdang.seatdang.member.repository;
 
 import com.matdang.seatdang.member.entitiy.*;
 import com.matdang.seatdang.member.vo.StoreVo;
-import common.storeEnum.StoreType;
+import com.matdang.seatdang.common.storeEnum.StoreType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
