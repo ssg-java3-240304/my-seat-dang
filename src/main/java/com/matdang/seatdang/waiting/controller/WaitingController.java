@@ -60,8 +60,6 @@ public class WaitingController {
         return "store/waiting/main";
     }
 
-
-
     @PostMapping
     public String updateStatus(@ModelAttribute UpdateRequest updateRequest, Model model) {
         int result = waitingService.updateStatus(updateRequest);
@@ -73,12 +71,7 @@ public class WaitingController {
             log.info("storeId = {},  total update = {}", updateRequest.getStoreId(), result);
         }
 
-        List<WaitingDto> waitings = waitingService.showWaiting(updateRequest.getStoreId(), updateRequest.getStatus());
-        model.addAttribute("waitingPeople", WaitingPeople.create(waitings));
-        model.addAttribute("waitings", waitings);
-        model.addAttribute("storeId", updateRequest.getStoreId());
-        model.addAttribute("status", updateRequest.getStatus());
-        return "store/waiting/main";
+        return "redirect:/store/waiting";
     }
 
     /**
