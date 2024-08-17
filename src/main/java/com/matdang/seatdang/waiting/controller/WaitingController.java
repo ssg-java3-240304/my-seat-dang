@@ -95,7 +95,6 @@ public class WaitingController {
                 .storeOwnerProfileImage("profile.jpg")
                 .store(storeVo)
                 .build();
-
         StoreOwner savedStoreOwner = (StoreOwner) memberRepository.save(storeOwner);
 
         {
@@ -128,7 +127,6 @@ public class WaitingController {
         }
 
         storeRepository.save(Store.builder()
-                .storeId(1L)
                 .build());
     }
 }
