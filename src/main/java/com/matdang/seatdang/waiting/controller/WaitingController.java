@@ -19,7 +19,10 @@ import com.matdang.seatdang.waiting.service.WaitingService;
 import com.matdang.seatdang.waiting.service.WaitingSettingService;
 import common.storeEnum.StoreType;
 import jakarta.annotation.PostConstruct;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -54,6 +57,7 @@ public class WaitingController {
         log.info("===  showWaiting  ===");
 
         List<WaitingDto> waitings = waitingService.showWaiting(storeId, status);
+        createEstimatedWaitingTime(status, model, waitings, storeId);
 
         model.addAttribute("waitingStatus", waitingSettingService.findWaitingStatus(storeId));
         model.addAttribute("waitingPeople", WaitingPeople.create(waitings));
@@ -75,6 +79,24 @@ public class WaitingController {
         }
 
         return "redirect:/store/waiting";
+    }
+
+    private void createEstimatedWaitingTime(int status, Model model, List<WaitingDto> waitings, Long storeId) {
+        if (status == 0) {
+            int diff = 0;
+            long elapsedTime = Duration.between(waitings.get(0).getCreatedDate(), LocalDateTime.now()).toMinutes();
+            int estimatedTime = waitingSettingService.findEstimatedWaitingTime(storeId).getMinute();
+
+            if (estimatedTime > elapsedTime) {
+                diff = estimatedTime - (int) elapsedTime;
+            }
+
+            int totalMinutes = (waitings.size() - 1) * estimatedTime + diff;
+            int hours = totalMinutes / 60;
+            int minutes = totalMinutes % 60;
+
+            model.addAttribute("estimatedTime", LocalTime.of(hours, minutes));
+        }
     }
 
     /**
