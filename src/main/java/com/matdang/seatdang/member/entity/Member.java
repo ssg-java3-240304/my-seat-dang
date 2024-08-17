@@ -1,4 +1,4 @@
-package com.matdang.seatdang.member.entitiy;
+package com.matdang.seatdang.member.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,19 +1,12 @@
 <!DOCTYPE html>
-<!--원래 account.html 페이지임-->
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{customer/layout/default}">
 <head>
-	<meta charset="UTF-8">
-	<title>Title</title>
-	<!--    main page only css-->
-	<link th:href="@{/css/customer/booking-sign_up.css}" rel="stylesheet">
-<!--	스크롤추가-->
-<!--	<style>-->
-<!--		.scrollable-container {-->
-<!--			max-height: 80vh; /* Adjust this value as needed */-->
-<!--			overflow-y: scroll;-->
-<!--		}-->
-<!--	</style>-->
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--    main page only css-->
+    <link th:href="@{/css/customer/booking-sign_up.css}" rel="stylesheet">
+</head>
 <body>
 <main class="bg_gray pattern" layout:fragment="main">
     <div class="container margin_60_40">
@@ -27,67 +20,61 @@
                     </div>
                     <!-- /head -->
                     <div class="main">
-                        <form th:action="@{/signupProc}" method="post" name="joinForm" enctype="multipart/form-data">
-                            <!--						<a href="#0" class="social_bt facebook">Sign up with Facebook</a>-->
-                            <!--						<a href="#0" class="social_bt google">Sign up with Google</a>-->
-                            <!--						<div class="divider"><span>Or</span></div>-->
-                            <!--						이름-->
+                        <form th:action="@{/signupProc}" method="post" name="joinForm" id="joinForm" enctype="multipart/form-data">
+                            <!-- 이름 -->
                             <h6>이름</h6>
                             <div class="form-group">
                                 <input class="form-control" name="memberName" placeholder="이름을 입력해주세요">
-                                <!--							<i class="icon_pencil"></i>-->
                             </div>
-                            <!--						닉네임-->
+                            <!-- 닉네임 -->
                             <h6>닉네임</h6>
                             <div class="form-group">
-                                <input class="form-control" name="customerNickName" placeholder="닉네임을 입력해주세요">
-                                <!--							<i class="icon_pencil"></i>-->
-                                <button class="btn btn-primary" type="button">닉네임 중복확인</button>
+                                <input class="form-control" name="customerNickName" id="customerNickName" placeholder="닉네임을 입력해주세요">
+                                <button class="btn btn-primary" type="button" id="checkNicknameBtn">닉네임 중복확인</button>
+                                <small id="nicknameFeedback" style="display:none;"></small>
                             </div>
-                            <!--						휴대전화번호 인증 -->
+                            <!-- 휴대전화번호 인증 -->
                             <h6>휴대전화번호</h6>
                             <div class="form-group">
-                                <!--								<i class="icon_pencil"></i>-->
                                 <input class="form-control" name="memberPhone" placeholder="휴대전화번호를 입력해주세요">
                                 <button class="btn btn-primary" type="button">휴대폰인증</button>
                             </div>
+                            <!-- 이메일 -->
                             <h6>이메일</h6>
-                            <!--						이메일-->
                             <div class="form-group col-8">
-                                <input class="form-control" name="memberEmail" placeholder="이메일을 입력해주세요">
-                                <!--							<i class="icon_mail"></i>-->
-                                <button class="btn btn-primary" type="button">이메일인증</button>
+                                <input class="form-control" name="memberEmail" id="memberEmail" placeholder="이메일을 입력해주세요">
+                                <button class="btn btn-primary" type="button" id="checkEmailBtn">이메일 중복확인</button>
+                                <small id="emailFeedback" style="display:none;"></small>
                             </div>
-                            <h6>비밀번호</h6>
-                            <!--						비밀번호-->
+                            <!-- 비밀번호 -->
+                            <h6>비밀번호(영문,숫자,특수문자를 혼합하여 5자 이상)</h6>
                             <div class="form-group add_bottom_15">
-                                <input class="form-control" type="password" name="memberPassword"
-                                       placeholder="비밀번호를 입력해주세요" id="password_sign">
-                                <input class="form-control" type="password" placeholder="비밀번호를 확인"
-                                       id="password_sign_check">
-                                <!--							<i class="icon_lock"></i>-->
-                                <button class="btn btn-primary" type="button">비밀번호 중복확인</button>
+                                <input class="form-control" type="password" name="memberPassword" placeholder="비밀번호를 입력해주세요(영문,숫자,특수문자를 혼합하여 5자 이상)" id="password_sign">
+                                <input class="form-control" type="password" placeholder="비밀번호를 확인" id="password_sign_check">
+                                <small id="passwordFeedback" style="display:none;"></small>
+                                <button class="btn btn-primary" type="button" id="checkPasswordBtn">비밀번호 일치확인</button>
                             </div>
-                            <!--						프로필이미지-->
-                            <!--						이미지업로드하면 미리보기기능 추가아직 안함-->
+                            <!-- 프로필이미지 -->
                             <h6>프로필이미지(선택)</h6>
                             <div class="form-group add_bottom_15">
                                 <input type="file" name="customerProfileImage"/>
                             </div>
+                            <!-- 성별 -->
                             <h6>성별(선택)</h6>
                             <div class="form-group col-8">
-                                <select class="form-control" name="customerGender">
-                                    <option value="NONE">선택안함</option>
-                                    <option value="MALE">남</option>
-                                    <option value="FEMALE">여</option>
+                                <select class="form-select" id="inputGender" name="customerGender">
+                                    <option value="NONE" th:selected="${customerGender eq 'NONE'}">선택안함</option>
+                                    <option value="MALE" th:selected="${customerGender eq 'MALE'}">남</option>
+                                    <option value="FEMALE" th:selected="${customerGender eq 'FEMALE'}">여</option>
                                 </select>
                             </div>
+                            <!-- 생일 -->
                             <h6>생일(선택)</h6>
                             <div class="form-group col-8">
-                                <input class="form-control" type="date" name="customerBirthday"
-                                       placeholder="생일을 선택해주세요">
+                                <input class="form-control" type="date" name="customerBirthday" >
                             </div>
-                            <input type="submit" class="btn_1 full-width mb_5" value="가입하기">
+                            <!-- 가입 버튼 -->
+                            <input type="submit" class="btn_1 full-width mb_5" value="가입하기" id="submitBtn">
                         </form>
                         <div class="text-center">
                             계정이 있나요? <a th:href="@{/login}">로그인</a>
@@ -102,11 +89,152 @@
     </div>
     <!-- /container -->
 </main>
-<div layout:fragment="js">
-    <!-- 이 페이지 전용 스크립트 -->
-    <script th:src="@{/customer/js/jarallax.min.js}"></script>
-    <script th:src="@{/customer/js/jarallax-video.min.js}"></script>
-</div>
+<!-- 스크립트 -->
 
+</div>
+<th:block layout:fragment="js">
+    <!-- 이 페이지 전용 스크립트 -->
+    <script th:src="@{/js/customer/jarallax.min.js}"></script>
+    <script th:src="@{/js/customer/jarallax-video.min.js}"></script>
+    <script>
+        // 인증 상태를 추적하는 변수
+        let isNicknameVerified = false;
+        let isEmailVerified = false;
+        let isPasswordMatched = false;
+
+        // 닉네임 입력이 변경될 때 인증 상태 초기화
+        $("#customerNickName").on("input", function() {
+            isNicknameVerified = false;
+            $("#checkNicknameBtn").css("background-color", ""); // 버튼 색상 초기화
+            $("#nicknameFeedback").hide(); // 피드백 메시지 숨기기
+        });
+
+        // 이메일 입력이 변경될 때 인증 상태 초기화
+        $("#memberEmail").on("input", function() {
+            isEmailVerified = false;
+            $("#checkEmailBtn").css("background-color", ""); // 버튼 색상 초기화
+            $("#emailFeedback").hide(); // 피드백 메시지 숨기기
+        });
+
+        // 비밀번호 입력이 변경될 때 인증 상태 초기화
+        $("#password_sign, #password_sign_check").on("input", function() {
+            isPasswordMatched = false;
+            $("#checkPasswordBtn").css("background-color", ""); // 버튼 색상 초기화
+            $("#passwordFeedback").hide(); // 피드백 메시지 숨기기
+        });
+
+        // 닉네임 중복 확인
+        $("#checkNicknameBtn").click(function() {
+            const nickname = $("#customerNickName").val().trim(); // 공백 제거
+
+            if (nickname === "") {
+                $("#nicknameFeedback").text("닉네임을 입력해주세요.").css("color", "red").show();
+                return;
+            }
+
+            $.ajax({
+                url: '/check-nickname',
+                type: 'POST',
+                data: { customerNickName: nickname },
+                success: function(isDuplicate) {
+                    if (isDuplicate) {
+                        $("#nicknameFeedback").text("이미 사용 중인 닉네임입니다.").css("color", "red").show();
+                        isNicknameVerified = false; // 중복이면 인증 실패
+                        $("#checkNicknameBtn").css("background-color", "red"); // 버튼 색상 변경
+                    } else {
+                        $("#nicknameFeedback").text("사용 가능한 닉네임입니다.").css("color", "green").show();
+                        isNicknameVerified = true; // 인증 성공
+                        $("#checkNicknameBtn").css("background-color", "green"); // 버튼 색상 변경
+                    }
+                },
+                error: function() {
+                    $("#nicknameFeedback").text("닉네임 중복 확인 중 오류가 발생했습니다.").css("color", "red").show();
+                    $("#checkNicknameBtn").css("background-color", "red"); // 버튼 색상 변경
+                }
+            });
+        });
+
+        // 이메일 중복 확인
+        $("#checkEmailBtn").click(function() {
+            const email = $("#memberEmail").val().trim();
+
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!emailPattern.test(email)) {
+                $("#emailFeedback").text("유효한 이메일 주소를 입력해주세요. 예: example@domain.com").css("color", "red").show();
+                $("#checkEmailBtn").css("background-color", "red"); // 버튼 색상 변경
+                return;
+            }
+
+            $.ajax({
+                url: '/check-email',
+                type: 'POST',
+                data: { memberEmail: email },
+                success: function(isDuplicate) {
+                    if (isDuplicate) {
+                        $("#emailFeedback").text("이미 사용 중인 이메일입니다.").css("color", "red").show();
+                        isEmailVerified = false; // 중복이면 인증 실패
+                        $("#checkEmailBtn").css("background-color", "red"); // 버튼 색상 변경
+                    } else {
+                        $("#emailFeedback").text("사용 가능한 이메일입니다.").css("color", "green").show();
+                        isEmailVerified = true; // 인증 성공
+                        $("#checkEmailBtn").css("background-color", "green"); // 버튼 색상 변경
+                    }
+                },
+                error: function() {
+                    $("#emailFeedback").text("이메일 중복 확인 중 오류가 발생했습니다.").css("color", "red").show();
+                    $("#checkEmailBtn").css("background-color", "red"); // 버튼 색상 변경
+                }
+            });
+        });
+
+        // 비밀번호 검증을 위한 정규식
+        const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{5,}$/;
+
+        // 비밀번호 일치 확인 및 조건 확인
+        $("#checkPasswordBtn").click(function() {
+            const password = $("#password_sign").val();
+            const confirmPassword = $("#password_sign_check").val();
+
+            if (!passwordPattern.test(password)) {
+                $("#passwordFeedback").text("비밀번호는 영문, 숫자, 특수문자를 혼합하여 5자 이상이어야 합니다.").css("color", "red").show();
+                isPasswordMatched = false;
+                $("#checkPasswordBtn").css("background-color", "red"); // 버튼 색상 변경
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                $("#passwordFeedback").text("비밀번호가 일치하지 않습니다.").css("color", "red").show();
+                isPasswordMatched = false;
+                $("#checkPasswordBtn").css("background-color", "red"); // 버튼 색상 변경
+            } else {
+                $("#passwordFeedback").text("비밀번호가 일치합니다.").css("color", "green").show();
+                isPasswordMatched = true;
+                $("#checkPasswordBtn").css("background-color", "green"); // 버튼 색상 변경
+            }
+        });
+
+        // 폼을 제출할 때 인증 상태를 확인
+        $("#joinForm").submit(function(event) {
+            if (!isNicknameVerified) {
+                alert("닉네임 중복 확인을 해주세요.");
+                event.preventDefault(); // 폼 제출 중단
+                return;
+            }
+
+            if (!isEmailVerified) {
+                alert("이메일 중복 확인을 해주세요.");
+                event.preventDefault(); // 폼 제출 중단
+                return;
+            }
+
+            if (!isPasswordMatched) {
+                alert("비밀번호가 일치하지 않습니다. 비밀번호를 확인해주세요.");
+                event.preventDefault(); // 폼 제출 중단
+                return;
+            }
+        });
+    </script>
+</th:block>
 </body>
 </html>
