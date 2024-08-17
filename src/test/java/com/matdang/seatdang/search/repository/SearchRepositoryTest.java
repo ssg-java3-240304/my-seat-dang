@@ -166,7 +166,7 @@ class SearchRepositoryTest {
         assertThat(store.getStoreId()).isEqualTo(id);
     }
 
-    @Disabled
+//    @Disabled
     @DisplayName("더미데이터 생성")
     @Test
     public void test8() {
