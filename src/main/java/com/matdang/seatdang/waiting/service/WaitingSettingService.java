@@ -52,4 +52,16 @@ public class WaitingSettingService {
 
         return 0;
     }
+
+    /**
+     * 상점 생성시, StoreSetting이 생성되면, null값이 들어오지 않아 삭제해도 됨
+     * test code 생략
+     */
+    public WaitingStatus findWaitingStatus(Long storeId) {
+        WaitingStatus findResult = storeQueryRepository.findWaitingStatus(storeId);
+        if (findResult == null) {
+            return WaitingStatus.UNAVAILABLE;
+        }
+        return findResult;
+    }
 }
