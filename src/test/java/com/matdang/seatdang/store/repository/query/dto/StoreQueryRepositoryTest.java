@@ -25,8 +25,7 @@ class StoreQueryRepositoryTest {
     @DisplayName("이용가능한 웨이팅 시간 가져오기")
     public void findAvailableWaitingTime() {
         // given
-        storeRepository.save(Store.builder()
-                .storeId(1L)
+        Store store = storeRepository.save(Store.builder()
                 .storeSetting(StoreSetting.builder()
                         .waitingTime(WaitingTime.builder()
                                 .waitingOpenTime(LocalTime.of(9, 0))
@@ -36,7 +35,7 @@ class StoreQueryRepositoryTest {
                 .build());
         // when
 
-        AvailableWaitingTime findResult = storeQueryRepository.findAvailableWaitingTime(1L);
+        AvailableWaitingTime findResult = storeQueryRepository.findAvailableWaitingTime(store.getStoreId());
 
         // then
         assertThat(findResult).isNotNull();
@@ -48,17 +47,16 @@ class StoreQueryRepositoryTest {
     @DisplayName("웨이팅 예상 대기 시간 가져오기")
     public void findEstimatedWaitingTime() {
         // given
-        storeRepository.save(Store.builder()
-                .storeId(1L)
+        Store store = storeRepository.save(Store.builder()
                 .storeSetting(StoreSetting.builder()
                         .waitingTime(WaitingTime.builder()
-                                .estimatedWaitingTime(LocalTime.of(0,20))
+                                .estimatedWaitingTime(LocalTime.of(0, 20))
                                 .build())
                         .build())
                 .build());
         // when
 
-        LocalTime findResult = storeQueryRepository.findEstimatedWaitingTime(1L);
+        LocalTime findResult = storeQueryRepository.findEstimatedWaitingTime(store.getStoreId());
 
         // then
         assertThat(findResult).isNotNull();
