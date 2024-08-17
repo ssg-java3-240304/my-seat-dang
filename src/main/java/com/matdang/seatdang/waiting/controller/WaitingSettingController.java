@@ -4,6 +4,7 @@ import com.matdang.seatdang.auth.service.AuthService;
 import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.store.repository.query.dto.AvailableWaitingTime;
 import com.matdang.seatdang.waiting.service.WaitingSettingService;
+import java.time.LocalTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -41,11 +42,34 @@ public class WaitingSettingController {
                 availableWaitingTime.getWaitingCloseTime(), storeId);
         log.debug("==========");
 
-
         if (result == 1) {
             log.info("=== update available time ===");
         }
 
         return "redirect:/store/setting/available-waiting-time";
+    }
+
+    @GetMapping("/estimated-waiting-time")
+    public String estimatedTimeSetting(Model model) {
+        Long storeId = authService.getAuthenticatedStoreId();
+        model.addAttribute("estimatedWaitingTime", waitingSettingService.findEstimatedWaitingTime(storeId).getMinute());
+
+        return "store/setting/estimated-waiting-time";
+    }
+
+    @PostMapping("/estimated-waiting-time")
+    public String updateEstimatedTime(int estimatedWaitingTime) {
+        Long storeId = authService.getAuthenticatedStoreId();
+        log.debug("localTime = {}", estimatedWaitingTime);
+
+        log.debug("====== update ====");
+        int result = storeRepository.updateEstimatedWaitingTime(LocalTime.of(0, estimatedWaitingTime), storeId);
+        log.debug("==========");
+
+        if (result == 1) {
+            log.info("=== update estimated time ===");
+        }
+
+        return "redirect:/store/setting/estimated-waiting-time";
     }
 }
