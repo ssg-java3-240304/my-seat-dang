@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface StoreRepository extends JpaRepository<Store, Long> {
     Page<Store> findByStoreNameContainingAndStoreAddressContainingOrderByStoreAddressDesc(String storeName,
@@ -34,6 +35,7 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     Store findByStoreId(Long storeId);
 
     @Modifying
+    @Transactional
     @Query("update Store s"
             + " set s.storeSetting.waitingTime.waitingOpenTime = :waitingOpenTime,"
             + " s.storeSetting.waitingTime.waitingCloseTime = :waitingCloseTime"
@@ -41,7 +43,5 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     int updateWaitingAvailableTime(@Param("waitingOpenTime") LocalTime waitingOpenTime,
                                    @Param("waitingCloseTime") LocalTime waitingCloseTime,
                                    @Param("storeId") Long storeId);
-
-
 
 }
