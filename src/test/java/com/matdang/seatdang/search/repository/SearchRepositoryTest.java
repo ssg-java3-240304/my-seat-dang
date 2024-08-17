@@ -2,7 +2,7 @@ package com.matdang.seatdang.search.repository;
 
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
-import com.matdang.seatdang.store.vo.ReservationOnOff;
+import com.matdang.seatdang.store.vo.Status;
 import com.matdang.seatdang.store.vo.StoreSetting;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
@@ -232,8 +232,8 @@ class SearchRepositoryTest {
                             .storeSetting(StoreSetting.builder()
                                     .reservationOpenTime(LocalTime.of(10,0))
                                     .reservationCloseTime(LocalTime.of(20,0))
-                                    .reservationOnOff(ReservationOnOff.OFF)
-                                    .waitingOnOff(ReservationOnOff.ON)
+                                    .reservationOnOff(Status.OFF)
+                                    .waitingStatus(Status.ON)
                                     .build()
                             )
                             .build();
@@ -257,8 +257,8 @@ class SearchRepositoryTest {
                             .storeSetting(StoreSetting.builder()
                                     .reservationOpenTime(LocalTime.of(10,0))
                                     .reservationCloseTime(LocalTime.of(20,0))
-                                    .reservationOnOff(ReservationOnOff.ON)
-                                    .waitingOnOff(ReservationOnOff.OFF)
+                                    .reservationOnOff(Status.ON)
+                                    .waitingStatus(Status.OFF)
                                     .build()
                             )
                             .build();
@@ -282,8 +282,8 @@ class SearchRepositoryTest {
                             .storeSetting(StoreSetting.builder()
                                     .reservationOpenTime(LocalTime.of(10,0))
                                     .reservationCloseTime(LocalTime.of(20,0))
-                                    .reservationOnOff(ReservationOnOff.ON)
-                                    .waitingOnOff(ReservationOnOff.OFF)
+                                    .reservationOnOff(Status.ON)
+                                    .waitingStatus(Status.OFF)
                                     .build()
                             )
                             .build();
