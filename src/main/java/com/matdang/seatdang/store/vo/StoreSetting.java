@@ -1,6 +1,7 @@
 package com.matdang.seatdang.store.vo;
 
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Enumerated;
@@ -20,9 +21,10 @@ public class StoreSetting {
     private LocalTime reservationCloseTime;
     @Enumerated(EnumType.STRING)
     private ReservationOnOff reservationOnOff;
-    private LocalTime waitingOpenTime;
-    private LocalTime waitingCloseTime;
+
+    @Embedded
+    private WaitingTime waitingTime;
+
     @Enumerated(EnumType.STRING)
     private ReservationOnOff waitingOnOff;
-    private LocalTime expectedWaitingTime;
 }
