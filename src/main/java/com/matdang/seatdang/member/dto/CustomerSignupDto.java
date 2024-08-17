@@ -1,6 +1,6 @@
 package com.matdang.seatdang.member.dto;
 
-import com.matdang.seatdang.member.entitiy.Gender;
+import com.matdang.seatdang.member.entity.Gender;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 

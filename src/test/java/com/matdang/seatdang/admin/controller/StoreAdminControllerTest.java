@@ -20,4 +20,3 @@ class StoreAdminControllerTest {
 //        assertThat(store).allMatch
 
     }
-
