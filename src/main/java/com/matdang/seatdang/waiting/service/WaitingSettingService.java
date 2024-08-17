@@ -21,4 +21,13 @@ public class WaitingSettingService {
 
         return findResult;
     }
+
+    public LocalTime findEstimatedWaitingTime(Long storeId) {
+        LocalTime findResult = storeQueryRepository.findEstimatedWaitingTime(storeId);
+        if (findResult == null) {
+            return LocalTime.of(0, 0);
+        }
+
+        return findResult;
+    }
 }
