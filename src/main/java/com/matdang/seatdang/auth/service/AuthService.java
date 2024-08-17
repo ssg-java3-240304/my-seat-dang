@@ -3,6 +3,7 @@ package com.matdang.seatdang.auth.service;
 import com.matdang.seatdang.auth.dto.CustomOAuth2User;
 import com.matdang.seatdang.auth.principal.CustomerUserDetails;
 import com.matdang.seatdang.member.entity.Member;
+import com.matdang.seatdang.auth.principal.StoreOwnerUserDetails;
 import com.matdang.seatdang.member.repository.MemberRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,7 +26,6 @@ public class AuthService {
     public AuthService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
-
     public Member getAuthenticatedMember() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -43,11 +43,17 @@ public class AuthService {
         return null; // 인증된 사용자가 없으면 null 반환
     }
 
+    public Long getAuthenticatedStoreId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        if (authentication != null) {
+            Object principal = authentication.getPrincipal();
 
+            if (principal instanceof StoreOwnerUserDetails) {
+                return  ((StoreOwnerUserDetails) principal).getStore().getStoreId();
+            }
+        }
 
-
-
-
-
+        return null;
+    }
 }

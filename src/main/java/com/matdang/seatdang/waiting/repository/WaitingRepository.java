@@ -12,10 +12,6 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
 
     List<Waiting> findAllByStoreId(Long storeId);
 
-
-
-
-
     @Modifying
     @Query("update Waiting w set w.waitingOrder = w.waitingOrder-1"
             + " where w.waitingStatus = com.matdang.seatdang.waiting.entity.WaitingStatus.WAITING"
@@ -35,4 +31,12 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
             + " THEN CURRENT_TIMESTAMP ELSE w.visitedTime END"
             + " where w.id = :id")
     int updateStatus(@Param("waitingStatus") WaitingStatus waitingStatus, @Param("id") Long id);
+
+    @Modifying
+    @Query("update Waiting w"
+            + " set w.waitingStatus = com.matdang.seatdang.waiting.entity.WaitingStatus.SHOP_CANCELED"
+            + " where w.waitingStatus = com.matdang.seatdang.waiting.entity.WaitingStatus.WAITING"
+            + " and w.storeId = :storeId")
+    int cancelAllWaiting(@Param("storeId") Long storeId);
+
 }

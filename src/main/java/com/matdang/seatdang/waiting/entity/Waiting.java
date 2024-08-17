@@ -1,5 +1,6 @@
 package com.matdang.seatdang.waiting.entity;
 
+import com.matdang.seatdang.payment.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,8 +11,9 @@ import java.time.LocalDateTime;
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
-public class Waiting {
+public class Waiting extends BaseEntity {
     @Id @GeneratedValue
     private Long id;
 
@@ -24,8 +26,5 @@ public class Waiting {
 
     @Enumerated(EnumType.STRING)
     private WaitingStatus waitingStatus;
-
-    // TODO : @CreatedDate 사용
-    private LocalDateTime createdAt;
     private LocalDateTime visitedTime;
 }
