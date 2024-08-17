@@ -79,7 +79,7 @@ public class CustomerSignupService {
         return customerRepository.existsByCustomerNickName(customerNickName);
     }
 
-//    public boolean isEmailDuplicate(String memberEmail) {
-//        return memberRepository.existsByMemberEmail(memberEmail);
-//    }
+    public boolean isEmailDuplicate(String memberEmail) {
+        return memberRepository.existsByMemberEmail(memberEmail);
+    }
 }

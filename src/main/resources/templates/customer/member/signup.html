@@ -41,7 +41,7 @@
                             <!-- 이메일 -->
                             <h6>이메일</h6>
                             <div class="form-group col-8">
-                                <input class="form-control" name="memberEmail" placeholder="이메일을 입력해주세요">
+                                <input class="form-control" name="memberEmail" id="memberEmail" placeholder="이메일을 입력해주세요">
                                 <button class="btn btn-primary" type="button" id="checkEmailBtn">이메일 중복확인</button>
                             </div>
                             <!-- 비밀번호 -->
@@ -97,17 +97,23 @@
     <script>
         // 인증 상태를 추적하는 변수
         let isNicknameVerified = false;
+        let isEmailVerified = false;
 
         // 닉네임 입력이 변경될 때 인증 상태 초기화
         $("#customerNickName").on("input", function() {
             isNicknameVerified = false;
         });
 
+        // 이메일 입력이 변경될 때 인증 상태 초기화
+        $("#memberEmail").on("input", function() {
+            isEmailVerified = false;
+        });
 
+        // 닉네임 중복 확인
         $("#checkNicknameBtn").click(function() {
-            const nickname = $("#customerNickName").val();
+            const nickname = $("#customerNickName").val().trim(); // 공백 제거
 
-            if (!nickname) {
+            if (nickname === "") {
                 alert("닉네임을 입력해주세요.");
                 return;
             }
@@ -131,17 +137,68 @@
             });
         });
 
+        // 이메일 중복 확인
+        $("#checkEmailBtn").click(function() {
+            const email = $("#memberEmail").val().trim();
+
+            console.log("입력된 이메일:", email); // 입력된 이메일 값 확인
+
+            /**
+             * @ 앞쪽 공백없는 모든 문자
+             * @ 뒤쪽 공백없는 모든 문자
+             * . 뒤에 1자리 이상 문자
+             *
+             *
+             * @type {RegExp}
+             */
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            console.log("정규식 검사 결과:", emailPattern.test(email)); // 정규식 결과 확인
+
+
+
+            if (!emailPattern.test(email)) {
+                alert("유효한 이메일 주소를 입력해주세요. 예: example@domain.com");
+                return;
+            }
+
+            $.ajax({
+                url: '/check-email',
+                type: 'POST',
+                data: { memberEmail: email },
+                success: function(isDuplicate) {
+                    if (isDuplicate) {
+                        alert("이미 사용 중인 이메일입니다.");
+                        isEmailVerified = false; // 중복이면 인증 실패
+                    } else {
+                        alert("사용 가능한 이메일입니다.");
+                        isEmailVerified = true; // 인증 성공
+                    }
+                },
+                error: function() {
+                    alert("이메일 중복 확인 중 오류가 발생했습니다.");
+                }
+            });
+        });
+
         // 폼을 제출할 때 인증 상태를 확인
         $("#joinForm").submit(function(event) {
             if (!isNicknameVerified) {
                 alert("닉네임 중복 확인을 해주세요.");
                 event.preventDefault(); // 폼 제출 중단
+                return;
+            }
+
+            if (!isEmailVerified) {
+                alert("이메일 중복 확인을 해주세요.");
+                event.preventDefault(); // 폼 제출 중단
+                return;
             }
         });
-
-
-
     </script>
+
+
+
 </th:block>
 
 

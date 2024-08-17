@@ -35,13 +35,13 @@ public class SignupController {
         return customerSignupService.isNicknameDuplicate(customerNickName);
     }
 
-//    //이메일 중복 확인
-//    @PostMapping("/check-email")
-//    @ResponseBody
-//    public boolean checkMemberEmail(@RequestParam String memberEmail) {
-//        log.debug("입력한 이메일 : {}", memberEmail);
-//        return customerSignupService.isEmailDuplicate(memberEmail);
-//    }
+    //이메일 중복 확인
+    @PostMapping("/check-email")
+    @ResponseBody
+    public boolean checkMemberEmail(@RequestParam String memberEmail) {
+        log.debug("입력한 이메일 : {}", memberEmail);
+        return customerSignupService.isEmailDuplicate(memberEmail);
+    }
 
     // 사용자 회원가입 값 요청
     @PostMapping("/signupProc")

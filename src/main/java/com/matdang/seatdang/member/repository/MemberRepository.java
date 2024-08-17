@@ -14,7 +14,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("SELECT c FROM Customer c JOIN c.oauthIdentifiers oi WHERE oi = :oauthIdentifier")
     Customer findByOauthIdentifier(@Param("oauthIdentifier") String oauthIdentifier);
 
-    // 닉네임 중복 확인
-    boolean existsByCustomerNickName(String customerNickName);
 
+    boolean existsByMemberEmail(String memberEmail);
 }
