@@ -34,6 +34,7 @@ public class WaitingSettingController {
     @PostMapping("/available-waiting-time")
     public String updateAvailableTime(@ModelAttribute AvailableWaitingTime availableWaitingTime) {
         Long storeId = authService.getAuthenticatedStoreId();
+        log.debug("availableWaitingTime = {}", availableWaitingTime);
 
         log.debug("====== update ====");
         int result = storeRepository.updateWaitingAvailableTime(availableWaitingTime.getWaitingOpenTime(),
