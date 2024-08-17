@@ -4,6 +4,7 @@ import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.store.repository.query.dto.AvailableWaitingTime;
 import com.matdang.seatdang.store.repository.query.dto.StoreQueryRepository;
 import com.matdang.seatdang.store.vo.Status;
+import com.matdang.seatdang.store.vo.WaitingStatus;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import java.time.LocalTime;
 import lombok.RequiredArgsConstructor;
@@ -39,13 +40,13 @@ public class WaitingSettingService {
     @Transactional
     public int changeWaitingStatus(int status, Long storeId) {
         if (status == 1) {
-            return storeRepository.updateWaitingStatus(Status.ON, storeId);
+            return storeRepository.updateWaitingStatus(WaitingStatus.OPEN, storeId);
         }
         if (status == 2) {
-            return storeRepository.updateWaitingStatus(Status.OFF, storeId);
+            return storeRepository.updateWaitingStatus(WaitingStatus.CLOSE, storeId);
         }
         if (status == 3) {
-            int result = storeRepository.updateWaitingStatus(Status.OFF, storeId);
+            int result = storeRepository.updateWaitingStatus(WaitingStatus.UNAVAILABLE, storeId);
             return waitingRepository.cancelAllWaiting(storeId) + result;
         }
 

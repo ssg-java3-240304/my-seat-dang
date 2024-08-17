@@ -144,7 +144,8 @@ class WaitingSettingServiceTest {
         waitingSettingService.changeWaitingStatus(1, store.getStoreId());
 
         // then
-        assertThat(storeRepository.findByStoreId(store.getStoreId()).getStoreSetting().getWaitingStatus()).isEqualTo(Status.ON);
+        assertThat(storeRepository.findByStoreId(store.getStoreId()).getStoreSetting().getWaitingStatus()).isEqualTo(
+                com.matdang.seatdang.store.vo.WaitingStatus.OPEN);
     }
 
     @Test
@@ -164,7 +165,8 @@ class WaitingSettingServiceTest {
         waitingSettingService.changeWaitingStatus(2, store.getStoreId());
 
         // then
-        assertThat(storeRepository.findByStoreId(store.getStoreId()).getStoreSetting().getWaitingStatus()).isEqualTo(Status.OFF);
+        assertThat(storeRepository.findByStoreId(store.getStoreId()).getStoreSetting().getWaitingStatus()).isEqualTo(
+                com.matdang.seatdang.store.vo.WaitingStatus.CLOSE);
     }
 
     @Test
@@ -196,7 +198,8 @@ class WaitingSettingServiceTest {
         waitingSettingService.changeWaitingStatus(3, store.getStoreId());
 
         // then
-        assertThat(storeRepository.findByStoreId(store.getStoreId()).getStoreSetting().getWaitingStatus()).isEqualTo(Status.OFF);
+        assertThat(storeRepository.findByStoreId(store.getStoreId()).getStoreSetting().getWaitingStatus()).isEqualTo(
+                com.matdang.seatdang.store.vo.WaitingStatus.UNAVAILABLE);
         assertThat(waitingQueryRepository.findAllByStoreIdAndWaitingStatus( store.getStoreId(), WaitingStatus.WAITING).size())
                 .isEqualTo(0);
         assertThat(waitingQueryRepository.findAllByStoreIdAndWaitingStatus( store.getStoreId(), WaitingStatus.SHOP_CANCELED).size())

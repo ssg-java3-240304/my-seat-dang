@@ -25,5 +25,5 @@ public class StoreSetting {
     private WaitingTime waitingTime;
 
     @Enumerated(EnumType.STRING)
-    private Status waitingStatus;
+    private WaitingStatus waitingStatus;
 }

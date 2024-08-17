@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.vo.Status;
+import com.matdang.seatdang.store.vo.WaitingStatus;
 import jakarta.persistence.EntityManager;
 import java.time.LocalTime;
 import org.junit.jupiter.api.DisplayName;
@@ -72,7 +73,7 @@ class StoreRepositoryTest {
         em.clear();
 
         // when
-        int result = storeRepository.updateWaitingStatus(Status.valueOf(status), store.getStoreId());
+        int result = storeRepository.updateWaitingStatus(WaitingStatus.valueOf(status), store.getStoreId());
 
         // then
         assertThat(result).isEqualTo(1);
