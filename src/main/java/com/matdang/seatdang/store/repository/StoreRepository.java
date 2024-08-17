@@ -44,4 +44,11 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
                                    @Param("waitingCloseTime") LocalTime waitingCloseTime,
                                    @Param("storeId") Long storeId);
 
+    @Modifying
+    @Transactional
+    @Query("update Store s"
+            + " set s.storeSetting.waitingTime.estimatedWaitingTime = :estimatedWaitingTime"
+            + " where s.storeId = :storeId")
+    int updateEstimatedWaitingTime(@Param("estimatedWaitingTime") LocalTime estimatedWaitingTime,
+                                   @Param("storeId") Long storeId);
 }
