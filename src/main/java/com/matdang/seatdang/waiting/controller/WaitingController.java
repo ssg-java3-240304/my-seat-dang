@@ -16,6 +16,7 @@ import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.service.WaitingService;
+import com.matdang.seatdang.waiting.service.WaitingSettingService;
 import common.storeEnum.StoreType;
 import jakarta.annotation.PostConstruct;
 import java.time.LocalDate;
@@ -38,6 +39,7 @@ import java.util.List;
 public class WaitingController {
     private final WaitingRepository waitingRepository;
     private final WaitingService waitingService;
+    private final WaitingSettingService waitingSettingService;
     private final AuthService authService;
     // test 코드
     private final MemberRepository memberRepository;
@@ -53,6 +55,7 @@ public class WaitingController {
 
         List<WaitingDto> waitings = waitingService.showWaiting(storeId, status);
 
+        model.addAttribute("waitingStatus", waitingSettingService.findWaitingStatus(storeId));
         model.addAttribute("waitingPeople", WaitingPeople.create(waitings));
         model.addAttribute("waitings", waitings);
         model.addAttribute("storeId", storeId);
