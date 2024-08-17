@@ -4,6 +4,7 @@ import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.store.vo.Status;
 import com.matdang.seatdang.store.vo.StoreSetting;
+import com.matdang.seatdang.store.vo.WaitingStatus;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import com.matdang.seatdang.common.storeEnum.StoreType;
@@ -233,7 +234,7 @@ class SearchRepositoryTest {
                                     .reservationOpenTime(LocalTime.of(10,0))
                                     .reservationCloseTime(LocalTime.of(20,0))
                                     .reservationStatus(Status.OFF)
-                                    .waitingStatus(Status.ON)
+                                    .waitingStatus(WaitingStatus.OPEN)
                                     .build()
                             )
                             .build();
@@ -258,7 +259,7 @@ class SearchRepositoryTest {
                                     .reservationOpenTime(LocalTime.of(10,0))
                                     .reservationCloseTime(LocalTime.of(20,0))
                                     .reservationStatus(Status.ON)
-                                    .waitingStatus(Status.OFF)
+                                    .waitingStatus(WaitingStatus.CLOSE)
                                     .build()
                             )
                             .build();
@@ -283,7 +284,7 @@ class SearchRepositoryTest {
                                     .reservationOpenTime(LocalTime.of(10,0))
                                     .reservationCloseTime(LocalTime.of(20,0))
                                     .reservationStatus(Status.ON)
-                                    .waitingStatus(Status.OFF)
+                                    .waitingStatus(WaitingStatus.UNAVAILABLE)
                                     .build()
                             )
                             .build();
