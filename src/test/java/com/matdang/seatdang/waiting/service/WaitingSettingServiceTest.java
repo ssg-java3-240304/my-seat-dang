@@ -46,4 +46,23 @@ class WaitingSettingServiceTest {
         assertThat(findResult.getWaitingCloseTime()).isEqualTo(LocalTime.of(22, 0));
     }
 
+    @Test
+    @DisplayName("존재하지 않는 이용 가능한 웨이팅 시간 가져오기")
+    public void findAvailableWaitingTimeByNotExistence() {
+        // given
+        storeRepository.save(Store.builder()
+                .storeId(1L)
+                .storeSetting(StoreSetting.builder()
+                        .build())
+                .build());
+        // when
+        AvailableWaitingTime findResult = waitingSettingService.findAvailableWaitingTime(1L);
+        System.out.println("findResult = " + findResult);
+
+        // then
+        assertThat(findResult).isNotNull();
+        assertThat(findResult.getWaitingOpenTime()).isEqualTo(LocalTime.of(0, 0));
+        assertThat(findResult.getWaitingCloseTime()).isEqualTo(LocalTime.of(0, 0));
+    }
+
 }
