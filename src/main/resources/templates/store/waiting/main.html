@@ -89,6 +89,10 @@
 
 <p>현재 상태: <span th:text="${waitingStatus.waitingStatus}"></span></p>
 
+<div th:if="${status == 0}">
+    <h2>Estimated Waiting Time: <span th:text="${estimatedTime}"></span></h2>
+</div>
+
 <div class="waiting-info">
     <p>Team Count: <span th:text="${waitingPeople.teamCount}"></span></p>
     <p>People Count: <span th:text="${waitingPeople.peopleCount}"></span></p>
