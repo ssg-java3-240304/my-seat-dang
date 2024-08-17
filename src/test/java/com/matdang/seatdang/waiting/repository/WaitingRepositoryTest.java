@@ -140,4 +140,20 @@ class WaitingRepositoryTest {
         assertThat(result).isEqualTo(4);
     }
 
+    @Test
+    @DisplayName("상점 id로 웨이팅 전체 취소")
+    void cancelAllWaiting() {
+        // given
+        // when
+        int result = waitingRepository.cancelAllWaiting(1L);
+        // then
+        assertThat(result).isEqualTo(10);
+        assertThat(waitingQueryRepository.findAllByStoreIdAndWaitingStatus(1L, WaitingStatus.WAITING).size())
+                .isEqualTo(0);
+        assertThat(waitingQueryRepository.findAllByStoreIdAndWaitingStatus(1L, WaitingStatus.SHOP_CANCELED)
+                .size()).isEqualTo(20);
+
+    }
+
+
 }
