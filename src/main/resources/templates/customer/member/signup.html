@@ -31,6 +31,7 @@
                             <div class="form-group">
                                 <input class="form-control" name="customerNickName" id="customerNickName" placeholder="닉네임을 입력해주세요">
                                 <button class="btn btn-primary" type="button" id="checkNicknameBtn">닉네임 중복확인</button>
+                                <small id="nicknameFeedback" style="display:none;"></small>
                             </div>
                             <!-- 휴대전화번호 인증 -->
                             <h6>휴대전화번호</h6>
@@ -43,11 +44,12 @@
                             <div class="form-group col-8">
                                 <input class="form-control" name="memberEmail" id="memberEmail" placeholder="이메일을 입력해주세요">
                                 <button class="btn btn-primary" type="button" id="checkEmailBtn">이메일 중복확인</button>
+                                <small id="emailFeedback" style="display:none;"></small>
                             </div>
                             <!-- 비밀번호 -->
-                            <h6>비밀번호</h6>
+                            <h6>비밀번호(영문,숫자,특수문자를 혼합하여 5자 이상)</h6>
                             <div class="form-group add_bottom_15">
-                                <input class="form-control" type="password" name="memberPassword" placeholder="비밀번호를 입력해주세요" id="password_sign">
+                                <input class="form-control" type="password" name="memberPassword" placeholder="비밀번호를 입력해주세요(영문,숫자,특수문자를 혼합하여 5자 이상)" id="password_sign">
                                 <input class="form-control" type="password" placeholder="비밀번호를 확인" id="password_sign_check">
                                 <small id="passwordFeedback" style="display:none;"></small>
                                 <button class="btn btn-primary" type="button" id="checkPasswordBtn">비밀번호 일치확인</button>
@@ -61,9 +63,9 @@
                             <h6>성별(선택)</h6>
                             <div class="form-group col-8">
                                 <select class="form-select" id="inputGender" name="customerGender">
+                                    <option value="NONE" th:selected="${customerGender eq 'NONE'}">선택안함</option>
                                     <option value="MALE" th:selected="${customerGender eq 'MALE'}">남</option>
                                     <option value="FEMALE" th:selected="${customerGender eq 'FEMALE'}">여</option>
-                                    <option value="NONE" th:selected="${customerGender eq 'NONE'}">선택안함</option>
                                 </select>
                             </div>
                             <!-- 생일 -->
@@ -103,11 +105,22 @@
         // 닉네임 입력이 변경될 때 인증 상태 초기화
         $("#customerNickName").on("input", function() {
             isNicknameVerified = false;
+            $("#checkNicknameBtn").css("background-color", ""); // 버튼 색상 초기화
+            $("#nicknameFeedback").hide(); // 피드백 메시지 숨기기
         });
 
         // 이메일 입력이 변경될 때 인증 상태 초기화
         $("#memberEmail").on("input", function() {
             isEmailVerified = false;
+            $("#checkEmailBtn").css("background-color", ""); // 버튼 색상 초기화
+            $("#emailFeedback").hide(); // 피드백 메시지 숨기기
+        });
+
+        // 비밀번호 입력이 변경될 때 인증 상태 초기화
+        $("#password_sign, #password_sign_check").on("input", function() {
+            isPasswordMatched = false;
+            $("#checkPasswordBtn").css("background-color", ""); // 버튼 색상 초기화
+            $("#passwordFeedback").hide(); // 피드백 메시지 숨기기
         });
 
         // 닉네임 중복 확인
@@ -115,7 +128,7 @@
             const nickname = $("#customerNickName").val().trim(); // 공백 제거
 
             if (nickname === "") {
-                alert("닉네임을 입력해주세요.");
+                $("#nicknameFeedback").text("닉네임을 입력해주세요.").css("color", "red").show();
                 return;
             }
 
@@ -125,15 +138,18 @@
                 data: { customerNickName: nickname },
                 success: function(isDuplicate) {
                     if (isDuplicate) {
-                        alert("이미 사용 중인 닉네임입니다.");
+                        $("#nicknameFeedback").text("이미 사용 중인 닉네임입니다.").css("color", "red").show();
                         isNicknameVerified = false; // 중복이면 인증 실패
+                        $("#checkNicknameBtn").css("background-color", "red"); // 버튼 색상 변경
                     } else {
-                        alert("사용 가능한 닉네임입니다.");
+                        $("#nicknameFeedback").text("사용 가능한 닉네임입니다.").css("color", "green").show();
                         isNicknameVerified = true; // 인증 성공
+                        $("#checkNicknameBtn").css("background-color", "green"); // 버튼 색상 변경
                     }
                 },
                 error: function() {
-                    alert("닉네임 중복 확인 중 오류가 발생했습니다.");
+                    $("#nicknameFeedback").text("닉네임 중복 확인 중 오류가 발생했습니다.").css("color", "red").show();
+                    $("#checkNicknameBtn").css("background-color", "red"); // 버튼 색상 변경
                 }
             });
         });
@@ -142,24 +158,11 @@
         $("#checkEmailBtn").click(function() {
             const email = $("#memberEmail").val().trim();
 
-            console.log("입력된 이메일:", email); // 입력된 이메일 값 확인
-
-            /**
-             * @ 앞쪽 공백없는 모든 문자
-             * @ 뒤쪽 공백없는 모든 문자
-             * . 뒤에 1자리 이상 문자
-             *
-             *
-             * @type {RegExp}
-             */
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-            console.log("정규식 검사 결과:", emailPattern.test(email)); // 정규식 결과 확인
-
-
-
             if (!emailPattern.test(email)) {
-                alert("유효한 이메일 주소를 입력해주세요. 예: example@domain.com");
+                $("#emailFeedback").text("유효한 이메일 주소를 입력해주세요. 예: example@domain.com").css("color", "red").show();
+                $("#checkEmailBtn").css("background-color", "red"); // 버튼 색상 변경
                 return;
             }
 
@@ -169,39 +172,47 @@
                 data: { memberEmail: email },
                 success: function(isDuplicate) {
                     if (isDuplicate) {
-                        alert("이미 사용 중인 이메일입니다.");
+                        $("#emailFeedback").text("이미 사용 중인 이메일입니다.").css("color", "red").show();
                         isEmailVerified = false; // 중복이면 인증 실패
+                        $("#checkEmailBtn").css("background-color", "red"); // 버튼 색상 변경
                     } else {
-                        alert("사용 가능한 이메일입니다.");
+                        $("#emailFeedback").text("사용 가능한 이메일입니다.").css("color", "green").show();
                         isEmailVerified = true; // 인증 성공
+                        $("#checkEmailBtn").css("background-color", "green"); // 버튼 색상 변경
                     }
                 },
                 error: function() {
-                    alert("이메일 중복 확인 중 오류가 발생했습니다.");
+                    $("#emailFeedback").text("이메일 중복 확인 중 오류가 발생했습니다.").css("color", "red").show();
+                    $("#checkEmailBtn").css("background-color", "red"); // 버튼 색상 변경
                 }
             });
         });
 
-        // 비밀번호 일치 확인
+        // 비밀번호 검증을 위한 정규식
+        const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{5,}$/;
+
+        // 비밀번호 일치 확인 및 조건 확인
         $("#checkPasswordBtn").click(function() {
             const password = $("#password_sign").val();
             const confirmPassword = $("#password_sign_check").val();
 
-            if (password === "" || confirmPassword === "") {
-                alert("비밀번호를 입력해주세요.");
+            if (!passwordPattern.test(password)) {
+                $("#passwordFeedback").text("비밀번호는 영문, 숫자, 특수문자를 혼합하여 5자 이상이어야 합니다.").css("color", "red").show();
+                isPasswordMatched = false;
+                $("#checkPasswordBtn").css("background-color", "red"); // 버튼 색상 변경
                 return;
             }
 
-            if (password === confirmPassword) {
-                isPasswordMatched = true;
-                alert("비밀번호가 일치합니다.")
-            } else {
+            if (password !== confirmPassword) {
+                $("#passwordFeedback").text("비밀번호가 일치하지 않습니다.").css("color", "red").show();
                 isPasswordMatched = false;
-                alert("비밀번호가 일치하지 않습니다.")
+                $("#checkPasswordBtn").css("background-color", "red"); // 버튼 색상 변경
+            } else {
+                $("#passwordFeedback").text("비밀번호가 일치합니다.").css("color", "green").show();
+                isPasswordMatched = true;
+                $("#checkPasswordBtn").css("background-color", "green"); // 버튼 색상 변경
             }
         });
-
-
 
         // 폼을 제출할 때 인증 상태를 확인
         $("#joinForm").submit(function(event) {
@@ -224,12 +235,6 @@
             }
         });
     </script>
-
-
-
 </th:block>
-
-
-
 </body>
 </html>
