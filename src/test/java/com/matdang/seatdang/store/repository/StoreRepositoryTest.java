@@ -27,20 +27,19 @@ class StoreRepositoryTest {
     @DisplayName("웨이팅 이용가능한 시간 설정")
     void updateWaitingAvailableTime() {
         // given
-        storeRepository.save(Store.builder()
-                .storeId(1L)
+        Store store = storeRepository.save(Store.builder()
                 .build());
         em.clear();
 
         // when
         int result = storeRepository.updateWaitingAvailableTime(LocalTime.of(9, 0),
-                LocalTime.of(22, 0), 1L);
+                LocalTime.of(22, 0), store.getStoreId());
 
         // then
         assertThat(result).isEqualTo(1);
-        assertThat(storeRepository.findByStoreId(1L).getStoreSetting().getWaitingTime()
+        assertThat(storeRepository.findByStoreId(store.getStoreId()).getStoreSetting().getWaitingTime()
                 .getWaitingOpenTime()).isEqualTo(LocalTime.of(9, 0));
-        assertThat(storeRepository.findByStoreId(1L).getStoreSetting().getWaitingTime()
+        assertThat(storeRepository.findByStoreId(store.getStoreId()).getStoreSetting().getWaitingTime()
                 .getWaitingCloseTime()).isEqualTo(LocalTime.of(22, 0));
 
     }
@@ -49,17 +48,17 @@ class StoreRepositoryTest {
     @DisplayName("웨이팅 예상 대기시간 설정")
     void updateEstimatedWaitingTime() {
         // given
-        storeRepository.save(Store.builder()
+        Store store = storeRepository.save(Store.builder()
                 .storeId(1L)
                 .build());
         em.clear();
 
         // when
-        int result = storeRepository.updateEstimatedWaitingTime(LocalTime.of(0, 20), 1L);
+        int result = storeRepository.updateEstimatedWaitingTime(LocalTime.of(0, 20), store.getStoreId());
 
         // then
         assertThat(result).isEqualTo(1);
-        assertThat(storeRepository.findByStoreId(1L).getStoreSetting().getWaitingTime()
+        assertThat(storeRepository.findByStoreId(store.getStoreId()).getStoreSetting().getWaitingTime()
                 .getEstimatedWaitingTime()).isEqualTo(LocalTime.of(0, 20));
     }
 
@@ -68,16 +67,15 @@ class StoreRepositoryTest {
     @DisplayName("상점 웨이팅 상태 업데이트")
     void updateWaitingStatus(String status) {
         // given
-        storeRepository.save(Store.builder()
-                .storeId(1L)
+        Store store = storeRepository.save(Store.builder()
                 .build());
         em.clear();
 
         // when
-        int result = storeRepository.updateWaitingStatus(Status.valueOf(status), 1L);
+        int result = storeRepository.updateWaitingStatus(Status.valueOf(status), store.getStoreId());
 
         // then
         assertThat(result).isEqualTo(1);
-        assertThat(storeRepository.findByStoreId(1L).getStoreSetting().getWaitingStatus()).isEqualTo(Status.valueOf(status));
+        assertThat(storeRepository.findByStoreId(store.getStoreId()).getStoreSetting().getWaitingStatus()).isEqualTo(Status.valueOf(status));
     }
 }
