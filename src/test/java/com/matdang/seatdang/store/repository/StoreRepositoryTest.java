@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.vo.Status;
+import com.matdang.seatdang.store.vo.StoreSetting;
 import com.matdang.seatdang.store.vo.WaitingStatus;
 import jakarta.persistence.EntityManager;
 import java.time.LocalTime;
@@ -64,7 +65,7 @@ class StoreRepositoryTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"ON", "OFF"})
+    @ValueSource(strings = {"OPEN", "CLOSE", "UNAVAILABLE"})
     @DisplayName("상점 웨이팅 상태 업데이트")
     void updateWaitingStatus(String status) {
         // given
@@ -77,6 +78,21 @@ class StoreRepositoryTest {
 
         // then
         assertThat(result).isEqualTo(1);
-        assertThat(storeRepository.findByStoreId(store.getStoreId()).getStoreSetting().getWaitingStatus()).isEqualTo(Status.valueOf(status));
+        assertThat(storeRepository.findByStoreId(store.getStoreId()).getStoreSetting().getWaitingStatus()).isEqualTo(
+                WaitingStatus.valueOf(status));
+    }
+
+    @Test
+    @DisplayName("웨이팅 상태 기본값 UNAVAILABLE")
+    void setDefaultWaitingStatus() {
+        Store store = storeRepository.save(Store.builder()
+                .storeSetting(new StoreSetting())
+                .build());
+        em.clear();
+
+        Store findStore = storeRepository.findByStoreId(store.getStoreId());
+        System.out.println("findStore = " + findStore);
+
+        assertThat(findStore.getStoreSetting().getWaitingStatus()).isEqualTo(WaitingStatus.UNAVAILABLE);
     }
 }
