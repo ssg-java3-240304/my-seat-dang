@@ -75,7 +75,9 @@ public class WaitingSettingController {
     }
 
     @GetMapping("/waiting-status")
-    public String waitingStatusSetting() {
+    public String waitingStatusSetting(Model model) {
+        Long storeId = authService.getAuthenticatedStoreId();
+        model.addAttribute("waitingStatus", waitingSettingService.findWaitingStatus(storeId));
 
         return "store/setting/waiting-status";
     }
