@@ -19,10 +19,12 @@ public class WaitingService {
     private final WaitingQueryRepository waitingQueryRepository;
 
     public List<WaitingDto> showWaiting(Long storeId, int status) {
+        if (status == 0) {
+            return waitingQueryRepository.findAllByWaitingStatusOrderByWaitingOrder(storeId);
+        }
         if (status == 2) {
             return waitingQueryRepository.findAllByCancelStatus(storeId);
         }
-
         List<WaitingDto> waitings = waitingQueryRepository.findAllByStoreIdAndWaitingStatus(storeId,
                 WaitingStatus.findWaiting(status));
         return waitings;
