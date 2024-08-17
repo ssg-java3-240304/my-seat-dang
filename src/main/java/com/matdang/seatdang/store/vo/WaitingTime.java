@@ -18,5 +18,5 @@ import lombok.Setter;
 public class WaitingTime {
     private LocalTime waitingOpenTime;
     private LocalTime waitingCloseTime;
-    private LocalTime expectedWaitingTime;
+    private LocalTime estimatedWaitingTime;
 }
