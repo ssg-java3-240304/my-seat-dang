@@ -65,4 +65,27 @@ class WaitingSettingServiceTest {
         assertThat(findResult.getWaitingCloseTime()).isEqualTo(LocalTime.of(0, 0));
     }
 
+    @Test
+    @DisplayName("존재하는 웨이팅 예상대기 시간 가져오기")
+    public void findEstimatedWaitingTime() {
+        // given
+        storeRepository.save(Store.builder()
+                .storeId(1L)
+                .storeSetting(StoreSetting.builder()
+                        .waitingTime(WaitingTime.builder()
+                                .estimatedWaitingTime(LocalTime.of(0,20))
+                                .build())
+                        .build())
+                .build());
+        // when
+
+        LocalTime findResult = waitingSettingService.findEstimatedWaitingTime(1L);
+
+        // then
+        assertThat(findResult).isNotNull();
+        assertThat(findResult).isEqualTo(LocalTime.of(0, 20));
+    }
+
+
+
 }
