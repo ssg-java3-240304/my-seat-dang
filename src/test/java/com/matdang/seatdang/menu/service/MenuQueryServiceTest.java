@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 class MenuQueryServiceTest {
     @Autowired
-    MenuQueryService menuQueryService;
+    private MenuQueryService menuQueryService;
 
     @ValueSource(longs = {1L, 2L, 3L, 4L})
     @DisplayName("메뉴ID로 메뉴 조회하기")

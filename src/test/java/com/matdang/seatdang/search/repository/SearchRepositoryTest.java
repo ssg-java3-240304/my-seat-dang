@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.time.LocalTime;
@@ -122,8 +123,6 @@ class SearchRepositoryTest {
     }
 
 
-    static Set<String> storeNames = Set.of("마카롱", "케이크", "에클레어", "식빵", "소라빵");
-    static Set<String> storeAddresses = Set.of("선릉", "마포", "노량진", "중랑", "공덕");
 
     /**
      * storeNames로 스트림을 생성
@@ -132,6 +131,8 @@ class SearchRepositoryTest {
      * storeAddress와 storeName 쌍에 대해 Arguments.of()를 생성
      */
     static Stream<Arguments> storeDataProvider() {
+        Set<String> storeNames = Set.of("마카롱", "케이크", "에클레어", "식빵", "소라빵");
+        Set<String> storeAddresses = Set.of("선릉", "마포", "노량진", "중랑", "공덕");
         return storeNames.stream()
                 .flatMap(storeName -> storeAddresses.stream()
                         .map(storeAddress -> Arguments.of(storeName, storeAddress)));
@@ -166,16 +167,18 @@ class SearchRepositoryTest {
         assertThat(store.getStoreId()).isEqualTo(id);
     }
 
-    @Disabled
-    @DisplayName("더미데이터 생성")
+//    @Disabled
+    @DisplayName("상점 더미데이터 생성")
     @Test
     public void test8() {
         //given
-        String csvFile = "C:\\workspace\\my-seat-dang\\src\\main\\resources\\csv\\store_seoul.csv"; // CSV 파일 경로 설정
+        String csvFile = "csv/store_sample_seoul.csv"; // CSV 파일 경로 설정
         String[] suffixes = {"에그타르트", "브라우니", "케이크", "에클레어", "마카롱", "소라빵", "단팥빵", "식빵"};
         Random random = new Random();
-        try (CSVReader reader = new CSVReader(new InputStreamReader(new FileInputStream(csvFile), Charset.forName("EUC-KR")))) {
-            // 첫 번째 라인을 읽어서 헤더로 처리, 저장하지 않음
+
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(csvFile);
+             CSVReader reader = new CSVReader(new InputStreamReader(inputStream))) {
+
             reader.readNext();
 
             String[] line;

@@ -1,7 +1,7 @@
 package com.matdang.seatdang.member.vo;
 
 
-import common.storeEnum.StoreType;
+import com.matdang.seatdang.common.storeEnum.StoreType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
