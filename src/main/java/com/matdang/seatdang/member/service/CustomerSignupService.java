@@ -4,6 +4,7 @@ import com.matdang.seatdang.member.dto.CustomerSignupDto;
 import com.matdang.seatdang.member.entity.Customer;
 import com.matdang.seatdang.member.entity.MemberRole;
 import com.matdang.seatdang.member.entity.MemberStatus;
+import com.matdang.seatdang.member.repository.CustomerRepository;
 import com.matdang.seatdang.member.repository.MemberRepository;
 import com.matdang.seatdang.object_storage.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +18,17 @@ import java.time.LocalDate;
 public class CustomerSignupService {
 
     private final MemberRepository memberRepository;
+    private final CustomerRepository customerRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private final FileService fileService; // File 업로드를 위해
 
     @Autowired
-    public CustomerSignupService(MemberRepository memberRepository, BCryptPasswordEncoder bCryptPasswordEncoder,FileService fileService) {
+    public CustomerSignupService(MemberRepository memberRepository, BCryptPasswordEncoder bCryptPasswordEncoder,FileService fileService,CustomerRepository customerRepository) {
         this.memberRepository = memberRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.fileService = fileService;
+        this.customerRepository = customerRepository;
 
     }
 
@@ -73,6 +76,10 @@ public class CustomerSignupService {
     }
 
     public boolean isNicknameDuplicate(String customerNickName) {
-        return memberRepository.existsByCustomerNickName(customerNickName);
+        return customerRepository.existsByCustomerNickName(customerNickName);
     }
+
+//    public boolean isEmailDuplicate(String memberEmail) {
+//        return memberRepository.existsByMemberEmail(memberEmail);
+//    }
 }
