@@ -15,7 +15,7 @@ public class WaitingSettingService {
 
     public AvailableWaitingTime findAvailableWaitingTime(Long storeId) {
         AvailableWaitingTime findResult = storeQueryRepository.findAvailableWaitingTime(storeId);
-        if (findResult == null) {
+        if (findResult.getWaitingOpenTime() == null) {
             return new AvailableWaitingTime(LocalTime.of(0, 0), LocalTime.of(0, 0));
         }
 
