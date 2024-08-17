@@ -43,4 +43,26 @@ class StoreQueryRepositoryTest {
         assertThat(findResult.getWaitingOpenTime()).isEqualTo(LocalTime.of(9, 0));
         assertThat(findResult.getWaitingCloseTime()).isEqualTo(LocalTime.of(22, 0));
     }
+
+    @Test
+    @DisplayName("웨이팅 예상 대기 시간 가져오기")
+    public void findEstimatedWaitingTime() {
+        // given
+        storeRepository.save(Store.builder()
+                .storeId(1L)
+                .storeSetting(StoreSetting.builder()
+                        .waitingTime(WaitingTime.builder()
+                                .estimatedWaitingTime(LocalTime.of(0,20))
+                                .build())
+                        .build())
+                .build());
+        // when
+
+        LocalTime findResult = storeQueryRepository.findEstimatedWaitingTime(1L);
+
+        // then
+        assertThat(findResult).isNotNull();
+        assertThat(findResult).isEqualTo(LocalTime.of(0, 20));
+    }
+
 }
