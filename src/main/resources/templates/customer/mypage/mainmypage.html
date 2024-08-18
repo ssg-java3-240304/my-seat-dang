@@ -11,9 +11,12 @@
     <!-- Favicons -->
     <link rel="shortcut icon" th:href="@{img/favicon.ico}" type="image/x-icon">
     <link rel="apple-touch-icon" type="image/x-icon" th:href="@{img/apple-touch-icon-57x57-precomposed.png}">
-    <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" th:href="@{img/apple-touch-icon-72x72-precomposed.png}">
-    <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114" th:href="@{img/apple-touch-icon-114x114-precomposed.png}">
-    <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144" th:href="@{img/apple-touch-icon-144x144-precomposed.png}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72"
+          th:href="@{img/apple-touch-icon-72x72-precomposed.png}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114"
+          th:href="@{img/apple-touch-icon-114x114-precomposed.png}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144"
+          th:href="@{img/apple-touch-icon-144x144-precomposed.png}">
     <!-- Bootstrap core CSS -->
     <link href="/vendor/admin/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- Main styles -->
@@ -25,6 +28,7 @@
     <!-- Your custom styles -->
     <link href="/css/admin/custom.css" rel="stylesheet">
 </head>
+<body>
 <main layout:fragment="main">
     <div class="container">
         <div class="row gy-4 gy-lg-0">
@@ -32,97 +36,98 @@
                 <div class="row gy-4">
                     <div class="col-12">
                         <div class="card widget-card border-light shadow-sm">
-                            <div class="card-header text-bg-primary"th:text="${customer.memberName} + '님 방가워요!'"></div>
+                            <div class="card-header text-bg-primary" th:text="${customer.memberName} + '님 방가워요!'"></div>
                             <div class="card-body">
                                 <div class="text-center mb-3">
-                                    <img th:src="${customer.customerProfileImage}" class="img-fluid rounded-circle" alt="Profile Image">
+                                    <img th:src="${customer.customerProfileImage}" class="img-fluid rounded-circle"
+                                         alt="Profile Image">
                                 </div>
                                 <h5 class="text-center mb-1" th:text="${customer.memberName}"></h5>
                                 <p class="text-center text-secondary mb-4" th:text="${customer.customerNickName}"></p>
-<!--                                <ul class="list-group list-group-flush mb-4">-->
-<!--                                    <li class="list-group-item d-flex justify-content-between align-items-center">-->
-<!--                                        <h6 class="m-0">Followers</h6>-->
-<!--                                        <span>7,854</span>-->
-<!--                                    </li>-->
-<!--                                    <li class="list-group-item d-flex justify-content-between align-items-center">-->
-<!--                                        <h6 class="m-0">Following</h6>-->
-<!--                                        <span>5,987</span>-->
-<!--                                    </li>-->
-<!--                                    <li class="list-group-item d-flex justify-content-between align-items-center">-->
-<!--                                        <h6 class="m-0">Friends</h6>-->
-<!--                                        <span>4,620</span>-->
-<!--                                    </li>-->
-<!--                                </ul>-->
-<!--                                <div class="d-grid m-0">-->
-<!--                                    <button class="btn btn-outline-primary" type="button">Follow</button>-->
-<!--                                </div>-->
+                                <!--                                <ul class="list-group list-group-flush mb-4">-->
+                                <!--                                    <li class="list-group-item d-flex justify-content-between align-items-center">-->
+                                <!--                                        <h6 class="m-0">Followers</h6>-->
+                                <!--                                        <span>7,854</span>-->
+                                <!--                                    </li>-->
+                                <!--                                    <li class="list-group-item d-flex justify-content-between align-items-center">-->
+                                <!--                                        <h6 class="m-0">Following</h6>-->
+                                <!--                                        <span>5,987</span>-->
+                                <!--                                    </li>-->
+                                <!--                                    <li class="list-group-item d-flex justify-content-between align-items-center">-->
+                                <!--                                        <h6 class="m-0">Friends</h6>-->
+                                <!--                                        <span>4,620</span>-->
+                                <!--                                    </li>-->
+                                <!--                                </ul>-->
+                                <!--                                <div class="d-grid m-0">-->
+                                <!--                                    <button class="btn btn-outline-primary" type="button">Follow</button>-->
+                                <!--                                </div>-->
                             </div>
                         </div>
                     </div>
-<!--                    <div class="col-12">-->
-<!--                        <div class="card widget-card border-light shadow-sm">-->
-<!--                            <div class="card-header text-bg-primary">Social Accounts</div>-->
-<!--                            <div class="card-body">-->
-<!--                                <a href="#!" class="d-inline-block bg-dark link-light lh-1 p-2 rounded">-->
-<!--                                    <i class="bi bi-youtube"></i>-->
-<!--                                </a>-->
-<!--                                <a href="#!" class="d-inline-block bg-dark link-light lh-1 p-2 rounded">-->
-<!--                                    <i class="bi bi-twitter-x"></i>-->
-<!--                                </a>-->
-<!--                                <a href="#!" class="d-inline-block bg-dark link-light lh-1 p-2 rounded">-->
-<!--                                    <i class="bi bi-facebook"></i>-->
-<!--                                </a>-->
-<!--                                <a href="#!" class="d-inline-block bg-dark link-light lh-1 p-2 rounded">-->
-<!--                                    <i class="bi bi-linkedin"></i>-->
-<!--                                </a>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="col-12">-->
-<!--                        <div class="card widget-card border-light shadow-sm">-->
-<!--                            <div class="card-header text-bg-primary">About Me</div>-->
-<!--                            <div class="card-body">-->
-<!--                                <ul class="list-group list-group-flush mb-0">-->
-<!--                                    <li class="list-group-item">-->
-<!--                                        <h6 class="mb-1">-->
-<!--                                            <span class="bii bi-mortarboard-fill me-2"></span>-->
-<!--                                            Education-->
-<!--                                        </h6>-->
-<!--                                        <span>M.S Computer Science</span>-->
-<!--                                    </li>-->
-<!--                                    <li class="list-group-item">-->
-<!--                                        <h6 class="mb-1">-->
-<!--                                            <span class="bii bi-geo-alt-fill me-2"></span>-->
-<!--                                            Location-->
-<!--                                        </h6>-->
-<!--                                        <span>Mountain View, California</span>-->
-<!--                                    </li>-->
-<!--                                    <li class="list-group-item">-->
-<!--                                        <h6 class="mb-1">-->
-<!--                                            <span class="bii bi-building-fill-gear me-2"></span>-->
-<!--                                            Company-->
-<!--                                        </h6>-->
-<!--                                        <span>GitHub Inc</span>-->
-<!--                                    </li>-->
-<!--                                </ul>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="col-12">-->
-<!--                        <div class="card widget-card border-light shadow-sm">-->
-<!--                            <div class="card-header text-bg-primary">Skills</div>-->
-<!--                            <div class="card-body">-->
-<!--                                <span class="badge text-bg-primary">HTML</span>-->
-<!--                                <span class="badge text-bg-primary">SCSS</span>-->
-<!--                                <span class="badge text-bg-primary">Javascript</span>-->
-<!--                                <span class="badge text-bg-primary">React</span>-->
-<!--                                <span class="badge text-bg-primary">Vue</span>-->
-<!--                                <span class="badge text-bg-primary">Angular</span>-->
-<!--                                <span class="badge text-bg-primary">UI</span>-->
-<!--                                <span class="badge text-bg-primary">UX</span>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
+                    <!--                    <div class="col-12">-->
+                    <!--                        <div class="card widget-card border-light shadow-sm">-->
+                    <!--                            <div class="card-header text-bg-primary">Social Accounts</div>-->
+                    <!--                            <div class="card-body">-->
+                    <!--                                <a href="#!" class="d-inline-block bg-dark link-light lh-1 p-2 rounded">-->
+                    <!--                                    <i class="bi bi-youtube"></i>-->
+                    <!--                                </a>-->
+                    <!--                                <a href="#!" class="d-inline-block bg-dark link-light lh-1 p-2 rounded">-->
+                    <!--                                    <i class="bi bi-twitter-x"></i>-->
+                    <!--                                </a>-->
+                    <!--                                <a href="#!" class="d-inline-block bg-dark link-light lh-1 p-2 rounded">-->
+                    <!--                                    <i class="bi bi-facebook"></i>-->
+                    <!--                                </a>-->
+                    <!--                                <a href="#!" class="d-inline-block bg-dark link-light lh-1 p-2 rounded">-->
+                    <!--                                    <i class="bi bi-linkedin"></i>-->
+                    <!--                                </a>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="col-12">-->
+                    <!--                        <div class="card widget-card border-light shadow-sm">-->
+                    <!--                            <div class="card-header text-bg-primary">About Me</div>-->
+                    <!--                            <div class="card-body">-->
+                    <!--                                <ul class="list-group list-group-flush mb-0">-->
+                    <!--                                    <li class="list-group-item">-->
+                    <!--                                        <h6 class="mb-1">-->
+                    <!--                                            <span class="bii bi-mortarboard-fill me-2"></span>-->
+                    <!--                                            Education-->
+                    <!--                                        </h6>-->
+                    <!--                                        <span>M.S Computer Science</span>-->
+                    <!--                                    </li>-->
+                    <!--                                    <li class="list-group-item">-->
+                    <!--                                        <h6 class="mb-1">-->
+                    <!--                                            <span class="bii bi-geo-alt-fill me-2"></span>-->
+                    <!--                                            Location-->
+                    <!--                                        </h6>-->
+                    <!--                                        <span>Mountain View, California</span>-->
+                    <!--                                    </li>-->
+                    <!--                                    <li class="list-group-item">-->
+                    <!--                                        <h6 class="mb-1">-->
+                    <!--                                            <span class="bii bi-building-fill-gear me-2"></span>-->
+                    <!--                                            Company-->
+                    <!--                                        </h6>-->
+                    <!--                                        <span>GitHub Inc</span>-->
+                    <!--                                    </li>-->
+                    <!--                                </ul>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="col-12">-->
+                    <!--                        <div class="card widget-card border-light shadow-sm">-->
+                    <!--                            <div class="card-header text-bg-primary">Skills</div>-->
+                    <!--                            <div class="card-body">-->
+                    <!--                                <span class="badge text-bg-primary">HTML</span>-->
+                    <!--                                <span class="badge text-bg-primary">SCSS</span>-->
+                    <!--                                <span class="badge text-bg-primary">Javascript</span>-->
+                    <!--                                <span class="badge text-bg-primary">React</span>-->
+                    <!--                                <span class="badge text-bg-primary">Vue</span>-->
+                    <!--                                <span class="badge text-bg-primary">Angular</span>-->
+                    <!--                                <span class="badge text-bg-primary">UI</span>-->
+                    <!--                                <span class="badge text-bg-primary">UX</span>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
                 </div>
             </div>
             <div class="col-12 col-lg-8 col-xl-9">
@@ -130,22 +135,32 @@
                     <div class="card-body p-4">
                         <ul class="nav nav-tabs" id="profileTab" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview-tab-pane" type="button" role="tab" aria-controls="overview-tab-pane" aria-selected="true">Overview</button>
+                                <button class="nav-link active" id="overview-tab" data-bs-toggle="tab"
+                                        data-bs-target="#overview-tab-pane" type="button" role="tab"
+                                        aria-controls="overview-tab-pane" aria-selected="true">Overview
+                                </button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">프로필수정</button>
+                                <button class="nav-link" id="profile-tab" data-bs-toggle="tab"
+                                        data-bs-target="#profile-tab-pane" type="button" role="tab"
+                                        aria-controls="profile-tab-pane" aria-selected="false">프로필수정
+                                </button>
                             </li>
-<!--                            <li class="nav-item" role="presentation">-->
-<!--                                <button class="nav-link" id="email-tab" data-bs-toggle="tab" data-bs-target="#email-tab-pane" type="button" role="tab" aria-controls="email-tab-pane" aria-selected="false">Emails</button>-->
-<!--                            </li>-->
+                            <!--                            <li class="nav-item" role="presentation">-->
+                            <!--                                <button class="nav-link" id="email-tab" data-bs-toggle="tab" data-bs-target="#email-tab-pane" type="button" role="tab" aria-controls="email-tab-pane" aria-selected="false">Emails</button>-->
+                            <!--                            </li>-->
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="password-tab" data-bs-toggle="tab" data-bs-target="#password-tab-pane" type="button" role="tab" aria-controls="password-tab-pane" aria-selected="false">Password</button>
+                                <button class="nav-link" id="password-tab" data-bs-toggle="tab"
+                                        data-bs-target="#password-tab-pane" type="button" role="tab"
+                                        aria-controls="password-tab-pane" aria-selected="false">Password
+                                </button>
                             </li>
                         </ul>
                         <div class="tab-content pt-4" id="profileTabContent">
-                            <div class="tab-pane fade show active" id="overview-tab-pane" role="tabpanel" aria-labelledby="overview-tab" tabindex="0">
-<!--                                <h5 class="mb-3">About</h5>-->
-<!--                                <p class="lead mb-3">Ethan Leo is a seasoned and results-driven Project Manager who brings experience and expertise to project management. With a proven track record of successfully delivering complex projects on time and within budget, Ethan Leo is the go-to professional for organizations seeking efficient and effective project leadership.</p>-->
+                            <div class="tab-pane fade show active" id="overview-tab-pane" role="tabpanel"
+                                 aria-labelledby="overview-tab" tabindex="0">
+                                <!--                                <h5 class="mb-3">About</h5>-->
+                                <!--                                <p class="lead mb-3">Ethan Leo is a seasoned and results-driven Project Manager who brings experience and expertise to project management. With a proven track record of successfully delivering complex projects on time and within budget, Ethan Leo is the go-to professional for organizations seeking efficient and effective project leadership.</p>-->
                                 <h5 class="mb-3">Profile</h5>
                                 <div class="row g-0">
                                     <div class="col-5 col-md-3 bg-light border-bottom border-white border-3">
@@ -158,7 +173,7 @@
                                         <div class="p-2">닉네임</div>
                                     </div>
                                     <div class="col-7 col-md-9 bg-light border-start border-bottom border-white border-3">
-                                        <div class="p-2"th:text="${customer.customerNickName}"></div>
+                                        <div class="p-2" th:text="${customer.customerNickName}"></div>
                                     </div>
                                     <div class="col-5 col-md-3 bg-light border-bottom border-white border-3">
                                         <div class="p-2">아이디(이메일)</div>
@@ -186,111 +201,132 @@
                                     <div class="col-5 col-md-3 bg-light border-bottom border-white border-3">
                                         <div class="p-2">AI 케이크 시안<br>생성 남은 횟수</div>
                                     </div>
-<!--                                    <div class="col-5 col-md-3 bg-light border-bottom border-white border-3 text-center text-wrap" style="width: 100px;">-->
-<!--                                        <div class="p-2" style="font-size: 0.9rem;">AI 케이크 시안 생성<br>남은 횟수</div>-->
-<!--                                    </div>-->
+                                    <!--                                    <div class="col-5 col-md-3 bg-light border-bottom border-white border-3 text-center text-wrap" style="width: 100px;">-->
+                                    <!--                                        <div class="p-2" style="font-size: 0.9rem;">AI 케이크 시안 생성<br>남은 횟수</div>-->
+                                    <!--                                    </div>-->
                                     <div class="col-7 col-md-9 bg-light border-start border-bottom border-white border-3">
-                                        <div class="p-2"th:text="${customer.imageGenLeft}">imageGenLeft</div>
+                                        <div class="p-2" th:text="${customer.imageGenLeft}">imageGenLeft</div>
                                     </div>
                                     <div class="col-5 col-md-3 bg-light border-bottom border-white border-3">
                                         <div class="p-2">생일</div>
                                     </div>
                                     <div class="col-7 col-md-9 bg-light border-start border-bottom border-white border-3">
-                                        <div class="p-2" th:text="${customer.customerBirthday}" >customerBirthday</div>
+                                        <div class="p-2" th:text="${customer.customerBirthday}">customerBirthday</div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
-                                <form action="#!" class="row gy-3 gy-xxl-4">
+                            <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel"
+                                 aria-labelledby="profile-tab" tabindex="0">
+                                <form th:action="@{/mainmypage/update}" th:object="${customer}" method="post" name="detailsForm" id="detailsForm" enctype="multipart/form-data" class="row gy-3 gy-xxl-4">
                                     <div class="col-12">
                                         <div class="row gy-2">
-                                            <label class="col-12 form-label m-0">Profile Image</label>
-<!--                                            @-->
+                                            <!--                                            <label class="col-12 form-label m-0">Profile Image</label>-->
+                                            <!--                                            @-->
+                                            <!--                                            <div class="col-12">-->
+                                            <!--                                                <img src="./assets/img/profile-img-1.jpg" class="img-fluid" alt="별명">-->
+                                            <!--                                            </div>-->
+                                            <input type="file" id="customerProfileImage" name="customerProfileImage"
+                                                   class="d-none">
                                             <div class="col-12">
-                                                <img src="./assets/img/profile-img-1.jpg" class="img-fluid" alt="별명">
-                                            </div>
-                                            <div class="col-12">
-                                                <a href="#!" class="d-inline-block bg-primary link-light lh-1 p-2 rounded">
+                                                <!-- 업로드 버튼 -->
+                                                <a href="javascript:void(0);" id="uploadBtn"
+                                                   class="d-inline-block bg-primary link-light lh-1 p-2 rounded">
                                                     <i class="bi bi-upload"></i>
                                                 </a>
-                                                <a href="#!" class="d-inline-block bg-danger link-light lh-1 p-2 rounded">
+
+                                                <!-- 삭제 버튼 -->
+                                                <a href="javascript:void(0);" id="deleteBtn"
+                                                   class="d-inline-block bg-danger link-light lh-1 p-2 rounded">
                                                     <i class="bi bi-trash"></i>
                                                 </a>
+                                                <!-- 이미지 미리보기 -->
+                                                <div class="mt-3">
+                                                    <img id="profileImagePreview" src="" alt="이미지 미리보기" class="img-fluid rounded-circle" style="display: none; max-width: 200px;">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
-                                        <label for="inputNickName" class="form-label">닉네임</label>
-                                        <input type="text" class="form-control" id="inputNickName" th:value="${customer.customerNickName}">
+                                        <label for="customerNickName" class="form-label">닉네임</label>
+                                        <input type="text" class="form-control" name = "customerNickName" id="customerNickName"
+                                               th:value="${customer.customerNickName}">
                                     </div>
                                     <div class="col-12 col-md-4 d-flex align-items-end">
-                                        <button type="button" class="btn btn-primary w-100">닉네임 중복 확인</button>
+                                        <button type="button" class="btn btn-primary w-100" id="checkNicknameBtn" disabled>닉네임 중복 확인</button>
+                                        <small id="nicknameFeedback" style="display:none;"></small>
                                     </div>
                                     <div class="col-12 col-md-6">
-                                        <label for="inputBirthday" class="form-label">생일</label>
-                                        <input type="date" class="form-control" id="inputBirthday" th:value="${customer.customerBirthday}">
+                                        <label for="customerBirthday" class="form-label">생일</label>
+                                        <input type="date" class="form-control" name = "customerBirthday" id="customerBirthday"
+                                               th:value="${customer.customerBirthday}">
                                     </div>
                                     <!--                                    <div class="col-12 col-md-6">-->
-<!--                                        <label for="inputLastName" class="form-label">memberNickname</label>-->
-<!--                                        <input type="text" class="form-control" id="inputLastName" value="Leo">-->
-<!--                                    </div>-->
+                                    <!--                                        <label for="inputLastName" class="form-label">memberNickname</label>-->
+                                    <!--                                        <input type="text" class="form-control" id="inputLastName" value="Leo">-->
+                                    <!--                                    </div>-->
                                     <div class="col-12 col-md-6">
                                         <label for="inputGender" class="form-label">성별</label>
                                         <select class="form-select" id="inputGender" name=customerGender>
-                                            <option value="MALE" th:selected="${customer.customerGender == 'MALE'}">남</option>
-                                            <option value="FEMALE" th:selected="${customer.customerGender == 'FEMALE'}">여</option>
-                                            <option value="NONE" th:selected="${customer.customerGender == 'NONE'}">선택안함</option>
+                                            <option value="MALE" th:selected="${customer.customerGender == 'MALE'}">남
+                                            </option>
+                                            <option value="FEMALE" th:selected="${customer.customerGender == 'FEMALE'}">
+                                                여
+                                            </option>
+                                            <option value="NONE" th:selected="${customer.customerGender == 'NONE'}">
+                                                선택안함
+                                            </option>
                                         </select>
                                     </div>
                                     <!--                                    </div>-->
-<!--                                    <div class="col-12">-->
-<!--                                        <label for="inputAbout" class="form-label">About</label>-->
-<!--                                        <textarea class="form-control" id="inputAbout">Ethan Leo is a seasoned and results-driven Project Manager who brings experience and expertise to project management. With a proven track record of successfully delivering complex projects on time and within budget, Ethan Leo is the go-to professional for organizations seeking efficient and effective project leadership.</textarea>-->
-<!--                                    </div>-->
+                                    <!--                                    <div class="col-12">-->
+                                    <!--                                        <label for="inputAbout" class="form-label">About</label>-->
+                                    <!--                                        <textarea class="form-control" id="inputAbout">Ethan Leo is a seasoned and results-driven Project Manager who brings experience and expertise to project management. With a proven track record of successfully delivering complex projects on time and within budget, Ethan Leo is the go-to professional for organizations seeking efficient and effective project leadership.</textarea>-->
+                                    <!--                                    </div>-->
                                     <div class="col-12">
                                         <button type="submit" class="btn btn-primary">회원정보 수정</button>
                                     </div>
                                 </form>
                             </div>
-<!--                            <div class="tab-pane fade" id="email-tab-pane" role="tabpanel" aria-labelledby="email-tab" tabindex="0">-->
-<!--                                <form action="#!">-->
-<!--                                    <fieldset class="row gy-3 gy-md-0">-->
-<!--                                        <legend class="col-form-label col-12 col-md-3 col-xl-2">Email Alerts</legend>-->
-<!--                                        <div class="col-12 col-md-9 col-xl-10">-->
-<!--                                            <div class="form-check">-->
-<!--                                                <input class="form-check-input" type="checkbox" id="emailChange">-->
-<!--                                                <label class="form-check-label" for="emailChange">-->
-<!--                                                    Email Changed-->
-<!--                                                </label>-->
-<!--                                            </div>-->
-<!--                                            <div class="form-check">-->
-<!--                                                <input class="form-check-input" type="checkbox" id="passwordChange">-->
-<!--                                                <label class="form-check-label" for="passwordChange">-->
-<!--                                                    Password Changed-->
-<!--                                                </label>-->
-<!--                                            </div>-->
-<!--                                            <div class="form-check">-->
-<!--                                                <input class="form-check-input" type="checkbox" id="weeklyNewsletter">-->
-<!--                                                <label class="form-check-label" for="weeklyNewsletter">-->
-<!--                                                    Weekly Newsletter-->
-<!--                                                </label>-->
-<!--                                            </div>-->
-<!--                                            <div class="form-check">-->
-<!--                                                <input class="form-check-input" type="checkbox" id="productPromotions">-->
-<!--                                                <label class="form-check-label" for="productPromotions">-->
-<!--                                                    Product Promotions-->
-<!--                                                </label>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </fieldset>-->
-<!--                                    <div class="row">-->
-<!--                                        <div class="col-12">-->
-<!--                                            <button type="submit" class="btn btn-primary mt-4">Save Changes</button>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </form>-->
-<!--                            </div>-->
-                            <div class="tab-pane fade" id="password-tab-pane" role="tabpanel" aria-labelledby="password-tab" tabindex="0">
+                            <!--                            <div class="tab-pane fade" id="email-tab-pane" role="tabpanel" aria-labelledby="email-tab" tabindex="0">-->
+                            <!--                                <form action="#!">-->
+                            <!--                                    <fieldset class="row gy-3 gy-md-0">-->
+                            <!--                                        <legend class="col-form-label col-12 col-md-3 col-xl-2">Email Alerts</legend>-->
+                            <!--                                        <div class="col-12 col-md-9 col-xl-10">-->
+                            <!--                                            <div class="form-check">-->
+                            <!--                                                <input class="form-check-input" type="checkbox" id="emailChange">-->
+                            <!--                                                <label class="form-check-label" for="emailChange">-->
+                            <!--                                                    Email Changed-->
+                            <!--                                                </label>-->
+                            <!--                                            </div>-->
+                            <!--                                            <div class="form-check">-->
+                            <!--                                                <input class="form-check-input" type="checkbox" id="passwordChange">-->
+                            <!--                                                <label class="form-check-label" for="passwordChange">-->
+                            <!--                                                    Password Changed-->
+                            <!--                                                </label>-->
+                            <!--                                            </div>-->
+                            <!--                                            <div class="form-check">-->
+                            <!--                                                <input class="form-check-input" type="checkbox" id="weeklyNewsletter">-->
+                            <!--                                                <label class="form-check-label" for="weeklyNewsletter">-->
+                            <!--                                                    Weekly Newsletter-->
+                            <!--                                                </label>-->
+                            <!--                                            </div>-->
+                            <!--                                            <div class="form-check">-->
+                            <!--                                                <input class="form-check-input" type="checkbox" id="productPromotions">-->
+                            <!--                                                <label class="form-check-label" for="productPromotions">-->
+                            <!--                                                    Product Promotions-->
+                            <!--                                                </label>-->
+                            <!--                                            </div>-->
+                            <!--                                        </div>-->
+                            <!--                                    </fieldset>-->
+                            <!--                                    <div class="row">-->
+                            <!--                                        <div class="col-12">-->
+                            <!--                                            <button type="submit" class="btn btn-primary mt-4">Save Changes</button>-->
+                            <!--                                        </div>-->
+                            <!--                                    </div>-->
+                            <!--                                </form>-->
+                            <!--                            </div>-->
+                            <div class="tab-pane fade" id="password-tab-pane" role="tabpanel"
+                                 aria-labelledby="password-tab" tabindex="0">
                                 <form action="#!">
                                     <div class="row gy-3 gy-xxl-4">
                                         <div class="col-12">
@@ -318,4 +354,111 @@
         </div>
     </div>
 </main>
+<th:block layout:fragment="js">
+    <script>
+        document.getElementById('uploadBtn').addEventListener('click', function () {
+            document.getElementById('customerProfileImage').click(); // 파일 선택 창 열기
+        });
+
+        document.getElementById('customerProfileImage').addEventListener('change', function () {
+            if (this.files && this.files[0]) {
+                const file = this.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    // 미리보기 이미지 태그의 src를 변경하여 선택된 파일을 표시
+                    const previewImage = document.getElementById('profileImagePreview');
+                    previewImage.src = e.target.result;
+                    previewImage.style.display = "block"; // 이미지 미리보기 보이기
+                }
+
+                reader.readAsDataURL(file); // 파일을 Data URL로 변환하여 읽기
+            }
+        });
+
+        document.getElementById('deleteBtn').addEventListener('click', function () {
+            // 삭제 버튼 클릭 시, 이미지와 파일 입력 초기화
+            document.getElementById('customerProfileImage').value = ""; // 파일 입력 초기화
+            const previewImage = document.getElementById('profileImagePreview');
+            previewImage.src = ""; // 미리보기 이미지 초기화
+            previewImage.style.display = "none"; // 이미지 미리보기 숨기기
+        });
+    </script>
+<!--    닉네임 중복인증-->
+    <script>
+        // 인증 상태를 추적하는 변수
+        let isNicknameVerified = true; // 기존 닉네임은 이미 인증된 것으로 간주
+        const originalNickname = $("#customerNickName").val(); // 페이지 로드 시, 기존 닉네임 저장
+
+        // 닉네임 입력이 변경될 때 인증 상태 초기화
+        $("#customerNickName").on("input", function() {
+            const currentNickname = $(this).val().trim();
+
+            if (currentNickname === originalNickname) {
+                // 닉네임이 기존과 동일하면 인증된 상태로 간주
+                isNicknameVerified = true;
+                $("#checkNicknameBtn").prop("disabled", true); // 중복 확인 버튼 비활성화
+                $("#nicknameFeedback").hide(); // 피드백 메시지 숨기기
+            } else {
+                // 닉네임이 변경되면 인증이 필요함
+                isNicknameVerified = false;
+                $("#checkNicknameBtn").prop("disabled", false); // 중복 확인 버튼 활성화
+                $("#checkNicknameBtn").css("background-color", ""); // 버튼 색상 초기화
+                $("#nicknameFeedback").hide(); // 피드백 메시지 숨기기
+            }
+        });
+
+        // 닉네임 중복 확인
+        $("#checkNicknameBtn").click(function() {
+            const nickname = $("#customerNickName").val().trim(); // 공백 제거
+
+            if (nickname === "") {
+                $("#nicknameFeedback").text("닉네임을 입력해주세요.").css("color", "red").show();
+                return;
+            }
+
+            $.ajax({
+                url: '/check-nickname',
+                type: 'POST',
+                data: { customerNickName: nickname },
+                success: function(isDuplicate) {
+                    if (isDuplicate) {
+                        $("#nicknameFeedback").text("이미 사용 중인 닉네임입니다.").css("color", "red").show();
+                        isNicknameVerified = false; // 중복이면 인증 실패
+                        $("#checkNicknameBtn").css({
+                            "background-color": "red",
+                            "cursor": "not-allowed"
+                        }); // 버튼 색상 변경 및 커서 업데이트
+                        $("#checkNicknameBtn").prop("disabled", true); // 버튼 비활성화
+                    } else {
+                        $("#nicknameFeedback").text("사용 가능한 닉네임입니다.").css("color", "green").show();
+                        isNicknameVerified = true; // 인증 성공
+                        $("#checkNicknameBtn").css({
+                            "background-color": "green",
+                            "cursor": "pointer"
+                        }); // 버튼 색상 변경 및 커서 복원
+                    }
+                },
+                error: function() {
+                    $("#nicknameFeedback").text("닉네임 중복 확인 중 오류가 발생했습니다.").css("color", "red").show();
+                    $("#checkNicknameBtn").css({
+                        "background-color": "red",
+                        "cursor": "not-allowed"
+                    }); // 버튼 색상 변경 및 커서 업데이트
+                    $("#checkNicknameBtn").prop("disabled", true); // 버튼 비활성화
+                }
+            });
+        });
+
+        // 폼을 제출할 때 인증 상태를 확인
+        $("#detailsForm").submit(function(event) {
+            if (!isNicknameVerified && $("#customerNickName").val().trim() !== originalNickname) {
+                alert("닉네임 중복 확인을 해주세요.");
+                event.preventDefault(); // 폼 제출 중단
+                return;
+            }
+        });
+    </script>
+</th:block>
+</body>
 </html>
