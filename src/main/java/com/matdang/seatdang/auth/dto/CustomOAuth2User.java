@@ -1,7 +1,6 @@
 package com.matdang.seatdang.auth.dto;
 
-import com.matdang.seatdang.member.entitiy.Gender;
-import com.matdang.seatdang.member.entitiy.MemberRole;
+import com.matdang.seatdang.member.entity.MemberRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 

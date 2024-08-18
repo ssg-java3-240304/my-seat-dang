@@ -2,8 +2,9 @@ package com.matdang.seatdang.search.repository;
 
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
-import com.matdang.seatdang.store.vo.ReservationOnOff;
+import com.matdang.seatdang.store.vo.Status;
 import com.matdang.seatdang.store.vo.StoreSetting;
+import com.matdang.seatdang.store.vo.WaitingStatus;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import com.matdang.seatdang.common.storeEnum.StoreType;
@@ -232,14 +233,11 @@ class SearchRepositoryTest {
                             .notice("Closed on public holidays.")
                             .phone("555-1234-567")
                             .starRating(4.5)
-                            .setting(StoreSetting.builder()
+                            .storeSetting(StoreSetting.builder()
                                     .reservationOpenTime(LocalTime.of(10,0))
                                     .reservationCloseTime(LocalTime.of(20,0))
-                                    .reservationOnOff(ReservationOnOff.OFF)
-                                    .waitingOpenTime(LocalTime.of(10,0))
-                                    .waitingCloseTime(LocalTime.of(20,0))
-                                    .waitingOnOff(ReservationOnOff.ON)
-                                    .expectedWaitingTime(LocalTime.of(0,10))
+                                    .reservationStatus(Status.OFF)
+                                    .waitingStatus(WaitingStatus.OPEN)
                                     .build()
                             )
                             .build();
@@ -260,14 +258,11 @@ class SearchRepositoryTest {
                             .notice("Closed on public holidays.")
                             .phone("555-1234-567")
                             .starRating(4.5)
-                            .setting(StoreSetting.builder()
+                            .storeSetting(StoreSetting.builder()
                                     .reservationOpenTime(LocalTime.of(10,0))
                                     .reservationCloseTime(LocalTime.of(20,0))
-                                    .reservationOnOff(ReservationOnOff.ON)
-                                    .waitingOpenTime(LocalTime.of(10,0))
-                                    .waitingCloseTime(LocalTime.of(20,0))
-                                    .waitingOnOff(ReservationOnOff.OFF)
-                                    .expectedWaitingTime(LocalTime.of(0,10))
+                                    .reservationStatus(Status.ON)
+                                    .waitingStatus(WaitingStatus.CLOSE)
                                     .build()
                             )
                             .build();
@@ -288,14 +283,11 @@ class SearchRepositoryTest {
                             .notice("Closed on public holidays.")
                             .phone("555-1234-567")
                             .starRating(4.5)
-                            .setting(StoreSetting.builder()
+                            .storeSetting(StoreSetting.builder()
                                     .reservationOpenTime(LocalTime.of(10,0))
                                     .reservationCloseTime(LocalTime.of(20,0))
-                                    .reservationOnOff(ReservationOnOff.ON)
-                                    .waitingOpenTime(LocalTime.of(10,0))
-                                    .waitingCloseTime(LocalTime.of(20,0))
-                                    .waitingOnOff(ReservationOnOff.OFF)
-                                    .expectedWaitingTime(LocalTime.of(0,10))
+                                    .reservationStatus(Status.ON)
+                                    .waitingStatus(WaitingStatus.UNAVAILABLE)
                                     .build()
                             )
                             .build();

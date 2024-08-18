@@ -1,4 +1,4 @@
-package com.matdang.seatdang.member.entitiy;
+package com.matdang.seatdang.member.entity;
 
 /**
  * 회원 상태를 나타내는 열거형 클래스입니다.

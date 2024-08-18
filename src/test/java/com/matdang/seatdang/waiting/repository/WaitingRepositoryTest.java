@@ -27,7 +27,6 @@ class WaitingRepositoryTest {
     private WaitingRepository waitingRepository;
     @Autowired
     private WaitingQueryRepository waitingQueryRepository;
-
     @Autowired
     private EntityManager em;
 
@@ -43,7 +42,6 @@ class WaitingRepositoryTest {
                             .storeId(1L)
                             .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
                             .waitingStatus(value)
-                            .createdAt(LocalDateTime.now())
                             .visitedTime(null)
                             .build());
                 }
@@ -57,7 +55,6 @@ class WaitingRepositoryTest {
                     .storeId(2L)
                     .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
                     .waitingStatus(WaitingStatus.WAITING)
-                    .createdAt(LocalDateTime.now())
                     .visitedTime(null)
                     .build());
         }
@@ -78,29 +75,7 @@ class WaitingRepositoryTest {
         assertThat(findWaitings.size()).isEqualTo(size);
     }
 
-    @ParameterizedTest
-    @CsvSource(value = {"1,WAITING,10", "2,WAITING,10", "1,VISITED,10", "2,VISITED,0", "1,NO_SHOW,10"})
-    @DisplayName("상점 id로 특정 상태인 웨이팅 모두 조회 ")
-    void findAllByStoreIdAndWaitingStatus(long shopId, String status, int size) {
-        // given
-        // when
-        List<WaitingDto> findWaitings = waitingQueryRepository.findAllByStoreIdAndWaitingStatus(shopId,
-                WaitingStatus.valueOf(status));
 
-        // then
-        assertThat(findWaitings.size()).isEqualTo(size);
-    }
-
-    @ParameterizedTest
-    @CsvSource(value = {"1,30", "2,0"})
-    @DisplayName("상점 id로 취소 상태(노쇼, 점주, 고객) 웨이팅 모두 조회")
-    void findAllByCancelStatus(Long storeId, int size) {
-        // given
-        // when
-        List<WaitingDto> findWaitings = waitingQueryRepository.findAllByCancelStatus(storeId);
-        // then
-        assertThat(findWaitings.size()).isEqualTo(size);
-    }
 
     @ParameterizedTest
     @CsvSource(value = {"1,NO_SHOW", "2,VISITED", "3,CUSTOMER_CANCELED", "4,SHOP_CANCELED"})
@@ -141,5 +116,21 @@ class WaitingRepositoryTest {
         // then
         assertThat(result).isEqualTo(4);
     }
+
+    @Test
+    @DisplayName("상점 id로 웨이팅 전체 취소")
+    void cancelAllWaiting() {
+        // given
+        // when
+        int result = waitingRepository.cancelAllWaiting(1L);
+        // then
+        assertThat(result).isEqualTo(10);
+        assertThat(waitingQueryRepository.findAllByStoreIdAndWaitingStatus(1L, WaitingStatus.WAITING).size())
+                .isEqualTo(0);
+        assertThat(waitingQueryRepository.findAllByStoreIdAndWaitingStatus(1L, WaitingStatus.SHOP_CANCELED)
+                .size()).isEqualTo(20);
+
+    }
+
 
 }

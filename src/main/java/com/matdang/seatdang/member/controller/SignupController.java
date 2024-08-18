@@ -27,6 +27,22 @@ public class SignupController {
         return "customer/member/signup";
     }
 
+
+    // 닉네임 중복 확인
+    @PostMapping("/check-nickname")
+    @ResponseBody
+    public boolean checkNickname(@RequestParam String customerNickName) {
+        return customerSignupService.isNicknameDuplicate(customerNickName);
+    }
+
+    //이메일 중복 확인
+    @PostMapping("/check-email")
+    @ResponseBody
+    public boolean checkMemberEmail(@RequestParam String memberEmail) {
+        log.debug("입력한 이메일 : {}", memberEmail);
+        return customerSignupService.isEmailDuplicate(memberEmail);
+    }
+
     // 사용자 회원가입 값 요청
     @PostMapping("/signupProc")
     public String joinProcess(@ModelAttribute CustomerSignupDto customerSignupDto,@RequestParam("customerProfileImage") MultipartFile customerProfileImage){
@@ -35,6 +51,8 @@ public class SignupController {
 
         return "redirect:/login"; // 이 경로로 오면 로그인 바로 할 수 있게
     }
+
+
 
 
 

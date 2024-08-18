@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Waiting Status Setting</title>
+    <script>
+        function confirmStatusChange(status) {
+            let statusText = "";
+            switch (status) {
+                case 1:
+                    statusText = "웨이팅 접수";
+                    break;
+                case 2:
+                    statusText = "웨이팅 마감";
+                    break;
+                case 3:
+                    statusText = "웨이팅 이용불가";
+                    break;
+            }
+
+            if (confirm(`정말로 ${statusText} 상태로 변경하시겠습니까?`)) {
+                // 버튼 클릭 시 폼 제출
+                document.getElementById("statusForm").elements["status"].value = status;
+                document.getElementById("statusForm").submit();
+            }
+        }
+    </script>
+</head>
+<body>
+<h1>Change Waiting Status</h1>
+
+<p>현재 상태: <span th:text="${waitingStatus.waitingStatus}"></span></p>
+<!-- 상태 변경 폼 -->
+<form id="statusForm" th:action="@{/store/setting/waiting-status}" method="post">
+    <!-- 상태 값을 전송할 숨겨진 필드 -->
+    <input type="hidden" name="status" value="0" />
+
+    <!-- 버튼들 -->
+    <div>
+        <button type="button" onclick="confirmStatusChange(1)">웨이팅 접수</button>
+    </div>
+    <div>
+        <button type="button" onclick="confirmStatusChange(2)">웨이팅 마감</button>
+    </div>
+    <div>
+        <button type="button" onclick="confirmStatusChange(3)">웨이팅 이용불가</button>
+    </div>
+</form>
+</body>
+</html>
