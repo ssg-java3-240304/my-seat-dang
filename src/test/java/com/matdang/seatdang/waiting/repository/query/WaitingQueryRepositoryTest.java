@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
+import com.matdang.seatdang.waiting.entity.WaitingStorage;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingDto;
 import jakarta.persistence.EntityManager;
@@ -108,5 +109,17 @@ class WaitingQueryRepositoryTest {
         for (int i = 0; i < findWaitings.size(); i++) {
             assertThat(findWaitings.get(i).getWaitingOrder()).isEqualTo(i + 1);
         }
+    }
+
+    @Test
+    @DisplayName("상점 id로 WaitingStorage entity형태로 웨이팅 가져오기")
+    void findAllByStoreId() {
+        // given
+        // when
+        List<WaitingStorage> findResult = waitingQueryRepository.findAllByStoreId(1L);
+        System.out.println("findResult = " + findResult);
+
+        // then
+        assertThat(findResult.size()).isEqualTo(50);
     }
 }
