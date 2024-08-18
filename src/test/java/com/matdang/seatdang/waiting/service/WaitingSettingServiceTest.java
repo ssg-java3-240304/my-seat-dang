@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.store.repository.query.dto.AvailableWaitingTime;
-import com.matdang.seatdang.store.vo.Status;
 import com.matdang.seatdang.store.vo.StoreSetting;
 import com.matdang.seatdang.store.vo.WaitingTime;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
@@ -52,7 +51,6 @@ class WaitingSettingServiceTest {
         em.flush();
         em.clear();
 
-
         // when
         AvailableWaitingTime findResult = waitingSettingService.findAvailableWaitingTime(store.getStoreId());
 
@@ -75,7 +73,6 @@ class WaitingSettingServiceTest {
 
         // when
         AvailableWaitingTime findResult = waitingSettingService.findAvailableWaitingTime(store.getStoreId());
-        System.out.println("findResult = " + findResult);
 
         // then
         assertThat(findResult).isNotNull();
@@ -99,7 +96,6 @@ class WaitingSettingServiceTest {
 
         // when
         LocalTime findResult = waitingSettingService.findEstimatedWaitingTime(store.getStoreId());
-        System.out.println("findResult = " + findResult);
 
         // then
         assertThat(findResult).isNotNull();
@@ -206,4 +202,23 @@ class WaitingSettingServiceTest {
                 .isEqualTo(10);
     }
 
+    @Test
+    @DisplayName("존재하는 웨이팅 인원수 가져오기")
+    public void findWaitingPeopleCount() {
+        // given
+        Store store = storeRepository.save(Store.builder()
+                .storeSetting(StoreSetting.builder()
+                        .waitingPeopleCount(3)
+                        .build())
+                .build());
+        em.flush();
+        em.clear();
+
+        // when
+        Integer findResult = waitingSettingService.findWaitingPeopleCount(store.getStoreId());
+
+        // then
+        assertThat(findResult).isNotNull();
+        assertThat(findResult).isEqualTo(3);
+    }
 }
