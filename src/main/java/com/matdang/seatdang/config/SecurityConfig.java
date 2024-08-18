@@ -44,7 +44,8 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/**","/login","/signup","/signupProc").permitAll() // 누구나 허용
+                        .requestMatchers("/","/login","/signup","/signupProc").permitAll() // 누구나 허용
+                        .requestMatchers("/payment/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN") // ROLE_ADMIN 권한이 있는 사용자만 허용
                         .requestMatchers("/storeowner/**").hasRole("STORE_OWNER") // ROLE_STORE_OWNER 권한이 있는 사용자만 허용
                         .anyRequest().authenticated() // 나머지 로그인 사용자만 이용가능
