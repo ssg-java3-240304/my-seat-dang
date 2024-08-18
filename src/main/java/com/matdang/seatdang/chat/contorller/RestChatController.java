@@ -1,5 +1,6 @@
 package com.matdang.seatdang.chat.contorller;
 
+import com.matdang.seatdang.chat.dto.ChatPaymentRequestDto;
 import com.matdang.seatdang.chat.entity.Chat;
 import com.matdang.seatdang.chat.repository.ChatRepository;
 import com.matdang.seatdang.chat.service.ChatService;
@@ -27,7 +28,11 @@ public class RestChatController {
     @CrossOrigin(origins = "*")
     @PostMapping("/chat")
     public Mono<Chat> setMsg(@RequestPart(value = "chat") Chat chat,
-                             @RequestPart(value = "customerImage", required = false) MultipartFile customerImage) {
+                             @RequestPart(value = "customerImage", required = false) MultipartFile customerImage
+                             ) {
+        System.out.println(chat);
+        System.out.println(customerImage);
+//        System.out.println("chatpayment:" + chatPaymentRequestDto);
         return chatService.saveChatWithImage(chat, customerImage);
     }
 
