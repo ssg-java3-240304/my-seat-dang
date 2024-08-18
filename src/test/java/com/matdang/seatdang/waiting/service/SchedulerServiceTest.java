@@ -7,6 +7,7 @@ import com.matdang.seatdang.search.repository.SearchRepository;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.store.vo.StoreSetting;
+import com.matdang.seatdang.store.vo.WaitingTime;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
@@ -14,6 +15,7 @@ import com.matdang.seatdang.waiting.entity.WaitingStorage;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
 import jakarta.persistence.EntityManager;
+import java.time.LocalTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -119,7 +121,77 @@ class SchedulerServiceTest {
         assertThat(findSA.size()).isEqualTo(50);
         assertThat(findSB.size()).isEqualTo(10);
         assertThat(findSC.size()).isEqualTo(0);
+    }
 
+    @Test
+    @DisplayName("웨이팅 마감 시간일 때, 마감 상태로 변경")
+    void closeWaiting() {
+        // given
+        Store storeA = storeRepository.save(Store.builder()
+                .storeSetting(StoreSetting.builder()
+                        .waitingStatus(com.matdang.seatdang.store.vo.WaitingStatus.CLOSE)
+                        .build())
+                .build());
+
+        Store storeB = storeRepository.save(Store.builder()
+                .storeSetting(StoreSetting.builder()
+                        .waitingStatus(com.matdang.seatdang.store.vo.WaitingStatus.UNAVAILABLE)
+                        .build())
+                .build());
+
+        Store storeC = storeRepository.save(Store.builder()
+                .storeSetting(StoreSetting.builder()
+                        .waitingStatus(com.matdang.seatdang.store.vo.WaitingStatus.OPEN)
+                        .waitingTime(WaitingTime.builder()
+                                .waitingCloseTime(LocalTime.now())
+                                .build())
+                        .build())
+                .build());
+
+        Store storeD = storeRepository.save(Store.builder()
+                .storeSetting(StoreSetting.builder()
+                        .waitingStatus(com.matdang.seatdang.store.vo.WaitingStatus.OPEN)
+                        .waitingTime(WaitingTime.builder()
+                                .waitingCloseTime(LocalTime.now().plusMinutes(10))
+                                .build())
+                        .build())
+                .build());
+
+        Store storeE = storeRepository.save(Store.builder()
+                .storeSetting(StoreSetting.builder()
+                        .waitingStatus(com.matdang.seatdang.store.vo.WaitingStatus.OPEN)
+                        .waitingTime(WaitingTime.builder()
+                                .waitingCloseTime(LocalTime.now().minusMinutes(10))
+                                .build())
+                        .build())
+                .build());
+
+        // when
+        em.flush();
+        em.clear();
+
+        schedulerService.closeWaiting();
+        em.flush();
+        em.clear();
+
+        Store findA = storeRepository.findByStoreId(storeA.getStoreId());
+        Store findB = storeRepository.findByStoreId(storeB.getStoreId());
+        Store findC = storeRepository.findByStoreId(storeC.getStoreId());
+        Store findD = storeRepository.findByStoreId(storeD.getStoreId());
+        Store findE = storeRepository.findByStoreId(storeE.getStoreId());
+
+        // then
+        assertThat(findA.getStoreSetting().getWaitingStatus()).isEqualTo(
+                com.matdang.seatdang.store.vo.WaitingStatus.CLOSE);
+        assertThat(findB.getStoreSetting().getWaitingStatus()).isEqualTo(
+                com.matdang.seatdang.store.vo.WaitingStatus.UNAVAILABLE);
+
+        assertThat(findC.getStoreSetting().getWaitingStatus()).isEqualTo(
+                com.matdang.seatdang.store.vo.WaitingStatus.CLOSE);
+        assertThat(findD.getStoreSetting().getWaitingStatus()).isEqualTo(
+                com.matdang.seatdang.store.vo.WaitingStatus.OPEN);
+        assertThat(findE.getStoreSetting().getWaitingStatus()).isEqualTo(
+                com.matdang.seatdang.store.vo.WaitingStatus.CLOSE);
 
     }
 }
