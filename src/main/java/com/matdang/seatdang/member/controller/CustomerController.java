@@ -7,11 +7,14 @@ import com.matdang.seatdang.member.service.CustomerService;
 import com.matdang.seatdang.member.entity.Customer;
 import com.matdang.seatdang.member.entity.Member;
 import com.matdang.seatdang.object_storage.service.FileService;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 /**
@@ -89,6 +92,35 @@ public class CustomerController {
             return "redirect:/login";
         }
     }
+
+
+    @PostMapping("/mainmypage/change-password")
+    public String changePassword(@RequestParam("newPassword") String newPassword,
+                                 @RequestParam("confirmPassword") String confirmPassword,
+                                 Model model, HttpServletRequest request) {
+        Member member = authService.getAuthenticatedMember();
+
+        if (member != null) {
+            // 새 비밀번호와 확인 비밀번호가 일치하는지 확인
+            if (!newPassword.equals(confirmPassword)) {
+                model.addAttribute("error", "새 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
+                return "customer/mypage/mainmypage"; // 비밀번호가 일치하지 않을 경우 오류 메시지 표시
+            }
+
+            // 비밀번호 변경
+            customerService.updateCustomerPassword((Customer) member, newPassword);
+
+            // 세션 무효화 및 로그아웃 처리
+            request.getSession().invalidate(); // 세션 무효화
+            SecurityContextHolder.clearContext(); // Spring Security 컨텍스트 초기화
+
+            model.addAttribute("success", "비밀번호가 성공적으로 변경되었습니다.");
+            return "redirect:/login?passwordChanged=true"; // 비밀번호 변경 후 성공모달창으로 리다이렉트
+        } else {
+            return "redirect:/mainmypage";
+        }
+    }
+
 
 
 

@@ -4,6 +4,7 @@ import com.matdang.seatdang.member.dto.CustomerDto;
 import com.matdang.seatdang.member.entity.Customer;
 import com.matdang.seatdang.member.entity.Gender;
 import com.matdang.seatdang.member.repository.CustomerRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,9 +15,11 @@ import java.time.format.DateTimeParseException;
 @Service
 public class CustomerService {
 
+    private final PasswordEncoder passwordEncoder;
     private final CustomerRepository customerRepository;
 
-    public CustomerService(CustomerRepository customerRepository) {
+    public CustomerService(PasswordEncoder passwordEncoder, CustomerRepository customerRepository) {
+        this.passwordEncoder = passwordEncoder;
         this.customerRepository = customerRepository;
     }
 
@@ -75,4 +78,13 @@ public class CustomerService {
     }
 
 
+    @Transactional
+    public void updateCustomerPassword(Customer customer, String newPassword) {
+        // 빌더 패턴을 사용하여 새로운 인스턴스로 업데이트
+        Customer updatedCustomer = customer.toBuilder()
+                .memberPassword(passwordEncoder.encode(newPassword))
+                .build();
+
+        customerRepository.save(updatedCustomer);
+    }
 }

@@ -82,9 +82,36 @@
         <!-- /row -->
     </div>
     <!-- /container -->
+    <div class="modal fade" id="passwordChangedModal" tabindex="-1" aria-labelledby="passwordChangedModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="passwordChangedModalLabel">비밀번호 변경 완료</h5>
+                </div>
+                <div class="modal-body">
+                    <p>비밀번호가 성공적으로 변경되었습니다. 새로운 비밀번호로 로그인해 주세요.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div layout:fragment="js">
         <!-- 이 페이지 전용 스크립트 -->
         <script th:src="@{/js/customer/jarallax.min.js}"></script>
         <script th:src="@{/js/customer/jarallax-video.min.js}"></script>
+        <!-- 모달 자동 표시 스크립트 -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const urlParams = new URLSearchParams(window.location.search);
+                const passwordChanged = urlParams.get('passwordChanged');
+
+                if (passwordChanged === 'true') {
+                    const successModal = new bootstrap.Modal(document.getElementById('passwordChangedModal'));
+                    successModal.show();
+                }
+            });
+        </script>
     </div>
 </main>
