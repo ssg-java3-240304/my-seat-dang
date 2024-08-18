@@ -1,4 +1,4 @@
-package com.matdang.seatdang.auth.dto;
+package com.matdang.seatdang.member.dto;
 
 import lombok.Data;
 
