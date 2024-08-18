@@ -77,11 +77,26 @@
         .row-buttons button.cancel-button:hover {
             background-color: #d32f2f; /* 빨간색 배경 - hover */
         }
+
+        .waiting-info {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
 
 <h2>Waiting List</h2>
+
+<p>현재 상태: <span th:text="${waitingStatus.waitingStatus}"></span></p>
+
+<div th:if="${status == 0}">
+    <h2>Estimated Waiting Time: <span th:text="${estimatedTime}"></span></h2>
+</div>
+
+<div class="waiting-info">
+    <p>Team Count: <span th:text="${waitingPeople.teamCount}"></span></p>
+    <p>People Count: <span th:text="${waitingPeople.peopleCount}"></span></p>
+</div>
 
 <div class="button-container">
     <form th:action="@{/store/waiting}" method="get" style="display:inline;">
@@ -106,7 +121,7 @@
         <th>Customer Phone Number</th>
         <th>People Count</th>
         <th>Waiting Status</th>
-        <th>Created At</th>
+        <th>Created Date</th>
         <th>Visited Time</th>
         <th th:if="${status == 0}">Status Change</th>
     </tr>
@@ -118,8 +133,8 @@
         <td th:text="${waiting.customerPhone}"></td>
         <td th:text="${waiting.peopleCount}"></td>
         <td th:text="${waiting.waitingStatus}"></td>
-        <td th:text="${waiting.createdAt}"></td>
-        <td th:text="${waiting.visitedTime}"></td>
+        <td th:text="${{waiting.createdDate}}"></td>
+        <td th:text="${{waiting.visitedTime}}"></td>
         <td th:if="${status == 0}">
             <div class="row-buttons">
                 <form th:if="${waiting.waitingOrder == 1}" th:action="@{/store/waiting}" method="post">
