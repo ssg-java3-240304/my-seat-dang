@@ -17,6 +17,9 @@ spring:
 
 
   #  thymeleaf:
+#    thymeleaf:
+#      cache:false
+
 
 #    prefix: classpath:/templates/
 #    suffix: .html

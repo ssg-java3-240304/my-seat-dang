@@ -8,6 +8,8 @@ import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -16,8 +18,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.client.RestTemplate;
 
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @Configuration
 @EnableWebSecurity
@@ -44,8 +48,6 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/","/login","/signup","/signupProc").permitAll() // 누구나 허용
-                        .requestMatchers("/payment/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN") // ROLE_ADMIN 권한이 있는 사용자만 허용
                         .requestMatchers("/storeowner/**").hasRole("STORE_OWNER") // ROLE_STORE_OWNER 권한이 있는 사용자만 허용
                         .anyRequest().authenticated() // 나머지 로그인 사용자만 이용가능
@@ -93,18 +95,32 @@ public class SecurityConfig {
                     if (authentication != null && authentication.getPrincipal() instanceof CustomOAuth2User) {
                         // 애플리케이션 세션 무효화 (인증되지 않은 상태)
                         request.getSession().invalidate();
-                        // 네이버 로그아웃은 되는데 naver로 가짐..
-                        // 네이버 로그아웃 URL에 리다이렉트할 URI 포함
-                        String logoutUrl = "https://nid.naver.com/nidlogin.logout?returl=" + URLEncoder.encode("http://223.130.155.102:8080/login", "UTF-8");
-                        System.out.println("Encoded URL: " + logoutUrl);
+
 //                        System.out.println("Logout Redirect URL: " + logoutRedirectUrl);
 
+//                        response.sendRedirect(logoutUrl);
 
-                        // 네이버 로그아웃으로 리다이렉트
-                        //현재 지금 네이버 Oauth 로그아웃하면 네이버창으로 감.......ㅠㅠㅠ
-                        response.sendRedirect(logoutUrl);
-//                        response.sendRedirect("/login");
+                        // 네이버 로그아웃 URL 설정
+                        String redirectUri = URLEncoder.encode("http://localhost:8080/login", StandardCharsets.UTF_8);
+                        String logoutUrl = "https://nid.naver.com/nidlogin.logout?returl=" + redirectUri;
 
+                        // 네이버 로그아웃 요청을 백엔드에서 직접 호출
+                        RestTemplate restTemplate = new RestTemplate();
+                        ResponseEntity<String> logoutResponse = restTemplate.getForEntity(logoutUrl, String.class);
+
+                        // 로그아웃 요청이 성공적으로 처리되었는지 확인
+                        if (logoutResponse.getStatusCode() == HttpStatus.OK) {
+                            // 로그아웃 성공 - 로그인 페이지로 리다이렉트
+                            response.sendRedirect("/login");
+                        } else {
+                            // 로그아웃 실패 처리
+                            // 예: 로그아웃 실패 메시지 전달 또는 다른 조치
+                            System.out.println("네이버 로그아웃 실패: 상태 코드 - " + logoutResponse.getStatusCode());
+                            response.sendRedirect("/login?logoutError=true");
+                        }
+
+
+//
 
                     } else {
                         // 기본 세션 로그아웃 처리
@@ -128,16 +144,6 @@ public class SecurityConfig {
         return (web) -> web.ignoring()
                 .requestMatchers("/assets/**","/css/**","/img/**","/js/**","/sass/**","/scss/**","/vendor/**","/video/**");
     }
-
-//    // OAuth2UserService 빈 설정 (필요에 따라 커스텀 서비스 추가 가능)
-//    @Bean
-//    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService() {
-//        return new DefaultOAuth2UserService(); // 기본 서비스 사용
-//    }
-
-
-
-
 
 
 }

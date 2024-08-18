@@ -1,4 +1,4 @@
-package com.matdang.seatdang.member.entitiy;
+package com.matdang.seatdang.member.entity;
 
 import com.matdang.seatdang.member.vo.StoreVo;
 import jakarta.persistence.DiscriminatorValue;
