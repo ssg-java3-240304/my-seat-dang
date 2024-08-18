@@ -82,7 +82,7 @@ public class WaitingController {
     }
 
     private void createEstimatedWaitingTime(int status, Model model, List<WaitingDto> waitings, Long storeId) {
-        if (status == 0) {
+        if (status == 0 && !waitings.isEmpty()) {
             int diff = 0;
             long elapsedTime = Duration.between(waitings.get(0).getCreatedDate(), LocalDateTime.now()).toMinutes();
             int estimatedTime = waitingSettingService.findEstimatedWaitingTime(storeId).getMinute();
