@@ -1,8 +1,7 @@
-package com.matdang.seatdang.member.controller;
+package com.matdang.seatdang.auth.controller;
 
-import com.matdang.seatdang.member.dto.CustomerSignupDto;
-import com.matdang.seatdang.member.service.CustomerSignupService;
-import com.matdang.seatdang.object_storage.service.FileService;
+import com.matdang.seatdang.auth.dto.CustomerSignupDto;
+import com.matdang.seatdang.auth.service.CustomerSignupService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

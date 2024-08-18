@@ -48,7 +48,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/**","/login","/signup","/signupProc","/check-nickname").permitAll() // 누구나 허용
+                        .requestMatchers("/**","/login","/signup","/signupProc","/check-nickname","/check-email").permitAll() // 누구나 허용
                         .requestMatchers("/payment/**").permitAll() // /payment 하위 경로는 인증 없이 허용
                         .requestMatchers("/admin/**").hasRole("ADMIN") // ROLE_ADMIN 권한이 있는 사용자만 허용
                         .requestMatchers("/storeowner/**").hasRole("STORE_OWNER") // ROLE_STORE_OWNER 권한이 있는 사용자만 허용
@@ -97,15 +97,9 @@ public class SecurityConfig {
                     if (authentication != null && authentication.getPrincipal() instanceof CustomOAuth2User) {
                         // 애플리케이션 세션 무효화 (인증되지 않은 상태)
                         request.getSession().invalidate();
-                        // 네이버 로그아웃은 되는데 naver로 가짐..
-                        // 네이버 로그아웃 URL에 리다이렉트할 URI 포함
-                        // 네이버 로그아웃 URL 설정
 
 //                        System.out.println("Logout Redirect URL: " + logoutRedirectUrl);
 
-
-                        // 네이버 로그아웃으로 리다이렉트
-                        //현재 지금 네이버 Oauth 로그아웃하면 네이버창으로 감.......ㅠㅠㅠ
 //                        response.sendRedirect(logoutUrl);
 
                         // 네이버 로그아웃 URL 설정
@@ -152,16 +146,6 @@ public class SecurityConfig {
         return (web) -> web.ignoring()
                 .requestMatchers("/assets/**","/css/**","/img/**","/js/**","/sass/**","/scss/**","/vendor/**","/video/**");
     }
-
-//    // OAuth2UserService 빈 설정 (필요에 따라 커스텀 서비스 추가 가능)
-//    @Bean
-//    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService() {
-//        return new DefaultOAuth2UserService(); // 기본 서비스 사용
-//    }
-
-
-
-
 
 
 }

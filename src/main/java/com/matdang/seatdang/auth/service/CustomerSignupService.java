@@ -1,6 +1,6 @@
-package com.matdang.seatdang.member.service;
+package com.matdang.seatdang.auth.service;
 
-import com.matdang.seatdang.member.dto.CustomerSignupDto;
+import com.matdang.seatdang.auth.dto.CustomerSignupDto;
 import com.matdang.seatdang.member.entity.Customer;
 import com.matdang.seatdang.member.entity.MemberRole;
 import com.matdang.seatdang.member.entity.MemberStatus;
