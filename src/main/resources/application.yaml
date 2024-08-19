@@ -16,9 +16,9 @@ spring:
   #    active: prod
 
 #  # ai api 추가
-#  openai:
-#    api:
-#      key: ${OPENAI_API_KEY}
+  openai:
+    api:
+      key: ${OPENAI_API_KEY}
 
 
   #  thymeleaf:

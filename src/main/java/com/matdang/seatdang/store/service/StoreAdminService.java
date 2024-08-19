@@ -1,9 +1,9 @@
-package com.matdang.seatdang.admin.service;
+package com.matdang.seatdang.store.service;
 
-import com.matdang.seatdang.admin.dto.StoreDetailDto;
-import com.matdang.seatdang.admin.dto.StoreRegistRequestDto;
-import com.matdang.seatdang.admin.dto.StoreUpdateRequestDto;
-import com.matdang.seatdang.admin.repository.StoreAdminRepository;
+import com.matdang.seatdang.store.dto.StoreDetailDto;
+import com.matdang.seatdang.store.dto.StoreRegistRequestDto;
+import com.matdang.seatdang.store.dto.StoreUpdateRequestDto;
+import com.matdang.seatdang.store.repository.StoreAdminRepository;
 import com.matdang.seatdang.object_storage.service.FileService;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
