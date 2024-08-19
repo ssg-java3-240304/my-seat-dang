@@ -8,11 +8,11 @@ public class MainController {
 
     @GetMapping("/")
     public String customerMain(){
-        return "/customer/main";
+        return "customer/main";
     }
 
-    @GetMapping("/storeowner/main")
+    @GetMapping("/store-owner/main")
     public String storeOwnerMain(){
-        return "/storeowner/main";
+        return "storeowner/main";
     }
 }

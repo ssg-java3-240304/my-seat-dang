@@ -38,7 +38,7 @@ import java.util.List;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/store/waiting")
+@RequestMapping("/store-owner/waiting")
 public class WaitingController {
     private final WaitingRepository waitingRepository;
     private final WaitingService waitingService;
@@ -64,7 +64,7 @@ public class WaitingController {
         model.addAttribute("waitings", waitings);
         model.addAttribute("storeId", storeId);
         model.addAttribute("status", status);
-        return "store/waiting/main";
+        return "storeowner/waiting/main";
     }
 
     @PostMapping
@@ -78,7 +78,7 @@ public class WaitingController {
             log.info("storeId = {},  total update = {}", updateRequest.getStoreId(), result);
         }
 
-        return "redirect:/store/waiting";
+        return "redirect:/store-owner/waiting";
     }
 
     private void createEstimatedWaitingTime(int status, Model model, List<WaitingDto> waitings, Long storeId) {
