@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.matdang.seatdang.store.entity.Store;
-import com.matdang.seatdang.store.vo.Status;
 import com.matdang.seatdang.store.vo.StoreSetting;
 import com.matdang.seatdang.store.vo.WaitingStatus;
 import jakarta.persistence.EntityManager;
@@ -85,14 +84,35 @@ class StoreRepositoryTest {
     @Test
     @DisplayName("웨이팅 상태 기본값 UNAVAILABLE")
     void setDefaultWaitingStatus() {
+        //given
         Store store = storeRepository.save(Store.builder()
                 .storeSetting(new StoreSetting())
                 .build());
         em.clear();
 
+        // when
         Store findStore = storeRepository.findByStoreId(store.getStoreId());
-        System.out.println("findStore = " + findStore);
 
+        // then
         assertThat(findStore.getStoreSetting().getWaitingStatus()).isEqualTo(WaitingStatus.UNAVAILABLE);
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {1,3,5})
+    @DisplayName("웨이팅 인원수 업데이트")
+    void  updateWaitingPeopleCount(int peopleCount) {
+        //given
+        Store store = storeRepository.save(Store.builder()
+                .build());
+        em.clear();
+
+        // when
+        int result = storeRepository.updateWaitingPeopleCount(peopleCount, store.getStoreId());
+
+        // then
+        assertThat(result).isEqualTo(1);
+        assertThat(
+                storeRepository.findByStoreId(store.getStoreId()).getStoreSetting().getWaitingPeopleCount()).isEqualTo(
+                peopleCount);
     }
 }

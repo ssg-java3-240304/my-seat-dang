@@ -1,12 +1,14 @@
 package com.matdang.seatdang.dummyData;
 
 import com.matdang.seatdang.common.storeEnum.StoreType;
-import com.matdang.seatdang.member.entitiy.*;
+import com.matdang.seatdang.member.entity.Customer;
+import com.matdang.seatdang.member.entity.Gender;
+import com.matdang.seatdang.member.entity.MemberRole;
+import com.matdang.seatdang.member.entity.MemberStatus;
 import com.matdang.seatdang.member.vo.StoreVo;
 import com.matdang.seatdang.member.repository.MemberRepository;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
-import com.matdang.seatdang.store.vo.ReservationOnOff;
 import com.matdang.seatdang.store.vo.StoreSetting;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
@@ -34,7 +36,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-//@Disabled
+@Disabled
 @SpringBootTest
 public class TestCreateDummyData {
     @Autowired
@@ -141,10 +143,10 @@ public class TestCreateDummyData {
                             .notice("Closed on public holidays.")
                             .phone("555-1234-567")
                             .starRating(4.5)
-                            .setting(StoreSetting.builder()
+                            .storeSetting(StoreSetting.builder()
                                     .reservationOpenTime(LocalTime.of(10,0))
                                     .reservationCloseTime(LocalTime.of(20,0))
-                                    .reservationOnOff(ReservationOnOff.OFF)
+                                    .reservationStatus(r.OFF)
                                     .waitingOpenTime(LocalTime.of(10,0))
                                     .waitingCloseTime(LocalTime.of(20,0))
                                     .waitingOnOff(ReservationOnOff.ON)

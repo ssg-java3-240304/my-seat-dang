@@ -76,7 +76,6 @@ class WaitingRepositoryTest {
     }
 
 
-
     @ParameterizedTest
     @CsvSource(value = {"1,NO_SHOW", "2,VISITED", "3,CUSTOMER_CANCELED", "4,SHOP_CANCELED"})
     @DisplayName("id로 상태 변경")
@@ -129,6 +128,19 @@ class WaitingRepositoryTest {
                 .isEqualTo(0);
         assertThat(waitingQueryRepository.findAllByStoreIdAndWaitingStatus(1L, WaitingStatus.SHOP_CANCELED)
                 .size()).isEqualTo(20);
+
+    }
+
+    @Test
+    @DisplayName("상점 id로 웨이팅 전체 삭제")
+    void deleteAllByStoreId() {
+        // given
+        // when
+        int result = waitingRepository.deleteAllByStoreId(1L);
+        List<Waiting> findResult = waitingRepository.findAllByStoreId(1L);
+        // then
+        assertThat(result).isEqualTo(50);
+        assertThat(findResult.size()).isEqualTo(0);
 
     }
 

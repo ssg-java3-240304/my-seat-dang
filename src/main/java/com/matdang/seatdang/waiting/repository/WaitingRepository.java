@@ -39,4 +39,9 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
             + " and w.storeId = :storeId")
     int cancelAllWaiting(@Param("storeId") Long storeId);
 
+
+    @Modifying
+    @Query("delete from Waiting w where w.storeId = :storeId")
+    int deleteAllByStoreId(@Param("storeId") Long storeId);
+
 }
