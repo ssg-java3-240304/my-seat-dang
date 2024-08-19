@@ -31,7 +31,7 @@
 #     constraint ck_storeType check (binary store_type in ('GENERAL_WAITING', 'GENERAL_RESERVATION', 'CUSTOM'))
 # );
 # alter table store auto_increment = 1000;
-
+#
 # create table tbl_store_images
 # (
 #     image_id int,

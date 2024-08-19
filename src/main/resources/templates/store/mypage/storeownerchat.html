@@ -90,7 +90,7 @@
   console.log(`Chat URL: ${chatUrl}`);
   console.log(`Reservation ID: ${reservationId}`);
   console.log(`Store Name: ${storeName}`);
-  console.log(`StoreOwner Name: ${storeOwnerName}`);
+  console.log(`store Name: ${storeOwnerName}`);
 
   // SSE 연결하기
   const eventSource = new EventSource(`${chatUrl}/chat/roomNum/${reservationId}`);
@@ -164,14 +164,6 @@
 
     // 중복된 결제 정보가 있는지 확인
     const chatBox = document.querySelector("#chat-box");
-    const existingPaymentInfo = Array.from(chatBox.querySelectorAll('.payment-info-box'))
-            .some(box => box.innerHTML.includes(data.itemName) && box.innerHTML.includes(data.quantity) && box.innerHTML.includes(data.totalAmount));
-
-    if (existingPaymentInfo) {
-      console.log('Payment info already exists in chat');
-      return;
-    }
-
     const date = new Date();
     const timeString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
     const paymentInfoBox = document.createElement("div");
@@ -180,11 +172,9 @@
     <div class="payment-info-box">
       <p><strong>상품명:</strong> ${data.itemName}</p>
       <p><strong>수량:</strong> ${data.quantity}</p>
-      <p><strong>결제 금액:</strong> ${data.totalAmount} 원</p>
-      ${data.sender === storeOwnerName
-            ? `<button class="btn btn-secondary btn-sm" disabled>결제하기</button>`
-            : `<button class="btn btn-primary btn-sm payment-btn" onclick="handlePayment(this, '${data.sender}')">결제하기</button>`
-    }
+      <p><strong>결제 금액:</strong> ${data.totalAmount}원</p>
+      <button class="btn btn-primary btn-sm payment-btn" onclick="handlePayment(this, '${data.sender}')">결제하기</button>
+      <div></div>
       <span class="time_date">${timeString}</span>
     </div>`;
     chatBox.append(paymentInfoBox);
@@ -275,7 +265,7 @@
     const payInfo = {
       sender: storeOwnerName,
       roomNum: reservationId,
-      msg: "결제폼입니다.",
+      msg: "결제버튼을 눌러주세요",
       itemName: itemName,
       quantity: quantity,
       totalAmount: totalAmount,
@@ -307,13 +297,10 @@
     });
   });
 
-  function handlePayment(button, sender) {
+  async function handlePayment(button, sender) {
     if (storeOwnerName === sender) {
-      return;  // 점주인 경우 아무것도 하지 않음
+      return "결제버튼은 고객용입니다.";  // 점주인 경우 아무것도 하지 않음
     }
-    alert("결제를 진행합니다.");
-    button.disabled = true;
-    button.textContent = "결제 완료";
   }
 
   document.querySelector("#back-button").addEventListener("click", () => {

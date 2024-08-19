@@ -41,23 +41,6 @@
   </div>
 </div>
 
-<!-- Modal for image preview -->
-<div class="modal fade" id="image-modal" tabindex="-1" role="dialog" aria-labelledby="image-modal-label" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="image-modal-label">Image Preview</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <img id="modal-image" src="" alt="Image preview" style="width: 100%;"/>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
@@ -66,9 +49,12 @@
 <script th:inline="javascript">
   /*<![CDATA[*/
   const chatUrl = /*[[${chatAccessUrl}]]*/ "";
-  var reservationId = /*[[${reservationId}]]*/ 0;
+  const reservationId = /*[[${reservationId}]]*/ 0;
   const storeName = /*[[${storeName}]]*/ "";
+  const storeId = /*[[${storeId}]]*/ 0;
   const customerName = /*[[${customerName}]]*/ "";
+  const customerId = /*[[${customerId}]]*/ 0;
+
   /*]]>*/
 
   console.log(`Chat URL: ${chatUrl}`);
@@ -81,6 +67,11 @@
   eventSource.onmessage = (event) => {
     const data = JSON.parse(event.data);
     console.log("Received data:", data);
+
+    // 결제 정보가 포함된 메시지인 경우 처리
+    if (data.itemName && data.quantity && data.totalAmount) {
+      addPaymentInfoToChat(data);
+    }
 
     if (data.sender === customerName) {
       initMyMessage(data);
@@ -133,6 +124,28 @@
     receivedBox.className = "received_msg";
     receivedBox.innerHTML = getReceiveMsgBox(data);
     chatBox.append(receivedBox);
+    document.documentElement.scrollTop = document.body.scrollHeight;
+  }
+
+  function addPaymentInfoToChat(data) {
+    console.log('Adding payment info:', data); // 데이터 확인
+
+    // 중복된 결제 정보가 있는지 확인
+    const chatBox = document.querySelector("#chat-box");
+    const date = new Date();
+    const timeString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+    const paymentInfoBox = document.createElement("div");
+    paymentInfoBox.className = "received_msg";
+    paymentInfoBox.innerHTML = `
+    <div class="payment-info-box">
+      <p><strong>상품명:</strong> ${data.itemName}</p>
+      <p><strong>수량:</strong> ${data.quantity}</p>
+      <p><strong>결제 금액:</strong> ${data.totalAmount}원</p>
+      <button class="btn btn-primary btn-sm payment-btn" onclick="handlePayment(this, '${data.sender}')">결제하기</button>
+      <div></div>
+      <span class="time_date">${timeString}</span>
+    </div>`;
+    chatBox.append(paymentInfoBox);
     document.documentElement.scrollTop = document.body.scrollHeight;
   }
 
@@ -233,6 +246,41 @@ r
       $('#image-modal').modal('show');
     }
   });
+
+  async function handlePayment(button) {
+    const partnerOrderId = reservationId;
+    const partnerUserId = customerId;
+    const shopId = storeId;
+
+    const paragraphs = button.parentNode.querySelectorAll('p');
+    let itemName = '';
+    let quantity = '';
+    let totalAmount = '';
+
+    paragraphs.forEach(p => {
+      if (p.textContent.includes('상품명:')) {
+        itemName = p.textContent.replace('상품명:', '').trim();
+      } else if (p.textContent.includes('수량:')) {
+        quantity = p.textContent.replace('수량:', '').trim();
+      } else if (p.textContent.includes('결제 금액:')) {
+        totalAmount = p.textContent.replace('결제 금액:', '').trim().replace(/[^0-9]/g, '');
+      }
+    });
+
+    const taxFreeAmount = 0;
+
+    const queryString = `partnerOrderId=${encodeURIComponent(partnerOrderId)}&partnerUserId=${encodeURIComponent(partnerUserId)}&shopId=${encodeURIComponent(shopId)}&itemName=${encodeURIComponent(itemName)}&quantity=${encodeURIComponent(quantity)}&totalAmount=${encodeURIComponent(totalAmount)}&taxFreeAmount=${encodeURIComponent(taxFreeAmount)}`;
+
+    try {
+      await fetch(`/payment/request?${queryString}`);
+      button.disabled = true;
+      button.textContent = "결제 완료";
+    } catch (error) {
+      console.error('Payment failed', error);
+      button.disabled = false;
+      button.textContent = "결제 실패, 다시 시도";
+    }
+  }
 </script>
 
 </body>
