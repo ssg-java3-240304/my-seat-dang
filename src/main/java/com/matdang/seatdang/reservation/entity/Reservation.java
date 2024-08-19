@@ -1,5 +1,6 @@
 package com.matdang.seatdang.reservation.entity;
 
+import com.matdang.seatdang.reservation.dto.ReservationDto;
 import com.matdang.seatdang.reservation.vo.*;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,4 +37,12 @@ public class Reservation {
     private ReservationStatus reservationStatus;
     @Embedded
     private ChatRoom chatRoom;
+
+    public void setEmpty(ReservationDto dto){
+        this.store = dto.getStore();
+        this.customer = dto.getCustomer();
+        this.storeOwner = dto.getStoreOwner();
+        this.reservedAt = dto.getReservedAt();
+        this.chatRoom = dto.getChatRoom();
+    }
 }
