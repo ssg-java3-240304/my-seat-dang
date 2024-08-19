@@ -16,7 +16,7 @@
             <!-- Breadcrumbs-->
             <ol class="breadcrumb">
                 <li class="breadcrumb-item active">
-                    <a th:href="@{/templates/storeowner/menu/menuList.html}">메뉴</a>
+                    <a th:href="@{/storeowner/menu/menuList.html}">메뉴</a>
                 </li>
             </ol>
             <div class="box_general">
@@ -37,10 +37,10 @@
                             </div>
                             <div class="col-4 row">
                                 <div class="col-6">
-                                    <a th:href="@{|/templates/storeowner/menu/update/*{menuId}|}" class="btn_1 medium">수정</a>
+                                    <a th:href="@{|/storeowner/menu/update/*{menuId}|}" class="btn_1 medium">수정</a>
                                 </div>
                                 <div class="col-6">
-                                    <form th:action="@{/templates/storeowner/menu/delete}" method="post">
+                                    <form th:action="@{/storeowner/menu/delete}" method="post">
                                         <input hidden="hidden" name="menu_id" th:value="*{menuId}">
                                         <button type="submit" class="btn_1 medium" style="background-color: #bd2130">삭제</button>
                                     </form>
