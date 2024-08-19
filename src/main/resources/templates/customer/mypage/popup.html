@@ -41,6 +41,23 @@
   </div>
 </div>
 
+<!-- Modal for image preview -->
+<div class="modal fade" id="image-modal" tabindex="-1" role="dialog" aria-labelledby="image-modal-label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="image-modal-label">Image Preview</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img id="modal-image" src="" alt="Image preview" style="width: 100%;"/>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
@@ -65,7 +82,6 @@
     const data = JSON.parse(event.data);
     console.log("Received data:", data);
 
-
     if (data.sender === customerName) {
       initMyMessage(data);
     } else {
@@ -76,7 +92,7 @@
   function getSendMsgBox(data) {
     const date = new Date(data.createdAt);
     const timeString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
-    const imgTag = data.customerImage ? `<img src="${data.customerImage}" alt="image" style="max-width: 100%; max-height: 200px;"/>` : '';
+    const imgTag = data.customerImage ? `<img src="${data.customerImage}" alt="image" class="chat-image" style="max-width: 100%; max-height: 200px; cursor: pointer;" />` : '';
     return `<div>
       <p style="text-align: right;">${data.sender}</p>
       <div class="sent_msg">
@@ -90,7 +106,7 @@
   function getReceiveMsgBox(data) {
     const date = new Date(data.createdAt);
     const timeString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
-    const imgTag = data.customerImage ? `<img src="${data.customerImage}" alt="image" style="max-width: 100%; max-height: 200px;"/>` : '';
+    const imgTag = data.customerImage ? `<img src="${data.customerImage}" alt="image" class="chat-image" style="max-width: 100%; max-height: 200px; cursor: pointer;" />` : '';
     return `<div>
       <p>${data.sender}</p>
       <div class="received_withd_msg">
@@ -158,7 +174,6 @@
     filePreview.innerHTML = ""; // 파일 미리보기 영역 초기화
   }
 
-
   document.querySelector("#chat-send").addEventListener("click", () => {
     addMessage();
   });
@@ -207,6 +222,16 @@ r
 
   document.querySelector("#back-button").addEventListener("click", () => {
     window.history.back();
+  });
+
+  // Event delegation to handle image click
+  document.querySelector("#chat-box").addEventListener("click", (e) => {
+    if (e.target.classList.contains("chat-image")) {
+      const imgSrc = e.target.src;
+      const modalImage = document.querySelector("#modal-image");
+      modalImage.src = imgSrc;
+      $('#image-modal').modal('show');
+    }
   });
 </script>
 

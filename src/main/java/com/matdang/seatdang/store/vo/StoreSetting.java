@@ -26,4 +26,6 @@ public class StoreSetting {
 
     @Enumerated(EnumType.STRING)
     private WaitingStatus waitingStatus = WaitingStatus.UNAVAILABLE;
+
+    private Integer waitingPeopleCount;
 }
