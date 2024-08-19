@@ -8,10 +8,7 @@ spring:
     password: ${PROD_DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-# ai api 추가
-openai:
-  api:
-    key: ${OPENAI_API_KEY}
+
 
   # 공통 jpa 설정
   jpa:
