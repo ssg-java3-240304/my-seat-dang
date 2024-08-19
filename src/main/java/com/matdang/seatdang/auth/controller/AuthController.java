@@ -23,12 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/")
 public class AuthController {
 
-    private final AuthService authService;
-    private final CustomerService customerService;
-    public AuthController(AuthService authService,CustomerService customerService) {
-        this.authService = authService;
-        this.customerService = customerService;
-    }
 
 
     //로그인 페이지 바로가기(셋다 공통으로 감)
