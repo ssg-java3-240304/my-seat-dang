@@ -18,7 +18,7 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/store")
 @RequiredArgsConstructor
-public class StoreOwnerController {
+public class ReservationController {
 
     @Autowired
     private ReservationService reservationService;
