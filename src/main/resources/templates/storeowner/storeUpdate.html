@@ -30,7 +30,7 @@
                     <div class="form-group">
                         <label>카테고리</label>
                         <div class="styled-select">
-                            <select id="storeType" required>
+                            <select id="storeType" required disabled>
                                 <option value="GENERAL_RESERVATION" th:selected="${store.storeType.name() eq 'GENERAL_RESERVATION'}">예약(베이커리)</option>
                                 <option value="CUSTOM" th:selected="${store.storeType.name() eq 'CUSTOM'}">예약(제작케이크)</option>
                                 <option value="GENERAL_WAITING" th:selected="${store.storeType.name() eq 'GENERAL_WAITING'}">웨이팅(베이커리)</option>
@@ -267,24 +267,40 @@
     </script>
 
     <script>
-        let isclicked = 0;
+        let isClicked = 0;
+        let currentStoreName = ''; // 현재 매장명 저장 변수
+
+        // 페이지 로드 시 현재 매장명 설정 (서버에서 가져온 경우)
+        document.addEventListener('DOMContentLoaded', function() {
+            currentStoreName = $('#storeName').val(); // 현재 매장명을 가져옵니다 (서버에서 설정된 경우)
+        });
+
         document.querySelector("#checkStoreNameBtn").onclick = () => {
+            const newStoreName = $('#storeName').val();
+
+            // 현재 매장명과 새로 입력한 매장명이 같은 경우
+            if (newStoreName === currentStoreName) {
+                alert("현재 매장명과 동일합니다.");
+                return;
+            }
+
+            // 매장명이 다를 경우 중복 체크 수행
             $.ajax({
                 url: '[[@{/storeowner/storeNameCheck}]]',
                 method: 'get',
-                data: {storeName: $('#storeName').val()},
+                data: {storeName: newStoreName},
                 dataType: 'json',
-                success (data){
-                    if (data === 0){
+                success (data) {
+                    if (data === 0) {
                         alert("사용가능한 매장명입니다.");
-                        isclicked = 1;
+                        isClicked = 1;
                     } else {
                         alert("이미 사용 중인 매장명입니다.");
                     }
-                    console.log(data)
+                    console.log(data);
                 },
                 error(error) {
-                    console.log(error)
+                    console.log(error);
                 }
             });
         }

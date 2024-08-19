@@ -56,7 +56,10 @@ public class StoreAdminService {
 
 
     public StoreDetailDto findByStoreId(Long storeId) {
-        return StoreDetailDto.fromStore(storeAdminRepository.findById(storeId).orElseThrow());
+        return StoreDetailDto.fromStore(
+                storeAdminRepository.findById(storeId)
+                        .orElseThrow(() -> new RuntimeException("Store not found for id: " + storeId))
+        );
     }
 
     public void update(StoreUpdateRequestDto dto) {
