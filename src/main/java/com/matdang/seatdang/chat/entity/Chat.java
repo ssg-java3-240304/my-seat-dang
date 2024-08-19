@@ -17,4 +17,9 @@ public class Chat {
 
     private String customerImage; // 사용자가 점주에게 보낼 시안 사진
     private LocalDateTime createdAt; // 채팅을 친 시각
+
+    // 결제정보
+    private String itemName; // 상품명
+    private Integer quantity; // 수량
+    private Integer totalAmount; // 결제금액
 }

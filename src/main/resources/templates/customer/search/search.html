@@ -28,25 +28,24 @@
                         <h1>검색 결과</h1>
 <!--                        검색 -->
                     </div>
-                        <div class="col-xl-4 col-lg-5 col-md-5">
-                            <form th:action="@{/search}" method="get" >
-                                <div class="search-wrapper">
-                                    <div class="input-group">
-                                        <div class="input-field">
-                                            <i class="icon_search"></i>
-                                            <input type="text" name="store_name" class="form-control" style="padding-left: 35px" placeholder="매장명...">
-                                        </div>
-                                        <div class="input-divider"></div>
-                                        <div class="input-field">
-                                            <i class="icon_pin_alt"></i>
-                                            <input type="text" name="store_address" class="form-control" style="padding-left: 35px" placeholder="지역...">
-                                        </div>
+                    <div class="col-xl-4 col-lg-5 col-md-5">
+                        <form th:action="@{/search}" method="get" >
+                            <div class="search-wrapper">
+                                <div class="input-group">
+                                    <div class="input-field">
+                                        <i class="icon_search"></i>
+                                        <input type="text" name="store_name" class="form-control" style="padding-left: 35px" placeholder="매장명...">
                                     </div>
-                                    <input type="submit" value="Search" class="search-btn">
+                                    <div class="input-divider"></div>
+                                    <div class="input-field">
+                                        <i class="icon_pin_alt"></i>
+                                        <input type="text" name="store_address" class="form-control" style="padding-left: 35px" placeholder="지역...">
+                                    </div>
                                 </div>
-                            </form>
-                        </div>
-
+                                <input type="submit" value="Search" class="search-btn">
+                            </div>
+                        </form>
+                    </div>
                 </div>
                 <!-- /row -->
             </div>
@@ -81,43 +80,19 @@
                             <div class="collapse show" id="filter_1">
                                 <ul>
                                     <li>
-                                        <label class="container_check">Pizza - Italian <small>12</small>
+                                        <label class="container_check">주문제작 <small>12</small>
                                             <input type="checkbox">
                                             <span class="checkmark"></span>
                                         </label>
                                     </li>
                                     <li>
-                                        <label class="container_check">Japanese - Sushi <small>24</small>
+                                        <label class="container_check">웨이팅 <small>24</small>
                                             <input type="checkbox">
                                             <span class="checkmark"></span>
                                         </label>
                                     </li>
                                     <li>
-                                        <label class="container_check">Burghers <small>23</small>
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="container_check">Vegetarian <small>11</small>
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="container_check">Bakery <small>18</small>
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="container_check">Chinese <small>12</small>
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="container_check">Mexican <small>15</small>
+                                        <label class="container_check">일반예약 <small>24</small>
                                             <input type="checkbox">
                                             <span class="checkmark"></span>
                                         </label>
@@ -125,78 +100,6 @@
                                 </ul>
                             </div>
                             <!-- /filter_type -->
-                        </div>
-                        <!-- /filter_type -->
-                        <div class="filter_type">
-                            <h4><a href="#filter_2" data-bs-toggle="collapse" class="closed">Rating</a></h4>
-                            <div class="collapse" id="filter_2">
-                                <ul>
-                                    <li>
-                                        <label class="container_check">Superb 9+ <small>06</small>
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="container_check">Very Good 8+ <small>12</small>
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="container_check">Good 7+ <small>17</small>
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="container_check">Pleasant 6+ <small>43</small>
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <!-- /filter_type -->
-                        <div class="filter_type">
-                            <h4><a href="#filter_3" data-bs-toggle="collapse" class="closed">Distance</a></h4>
-                            <div class="collapse" id="filter_3">
-                                <div class="distance"> Radius around selected destination <span></span> km</div>
-                                <div class="add_bottom_15"><input type="range" min="10" max="100" step="10" value="30" data-orientation="horizontal"></div>
-                            </div>
-                        </div>
-                        <!-- /filter_type -->
-                        <div class="filter_type">
-                            <h4><a href="#filter_4" data-bs-toggle="collapse" class="closed">Price</a></h4>
-                            <div class="collapse" id="filter_4">
-                                <ul>
-                                    <li>
-                                        <label class="container_check">$0 — $50<small>11</small>
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="container_check">$50 — $100<small>08</small>
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="container_check">$100 — $150<small>05</small>
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="container_check">$150 — $200<small>18</small>
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    </li>
-                                </ul>
-                            </div>
                         </div>
                         <!-- /filter_type -->
                         <div class="buttons">
@@ -212,8 +115,8 @@
                         <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6" th:each="store : ${storePage}">
                             <div class="strip">
                                 <figure>
-                                    <span class="ribbon off">Hot!</span>
-                                    <img th:src="@{https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/af4bc57e-5faa-493f-a8ea-2cf9bf2c6f13.png}" th:data-src="@{https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/af4bc57e-5faa-493f-a8ea-2cf9bf2c6f13.png}" class="img-fluid lazy" alt="">
+                                    <span class="ribbon off">웨이팅N분</span>
+                                    <img th:src="@{/img/customer/detail_1.jpg}" th:data-src="${store.getThumbnail()}" class="img-fluid lazy" alt="">
                                     <a th:href="|@{/customer/store/storeDetail/}${store.storeId}|" class="strip_info">
                                         <small>케이크</small>
                                         <div class="item_title">
@@ -222,12 +125,15 @@
                                         </div>
                                     </a>
                                 </figure>
+                                <form action="@{/}" method="post">
                                 <ul>
-                                    <li><span>웨이팅시간 N분</span></li>
+                                    <li><span class="loc_open">영업중</span></li>
+                                    <li style="padding: 0"><button type="submit" class="btn_1 small">웨이팅하기</button></li>
                                     <li>
                                         <div class="score"><span>Superb<em>350 Reviews</em></span><strong>8.9</strong></div>
                                     </li>
                                 </ul>
+                                </form>
                             </div>
                         </div>
                         <!-- /strip grid -->

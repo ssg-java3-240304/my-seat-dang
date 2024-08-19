@@ -1,12 +1,14 @@
 package com.matdang.seatdang.chat.contorller;
 
+import com.matdang.seatdang.chat.dto.ChatPaymentRequestDto;
+import com.matdang.seatdang.payment.dto.PayDetail;
+import com.matdang.seatdang.payment.service.dto.ReadyRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 
 @Controller
@@ -15,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class StoreOwnerChatController {
         @GetMapping("/storeownerchat")
-        public String popup(@RequestParam("reservationId") Long reservationId,
+        public String storeChatPage(@RequestParam("reservationId") Long reservationId,
                                 @RequestParam("storeName") String storeName,
                                 @RequestParam("storeOwnerName") String storeOwnerName,
                                 @RequestParam("chatUrl") String chatUrl,
@@ -26,7 +28,7 @@ public class StoreOwnerChatController {
             model.addAttribute("storeOwnerName", storeOwnerName);
             model.addAttribute("chatAccessUrl", chatUrl);
 
-            log.info("Received parameters - reservationId: {}, storeName: {}, customerName: {}, chatUrl: {}",
+            log.info("Received parameters - reservationId: {}, storeName: {}, storeOwnerName: {}, chatUrl: {}",
                     reservationId, storeName, storeOwnerName, chatUrl);
 
             return "storeowner/mypage/storeownerchat";

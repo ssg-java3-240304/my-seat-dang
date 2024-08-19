@@ -1,5 +1,5 @@
 package com.matdang.seatdang.store.vo;
 
-public enum ReservationOnOff {
+public enum Status {
     ON, OFF
 }
