@@ -1,6 +1,6 @@
 package com.matdang.seatdang.auth.principal;
 
-import com.matdang.seatdang.member.entitiy.Admin;
+import com.matdang.seatdang.member.entity.Admin;
 
 
 /**

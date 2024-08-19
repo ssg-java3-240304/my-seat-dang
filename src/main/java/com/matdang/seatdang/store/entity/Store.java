@@ -10,8 +10,7 @@ import lombok.*;
 import java.time.LocalTime;
 import java.util.List;
 
-@Entity(name = "store")
-@Table(name = "store")
+@Entity
 @Data
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
@@ -61,8 +60,7 @@ public class Store {
     private double starRating;
 
     @Embedded
-    @Column(name = "setting")
-    private StoreSetting setting;
+    private StoreSetting storeSetting;
 
     public void update(StoreDetailDto dto) {
         if (dto.getStoreName() != null) {

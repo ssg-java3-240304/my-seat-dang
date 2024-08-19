@@ -56,7 +56,7 @@ public class KakaoPayController {
 
         model.addAttribute("response", readyResponse);
 
-        return "payment/ready" ;
+        return "payment/ready";
     }
 
     // TODO : 새로고침 방지
@@ -75,7 +75,7 @@ public class KakaoPayController {
         }
         if (approveResponse instanceof ApproveFail) {
             log.error("=== Payment Approve Fail ===");
-            log.error("{}",approveResponse);
+            log.error("{}", approveResponse);
 
             ((ApproveFail) approveResponse).registerStatus(Status.PAYMENT_FAILED);
             model.addAttribute("response", approveResponse);
@@ -113,26 +113,23 @@ public class KakaoPayController {
             return "redirect:/payment/approve-fail";
         }
 
-
         return null;
     }
 
-
-//    @GetMapping("/cancel/{openType}")
-//    public String cancel( @PathVariable("openType") String openType) {
-//        // 주문건이 진짜 취소되었는지 확인 후 취소 처리
-//        // 결제내역조회(/v1/payment/status) api에서 status를 확인한다.
-//        // To prevent the unwanted request cancellation caused by attack,
-//        // the “show payment status” API is called and then check if the status is QUIT_PAYMENT before suspending the payment
-//        return  openType + "/cancel";
-//    }
-//
-//    @GetMapping("/fail/{agent}/{openType}")
-//    public String fail(@PathVariable("openType") String openType) {
-//        // 주문건이 진짜 실패되었는지 확인 후 실패 처리
-//        // 결제내역조회(/v1/payment/status) api에서 status를 확인한다.
-//        // To prevent the unwanted request cancellation caused by attack,
-//        // the “show payment status” API is called and then check if the status is FAIL_PAYMENT before suspending the payment
-//        return openType + "/fail";
-//    }
+    @GetMapping("/cancel")
+    public String cancel() {
+        // 주문건이 진짜 취소되었는지 확인 후 취소 처리
+        // 결제내역조회(/v1/payment/status) api에서 status를 확인한다.
+        // To prevent the unwanted request cancellation caused by attack,
+        // the “show payment status” API is called and then check if the status is QUIT_PAYMENT before suspending the payment
+        return "payment/cancel";
+    }
+    @GetMapping("/fail")
+    public String fail() {
+        // 주문건이 진짜 실패되었는지 확인 후 실패 처리
+        // 결제내역조회(/v1/payment/status) api에서 status를 확인한다.
+        // To prevent the unwanted request cancellation caused by attack,
+        // the “show payment status” API is called and then check if the status is FAIL_PAYMENT before suspending the payment
+        return "payment/fail";
+    }
 }
