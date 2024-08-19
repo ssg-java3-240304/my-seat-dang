@@ -1,11 +1,16 @@
 package com.matdang.seatdang.admin.controller;
 
-import com.matdang.seatdang.admin.dto.StoreDetailReponseDto;
+import com.matdang.seatdang.admin.dto.StoreDetailDto;
 import com.matdang.seatdang.admin.dto.StoreRegistRequestDto;
+import com.matdang.seatdang.admin.dto.StoreUpdateRequestDto;
 import com.matdang.seatdang.admin.service.StoreAdminService;
+import com.matdang.seatdang.auth.principal.StoreOwnerUserDetails;
+import com.matdang.seatdang.menu.dto.MenuDto;
 import com.matdang.seatdang.object_storage.service.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +29,7 @@ public class StoreAdminController {
 
     @GetMapping("/storeDetail")
     public void storeDetail(@RequestParam("storeId") Long storeId, Model model){
-        StoreDetailReponseDto store = storeAdminService.findByStoreId(storeId);
+        StoreDetailDto store = storeAdminService.findByStoreId(storeId);
         log.debug("store = {}", store);
         model.addAttribute("store", store);
     }
@@ -53,11 +58,18 @@ public class StoreAdminController {
 
     @GetMapping(path = "/storeUpdate")
     public void storeUpdate(Model model){
-//        @RequestParam Long storeId
-        Long storeId = 1050L;
-        StoreDetailReponseDto dto = storeAdminService.findByStoreId(storeId);
-        log.info("GET /store/storeUpdate");
+        StoreOwnerUserDetails userDetails = (StoreOwnerUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long storeId = userDetails.getStore().getStoreId();
+        StoreDetailDto dto = storeAdminService.findByStoreId(storeId);
+        log.info("GET /storeowner/storeUpdate");
         log.debug("dto = {}", dto);
         model.addAttribute("store", dto);
+    }
+
+    @PostMapping("/storeUpdate")
+    public String storeUpdate(
+            @ModelAttribute StoreUpdateRequestDto dto){
+        storeAdminService.update(dto);
+        return "redirect:/storeowner/storeUpdate";
     }
 }

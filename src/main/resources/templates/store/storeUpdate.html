@@ -30,10 +30,10 @@
                     <div class="form-group">
                         <label>카테고리</label>
                         <div class="styled-select">
-                            <select id="storeType" required>
-                                <option value="GENERAL_RESERVATION" th:selected="${store.storeType == 'GENERAL_RESERVATION'}">예약(베이커리)</option>
-                                <option value="CUSTOM" th:selected="${store.storeType == 'CUSTOM'}">예약(제작케이크)</option>
-                                <option value="GENERAL_WAITING" th:selected="${store.storeType == 'GENERAL_WAITING'}">웨이팅(베이커리)</option>
+                            <select id="storeType" required disabled>
+                                <option value="GENERAL_RESERVATION" th:selected="${store.storeType.name() eq 'GENERAL_RESERVATION'}">예약(베이커리)</option>
+                                <option value="CUSTOM" th:selected="${store.storeType.name() eq 'CUSTOM'}">예약(제작케이크)</option>
+                                <option value="GENERAL_WAITING" th:selected="${store.storeType.name() eq 'GENERAL_WAITING'}">웨이팅(베이커리)</option>
                             </select>
                         </div>
                     </div>
@@ -44,7 +44,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>매장소개</label>
-                        <textarea id="description" class="form-control" th:value="${store.description}"></textarea>
+                        <textarea id="description" class="form-control" th:text="${store.description}"></textarea>
                     </div>
                 </div>
             </div>
@@ -53,7 +53,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>공지사항</label>
-                        <textarea id="notice" class="form-control" th:value="${store.notice}"></textarea>
+                        <textarea id="notice" class="form-control" th:text="${store.notice}"></textarea>
                     </div>
                 </div>
             </div>
@@ -72,7 +72,7 @@
                     <div class="form-group">
                         <label>대표 매장 이미지 (필수/ 최대 1개)</label>
                         <form enctype="multipart/form-data">
-                            <div><img th:src="${store.thumbnail}" class="photo-preview" id="preview" width="200px" height="200px" alt="이미지 미리보기"/></div>
+                            <div><img th:src="${store.thumbnail}" class="img-preview" id="preview" width="200px" height="200px" alt="이미지 미리보기"/></div>
                             <input type="file" id="thumbnail" required>
                             <input type="hidden" id="originalThumbnail" th:value="${store.thumbnail}">
                         </form>
@@ -85,9 +85,11 @@
                     <div class="form-group">
                         <label>추가 매장 이미지 (최대 3개)</label>
                         <form enctype="multipart/form-data">
-                            <div id="previewContainer"></div> <!-- 이미지 미리보기 -->
+                            <div id="previewContainer">
+                                <div id="preview2"></div> <!-- 이미지 미리보기 컨테이너 -->
+                            </div>
                             <input type="file" id="images" multiple>
-                            <input type="hidden" id="originalImages" th:value="${store.images.join(',')}">
+                            <input type="hidden" id="originalImages" th:value="${store.images}">
                         </form>
                     </div>
                 </div>
@@ -102,6 +104,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
+                        <input type="hidden" id="address" th:value="${store.storeAddress}">
                         <input type="text" id="sample6_postcode" class="form-control" required><br>
                         <input type="text" id="sample6_address" class="form-control" placeholder="주소" required><br>
                         <input type="text" id="sample6_extraAddress" class="form-control" placeholder="참고항목" required><br>
@@ -167,6 +170,7 @@
                     <div class="form-group">
                         <div class="styled-select">
                             <select id="regularDayOff">
+                                <option value="없음" th:selected="${store.regularDayOff == '없음'}">없음</option>
                                 <option value="월요일" th:selected="${store.regularDayOff == '월요일'}">월요일</option>
                                 <option value="화요일" th:selected="${store.regularDayOff == '화요일'}">화요일</option>
                                 <option value="수요일" th:selected="${store.regularDayOff == '수요일'}">수요일</option>
@@ -263,167 +267,155 @@
     </script>
 
     <script>
-        let isclicked = 0;
+        let isClicked = 0;
+        let currentStoreName = ''; // 현재 매장명 저장 변수
+
+        // 페이지 로드 시 현재 매장명 설정 (서버에서 가져온 경우)
+        document.addEventListener('DOMContentLoaded', function() {
+            currentStoreName = $('#storeName').val(); // 현재 매장명을 가져옵니다 (서버에서 설정된 경우)
+        });
+
         document.querySelector("#checkStoreNameBtn").onclick = () => {
+            const newStoreName = $('#storeName').val();
+
+            // 현재 매장명과 새로 입력한 매장명이 같은 경우
+            if (newStoreName === currentStoreName) {
+                alert("현재 매장명과 동일합니다.");
+                return;
+            }
+
+            // 매장명이 다를 경우 중복 체크 수행
             $.ajax({
                 url: '[[@{/store/storeNameCheck}]]',
                 method: 'get',
-                data: {storeName: $('#storeName').val()},
+                data: {storeName: newStoreName},
                 dataType: 'json',
-                success (data){
-                    if (data === 0){
+                success (data) {
+                    if (data === 0) {
                         alert("사용가능한 매장명입니다.");
-                        isclicked = 1;
+                        isClicked = 1;
                     } else {
                         alert("이미 사용 중인 매장명입니다.");
                     }
-                    console.log(data)
+                    console.log(data);
                 },
                 error(error) {
-                    console.log(error)
+                    console.log(error);
                 }
             });
         }
 
-        const store = {
-            thumbnail: 'path/to/thumbnail.jpg', // URL for thumbnail image
-            images: ['path/to/image1.jpg', 'path/to/image2.jpg'] // Array of URLs for additional images
-        };
+        document.addEventListener('DOMContentLoaded', function() {
+            // 대표 매장 이미지 미리보기
+            const preview = document.getElementById('preview');
+            const thumbnailInput = document.getElementById('thumbnail');
+            const originalThumbnail = preview.src; // 초기 대표 매장 이미지 URL
 
-        // 추가 이미지 미리보기 생성 함수
-        function initializeImagePreviews() {
-            // For the thumbnail
-            const thumbnailUrl = store.thumbnail;
-            if (thumbnailUrl) {
-                document.querySelector("#preview").src = thumbnailUrl;
-                document.querySelector("#originalThumbnail").value = thumbnailUrl; // Save filename in hidden input
-            }
+            // 대표 매장 이미지 변경 시 미리보기 업데이트
+            thumbnailInput.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        preview.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    // 파일이 선택되지 않은 경우, 원래의 이미지 URL로 복원
+                    preview.src = originalThumbnail;
+                }
+            });
 
-            // For additional images
-            const imagesUrls = store.images;
-            if (imagesUrls && imagesUrls.length > 0) {
-                const previewContainer = document.getElementById('previewContainer');
-                previewContainer.innerHTML = ''; // Clear existing previews
+            const preview2 = document.getElementById('preview2');
+            const imagesInput = document.getElementById('images');
+            const originalImagesInput = document.getElementById('originalImages');
 
-                imagesUrls.forEach(url => {
+            // 원래 이미지 URL 리스트 가져오기
+            const originalImages = JSON.parse(originalImagesInput.value || '[]');
+
+            // 기존 이미지 미리보기 생성
+            function createImagePreview(url) {
+                if (url) {
                     const img = document.createElement('img');
                     img.src = url;
                     img.className = 'photo-preview';
                     img.style.width = '200px'; // 미리보기 크기 설정
                     img.style.height = '200px'; // 미리보기 크기 설정
-                    previewContainer.appendChild(img);
-                });
-
-                // Save filenames in hidden input
-                document.querySelector("#originalImages").value = imagesUrls.join(', ');
-            }
-        }
-
-        // 페이지 로드 시 추가 이미지 미리보기 생성
-        document.addEventListener('DOMContentLoaded', initializeImagePreviews);
-
-        // 썸네일 클릭시 파일 미리보기
-        document.querySelector("#thumbnail").onchange = () => {
-            const file = document.querySelector("#thumbnail").files[0];
-            if (file){
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    document.querySelector("#preview").src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        };
-
-        // 추가 이미지 클릭시 파일 미리보기
-        document.getElementById('images').addEventListener('change', function(event) {
-            const files = event.target.files;
-            const previewContainer = document.getElementById('previewContainer');
-
-            // 기존 미리보기 이미지 삭제
-            previewContainer.innerHTML = '';
-            const maxFiles = 3;
-
-            // 파일 수 제한
-            if (files.length > maxFiles) {
-                alert('최대 3개의 이미지만 선택할 수 있습니다.');
-                event.target.value = ''; // 입력 필드 초기화
-                return;
-            }
-
-            // 이미지 미리보기
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        // 이미지 엘리먼트 생성
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        img.className = 'photo-preview';
-                        img.style.width = '200px'; // 미리보기 크기 설정
-                        img.style.height = '200px'; // 미리보기 크기 설정
-                        previewContainer.appendChild(img);
-                    };
-                    reader.readAsDataURL(file);
+                    preview2.appendChild(img);
                 }
             }
+
+            // 페이지 로드 시 기존 이미지 미리보기 생성
+            originalImages.forEach(createImagePreview);
+
+            // 파일 선택 시 미리보기 업데이트
+            imagesInput.addEventListener('change', function(event) {
+                const files = event.target.files;
+
+                // 기존 미리보기 이미지 제거
+                preview2.innerHTML = '';
+
+                // 새로 선택된 이미지 미리보기 생성
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.className = 'photo-preview';
+                            img.style.width = '200px'; // 미리보기 크기 설정
+                            img.style.height = '200px'; // 미리보기 크기 설정
+                            preview2.appendChild(img);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                }
+            });
         });
 
         // 주소 구분자로 나눠서 디폴드값으로 보여주기
         document.addEventListener('DOMContentLoaded', () => {
-            // Mock store object with address field for demonstration
-            const store = {
-                address: "06774 서울 서초구 강남대로 27 (양재동) 22"
-            };
+            function populateAddressFields() {
+                // hidden input에서 주소 가져오기
+                const addressString = document.getElementById('address').value.trim();
 
-            // Function to parse and fill address fields
-            function fillAddressFields(address) {
-                // Initialize default values
+                // 값 초기화
                 let postcode = '';
                 let mainAddress = '';
                 let extraAddress = '';
                 let detailAddress = '';
 
-                // Check if address is defined and not empty
-                if (address) {
-                    // Split the address string into parts
-                    const parts = address.split(' ');
+                // 괄호 위치 찾기
+                const parenthesesIndex = addressString.indexOf('(');
 
-                    // Extract postcode
-                    postcode = parts.shift() || '';
-
-                    // Find where the main address ends and the extra address starts
-                    const indexExtra = parts.findIndex(part => part.startsWith('('));
-
-                    // Extract main address
-                    if (indexExtra > 0) {
-                        mainAddress = parts.slice(0, indexExtra).join(' ').trim();
+                if (parenthesesIndex !== -1) {
+                    // 참고주소 있는 경우
+                    postcode = addressString.substring(0, addressString.indexOf(' ')).trim();
+                    mainAddress = addressString.substring(addressString.indexOf(' ') + 1, parenthesesIndex).trim();
+                    extraAddress = addressString.substring(parenthesesIndex, addressString.indexOf(')') + 1).trim();
+                    detailAddress = addressString.substring(addressString.indexOf(')') + 1).trim();
+                } else {
+                    // 참고주소 없는 경우
+                    const parts = addressString.split(' ');
+                    if (parts.length >= 3) {
+                        postcode = parts[0];
+                        mainAddress = parts.slice(1, -2).join(' '); // Join all parts except the last two as main address
+                        detailAddress = parts.slice(-2).join(' '); // Last two parts as detail address
                     } else {
-                        mainAddress = parts.join(' ').trim();
-                    }
-
-                    // Extract extra address if present
-                    if (indexExtra >= 0) {
-                        extraAddress = parts.slice(indexExtra).join(' ').replace(/\(|\)/g, '').trim();
-                    }
-
-                    // Extract detail address
-                    const lastSpaceIndex = mainAddress.lastIndexOf(' ');
-                    if (lastSpaceIndex > 0) {
-                        detailAddress = mainAddress.substring(lastSpaceIndex + 1).trim();
-                        mainAddress = mainAddress.substring(0, lastSpaceIndex).trim();
+                        mainAddress = addressString; // Default to whole string if not enough parts
                     }
                 }
 
-                // Set values to input fields
+                // 데이터 삽입
                 document.getElementById('sample6_postcode').value = postcode;
                 document.getElementById('sample6_address').value = mainAddress;
                 document.getElementById('sample6_extraAddress').value = extraAddress;
                 document.getElementById('sample6_detailAddress').value = detailAddress;
             }
 
-            // Fill the address fields on page load
-            fillAddressFields(store.address);
+            // 위 함수 호출
+            populateAddressFields();
         });
 
         document.querySelector("#submitBtn").onclick = (e) => {
@@ -453,6 +445,7 @@
             const fullAddress = `${postcode} ${address} ${extraAddress} ${detailAddress}`;
 
             const formData = new FormData();
+            formData.append('storeId', document.querySelector('#storeId').value);
             formData.append('storeName', $('#storeName').val());
             formData.append('storeType', $('#storeType').val());
             formData.append('description', $('#description').val());
@@ -468,15 +461,12 @@
             const extraFiles = document.getElementById('images').files;
             const originalImages = document.querySelector('#originalImages').value.split(',').filter(Boolean);
 
-            if (extraFiles.length >= 1){
-                for (let i = 0; i < extraFiles.length; i++) {
-                    formData.append('images', extraFiles[i]);
-                }
-            } else {
-                originalImages.forEach(img => {
-                    formData.append('images', img);
-                });
+            for (let i = 0; i < extraFiles.length; i++) {
+                formData.append('images', extraFiles[i]);
             }
+            originalImages.forEach(img => {
+                formData.append('images', img);
+            });
 
             formData.append('storeAddress', fullAddress);
             formData.append('openTime', $('#openTime').val());
@@ -487,19 +477,19 @@
             formData.append('regularDayOff', $('#regularDayOff').val());
 
             $.ajax({
-                url: '[[@{/store/storeRegist}]]',
+                url: '[[@{/store/storeUpdate}]]',
                 method: 'post',
                 contentType: false,
                 processData: false,
                 data : formData,
                 success (data){
                     console.log(data);
-                    alert("매장을 성공적으로 등록했습니다.");
+                    alert("매장을 성공적으로 수정했습니다.");
                     window.location.reload();
                 },
                 error (error){
                     console.log(error);
-                    alert("매장 등록에 실패하셨습니다.");
+                    alert("매장 수정에 실패하셨습니다.");
                 }
             });
         }

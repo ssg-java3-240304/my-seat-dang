@@ -16,7 +16,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class StoreDetailReponseDto {
+public class StoreDetailDto {
+    // 매장 상세 페이지
+    private Long storeId;
     private String storeName;
     @Enumerated(EnumType.STRING)
     private StoreType storeType;
@@ -32,10 +34,10 @@ public class StoreDetailReponseDto {
     private LocalTime endBreakTime;
     private LocalTime lastOrder;
     private String regularDayOff;
-//    private Long menuListId;
 
-    public static StoreDetailReponseDto fromStore(Store store){
-        return new StoreDetailReponseDto(
+    public static StoreDetailDto fromStore(Store store){
+        return new StoreDetailDto(
+                store.getStoreId(),
                 store.getStoreName(),
                 store.getStoreType(),
                 store.getDescription(),
@@ -50,7 +52,6 @@ public class StoreDetailReponseDto {
                 store.getEndBreakTime(),
                 store.getLastOrder(),
                 store.getRegularDayOff()
-//                store.getMenuListId()
         );
     }
 }
