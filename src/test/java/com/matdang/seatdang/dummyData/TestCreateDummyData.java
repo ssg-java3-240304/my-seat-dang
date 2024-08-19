@@ -1,13 +1,15 @@
 package com.matdang.seatdang.dummyData;
 
 import com.matdang.seatdang.common.storeEnum.StoreType;
-import com.matdang.seatdang.member.entitiy.*;
+import com.matdang.seatdang.member.entity.*;
 import com.matdang.seatdang.member.vo.StoreVo;
 import com.matdang.seatdang.member.repository.MemberRepository;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
-import com.matdang.seatdang.store.vo.ReservationOnOff;
+import com.matdang.seatdang.store.vo.Status;
 import com.matdang.seatdang.store.vo.StoreSetting;
+import com.matdang.seatdang.store.vo.WaitingStatus;
+import com.matdang.seatdang.store.vo.WaitingTime;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import org.junit.jupiter.api.Disabled;
@@ -141,14 +143,12 @@ public class TestCreateDummyData {
                             .notice("Closed on public holidays.")
                             .phone("555-1234-567")
                             .starRating(4.5)
-                            .setting(StoreSetting.builder()
+                            .storeSetting(StoreSetting.builder()
                                     .reservationOpenTime(LocalTime.of(10,0))
                                     .reservationCloseTime(LocalTime.of(20,0))
-                                    .reservationOnOff(ReservationOnOff.OFF)
-                                    .waitingOpenTime(LocalTime.of(10,0))
-                                    .waitingCloseTime(LocalTime.of(20,0))
-                                    .waitingOnOff(ReservationOnOff.ON)
-                                    .expectedWaitingTime(LocalTime.of(0,10))
+                                    .reservationStatus(Status.OFF)
+                                    .waitingTime(new WaitingTime(LocalTime.of(10,0), LocalTime.of(20,0), LocalTime.of(0,10) ))
+                                    .waitingStatus(WaitingStatus.OPEN)
                                     .build()
                             )
                             .build();
@@ -169,14 +169,12 @@ public class TestCreateDummyData {
                             .notice("Closed on public holidays.")
                             .phone("555-1234-567")
                             .starRating(4.5)
-                            .setting(StoreSetting.builder()
+                            .storeSetting(StoreSetting.builder()
                                     .reservationOpenTime(LocalTime.of(10,0))
                                     .reservationCloseTime(LocalTime.of(20,0))
-                                    .reservationOnOff(ReservationOnOff.ON)
-                                    .waitingOpenTime(LocalTime.of(10,0))
-                                    .waitingCloseTime(LocalTime.of(20,0))
-                                    .waitingOnOff(ReservationOnOff.OFF)
-                                    .expectedWaitingTime(LocalTime.of(0,10))
+                                    .reservationStatus(Status.ON)
+                                    .waitingTime(new WaitingTime(LocalTime.of(10,0), LocalTime.of(20,0), LocalTime.of(0,10) ))
+                                    .waitingStatus(WaitingStatus.UNAVAILABLE)
                                     .build()
                             )
                             .build();
@@ -197,14 +195,12 @@ public class TestCreateDummyData {
                             .notice("공휴일에는 쉽니다")
                             .phone("555-1234-567")
                             .starRating(4.5)
-                            .setting(StoreSetting.builder()
+                            .storeSetting(StoreSetting.builder()
                                     .reservationOpenTime(LocalTime.of(10,0))
                                     .reservationCloseTime(LocalTime.of(20,0))
-                                    .reservationOnOff(ReservationOnOff.ON)
-                                    .waitingOpenTime(LocalTime.of(10,0))
-                                    .waitingCloseTime(LocalTime.of(20,0))
-                                    .waitingOnOff(ReservationOnOff.OFF)
-                                    .expectedWaitingTime(LocalTime.of(0,10))
+                                    .reservationStatus(Status.ON)
+                                    .waitingTime(new WaitingTime(LocalTime.of(10,0), LocalTime.of(20,0), LocalTime.of(0,10) ))
+                                    .waitingStatus(WaitingStatus.UNAVAILABLE)
                                     .build()
                             )
                             .build();
@@ -330,14 +326,12 @@ public class TestCreateDummyData {
                                 .notice("Closed on public holidays.")
                                 .phone("555-1234-567")
                                 .starRating(4.5)
-                                .setting(StoreSetting.builder()
+                                .storeSetting(StoreSetting.builder()
                                         .reservationOpenTime(LocalTime.of(10,0))
                                         .reservationCloseTime(LocalTime.of(20,0))
-                                        .reservationOnOff(ReservationOnOff.OFF)
-                                        .waitingOpenTime(LocalTime.of(10,0))
-                                        .waitingCloseTime(LocalTime.of(20,0))
-                                        .waitingOnOff(ReservationOnOff.ON)
-                                        .expectedWaitingTime(LocalTime.of(0,10))
+                                        .reservationStatus(Status.OFF)
+                                        .waitingTime(new WaitingTime(LocalTime.of(10,0), LocalTime.of(20,0), LocalTime.of(0,10) ))
+                                        .waitingStatus(WaitingStatus.OPEN)
                                         .build()
                                 )
                                 .build();
@@ -358,14 +352,12 @@ public class TestCreateDummyData {
                                 .notice("Closed on public holidays.")
                                 .phone("555-1234-567")
                                 .starRating(4.5)
-                                .setting(StoreSetting.builder()
+                                .storeSetting(StoreSetting.builder()
                                         .reservationOpenTime(LocalTime.of(10,0))
                                         .reservationCloseTime(LocalTime.of(20,0))
-                                        .reservationOnOff(ReservationOnOff.ON)
-                                        .waitingOpenTime(LocalTime.of(10,0))
-                                        .waitingCloseTime(LocalTime.of(20,0))
-                                        .waitingOnOff(ReservationOnOff.OFF)
-                                        .expectedWaitingTime(LocalTime.of(0,10))
+                                        .reservationStatus(Status.ON)
+                                        .waitingTime(new WaitingTime(LocalTime.of(10,0), LocalTime.of(20,0), LocalTime.of(0,10) ))
+                                        .waitingStatus(WaitingStatus.UNAVAILABLE)
                                         .build()
                                 )
                                 .build();
@@ -386,14 +378,12 @@ public class TestCreateDummyData {
                                 .notice("Closed on public holidays.")
                                 .phone("555-1234-567")
                                 .starRating(4.5)
-                                .setting(StoreSetting.builder()
+                                .storeSetting(StoreSetting.builder()
                                         .reservationOpenTime(LocalTime.of(10,0))
                                         .reservationCloseTime(LocalTime.of(20,0))
-                                        .reservationOnOff(ReservationOnOff.ON)
-                                        .waitingOpenTime(LocalTime.of(10,0))
-                                        .waitingCloseTime(LocalTime.of(20,0))
-                                        .waitingOnOff(ReservationOnOff.OFF)
-                                        .expectedWaitingTime(LocalTime.of(0,10))
+                                        .reservationStatus(Status.ON)
+                                        .waitingTime(new WaitingTime(LocalTime.of(10,0), LocalTime.of(20,0), LocalTime.of(0,10) ))
+                                        .waitingStatus(WaitingStatus.UNAVAILABLE)
                                         .build()
                                 )
                                 .build();

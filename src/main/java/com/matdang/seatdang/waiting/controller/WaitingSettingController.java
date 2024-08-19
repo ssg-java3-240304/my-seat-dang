@@ -95,4 +95,28 @@ public class WaitingSettingController {
         return "redirect:/store/setting/waiting-status";
     }
 
+    @GetMapping("/waiting-people-count")
+    public String peopleCountSetting(Model model) {
+        Long storeId = authService.getAuthenticatedStoreId();
+        model.addAttribute("waitingPeopleCount", waitingSettingService.findWaitingPeopleCount(storeId));
+
+        return "store/setting/waiting-people-count";
+    }
+
+    @PostMapping("/waiting-people-count")
+    public String updatePeopleCount(int waitingPeopleCount) {
+        Long storeId = authService.getAuthenticatedStoreId();
+
+        log.debug("====== update ====");
+        int result = storeRepository.updateWaitingPeopleCount(waitingPeopleCount, storeId);
+        log.debug("==========");
+
+        if (result == 1) {
+            log.info("=== update waiting people count ===");
+        }
+
+        return "redirect:/store/setting/waiting-people-count";
+    }
+
+
 }

@@ -82,7 +82,7 @@ public class WaitingController {
     }
 
     private void createEstimatedWaitingTime(int status, Model model, List<WaitingDto> waitings, Long storeId) {
-        if (status == 0) {
+        if (status == 0 && !waitings.isEmpty()) {
             int diff = 0;
             long elapsedTime = Duration.between(waitings.get(0).getCreatedDate(), LocalDateTime.now()).toMinutes();
             int estimatedTime = waitingSettingService.findEstimatedWaitingTime(storeId).getMinute();
@@ -102,7 +102,7 @@ public class WaitingController {
     /**
      * test 실행시 주석 필요
      */
-    @PostConstruct
+//    @PostConstruct
     public void initData() {
         StoreVo storeVo = new StoreVo(1L, "달콤커피", StoreType.CUSTOM, "서울시강남구");
         StoreOwner storeOwner = StoreOwner.builder()

@@ -93,4 +93,25 @@ class StoreQueryRepositoryTest {
         assertThat(findResult).isNotNull();
         assertThat(findResult).isEqualTo(WaitingStatus.valueOf(waitingStatus));
     }
+
+    @ParameterizedTest
+    @ValueSource(ints ={1,3,5})
+    @DisplayName("웨이팅 인원수 가져오기")
+    public void findWaitingPeopleCount(int peopleCount) {
+        // given
+        Store store = storeRepository.save(Store.builder()
+                .storeSetting(StoreSetting.builder()
+                        .waitingPeopleCount(peopleCount)
+                        .build())
+                .build());
+        em.flush();
+        em.clear();
+
+        // when
+        Integer findResult = storeQueryRepository.findWaitingPeopleCount(store.getStoreId());
+
+        // then
+        assertThat(findResult).isNotNull();
+        assertThat(findResult).isEqualTo(peopleCount);
+    }
 }
