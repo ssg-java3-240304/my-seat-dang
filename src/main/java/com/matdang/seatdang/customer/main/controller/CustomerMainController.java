@@ -16,7 +16,7 @@ import java.util.List;
 
 @Controller
 @Slf4j
-@RequestMapping("/")
+@RequestMapping("/myseatdang")
 @RequiredArgsConstructor
 public class CustomerMainController {
 

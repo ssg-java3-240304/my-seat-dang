@@ -271,15 +271,7 @@ r
 
     const queryString = `partnerOrderId=${encodeURIComponent(partnerOrderId)}&partnerUserId=${encodeURIComponent(partnerUserId)}&shopId=${encodeURIComponent(shopId)}&itemName=${encodeURIComponent(itemName)}&quantity=${encodeURIComponent(quantity)}&totalAmount=${encodeURIComponent(totalAmount)}&taxFreeAmount=${encodeURIComponent(taxFreeAmount)}`;
 
-    try {
-      await fetch(`/payment/request?${queryString}`);
-      button.disabled = true;
-      button.textContent = "결제 완료";
-    } catch (error) {
-      console.error('Payment failed', error);
-      button.disabled = false;
-      button.textContent = "결제 실패, 다시 시도";
-    }
+    window.location.href = `/payment/request?${queryString}`;
   }
 </script>
 

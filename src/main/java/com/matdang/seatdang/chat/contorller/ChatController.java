@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @Slf4j
-@RequestMapping("/")
+@RequestMapping("/myseatdang")
 @RequiredArgsConstructor
 public class ChatController {
         @GetMapping("/popup")

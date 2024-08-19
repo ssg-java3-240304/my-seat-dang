@@ -1,11 +1,7 @@
 package com.matdang.seatdang.chat.contorller;
 
-import com.matdang.seatdang.chat.dto.ChatPaymentRequestDto;
-import com.matdang.seatdang.payment.dto.PayDetail;
-import com.matdang.seatdang.payment.service.dto.ReadyRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
