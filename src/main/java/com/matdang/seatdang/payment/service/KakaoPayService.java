@@ -151,7 +151,7 @@ public class KakaoPayService {
         return ReadyRequest.builder()
                 .cid(cid)
                 .partnerOrderId(String.valueOf(payDetail.getPartnerOrderId()))
-                .partnerUserId(payDetail.getPartnerUserId())
+                .partnerUserId(String.valueOf(payDetail.getPartnerUserId()))
                 .itemName(payDetail.getItemName())
                 .quantity(payDetail.getQuantity())
                 .totalAmount(payDetail.getTotalAmount())
