@@ -1,13 +1,15 @@
 package com.matdang.seatdang.admin.service;
 
-import com.matdang.seatdang.admin.dto.StoreDetailReponseDto;
+import com.matdang.seatdang.admin.dto.StoreDetailDto;
 import com.matdang.seatdang.admin.dto.StoreRegistRequestDto;
+import com.matdang.seatdang.admin.dto.StoreUpdateRequestDto;
 import com.matdang.seatdang.admin.repository.StoreAdminRepository;
 import com.matdang.seatdang.object_storage.service.FileService;
 import com.matdang.seatdang.store.entity.Store;
+import com.matdang.seatdang.store.repository.StoreRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,15 +18,11 @@ import java.util.List;
 @Service
 @Transactional
 @Slf4j
+@RequiredArgsConstructor
 public class StoreAdminService {
+    private final StoreRepository storeRepository;
     private final StoreAdminRepository storeAdminRepository;
     private final FileService fileService; // File 업로드용
-
-    @Autowired
-    public StoreAdminService(StoreAdminRepository storeAdminRepository, FileService fileService) {
-        this.storeAdminRepository = storeAdminRepository;
-        this.fileService = fileService;
-    }
 
     public void regist(StoreRegistRequestDto dto, MultipartFile thumbnail, List<MultipartFile> images) {
         String uploadedThumbnailUrl = fileService.uploadSingleFile(thumbnail, "store-thumbnail"); // filePath: NCP에 생성될 파일폴더명 지정
@@ -57,7 +55,51 @@ public class StoreAdminService {
     }
 
 
-    public StoreDetailReponseDto findByStoreId(Long storeId) {
-        return StoreDetailReponseDto.fromStore(storeAdminRepository.findById(storeId).orElseThrow());
+    public StoreDetailDto findByStoreId(Long storeId) {
+        return StoreDetailDto.fromStore(storeAdminRepository.findById(storeId).orElseThrow());
+    }
+
+    public void update(StoreUpdateRequestDto dto) {
+        String uploadedThumbnailUrl = fileService.uploadSingleFile(dto.getThumbnail(), "store-thumbnail"); // filePath: NCP에 생성될 파일폴더명 지정
+        List<String> uploadedImagesUrl = fileService.uploadFiles(dto.getImages(), "store-images");
+        log.debug("thumbnail ={}", uploadedThumbnailUrl);
+        log.debug("images ={}", uploadedImagesUrl);
+
+        StoreDetailDto storeDetailDto = StoreDetailDto.builder()
+                .storeName(dto.getStoreName())
+                .description(dto.getDescription())
+                .notice(dto.getNotice())
+                .phone(dto.getPhone())
+                .thumbnail(uploadedThumbnailUrl)
+                .images(uploadedImagesUrl)
+                .storeAddress(dto.getStoreAddress())
+                .openTime(dto.getOpenTime())
+                .closeTime(dto.getCloseTime())
+                .startBreakTime(dto.getStartBreakTime())
+                .endBreakTime(dto.getEndBreakTime())
+                .lastOrder(dto.getLastOrder())
+                .regularDayOff(dto.getRegularDayOff())
+                .build();
+
+        if(dto.getThumbnail().getSize()>0){
+            String folderName = "store-thumbnail";
+            String uploadedFileUrl = fileService.uploadSingleFile(dto.getThumbnail(), folderName);
+            if(!uploadedFileUrl.isEmpty()){
+                log.debug("Thumbnail URL: {}", uploadedFileUrl);
+                storeDetailDto.setThumbnail(uploadedFileUrl);
+            }
+        }
+
+        if(!dto.getImages().isEmpty()){
+            String folderName = "store-images";
+            List<String> uploadedFileUrl = fileService.uploadFiles(dto.getImages(), folderName);
+            if(!uploadedFileUrl.isEmpty()){
+                log.debug("Images URL: {}", uploadedFileUrl);
+                storeDetailDto.setImages(uploadedFileUrl);
+            }
+        }
+
+        Store store = storeRepository.findByStoreId(dto.getStoreId());
+        store.update(storeDetailDto);
     }
 }

@@ -1,7 +1,8 @@
 package com.matdang.seatdang.admin.controller;
 
-import com.matdang.seatdang.admin.dto.StoreDetailReponseDto;
+import com.matdang.seatdang.admin.dto.StoreDetailDto;
 import com.matdang.seatdang.admin.dto.StoreRegistRequestDto;
+import com.matdang.seatdang.admin.dto.StoreUpdateRequestDto;
 import com.matdang.seatdang.admin.service.StoreAdminService;
 import com.matdang.seatdang.object_storage.service.FileService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class StoreAdminController {
 
     @GetMapping("/storeDetail")
     public void storeDetail(@RequestParam("storeId") Long storeId, Model model){
-        StoreDetailReponseDto store = storeAdminService.findByStoreId(storeId);
+        StoreDetailDto store = storeAdminService.findByStoreId(storeId);
         log.debug("store = {}", store);
         model.addAttribute("store", store);
     }
@@ -55,9 +56,16 @@ public class StoreAdminController {
     public void storeUpdate(Model model){
 //        @RequestParam Long storeId
         Long storeId = 1050L;
-        StoreDetailReponseDto dto = storeAdminService.findByStoreId(storeId);
+        StoreDetailDto dto = storeAdminService.findByStoreId(storeId);
         log.info("GET /storeowner/storeUpdate");
         log.debug("dto = {}", dto);
         model.addAttribute("store", dto);
+    }
+
+    @PostMapping("/storeUpdate")
+    public String storeUpdate(
+            @ModelAttribute StoreUpdateRequestDto dto){
+        storeAdminService.update(dto);
+        return "redirect:/storeowner/storeUpdate";
     }
 }

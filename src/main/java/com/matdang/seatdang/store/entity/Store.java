@@ -1,5 +1,7 @@
 package com.matdang.seatdang.store.entity;
 
+import com.matdang.seatdang.admin.dto.StoreDetailDto;
+import com.matdang.seatdang.admin.dto.StoreUpdateRequestDto;
 import com.matdang.seatdang.common.storeEnum.StoreType;
 import com.matdang.seatdang.store.vo.StoreSetting;
 import jakarta.persistence.*;
@@ -61,4 +63,49 @@ public class Store {
     @Embedded
     @Column(name = "setting")
     private StoreSetting setting;
+
+    public void update(StoreDetailDto dto) {
+        if (dto.getStoreName() != null) {
+            this.storeName = dto.getStoreName();
+        }
+        if (dto.getStoreAddress() != null) {
+            this.storeAddress = dto.getStoreAddress();
+        }
+        if (dto.getStoreType() != null) {
+            this.storeType = dto.getStoreType();
+        }
+        if (dto.getOpenTime() != null) {
+            this.openTime = dto.getOpenTime();
+        }
+        if (dto.getCloseTime() != null) {
+            this.closeTime = dto.getCloseTime();
+        }
+        if (dto.getStartBreakTime() != null) {
+            this.startBreakTime = dto.getStartBreakTime();
+        }
+        if (dto.getEndBreakTime() != null) {
+            this.endBreakTime = dto.getEndBreakTime();
+        }
+        if (dto.getLastOrder() != null) {
+            this.lastOrder = dto.getLastOrder();
+        }
+        if (dto.getRegularDayOff() != null) {
+            this.regularDayOff = dto.getRegularDayOff();
+        }
+        if (dto.getThumbnail() != null) {
+            this.thumbnail = dto.getThumbnail();
+        }
+        if (dto.getImages() != null) {
+            this.images = dto.getImages();
+        }
+        if (dto.getDescription() != null) {
+            this.description = dto.getDescription();
+        }
+        if (dto.getNotice() != null) {
+            this.notice = dto.getNotice();
+        }
+        if (dto.getPhone() != null) {
+            this.phone = dto.getPhone();
+        }
+    }
 }
