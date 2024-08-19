@@ -35,6 +35,10 @@ public class StoreOwnerController {
         Long storeOwnerId = ((StoreOwnerUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         List<ResponseDto> reservations = reservationService.getReservationsByStoreOwnerId(storeOwnerId);
         model.addAttribute("reservations", reservations);
+
+        log.debug("reservation = {}",reservations);
+
         return "store/mypage/storeownerpage";
+
     }
 }
