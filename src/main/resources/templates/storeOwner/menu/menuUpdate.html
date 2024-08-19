@@ -2,7 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{store/layout/default}">
+      layout:decorate="~{storeOwner/layout/default}">
 <head>
     <meta charset="UTF-8">
     <title>메뉴</title>
@@ -24,33 +24,35 @@
             <div class="header_box version_2">
                 <h2><i class="fa fa-list"></i>메뉴 등록</h2>
             </div>
-            <form th:action="@{/store/menu/regist}" name="menu" method="POST" enctype="multipart/form-data" class="strip_menu_items myDropzone">
+            <form th:action="@{/templates/storeOwner/menu/update}" name="menu" method="POST" enctype="multipart/form-data" class="strip_menu_items myDropzone">
                 <div class="row">
                     <div class="col-xl-3">
                         <div id="preview-container">
                             <div class="preview-item">
-                                <div class="placeholder">이미지 미리보기</div>
+                                <div th:if="${menu.image == null}" class="placeholder">이미지 미리보기</div>
+                                <img th:if="${menu.image != null}" th:src="${menu.image}" alt="미리보기 이미지" class="img-preview"/>
                             </div>
                         </div>
                     </div>
                     <div class="col-xl-9">
                         <div class="row">
+                            <input hidden="hidden" th:value="${menu.menuId}" type="text" name="menuId" class="form-control">
                             <div class="col-md-8">
                                 <div class="form-group">
                                     <label>메뉴 이름</label>
-                                    <input type="text" name="menuName" class="form-control">
+                                    <input th:value="${menu.menuName}" type="text" name="menuName" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>가격</label>
-                                    <input type="number" min="0" name="menuPrice" class="form-control">
+                                    <input th:value="${menu.menuPrice}" type="number" min="0" name="menuPrice" class="form-control" required>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>메뉴 소개</label>
-                            <input type="text" name="menuDesc" class="form-control">
+                            <input th:value="${menu.menuDesc}" type="text" name="menuDesc" class="form-control">
                         </div>
                         <div class="row">
                             <div class="col-md-3">
@@ -65,13 +67,13 @@
                             <div class="col-md-9">
                                 <div class="form-group">
                                     <label>메뉴 이미지</label>
-                                    <input type="file" name="file" multiple id="file-input" />
+                                    <input type="file" name="files" multiple id="file-input" />
                                 </div>
                             </div>
                         </div>
                         <div class="">
-                            <button type="submit" class="btn_1 medium">저장</button>
-                            <a th:href="@{|/store/menu|}" class="btn_1 medium gray">목록으로</a>
+                            <button type="submit" class="btn_1 medium">수정</button>
+                            <a th:href="@{|/templates/storeOwner/menu|}" class="btn_1 medium gray">목록으로</a>
                         </div>
                     </div><!-- End row -->
                 </div><!-- End strip_menu_items -->
