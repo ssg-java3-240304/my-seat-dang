@@ -1,7 +1,6 @@
 package com.matdang.seatdang.store.entity;
 
-import com.matdang.seatdang.admin.dto.StoreDetailDto;
-import com.matdang.seatdang.admin.dto.StoreUpdateRequestDto;
+import com.matdang.seatdang.store.dto.StoreDetailDto;
 import com.matdang.seatdang.common.storeEnum.StoreType;
 import com.matdang.seatdang.store.vo.StoreSetting;
 import jakarta.persistence.*;

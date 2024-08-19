@@ -1,7 +1,7 @@
-package com.matdang.seatdang.customer.main.controller;
+package com.matdang.seatdang.reservation.controller;
 
 import com.matdang.seatdang.auth.principal.MemberUserDetails;
-import com.matdang.seatdang.customer.main.model.ResponseDto;
+import com.matdang.seatdang.reservation.dto.ResponseDto;
 import com.matdang.seatdang.reservation.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,10 +22,7 @@ public class CustomerMainController {
 
     @Autowired
     private ReservationService reservationService;
-    @GetMapping("/")
-    public String index() {
-        return "customer/main/main";
-    }
+
 
     @GetMapping("/detail")
     public String detail() {
