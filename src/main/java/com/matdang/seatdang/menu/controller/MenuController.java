@@ -1,4 +1,4 @@
-package com.matdang.seatdang.menu.controlloer;
+package com.matdang.seatdang.menu.controller;
 
 import com.matdang.seatdang.auth.principal.StoreOwnerUserDetails;
 import com.matdang.seatdang.common.paging.PageCriteria;
@@ -19,11 +19,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-
 @Slf4j
 @Controller
-@RequestMapping("/storeowner/menu")
+@RequestMapping("/store/menu")
 @RequiredArgsConstructor
 public class MenuController {
     private final FileService fileService;
@@ -51,13 +49,13 @@ public class MenuController {
         model.addAttribute("pageCriteria", new PageCriteria(page, limit, totalCount, url));
         log.debug("page url = {} page = {}", url, menuPageResponse.getNumber() );
 
-        return "storeowner/menu/menuList";
+        return "store/menu/menuList";
     }
 
     @GetMapping("/regist")
     public String regist(Model model) {
         log.debug("Get menu/regist");
-        return "storeowner/menu/menuRegist";
+        return "store/menu/menuRegist";
     }
 
     @PostMapping("/regist")
@@ -80,7 +78,7 @@ public class MenuController {
         menuRequestDto.setStoreId(userDetails.getStore().getStoreId());
 
         menuCommandService.regist(menuRequestDto.toMenuDto());
-        return "redirect:/storeowner/menu/regist";
+        return "redirect:/store/menu/regist";
     }
 
     //메뉴 수정
@@ -90,7 +88,7 @@ public class MenuController {
         log.debug("menuId: {}", menuId);
         MenuDto menuDTO = menuQueryService.findByMenuId(menuId);
         model.addAttribute("menu", menuDTO);
-        return "storeowner/menu/menuUpdate";
+        return "store/menu/menuUpdate";
     }
 
     @PostMapping("/update")
@@ -110,7 +108,7 @@ public class MenuController {
         }
         menuCommandService.update(menuRequestDto.toMenuDto());
         log.debug("메뉴 수정 완료");
-        return "redirect:/storeowner/menu";
+        return "redirect:/store/menu";
     }
 
     @PostMapping("/delete")
@@ -120,6 +118,6 @@ public class MenuController {
 
         menuCommandService.delete(menuId);
         log.debug("메뉴 삭제 완료");
-        return "redirect:/storeowner/menu";
+        return "redirect:/store/menu";
     }
 }
