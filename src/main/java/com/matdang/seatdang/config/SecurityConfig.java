@@ -2,6 +2,7 @@ package com.matdang.seatdang.config;
 
 import com.matdang.seatdang.auth.dto.CustomOAuth2User;
 import com.matdang.seatdang.auth.service.CustomOAuth2UserService;
+import com.theokanning.openai.service.OpenAiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -22,6 +23,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 
 @Configuration
 @EnableWebSecurity
@@ -39,6 +41,17 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+
+    @Value("${openai.api.key}")
+    private String apiKey;
+
+
+    @Bean
+    public OpenAiService getOpenAiService() {
+        return new OpenAiService(apiKey, Duration.ofSeconds(30));
+    }
+
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 
@@ -48,7 +61,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/","/login","/signup","/signupProc","/check-nickname","/check-email","/mainmypage/change-password").permitAll() // 누구나 허용
+                        .requestMatchers("/","/login","/signup","/signupProc","/check-nickname","/check-email", "/mainmypage/change-password", "/storeRegist", "/storeUpdate").permitAll() // 누구나 허용
 //                        .requestMatchers("/","/login","/signup","/signupProc","/check-nickname","/check-email").permitAll() // 누구나 허용
                         .requestMatchers("/payment/**").permitAll() // /payment 하위 경로는 인증 없이 허용
                         .requestMatchers("/admin/**").hasRole("ADMIN") // ROLE_ADMIN 권한이 있는 사용자만 허용
