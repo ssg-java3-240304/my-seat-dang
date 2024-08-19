@@ -9,7 +9,7 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
-  <link rel="stylesheet" type="text/css" href="/css/storeowner/storechatstyle.css">
+  <link rel="stylesheet" type="text/css" href="/css/store/storechatstyle.css">
 </head>
 
 <body>
@@ -90,7 +90,7 @@
   console.log(`Chat URL: ${chatUrl}`);
   console.log(`Reservation ID: ${reservationId}`);
   console.log(`Store Name: ${storeName}`);
-  console.log(`StoreOwner Name: ${storeOwnerName}`);
+  console.log(`store Name: ${storeOwnerName}`);
 
   // SSE 연결하기
   const eventSource = new EventSource(`${chatUrl}/chat/roomNum/${reservationId}`);
