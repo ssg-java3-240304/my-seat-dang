@@ -1,4 +1,4 @@
-package com.matdang.seatdang.customer.main.model;
+package com.matdang.seatdang.reservation.dto;
 
 import lombok.Data;
 

@@ -2,7 +2,7 @@ package com.matdang.seatdang.reservation.service;
 
 import com.matdang.seatdang.auth.principal.MemberUserDetails;
 import com.matdang.seatdang.auth.principal.StoreOwnerUserDetails;
-import com.matdang.seatdang.customer.main.model.ResponseDto;
+import com.matdang.seatdang.reservation.dto.ResponseDto;
 import com.matdang.seatdang.reservation.entity.Reservation;
 import com.matdang.seatdang.reservation.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
