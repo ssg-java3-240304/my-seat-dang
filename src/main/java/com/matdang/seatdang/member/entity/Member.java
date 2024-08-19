@@ -13,7 +13,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "DTYPE")
-@Table(name = "tbl_member")
+@Table(
+        name = "tbl_member",
+        uniqueConstraints = {@UniqueConstraint(columnNames = "memberEmail")} // 유니크 제약 조건 추가
+)
 @SuperBuilder(toBuilder = true) //상속된 필드들을 빌더 패턴으로 초기화
 //@Builder
 public abstract class Member {
@@ -21,7 +24,7 @@ public abstract class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="member_id")
     private Long memberId;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String memberEmail;
     @Column(nullable = false)
     private LocalDate joinDate;
