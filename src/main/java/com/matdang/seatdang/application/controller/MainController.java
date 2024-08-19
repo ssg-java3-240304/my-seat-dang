@@ -10,4 +10,9 @@ public class MainController {
     public String customerMain(){
         return "/customer/main";
     }
+
+    @GetMapping("/storeowner/main")
+    public String storeOwnerMain(){
+        return "/storeowner/main";
+    }
 }
