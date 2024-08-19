@@ -28,6 +28,6 @@ public class AIController {
         String prompt = aiService.
                 generatePictureV2("케이크 시안을 원하는데 동그란시트 겨울왕국 올라프케이크 생성해줘");
         model.addAttribute("url", prompt);
-        return "test";
+        return "ai/test";
     }
 }
