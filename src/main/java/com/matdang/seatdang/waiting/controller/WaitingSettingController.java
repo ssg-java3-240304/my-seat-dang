@@ -4,33 +4,34 @@ import com.matdang.seatdang.auth.service.AuthService;
 import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.store.repository.query.dto.AvailableWaitingTime;
 import com.matdang.seatdang.waiting.service.WaitingSettingService;
-import java.time.LocalTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import java.time.LocalTime;
 
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/store/setting")
+@RequestMapping("/store/setting/waiting")
 public class WaitingSettingController {
 
     private final StoreRepository storeRepository;
     private final WaitingSettingService waitingSettingService;
     private final AuthService authService;
 
-    @GetMapping("/available-waiting-time")
-    public String availableTimeSetting(Model model) {
+    @GetMapping
+    public String showSettings(Model model) {
         Long storeId = authService.getAuthenticatedStoreId();
-        model.addAttribute("availableWaitingTime", waitingSettingService.findAvailableWaitingTime(storeId));
 
-        return "store/setting/available-waiting-time";
+        // 각 섹션에 필요한 데이터를 모델에 추가
+        model.addAttribute("availableWaitingTime", waitingSettingService.findAvailableWaitingTime(storeId));
+        model.addAttribute("estimatedWaitingTime", waitingSettingService.findEstimatedWaitingTime(storeId).getMinute());
+        model.addAttribute("waitingPeopleCount", waitingSettingService.findWaitingPeopleCount(storeId));
+        model.addAttribute("waitingStatus", waitingSettingService.findWaitingStatus(storeId));
+
+        return "store/setting/waiting-setting";
     }
 
     @PostMapping("/available-waiting-time")
@@ -47,15 +48,7 @@ public class WaitingSettingController {
             log.info("=== update available time ===");
         }
 
-        return "redirect:/store/setting/available-waiting-time";
-    }
-
-    @GetMapping("/estimated-waiting-time")
-    public String estimatedTimeSetting(Model model) {
-        Long storeId = authService.getAuthenticatedStoreId();
-        model.addAttribute("estimatedWaitingTime", waitingSettingService.findEstimatedWaitingTime(storeId).getMinute());
-
-        return "store/setting/estimated-waiting-time";
+        return "redirect:/store/setting/waiting";
     }
 
     @PostMapping("/estimated-waiting-time")
@@ -71,15 +64,7 @@ public class WaitingSettingController {
             log.info("=== update estimated time ===");
         }
 
-        return "redirect:/store/setting/estimated-waiting-time";
-    }
-
-    @GetMapping("/waiting-status")
-    public String waitingStatusSetting(Model model) {
-        Long storeId = authService.getAuthenticatedStoreId();
-        model.addAttribute("waitingStatus", waitingSettingService.findWaitingStatus(storeId));
-
-        return "store/setting/waiting-status";
+        return "redirect:/store/setting/waiting";
     }
 
     @PostMapping("/waiting-status")
@@ -92,15 +77,7 @@ public class WaitingSettingController {
         }
         log.debug("result ={}", result);
 
-        return "redirect:/store/setting/waiting-status";
-    }
-
-    @GetMapping("/waiting-people-count")
-    public String peopleCountSetting(Model model) {
-        Long storeId = authService.getAuthenticatedStoreId();
-        model.addAttribute("waitingPeopleCount", waitingSettingService.findWaitingPeopleCount(storeId));
-
-        return "store/setting/waiting-people-count";
+        return "redirect:/store/setting/waiting";
     }
 
     @PostMapping("/waiting-people-count")
@@ -115,8 +92,6 @@ public class WaitingSettingController {
             log.info("=== update waiting people count ===");
         }
 
-        return "redirect:/store/setting/waiting-people-count";
+        return "redirect:/store/setting/waiting";
     }
-
-
 }

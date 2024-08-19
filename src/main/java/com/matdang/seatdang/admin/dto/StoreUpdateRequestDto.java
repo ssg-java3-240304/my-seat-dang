@@ -17,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class StoreUpdateRequestDto {
+    private  Long storeId;
     private String storeName;
     @Enumerated(EnumType.STRING)
     private StoreType storeType;

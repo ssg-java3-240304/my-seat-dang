@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="Ansonika">
-    <title layout:title-pattern="$LAYOUT_TITLE | $CONTENT_TITLE">Admin</title>
+    <title layout:title-pattern="$LAYOUT_TITLE | $CONTENT_TITLE">Store</title>
 
     <!-- Favicons-->
     <link rel="shortcut icon" th:href="@{/img/admin/favicon.ico}" type="image/x-icon">
@@ -44,7 +44,7 @@
 </head>
 <body class="fixed-nav sticky-footer" id="page-top">
 
-<div th:replace="~{storeowner/fragments/aside::aside}"></div>
+<div th:replace="~{store/fragments/aside::aside}"></div>
 <div class="content-wrapper">
     <div class="container-fluid">
         <div layout:fragment="content" ></div>
@@ -52,8 +52,8 @@
 </div>
 
 
-<div th:replace="~{storeowner/fragments/footer::footer}"></div>
-<div th:replace="~{storeowner/fragments/topLogout::topLogout}"></div>
+<div th:replace="~{store/fragments/footer::footer}"></div>
+<div th:replace="~{store/fragments/topLogout::topLogout}"></div>
 
 <!-- Scroll to Top Button-->
 <a class="scroll-to-top rounded" href="#page-top">

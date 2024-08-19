@@ -31,6 +31,6 @@ public class StoreOwnerChatController {
             log.info("Received parameters - reservationId: {}, storeName: {}, storeOwnerName: {}, chatUrl: {}",
                     reservationId, storeName, storeOwnerName, chatUrl);
 
-            return "storeowner/mypage/storeownerchat";
+            return "store/mypage/storeownerchat";
         }
 }
