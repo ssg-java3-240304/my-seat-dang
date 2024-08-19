@@ -16,7 +16,7 @@ import java.util.List;
 
 @Controller
 @Slf4j
-@RequestMapping("/")
+@RequestMapping("/storeowner")
 @RequiredArgsConstructor
 public class StoreOwnerController {
 
@@ -29,6 +29,7 @@ public class StoreOwnerController {
         Long storeOwnerId = ((StoreOwnerUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         List<ResponseDto> reservations = reservationService.getReservationsByStoreOwnerId(storeOwnerId);
         model.addAttribute("reservations", reservations);
+        log.debug("reservation = {}",reservations);
         return "storeowner/mypage/storeownerpage";
     }
 }
