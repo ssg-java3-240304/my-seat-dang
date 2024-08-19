@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @Slf4j
-@RequestMapping("/storeowner")
+@RequestMapping("/store")
 @RequiredArgsConstructor
 public class StoreOwnerChatController {
         @GetMapping("/storeownerchat")
