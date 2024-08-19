@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Controller
-@RequestMapping("/storeowner")
+@RequestMapping("/store")
 @RequiredArgsConstructor
 @Slf4j
 public class StoreAdminController {
@@ -31,13 +31,13 @@ public class StoreAdminController {
 
     @GetMapping("/storeRegist")
     public void storeRegist(){
-        log.info("GET /storeowner/storeRegist");
+        log.info("GET /store/storeRegist");
     }
 
     @GetMapping(path = "/storeNameCheck", produces = "application/json; charset=utf-8")
     @ResponseBody
     public int storeNameCheck(@RequestParam String storeName){
-        log.info("GET /storeowner/storeNameCheck");
+        log.info("GET /store/storeNameCheck");
         return storeAdminService.findByStoreName(storeName);
     }
 
@@ -48,7 +48,7 @@ public class StoreAdminController {
         log.debug("dto = {}", dto);
 
         storeAdminService.regist(dto, thumbnail, images);
-        return "redirect:/storeowner/storeRegist";
+        return "redirect:/store/storeRegist";
     }
 
     @GetMapping(path = "/storeUpdate")
@@ -56,7 +56,7 @@ public class StoreAdminController {
 //        @RequestParam Long storeId
         Long storeId = 1050L;
         StoreDetailReponseDto dto = storeAdminService.findByStoreId(storeId);
-        log.info("GET /storeowner/storeUpdate");
+        log.info("GET /store/storeUpdate");
         log.debug("dto = {}", dto);
         model.addAttribute("store", dto);
     }

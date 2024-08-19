@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{storeowner/layout/default}" xmlns="http://www.w3.org/1999/html">
+      layout:decorate="~{store/layout/default}" xmlns="http://www.w3.org/1999/html">
 
 <div layout:fragment="content">
-    <form th:action="@{/storeowner/storeUpdate}" method="post" enctype="multipart/form-data">
+    <form th:action="@{/store/storeUpdate}" method="post" enctype="multipart/form-data">
         <!-- Breadcrumbs-->
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
@@ -266,7 +266,7 @@
         let isclicked = 0;
         document.querySelector("#checkStoreNameBtn").onclick = () => {
             $.ajax({
-                url: '[[@{/storeowner/storeNameCheck}]]',
+                url: '[[@{/store/storeNameCheck}]]',
                 method: 'get',
                 data: {storeName: $('#storeName').val()},
                 dataType: 'json',
@@ -487,7 +487,7 @@
             formData.append('regularDayOff', $('#regularDayOff').val());
 
             $.ajax({
-                url: '[[@{/storeowner/storeRegist}]]',
+                url: '[[@{/store/storeRegist}]]',
                 method: 'post',
                 contentType: false,
                 processData: false,
