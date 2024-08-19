@@ -1,4 +1,4 @@
-package com.matdang.seatdang.admin.repository;
+package com.matdang.seatdang.store.repository;
 
 import com.matdang.seatdang.store.entity.Store;
 import org.springframework.data.jpa.repository.JpaRepository;
