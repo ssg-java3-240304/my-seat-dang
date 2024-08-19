@@ -61,7 +61,7 @@ public class StoreAdminController {
         StoreOwnerUserDetails userDetails = (StoreOwnerUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long storeId = userDetails.getStore().getStoreId();
         StoreDetailDto dto = storeAdminService.findByStoreId(storeId);
-        log.info("GET /storeowner/storeUpdate");
+        log.info("GET /store/storeUpdate");
         log.debug("dto = {}", dto);
         model.addAttribute("store", dto);
     }
@@ -70,6 +70,6 @@ public class StoreAdminController {
     public String storeUpdate(
             @ModelAttribute StoreUpdateRequestDto dto){
         storeAdminService.update(dto);
-        return "redirect:/storeowner/storeUpdate";
+        return "redirect:/store/storeUpdate";
     }
 }
