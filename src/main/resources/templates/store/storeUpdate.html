@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{storeowner/layout/default}" xmlns="http://www.w3.org/1999/html">
+      layout:decorate="~{store/layout/default}" xmlns="http://www.w3.org/1999/html">
 
 <div layout:fragment="content">
-    <form th:action="@{/storeowner/storeUpdate}" method="post" enctype="multipart/form-data">
+    <form th:action="@{/store/storeUpdate}" method="post" enctype="multipart/form-data">
         <!-- Breadcrumbs-->
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
@@ -286,7 +286,7 @@
 
             // 매장명이 다를 경우 중복 체크 수행
             $.ajax({
-                url: '[[@{/storeowner/storeNameCheck}]]',
+                url: '[[@{/store/storeNameCheck}]]',
                 method: 'get',
                 data: {storeName: newStoreName},
                 dataType: 'json',
@@ -477,7 +477,7 @@
             formData.append('regularDayOff', $('#regularDayOff').val());
 
             $.ajax({
-                url: '[[@{/storeowner/storeUpdate}]]',
+                url: '[[@{/store/storeUpdate}]]',
                 method: 'post',
                 contentType: false,
                 processData: false,

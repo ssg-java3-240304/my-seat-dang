@@ -37,18 +37,8 @@ public class KakaoPayController {
 
     @GetMapping("/request")
     public String readyToKakaoPay(@ModelAttribute PayDetail payDetail, Model model) {
-        // test code
-        payDetail = PayDetail.builder()
-                .itemName("초코파이")
-                .partnerUserId(Long.toString(partnerUserID++))
-                .partnerOrderId(Long.toString(partnerOrderID++))
-                .taxFreeAmount(0)
-                .quantity(2)
-                .shopId(shopId++)
-                .totalAmount(2000 + count++)
-                .build();
-
         ReadyResponse readyResponse = kakaoPayService.ready(payDetail);
+
         // refund test용
         tid = readyResponse.getTid();
         log.debug("ReadyResponse ={}", readyResponse);
