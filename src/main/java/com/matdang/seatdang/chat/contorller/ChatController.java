@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/myseatdang")
 @RequiredArgsConstructor
 public class ChatController {
-        @GetMapping("/popup")
+        @GetMapping("/customerchat")
         public String popup(@RequestParam("reservationId") Long reservationId,
                                 @RequestParam("storeName") String storeName,
                                 @RequestParam("customerName") String customerName,
@@ -33,6 +33,6 @@ public class ChatController {
             log.info("Received parameters - reservationId: {}, storeName: {}, customerName: {}, chatUrl: {}",
                     reservationId, storeName, customerName, chatUrl);
 
-            return "customer/mypage/popup";
+            return "customer/mypage/customerchat";
         }
 }
