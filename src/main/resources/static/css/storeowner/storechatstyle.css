@@ -5,7 +5,10 @@
     border-radius: 10px; /* 모서리 둥글게 */
     padding: 10px; /* 여백 */
     margin: 10px 0; /* 상하 여백 */
-    position: relative; /* 버튼을 오른쪽에 고정시키기 위해 */
+    position: relative; /* 버튼을 고정하기 위해 필요 */
+    display: flex; /* 플렉스 박스로 요소 정렬 */
+    flex-direction: column; /* 세로로 쌓이게 정렬 */
+    justify-content: space-between; /* 상하 요소 간의 간격 균등하게 */
 }
 
 .payment-info-box p {
@@ -15,15 +18,13 @@
 .payment-info-box .time_date {
     color: #747474; /* 시간 표시 색상 */
     font-size: 10px; /* 시간 표시 크기 조정 */
-    display: block;
-    text-align: right; /* 오른쪽 정렬 */
+    text-align: right; /* 왼쪽 정렬 */
     margin: 8px 0 0; /* 상단 여백 */
 }
 
 .payment-btn {
-    position: absolute; /* 버튼을 박스의 오른쪽 아래에 위치시키기 */
-    right: 10px;
-    bottom: 10px;
+    align-self: center; /* 버튼을 박스의 오른쪽 하단에 위치시키기 */
+    margin-top: 10px; /* 상단 여백 추가 */
 }
 
 /* 채팅 메시지 스타일 */
