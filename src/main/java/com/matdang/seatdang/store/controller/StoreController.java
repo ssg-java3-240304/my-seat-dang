@@ -32,6 +32,8 @@ public class StoreController {
     private final StoreService storeService;
     private final MenuService menuService;
 
+
+
     @GetMapping("/store/storeList")
     public void storeList(@PageableDefault(page = 1, size = 10) Pageable pageable,
                           Model model){

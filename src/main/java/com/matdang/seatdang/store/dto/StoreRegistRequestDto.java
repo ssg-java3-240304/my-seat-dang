@@ -1,4 +1,4 @@
-package com.matdang.seatdang.admin.dto;
+package com.matdang.seatdang.store.dto;
 
 import com.matdang.seatdang.common.storeEnum.StoreType;
 import jakarta.persistence.EnumType;
