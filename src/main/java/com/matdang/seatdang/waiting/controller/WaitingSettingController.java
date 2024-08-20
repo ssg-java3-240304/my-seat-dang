@@ -14,7 +14,7 @@ import java.time.LocalTime;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/store/setting/waiting")
+@RequestMapping("/store-owner/setting/waiting")
 public class WaitingSettingController {
 
     private final StoreRepository storeRepository;
@@ -31,7 +31,7 @@ public class WaitingSettingController {
         model.addAttribute("waitingPeopleCount", waitingSettingService.findWaitingPeopleCount(storeId));
         model.addAttribute("waitingStatus", waitingSettingService.findWaitingStatus(storeId));
 
-        return "store/setting/waiting-setting";
+        return "storeowner/setting/waiting-setting";
     }
 
     @PostMapping("/available-waiting-time")
@@ -48,7 +48,7 @@ public class WaitingSettingController {
             log.info("=== update available time ===");
         }
 
-        return "redirect:/store/setting/waiting";
+        return "redirect:/store-owner/setting/waiting";
     }
 
     @PostMapping("/estimated-waiting-time")
@@ -64,7 +64,7 @@ public class WaitingSettingController {
             log.info("=== update estimated time ===");
         }
 
-        return "redirect:/store/setting/waiting";
+        return "redirect:/store-owner/setting/waiting";
     }
 
     @PostMapping("/waiting-status")
@@ -77,7 +77,7 @@ public class WaitingSettingController {
         }
         log.debug("result ={}", result);
 
-        return "redirect:/store/setting/waiting";
+        return "redirect:/store-owner/setting/waiting";
     }
 
     @PostMapping("/waiting-people-count")
@@ -92,6 +92,6 @@ public class WaitingSettingController {
             log.info("=== update waiting people count ===");
         }
 
-        return "redirect:/store/setting/waiting";
+        return "redirect:/store-owner/setting/waiting";
     }
 }
