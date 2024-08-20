@@ -223,4 +223,30 @@ class WaitingCustomerTest {
         // then
         assertThat(findResult).isEqualTo(0);
     }
+
+    @Test
+    @DisplayName("웨이팅 id로 고객이 웨이팅 취소")
+    void cancelWaitingByCustomer() {
+        // given
+        Store storeA = storeRepository.save(Store.builder()
+                .build());
+
+        Waiting waiting = waitingRepository.save(Waiting.builder()
+                .waitingNumber(1L)
+                .waitingOrder(1L)
+                .storeId(storeA.getStoreId())
+                .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
+                .waitingStatus(WaitingStatus.VISITED)
+                .visitedTime(null)
+                .build());
+        em.flush();
+        em.clear();
+
+        // when
+        int result = waitingRepository.cancelWaitingByCustomer(waiting.getId());
+
+        // then
+        assertThat(result).isEqualTo(1);
+        assertThat(waitingRepository.findById(waiting.getId()).get().getWaitingStatus()).isEqualTo(WaitingStatus.CUSTOMER_CANCELED);
+    }
 }
