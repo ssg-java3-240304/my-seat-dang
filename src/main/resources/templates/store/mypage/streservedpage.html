@@ -68,48 +68,6 @@
   <script th:src="@{/js/customer/jarallax-video.min.js}"></script>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-  <script>
-    // 변수로 새로운 메시지 수를 관리
-    let newMessageCount = 0;
-
-    function updateChatBadge(count) {
-      const badge = document.querySelector("#chat-badge");
-      if (count > 0) {
-        badge.style.display = "inline";
-        badge.textContent = count;
-      } else {
-        badge.style.display = "none";
-      }
-    }
-
-    // SSE 연결하기
-    const chatUrl = /*[[${chatAccessUrl}]]*/ ""; //
-    const reservationId = /*[[${reservationId}]]*/ 0; //
-    const storeOwnerName = /*[[${storeOwnerName}]]*/ ""; //
-
-    const eventSource = new EventSource(`${chatUrl}/chat/roomNum/${reservationId}`);
-    eventSource.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      console.log("Received data:", data);
-
-      // 메시지 수 업데이트
-      newMessageCount++;
-      updateChatBadge(newMessageCount);
-
-      if (data.sender === storeOwnerName) {
-        initMyMessage(data);
-      } else {
-        initYourMessage(data);
-      }
-    };
-
-    // 채팅 버튼 클릭 시 새로운 메시지 수 초기화
-    document.querySelector("#chat-button").addEventListener("click", () => {
-      newMessageCount = 0;
-      updateChatBadge(newMessageCount);
-    });
-  </script>
 </div>
 </body>
 </html>

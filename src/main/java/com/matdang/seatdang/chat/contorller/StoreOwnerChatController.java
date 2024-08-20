@@ -24,6 +24,10 @@ public class StoreOwnerChatController {
             model.addAttribute("storeOwnerName", storeOwnerName);
             model.addAttribute("chatAccessUrl", chatUrl);
 
+            if (chatUrl == null || chatUrl.isEmpty()) {
+                log.warn("chatUrl is null or empty");
+            }
+
             log.info("Received parameters - reservationId: {}, storeName: {}, storeOwnerName: {}, chatUrl: {}",
                     reservationId, storeName, storeOwnerName, chatUrl);
 
