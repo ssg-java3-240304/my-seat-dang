@@ -60,19 +60,21 @@ public class WaitingCustomerController {
         return "customer/waiting/awaiting-waiting-detail";
     }
 
-    @PostMapping("/waiting/awaiting/detail")
-    public String cancelWaiting(@RequestParam(defaultValue = "1") Long waitingId, Model model) {
+    @PostMapping("/waiting/{waitingId}/awaiting/detail")
+    public String cancelWaiting(@PathVariable Long waitingId, RedirectAttributes redirectAttributes) {
 
         int result = waitingRepository.cancelWaitingByCustomer(waitingId);
         if (result == 1) {
             log.info("=== 웨이팅 고객 취소 ===");
         } else log.error("== 웨이팅 고객 취소 오류 ===");
 
-        return "redirect:/my-seat-dang/waiting/canceled/detail";
+        redirectAttributes.addAttribute("waitingId", waitingId);
+
+        return "redirect:/my-seat-dang/waiting/{waitingId}/canceled/detail";
     }
 
     // TODO : Waiting entity 취소 시간 필드 추가
-    @GetMapping("/waiting/canceled/detail")
+    @GetMapping("/waiting/{waitingId}/canceled/detail")
     public String showCancelWaitingDetail(@RequestParam(defaultValue = "1") Long waitingId, Model model) {
         Waiting waiting = waitingRepository.findById(waitingId).get();
         Store store = storeRepository.findByStoreId(waiting.getStoreId());

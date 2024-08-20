@@ -10,8 +10,7 @@
 <p><strong>Created Date:</strong> <span th:text="${awaitingWaitingResponse.createdDate}"></span></p>
 <p><strong>People Count:</strong> <span th:text="${awaitingWaitingResponse.peopleCount}"></span></p>
 <p><strong>Store Name:</strong> <span th:text="${awaitingWaitingResponse.storeName}"></span></p>
-<form action="#" th:action="@{/my-seat-dang/waiting/awaiting/detail}" method="post">
-    <input type="hidden" name="waitingId" th:value="${awaitingWaitingResponse.waitingId}"/>
+<form action="#" th:action="@{|/my-seat-dang/waiting/${awaitingWaitingResponse.waitingId}/awaiting/detail|}" method="post">
     <button type="submit">Cancel Waiting</button>
 </form>
 </body>
