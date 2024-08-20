@@ -1,0 +1,18 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Awaiting Waiting Detail</title>
+</head>
+<body>
+<h1>Awaiting Waiting Detail</h1>
+<p><strong>Waiting Number:</strong> <span th:text="${waitingNumber}"></span></p>
+<p><strong>Waiting Status:</strong> <span th:text="${waitingStatus}"></span></p>
+<p><strong>Created Date:</strong> <span th:text="${createdDate}"></span></p>
+<p><strong>People Count:</strong> <span th:text="${peopleCount}"></span></p>
+<p><strong>Store Name:</strong> <span th:text="${storeName}"></span></p>
+<form action="#" th:action="@{/my-seat-dang/waiting/awaiting/detail}" method="post">
+    <input type="hidden" name="waitingId" th:value="${waitingId}"/>
+    <button type="submit">Cancel Waiting</button>
+</form>
+</body>
+</html>
