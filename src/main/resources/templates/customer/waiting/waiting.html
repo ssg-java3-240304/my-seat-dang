@@ -8,17 +8,17 @@
 <h1>Create Waiting</h1>
 
 <div>
-    <p>Do you want to register for waiting at <span th:text="${storeName}"></span>?</p>
+    <p>Do you want to register for waiting at <span th:text="${readyWaitingResponse.storeName}"></span>?</p>
     <p>Current Waiting Teams: <span th:text="${waitingTeam}"></span></p>
 </div>
 <form action="/my-seat-dang/waiting" method="post">
     <!-- Hidden field for storeId -->
-    <input type="hidden" name="storeId" th:value="${storeId}"/>
+    <input type="hidden" name="storeId" th:value="${readyWaitingResponse.storeId}"/>
 
     <div>
         <label for="peopleCount">People Count:</label>
         <input type="number" id="peopleCount" name="peopleCount" min="1"
-               th:max="${waitingPeopleCount}" value="2" required/>
+               th:max="${readyWaitingResponse.waitingPeopleCount}" value="2" required/>
     </div>
     <button type="submit">Create</button>
 </form>
