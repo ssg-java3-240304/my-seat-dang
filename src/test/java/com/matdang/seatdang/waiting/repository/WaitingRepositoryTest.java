@@ -40,7 +40,7 @@ class WaitingRepositoryTest {
                             .waitingNumber(i)
                             .waitingOrder(i)
                             .storeId(1L)
-                            .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
+                            .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
                             .waitingStatus(value)
                             .visitedTime(null)
                             .build());
@@ -53,7 +53,7 @@ class WaitingRepositoryTest {
                     .waitingNumber(i)
                     .waitingOrder(i)
                     .storeId(2L)
-                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
+                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
                     .waitingStatus(WaitingStatus.WAITING)
                     .visitedTime(null)
                     .build());
@@ -75,21 +75,34 @@ class WaitingRepositoryTest {
         assertThat(findWaitings.size()).isEqualTo(size);
     }
 
-
-    @ParameterizedTest
-    @CsvSource(value = {"1,NO_SHOW", "2,VISITED", "3,CUSTOMER_CANCELED", "4,SHOP_CANCELED"})
-    @DisplayName("id로 상태 변경")
-    void updateStatus(int index, String status) {
+    @Test
+    @DisplayName("id로 입장 상태 변경")
+    void updateStatusByVisit() {
         // given
         List<Waiting> findWaiting = waitingRepository.findAll();
         em.clear();
 
         // when
-        int result = waitingRepository.updateStatus(WaitingStatus.valueOf(status), findWaiting.get(index).getId());
+        int result = waitingRepository.updateStatusByVisit(findWaiting.get(1).getId());
         // then
         assertThat(result).isEqualTo(1);
-        assertThat(waitingRepository.findById(findWaiting.get(index).getId()).get().getWaitingStatus()).isEqualTo(
-                WaitingStatus.valueOf(status));
+        assertThat(waitingRepository.findById(findWaiting.get(1).getId()).get().getWaitingStatus())
+                .isEqualTo(WaitingStatus.VISITED);
+    }
+
+    @Test
+    @DisplayName("id로 점주 취소 상태 변경")
+    void updateStatusByShopCancel() {
+        // given
+        List<Waiting> findWaiting = waitingRepository.findAll();
+        em.clear();
+
+        // when
+        int result = waitingRepository.updateStatusByShopCancel(findWaiting.get(1).getId());
+        // then
+        assertThat(result).isEqualTo(1);
+        assertThat(waitingRepository.findById(findWaiting.get(1).getId()).get().getWaitingStatus())
+                .isEqualTo(WaitingStatus.SHOP_CANCELED);
     }
 
     @Test
