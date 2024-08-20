@@ -68,4 +68,10 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
             + " where w.storeId= :storeId"
             + " and w.waitingStatus = com.matdang.seatdang.waiting.entity.WaitingStatus.WAITING")
     Integer countWaitingByStoreIdAndWaitingStatus(@Param("storeId") Long storeId);
+
+    @Modifying
+    @Query("update Waiting w"
+            + " set w.waitingStatus = com.matdang.seatdang.waiting.entity.WaitingStatus.CUSTOMER_CANCELED"
+            + " where w.id = :id")
+    int cancelWaitingByCustomer(@Param("id") Long id);
 }
