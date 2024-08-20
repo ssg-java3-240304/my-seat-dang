@@ -3,6 +3,7 @@ package com.matdang.seatdang.waiting.controller;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.waiting.controller.dto.WaitingRequestDto;
+import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.service.WaitingCustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class WaitingCustomerController {
     private final WaitingCustomerService waitingCustomerService;
+    private final WaitingRepository waitingRepository;
     private final StoreRepository storeRepository;
 
     /**
@@ -25,6 +27,9 @@ public class WaitingCustomerController {
     @GetMapping("/waiting")
     public String readyWaiting(@RequestParam(defaultValue = "1") Long storeId, Model model) {
         Store store = storeRepository.findByStoreId(storeId);
+
+        model.addAttribute("waitingTeam", waitingRepository.countWaitingByStoreIdAndWaitingStatus(storeId));
+        model.addAttribute("storeName", store.getStoreName());
         model.addAttribute("waitingPeopleCount", store.getStoreSetting().getWaitingPeopleCount());
         model.addAttribute("storeId", storeId);
         return "customer/waiting/waiting";
