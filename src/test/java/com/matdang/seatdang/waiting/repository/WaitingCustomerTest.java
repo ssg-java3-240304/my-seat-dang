@@ -102,4 +102,18 @@ class WaitingCustomerTest {
         // then
         assertThat(findResult).isEqualTo(4L);
     }
+
+    @Test
+    @DisplayName("상점 id의 웨이팅(웨이팅 상태)이 존재하지 않을때 웨이팅 번호 0으로 가져오기")
+    void findMaxWaitingOrderByStoreIdAndNotExistence() {
+        // given
+        Store storeA = storeRepository.save(Store.builder()
+                .build());
+
+        // when
+        Long findResult = waitingRepository.findMaxWaitingOrderByStoreId(storeA.getStoreId());
+
+        // then
+        assertThat(findResult).isEqualTo(0L);
+    }
 }
