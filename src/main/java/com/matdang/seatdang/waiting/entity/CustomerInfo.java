@@ -5,6 +5,7 @@ import lombok.*;
 
 @Embeddable
 @Data
+@Builder
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
