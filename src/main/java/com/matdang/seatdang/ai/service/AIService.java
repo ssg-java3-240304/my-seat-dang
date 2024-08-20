@@ -3,6 +3,7 @@ package com.matdang.seatdang.ai.service;
 
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.matdang.seatdang.ai.dto.GeneratedImageUrlDto;
 import com.matdang.seatdang.ai.entity.GeneratedImageUrl;
 import com.matdang.seatdang.ai.repository.GeneratedImageUrlRepository;
 import com.matdang.seatdang.object_storage.service.FileService;
@@ -22,6 +23,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -65,24 +67,6 @@ public class AIService {
         return imageUrl;
     }
 
-//    // AI로 이미지를 생성하고 URL을 반환합니다.
-//    public String generateAndSaveImage(Long customerId, String cakeDescription) throws IOException, InterruptedException {
-//
-//        String imageUrl = generatePictureV2(cakeDescription);
-//
-//        // 생성된 이미지를 데이터베이스에 저장합니다.
-//        GeneratedImageUrl generatedImageUrl = GeneratedImageUrl.builder()
-//                .customerId(customerId)
-//                .generatedUrl(imageUrl)
-//                .createdAt(LocalDateTime.now())
-//                .inputText(cakeDescription)
-//                .build();
-//
-//        generatedImageUrlRepository.save(generatedImageUrl);
-//
-//        return imageUrl;
-//    }
-
     public String uploadImageToS3(String imageUrl, String filePath) throws IOException {
         // 이미지 URL에서 InputStream을 얻어오기
         try (InputStream inputStream = new URL(imageUrl).openStream()) {
@@ -107,5 +91,46 @@ public class AIService {
             }
         }
     }
+
+
+    public GeneratedImageUrl createAndSaveGeneratedImage(Long customerId, String cakeDescription) throws IOException, InterruptedException {
+        // AI 이미지 생성
+        String imageUrl = generatePictureV2(cakeDescription);
+
+        // S3 또는 NCP에 업로드
+        String filePath = "ai-generated-images/" + customerId + "/cake-idea.jpg";
+        String uploadedImageUrl = uploadImageToS3(imageUrl, filePath);
+
+        // 이미지 URL 및 생성된 데이터 저장
+        GeneratedImageUrl generatedImage = GeneratedImageUrl.builder()
+                .customerId(customerId)
+                .generatedUrl(uploadedImageUrl)
+                .createdAt(LocalDateTime.now())
+                .inputText(cakeDescription)
+                .build();
+
+        generatedImageUrlRepository.save(generatedImage);
+
+        return generatedImage;
+    }
+
+    public List<GeneratedImageUrlDto> getGeneratedImagesByCustomerId(Long customerId) {
+        List<GeneratedImageUrl> imageList = generatedImageUrlRepository.findAllByCustomerId(customerId);
+
+        // 엔티티를 DTO로 변환
+        return imageList.stream()
+                .map(image -> new GeneratedImageUrlDto(
+                        image.getGeneratedUrl(),
+                        image.getCreatedAt(),
+                        image.getInputText()))
+                .toList();
+    }
+
+
+
+
+
+
+
 
 }

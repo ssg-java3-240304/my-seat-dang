@@ -66,48 +66,52 @@ public class AIController {
 
 
 
-//    @PostMapping("/ai/generate")
-//    @ResponseBody // 이 애노테이션을 추가하여 JSON 형식으로 응답
-//    public  ResponseEntity<?> generateImage(@RequestParam("cakeDescription") String cakeDescription, Model model) throws IOException, InterruptedException {
-//        Long customerId = authService.getAuthenticatedMember().getMemberId();
-//        Customer customer = customerService.findById(customerId);
-//
-//        if (customer.getImageGenLeft() <= 0) {
-//            ErrorResponseDto errorResponse = new ErrorResponseDto("생성 가능한 이미지 횟수가 부족합니다.", LocalDateTime.now());
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-//        }
-//
-//        String imageUrl = aiService.generateAndSaveImage(customerId, cakeDescription);
-//        customerService.decrementImageGenLeft(customer);
-//
-//        // 고객이 생성한 모든 이미지 목록을 다시 조회
-//        List<GeneratedImageUrl> imageList = generatedImageUrlRepository.findAllByCustomerId(customerId);
-//
-//        // DTO에 필요한 데이터를 묶어 전달
-//        GeneratedImageResponseDto responseDto = new GeneratedImageResponseDto(
-//                imageList, imageUrl, cakeDescription, LocalDateTime.now()
-//        );
-//
-//        return ResponseEntity.ok(responseDto);
-//    }
+    @PostMapping("/ai/generate")
+    @ResponseBody
+    public ResponseEntity<?> generateImage(@RequestParam("cakeDescription") String cakeDescription) throws IOException, InterruptedException {
+        Long customerId = authService.getAuthenticatedMember().getMemberId();
+        Customer customer = customerService.findById(customerId);
+
+        if (customer.getImageGenLeft() <= 0) {
+            ErrorResponseDto errorResponse = new ErrorResponseDto("생성 가능한 이미지 횟수가 부족합니다.", LocalDateTime.now());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
+
+
+        // AI 이미지 생성 및 생성된 이미지 NCP에 저장
+        GeneratedImageUrl generatedImage = aiService.createAndSaveGeneratedImage(customerId, cakeDescription);
+
+        // 이미지 생성 가능 횟수 차감
+        customerService.decrementImageGenLeft(customer);
+
+        // 응답 데이터 생성
+        GeneratedImageResponseDto responseDto = new GeneratedImageResponseDto(
+                generatedImage.getGeneratedUrl(),
+                generatedImage.getInputText(),
+                generatedImage.getCreatedAt()
+        );
+
+        return ResponseEntity.ok(responseDto);
+    }
 
 
 
 
 
 
-//    @GetMapping("/ai-result")
-//    public String showResult(Model model){
-//
-//        // 현재 로그인된 고객 정보
-//        Long customerId = authService.getAuthenticatedMember().getMemberId();
-//
-//        // 고객이 생성한 모든 이미지 조회
-//        List<GeneratedImageUrl> imageList = generatedImageUrlRepository.findAllByCustomerId(customerId);
-//
-//        // 모델에 이미지 목록 추가
-//        model.addAttribute("imageList", imageList);
-//
-//        return "ai/ai-result";
-//    }
+
+    @GetMapping("/ai-result")
+    public String showResult(Model model){
+
+        // 현재 로그인된 고객 정보
+        Long customerId = authService.getAuthenticatedMember().getMemberId();
+
+        // 고객이 생성한 모든 이미지 조회
+        List<GeneratedImageUrl> imageList = generatedImageUrlRepository.findAllByCustomerId(customerId);
+
+        // 모델에 이미지 목록 추가
+        model.addAttribute("imageList", imageList);
+
+        return "ai/ai-result";
+    }
 }
