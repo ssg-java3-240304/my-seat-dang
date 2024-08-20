@@ -2,7 +2,7 @@ package com.matdang.seatdang.waiting.controller;
 
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
-import com.matdang.seatdang.waiting.controller.dto.WaitingRequestDto;
+import com.matdang.seatdang.waiting.controller.dto.WaitingRequest;
 import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.service.WaitingCustomerService;
@@ -37,9 +37,9 @@ public class WaitingCustomerController {
     }
 
     @PostMapping("/waiting")
-    public String createWaiting(@ModelAttribute WaitingRequestDto waitingRequestDto) {
+    public String createWaiting(@ModelAttribute WaitingRequest waitingRequest) {
         log.debug("=== create Waiting ===");
-        waitingCustomerService.createWaiting(waitingRequestDto.getStoreId(), waitingRequestDto.getPeopleCount());
+        waitingCustomerService.createWaiting(waitingRequest.getStoreId(), waitingRequest.getPeopleCount());
 
         /**
          * TODO : 변경 필요

@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class WaitingRequestDto {
+public class WaitingRequest {
     private Long storeId;
     private Long peopleCount;
 }
