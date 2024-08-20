@@ -16,6 +16,7 @@ public class CanceledWaitingResponse {
     private Long waitingNumber;
     private WaitingStatus waitingStatus;
     private LocalDateTime createdDate;
+    private LocalDateTime canceledTime;
     private Integer peopleCount;
     private String storeName;
 
@@ -25,6 +26,7 @@ public class CanceledWaitingResponse {
         canceledWaitingResponse.waitingStatus = waiting.getWaitingStatus();
         canceledWaitingResponse.createdDate = waiting.getCreatedDate();
         canceledWaitingResponse.peopleCount = waiting.getCustomerInfo().getPeopleCount();
+        canceledWaitingResponse.canceledTime = waiting.getCanceledTime();
         canceledWaitingResponse.storeName = store.getStoreName();
 
         return canceledWaitingResponse;

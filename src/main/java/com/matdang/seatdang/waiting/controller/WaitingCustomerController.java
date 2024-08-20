@@ -62,7 +62,6 @@ public class WaitingCustomerController {
 
     @PostMapping("/waiting/{waitingId}/awaiting/detail")
     public String cancelWaiting(@PathVariable Long waitingId, RedirectAttributes redirectAttributes) {
-
         int result = waitingRepository.cancelWaitingByCustomer(waitingId);
         if (result == 1) {
             log.info("=== 웨이팅 고객 취소 ===");
@@ -75,13 +74,14 @@ public class WaitingCustomerController {
         return "redirect:/my-seat-dang/waiting/{waitingId}/canceled/detail";
     }
 
-    // TODO : Waiting entity 취소 시간 필드 추가
     @GetMapping("/waiting/{waitingId}/canceled/detail")
-    public String showCanceledWaitingDetail(@RequestParam(defaultValue = "1") Long waitingId, Model model) {
+    public String showCanceledWaitingDetail(@PathVariable Long waitingId, Model model) {
         Waiting waiting = waitingRepository.findById(waitingId).get();
         Store store = storeRepository.findByStoreId(waiting.getStoreId());
         model.addAttribute("canceledWaitingResponse", CanceledWaitingResponse.create(waiting, store));
 
         return "customer/waiting/canceled-waiting-detail";
     }
+
+    // TODO : 입장 페이지 만들기
 }
