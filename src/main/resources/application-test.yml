@@ -11,6 +11,7 @@ spring:
 #    username: ${TEST_DB_USERNAME}
 #    password: ${TEST_DB_PASSWORD}
     url: jdbc:mysql://localhost:3306/myseatdangdb
+
     username: amatdang
     password: amatdang
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -22,7 +23,7 @@ spring:
         format_sql: true
         #        show_sql: true
         hbm2ddl:
-          auto: update
+          auto: create
         dialect: org.hibernate.dialect.MySQLDialect
     open-in-view: false
 kakao:

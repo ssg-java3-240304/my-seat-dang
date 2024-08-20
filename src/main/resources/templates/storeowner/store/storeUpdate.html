@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{store/layout/default}" xmlns="http://www.w3.org/1999/html">
+      layout:decorate="~{storeowner/layout/default}" xmlns="http://www.w3.org/1999/html">
 
 <div layout:fragment="content">
-    <form th:action="@{/store/storeRegist}" method="post" enctype="multipart/form-data">
+    <form th:action="@{/templates/storeowner/storeUpdate}" method="post" enctype="multipart/form-data">
         <!-- Breadcrumbs-->
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
@@ -16,10 +16,11 @@
                 <h2><i class="fa fa-file"></i>Basic info</h2>
             </div>
             <div class="row">
+                <input type="hidden" id="storeId" th:value="${store.storeId}">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>매장명</label>
-                        <input type="text" id="storeName" class="form-control" placeholder="매장명을 입력하세요." required><br>
+                        <input type="text" id="storeName" class="form-control" th:value="${store.storeName}" required><br>
                         <div class="input-group-append">
                             <button class="btn_1 medium" type="button" id="checkStoreNameBtn">중복 체크</button>
                         </div>
@@ -29,10 +30,10 @@
                     <div class="form-group">
                         <label>카테고리</label>
                         <div class="styled-select">
-                            <select id="storeType" required>
-                                <option value="GENERAL_RESERVATION">예약(베이커리)</option>
-                                <option value="CUSTOM">예약(제작케이크)</option>
-                                <option value="GENERAL_WAITING">웨이팅(베이커리)</option>
+                            <select id="storeType" required disabled>
+                                <option value="GENERAL_RESERVATION" th:selected="${store.storeType.name() eq 'GENERAL_RESERVATION'}">예약(베이커리)</option>
+                                <option value="CUSTOM" th:selected="${store.storeType.name() eq 'CUSTOM'}">예약(제작케이크)</option>
+                                <option value="GENERAL_WAITING" th:selected="${store.storeType.name() eq 'GENERAL_WAITING'}">웨이팅(베이커리)</option>
                             </select>
                         </div>
                     </div>
@@ -43,7 +44,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>매장소개</label>
-                        <textarea id="description" class="form-control"></textarea>
+                        <textarea id="description" class="form-control" th:text="${store.description}"></textarea>
                     </div>
                 </div>
             </div>
@@ -52,7 +53,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>공지사항</label>
-                        <textarea id="notice" class="form-control"></textarea>
+                        <textarea id="notice" class="form-control" th:text="${store.notice}"></textarea>
                     </div>
                 </div>
             </div>
@@ -61,7 +62,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>매장 전화번호</label>
-                        <input type="text" id="phone" class="form-control" placeholder="02-000-0000" required>
+                        <input type="text" id="phone" class="form-control" th:value="${store.phone}" required>
                     </div>
                 </div>
             </div>
@@ -71,8 +72,9 @@
                     <div class="form-group">
                         <label>대표 매장 이미지 (필수/ 최대 1개)</label>
                         <form enctype="multipart/form-data">
-                            <div><img src="" class="photo-preview" id="preview" width="200px" height="200px" alt="이미지 미리보기"/></div>
+                            <div><img th:src="${store.thumbnail}" class="img-preview" id="preview" width="200px" height="200px" alt="이미지 미리보기"/></div>
                             <input type="file" id="thumbnail" required>
+                            <input type="hidden" id="originalThumbnail" th:value="${store.thumbnail}">
                         </form>
                     </div>
                 </div>
@@ -83,8 +85,11 @@
                     <div class="form-group">
                         <label>추가 매장 이미지 (최대 3개)</label>
                         <form enctype="multipart/form-data">
-                            <div id="previewContainer"></div> <!-- 이미지 미리보기 -->
+                            <div id="previewContainer">
+                                <div id="preview2"></div> <!-- 이미지 미리보기 컨테이너 -->
+                            </div>
                             <input type="file" id="images" multiple>
+                            <input type="hidden" id="originalImages" th:value="${store.images}">
                         </form>
                     </div>
                 </div>
@@ -99,7 +104,8 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <input type="text" id="sample6_postcode" class="form-control" placeholder="우편번호" required><br>
+                        <input type="hidden" id="address" th:value="${store.storeAddress}">
+                        <input type="text" id="sample6_postcode" class="form-control" required><br>
                         <input type="text" id="sample6_address" class="form-control" placeholder="주소" required><br>
                         <input type="text" id="sample6_extraAddress" class="form-control" placeholder="참고항목" required><br>
                         <input type="text" id="sample6_detailAddress" class="form-control" placeholder="상세주소" required><br>
@@ -119,12 +125,12 @@
                 </div>
                 <div class="col-md-5">
                     <div class="form-group">
-                        <input type="time" id="openTime" class="form-control"/>
+                        <input type="time" id="openTime" class="form-control" th:value="${store.openTime}"/>
                     </div>
                 </div>
                 <div class="col-md-5">
                     <div class="form-group">
-                        <input type="time" id="closeTime" class="form-control"/>
+                        <input type="time" id="closeTime" class="form-control" th:value="${store.closeTime}"/>
                     </div>
                 </div>
             </div>
@@ -135,12 +141,12 @@
                 </div>
                 <div class="col-md-5">
                     <div class="form-group">
-                        <input type="time" id="startBreakTime" class="form-control"/>
+                        <input type="time" id="startBreakTime" class="form-control" th:value="${store.startBreakTime}"/>
                     </div>
                 </div>
                 <div class="col-md-5">
                     <div class="form-group">
-                        <input type="time" id="endBreakTime" class="form-control"/>
+                        <input type="time" id="endBreakTime" class="form-control" th:value="${store.endBreakTime}"/>
                     </div>
                 </div>
             </div>
@@ -151,7 +157,7 @@
                 </div>
                 <div class="col-md-5">
                     <div class="form-group">
-                        <input type="time" id="lastOrder" class="form-control"/>
+                        <input type="time" id="lastOrder" class="form-control" th:value="${store.lastOrder}"/>
                     </div>
                 </div>
             </div>
@@ -164,14 +170,14 @@
                     <div class="form-group">
                         <div class="styled-select">
                             <select id="regularDayOff">
-                                <option value="없음">없음</option>
-                                <option value="월요일">월요일</option>
-                                <option value="화요일">화요일</option>
-                                <option value="수요일">수요일</option>
-                                <option value="목요일">목요일</option>
-                                <option value="금요일">금요일</option>
-                                <option value="토요일">토요일</option>
-                                <option value="일요일">일요일</option>
+                                <option value="없음" th:selected="${store.regularDayOff == '없음'}">없음</option>
+                                <option value="월요일" th:selected="${store.regularDayOff == '월요일'}">월요일</option>
+                                <option value="화요일" th:selected="${store.regularDayOff == '화요일'}">화요일</option>
+                                <option value="수요일" th:selected="${store.regularDayOff == '수요일'}">수요일</option>
+                                <option value="목요일" th:selected="${store.regularDayOff == '목요일'}">목요일</option>
+                                <option value="금요일" th:selected="${store.regularDayOff == '금요일'}">금요일</option>
+                                <option value="토요일" th:selected="${store.regularDayOff == '토요일'}">토요일</option>
+                                <option value="일요일" th:selected="${store.regularDayOff == '일요일'}">일요일</option>
                             </select>
                         </div>
                     </div>
@@ -261,72 +267,156 @@
     </script>
 
     <script>
-        document.querySelector("#thumbnail").onchange = () => {
-            const file = document.querySelector("#thumbnail").files[0];
-            if (file){
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    document.querySelector("#preview").src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        };
+        let isClicked = 0;
+        let currentStoreName = ''; // 현재 매장명 저장 변수
 
-        document.getElementById('images').addEventListener('change', function(event) {
-            const files = event.target.files;
-            const previewContainer = document.getElementById('previewContainer');
+        // 페이지 로드 시 현재 매장명 설정 (서버에서 가져온 경우)
+        document.addEventListener('DOMContentLoaded', function() {
+            currentStoreName = $('#storeName').val(); // 현재 매장명을 가져옵니다 (서버에서 설정된 경우)
+        });
 
-            // 기존 미리보기 이미지 삭제
-            previewContainer.innerHTML = '';
-            const maxFiles = 3;
+        document.querySelector("#checkStoreNameBtn").onclick = () => {
+            const newStoreName = $('#storeName').val();
 
-            // 파일 수 제한
-            if (files.length > maxFiles) {
-                alert('최대 3개의 이미지만 선택할 수 있습니다.');
-                event.target.value = ''; // 입력 필드 초기화
+            // 현재 매장명과 새로 입력한 매장명이 같은 경우
+            if (newStoreName === currentStoreName) {
+                alert("현재 매장명과 동일합니다.");
                 return;
             }
 
-            // 이미지 미리보기
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        // 이미지 엘리먼트 생성
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        img.className = 'photo-preview';
-                        img.style.width = '200px'; // 미리보기 크기 설정
-                        img.style.height = '200px'; // 미리보기 크기 설정
-                        previewContainer.appendChild(img);
-                    };
-                    reader.readAsDataURL(file);
-                }
-            }
-        });
-
-        let isclicked = 0;
-        document.querySelector("#checkStoreNameBtn").onclick = () => {
+            // 매장명이 다를 경우 중복 체크 수행
             $.ajax({
                 url: '[[@{/store/storeNameCheck}]]',
                 method: 'get',
-                data: {storeName: $('#storeName').val()},
+                data: {storeName: newStoreName},
                 dataType: 'json',
-                success (data){
-                    if (data === 0){
+                success (data) {
+                    if (data === 0) {
                         alert("사용가능한 매장명입니다.");
-                        isclicked = 1;
+                        isClicked = 1;
                     } else {
                         alert("이미 사용 중인 매장명입니다.");
                     }
-                    console.log(data)
+                    console.log(data);
                 },
                 error(error) {
-                    console.log(error)
+                    console.log(error);
                 }
             });
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // 대표 매장 이미지 미리보기
+            const preview = document.getElementById('preview');
+            const thumbnailInput = document.getElementById('thumbnail');
+            const originalThumbnail = preview.src; // 초기 대표 매장 이미지 URL
+
+            // 대표 매장 이미지 변경 시 미리보기 업데이트
+            thumbnailInput.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        preview.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    // 파일이 선택되지 않은 경우, 원래의 이미지 URL로 복원
+                    preview.src = originalThumbnail;
+                }
+            });
+
+            const preview2 = document.getElementById('preview2');
+            const imagesInput = document.getElementById('images');
+            const originalImagesInput = document.getElementById('originalImages');
+
+            // 원래 이미지 URL 리스트 가져오기
+            const originalImages = JSON.parse(originalImagesInput.value || '[]');
+
+            // 기존 이미지 미리보기 생성
+            function createImagePreview(url) {
+                if (url) {
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.className = 'photo-preview';
+                    img.style.width = '200px'; // 미리보기 크기 설정
+                    img.style.height = '200px'; // 미리보기 크기 설정
+                    preview2.appendChild(img);
+                }
+            }
+
+            // 페이지 로드 시 기존 이미지 미리보기 생성
+            originalImages.forEach(createImagePreview);
+
+            // 파일 선택 시 미리보기 업데이트
+            imagesInput.addEventListener('change', function(event) {
+                const files = event.target.files;
+
+                // 기존 미리보기 이미지 제거
+                preview2.innerHTML = '';
+
+                // 새로 선택된 이미지 미리보기 생성
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.className = 'photo-preview';
+                            img.style.width = '200px'; // 미리보기 크기 설정
+                            img.style.height = '200px'; // 미리보기 크기 설정
+                            preview2.appendChild(img);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                }
+            });
+        });
+
+        // 주소 구분자로 나눠서 디폴드값으로 보여주기
+        document.addEventListener('DOMContentLoaded', () => {
+            function populateAddressFields() {
+                // hidden input에서 주소 가져오기
+                const addressString = document.getElementById('address').value.trim();
+
+                // 값 초기화
+                let postcode = '';
+                let mainAddress = '';
+                let extraAddress = '';
+                let detailAddress = '';
+
+                // 괄호 위치 찾기
+                const parenthesesIndex = addressString.indexOf('(');
+
+                if (parenthesesIndex !== -1) {
+                    // 참고주소 있는 경우
+                    postcode = addressString.substring(0, addressString.indexOf(' ')).trim();
+                    mainAddress = addressString.substring(addressString.indexOf(' ') + 1, parenthesesIndex).trim();
+                    extraAddress = addressString.substring(parenthesesIndex, addressString.indexOf(')') + 1).trim();
+                    detailAddress = addressString.substring(addressString.indexOf(')') + 1).trim();
+                } else {
+                    // 참고주소 없는 경우
+                    const parts = addressString.split(' ');
+                    if (parts.length >= 3) {
+                        postcode = parts[0];
+                        mainAddress = parts.slice(1, -2).join(' '); // Join all parts except the last two as main address
+                        detailAddress = parts.slice(-2).join(' '); // Last two parts as detail address
+                    } else {
+                        mainAddress = addressString; // Default to whole string if not enough parts
+                    }
+                }
+
+                // 데이터 삽입
+                document.getElementById('sample6_postcode').value = postcode;
+                document.getElementById('sample6_address').value = mainAddress;
+                document.getElementById('sample6_extraAddress').value = extraAddress;
+                document.getElementById('sample6_detailAddress').value = detailAddress;
+            }
+
+            // 위 함수 호출
+            populateAddressFields();
+        });
 
         document.querySelector("#submitBtn").onclick = (e) => {
             e.preventDefault();
@@ -336,7 +426,11 @@
                 return;
             }
 
-            if (!$('#thumbnail')[0].files[0]) {
+            const thumbnailInput = document.querySelector('#thumbnail');
+            const newThumbnail = thumbnailInput.files[0];
+            const originalThumbnail = document.querySelector('#originalThumbnail').value;
+
+            if (!newThumbnail && !originalThumbnail) {
                 alert("대표 매장 이미지를 업로드 해주세요.");
                 return;
             }
@@ -351,20 +445,28 @@
             const fullAddress = `${postcode} ${address} ${extraAddress} ${detailAddress}`;
 
             const formData = new FormData();
+            formData.append('storeId', document.querySelector('#storeId').value);
             formData.append('storeName', $('#storeName').val());
             formData.append('storeType', $('#storeType').val());
             formData.append('description', $('#description').val());
             formData.append('notice', $('#notice').val());
             formData.append('phone', $('#phone').val());
 
-            formData.append('thumbnail', $('#thumbnail')[0].files[0]);
+            if (newThumbnail) {
+                formData.append('thumbnail', newThumbnail);
+            } else {
+                formData.append('thumbnail', originalThumbnail); // 기존 파일명 전송
+            }
 
             const extraFiles = document.getElementById('images').files;
-            if (extraFiles.length >= 1){
-                for (let i = 0; i < extraFiles.length; i++) {
-                    formData.append('images', extraFiles[i]);
-                }
+            const originalImages = document.querySelector('#originalImages').value.split(',').filter(Boolean);
+
+            for (let i = 0; i < extraFiles.length; i++) {
+                formData.append('images', extraFiles[i]);
             }
+            originalImages.forEach(img => {
+                formData.append('images', img);
+            });
 
             formData.append('storeAddress', fullAddress);
             formData.append('openTime', $('#openTime').val());
@@ -375,19 +477,19 @@
             formData.append('regularDayOff', $('#regularDayOff').val());
 
             $.ajax({
-                url: '[[@{/store/storeRegist}]]',
+                url: '[[@{/store/storeUpdate}]]',
                 method: 'post',
                 contentType: false,
                 processData: false,
                 data : formData,
                 success (data){
                     console.log(data);
-                    alert("매장을 성공적으로 등록했습니다.");
+                    alert("매장을 성공적으로 수정했습니다.");
                     window.location.reload();
                 },
                 error (error){
                     console.log(error);
-                    alert("매장 등록에 실패하셨습니다.");
+                    alert("매장 수정에 실패하셨습니다.");
                 }
             });
         }

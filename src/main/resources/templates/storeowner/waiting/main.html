@@ -2,7 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{store/layout/default}">
+      layout:decorate="~{storeowner/layout/default}">
 <head>
     <meta charset="UTF-8">
     <title>Waiting List</title>
@@ -103,15 +103,15 @@
     </div>
 
     <div class="button-container">
-        <form th:action="@{/store/waiting}" method="get" style="display:inline;">
+        <form th:action="@{/store-owner/waiting}" method="get" style="display:inline;">
             <input type="hidden" name="status" value="0"/>
             <button type="submit">웨이팅 중</button>
         </form>
-        <form th:action="@{/store/waiting}" method="get" style="display:inline;">
+        <form th:action="@{/store-owner/waiting}" method="get" style="display:inline;">
             <input type="hidden" name="status" value="1"/>
             <button type="submit">입장</button>
         </form>
-        <form th:action="@{/store/waiting}" method="get" style="display:inline;">
+        <form th:action="@{/store-owner/waiting}" method="get" style="display:inline;">
             <input type="hidden" name="status" value="2"/>
             <button type="submit">취소</button>
         </form>
@@ -141,13 +141,13 @@
             <td th:text="${{waiting.visitedTime}}"></td>
             <td th:if="${status == 0}">
                 <div class="row-buttons">
-                    <form th:if="${waiting.waitingOrder == 1}" th:action="@{/store/waiting}" method="post">
+                    <form th:if="${waiting.waitingOrder == 1}" th:action="@{/store-owner/waiting}" method="post">
                         <input type="hidden" name="id" th:value="${waiting.id}"/>
                         <input type="hidden" name="storeId" th:value="${storeId}"/>
                         <input type="hidden" name="changeStatus" value="1"/>
                         <button type="submit" class="entry-button-secondary">입장</button>
                     </form>
-                    <form th:action="@{/store/waiting}" method="post">
+                    <form th:action="@{/store-owner/waiting}" method="post">
                         <input type="hidden" name="id" th:value="${waiting.id}"/>
                         <input type="hidden" name="storeId" th:value="${storeId}"/>
                         <input type="hidden" name="waitingNumber" th:value="${waiting.waitingOrder}"/>
