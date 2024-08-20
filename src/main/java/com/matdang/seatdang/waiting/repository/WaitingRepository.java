@@ -44,7 +44,7 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
     @Query("delete from Waiting w where w.storeId = :storeId")
     int deleteAllByStoreId(@Param("storeId") Long storeId);
 
-
-    @Query("select ifnull(max(w.waitingNumber), 0) from Waiting w where w.storeId = :storeId")
+    // COALESCE == IFNULL, ifnull도 가능
+    @Query("select COALESCE(max(w.waitingNumber), 0) from Waiting w where w.storeId = :storeId")
     Long findMaxWaitingNumberByStoreId(@Param("storeId") Long storeId);
 }
