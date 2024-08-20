@@ -37,7 +37,7 @@ class WaitingCustomerTest {
                     .waitingNumber(i)
                     .waitingOrder(i)
                     .storeId(storeA.getStoreId())
-                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
+                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
                     .waitingStatus(WaitingStatus.WAITING)
                     .visitedTime(null)
                     .build());
@@ -47,7 +47,7 @@ class WaitingCustomerTest {
                     .waitingNumber(i)
                     .waitingOrder(i)
                     .storeId(storeA.getStoreId())
-                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
+                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
                     .waitingStatus(WaitingStatus.VISITED)
                     .visitedTime(null)
                     .build());
@@ -87,7 +87,7 @@ class WaitingCustomerTest {
                     .waitingNumber(i)
                     .waitingOrder(i)
                     .storeId(storeA.getStoreId())
-                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
+                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
                     .waitingStatus(WaitingStatus.WAITING)
                     .visitedTime(null)
                     .build());
@@ -97,7 +97,7 @@ class WaitingCustomerTest {
                     .waitingNumber(i)
                     .waitingOrder(i)
                     .storeId(storeA.getStoreId())
-                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
+                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
                     .waitingStatus(WaitingStatus.VISITED)
                     .visitedTime(null)
                     .build());
@@ -137,7 +137,7 @@ class WaitingCustomerTest {
                     .waitingNumber(i)
                     .waitingOrder(i)
                     .storeId(storeA.getStoreId())
-                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
+                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
                     .waitingStatus(WaitingStatus.WAITING)
                     .visitedTime(null)
                     .build());
@@ -147,7 +147,7 @@ class WaitingCustomerTest {
                     .waitingNumber(i)
                     .waitingOrder(i)
                     .storeId(storeA.getStoreId())
-                    .customerInfo(new CustomerInfo(i-5, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
+                    .customerInfo(new CustomerInfo(i-5, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
                     .waitingStatus(WaitingStatus.VISITED)
                     .visitedTime(null)
                     .build());
@@ -174,7 +174,7 @@ class WaitingCustomerTest {
                     .waitingNumber(i)
                     .waitingOrder(i)
                     .storeId(storeA.getStoreId())
-                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
+                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
                     .waitingStatus(WaitingStatus.WAITING)
                     .visitedTime(null)
                     .build());
@@ -184,7 +184,7 @@ class WaitingCustomerTest {
                     .waitingNumber(i)
                     .waitingOrder(i)
                     .storeId(storeA.getStoreId())
-                    .customerInfo(new CustomerInfo(i-5, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
+                    .customerInfo(new CustomerInfo(i-5, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
                     .waitingStatus(WaitingStatus.VISITED)
                     .visitedTime(null)
                     .build());
@@ -210,7 +210,7 @@ class WaitingCustomerTest {
                     .waitingNumber(i)
                     .waitingOrder(i)
                     .storeId(storeA.getStoreId())
-                    .customerInfo(new CustomerInfo(i-5, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
+                    .customerInfo(new CustomerInfo(i-5, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
                     .waitingStatus(WaitingStatus.VISITED)
                     .visitedTime(null)
                     .build());
@@ -235,7 +235,7 @@ class WaitingCustomerTest {
                 .waitingNumber(1L)
                 .waitingOrder(1L)
                 .storeId(storeA.getStoreId())
-                .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
+                .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
                 .waitingStatus(WaitingStatus.VISITED)
                 .visitedTime(null)
                 .build());
