@@ -3,6 +3,7 @@ package com.matdang.seatdang.waiting.controller;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.waiting.controller.dto.WaitingRequestDto;
+import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.service.WaitingCustomerService;
 import lombok.RequiredArgsConstructor;
@@ -45,5 +46,48 @@ public class WaitingCustomerController {
          * 현재 등록한 웨이팅 상세페이지로 이동
          */
         return "redirect:/my-seat-dang/waiting";
+    }
+
+    // TODO : 취소 후 url에 접속 못하게 막기(if문 상태처리)
+    @GetMapping("/waiting/awaiting/detail")
+    public String showWaitingDetail(@RequestParam(defaultValue = "1") Long waitingId, Model model) {
+        Waiting waiting = waitingRepository.findById(waitingId).get();
+        Store store = storeRepository.findByStoreId(waiting.getStoreId());
+
+        model.addAttribute("waitingId", waitingId);
+        model.addAttribute("waitingNumber", waiting.getWaitingNumber());
+        model.addAttribute("waitingStatus", waiting.getWaitingStatus());
+        model.addAttribute("createdDate", waiting.getCreatedDate());
+        model.addAttribute("peopleCount", waiting.getCustomerInfo().getPeopleCount());
+        model.addAttribute("storeName", store.getStoreName());
+
+
+        return "customer/waiting/awaiting-waiting-detail";
+    }
+
+    @PostMapping("/waiting/awaiting/detail")
+    public String cancelWaiting(@RequestParam(defaultValue = "1") Long waitingId, Model model) {
+
+        int result = waitingRepository.cancelWaitingByCustomer(waitingId);
+        if (result == 1) {
+            log.info("=== 웨이팅 고객 취소 ===");
+        } else log.error("== 웨이팅 고객 취소 오류 ===");
+
+        return "redirect:/my-seat-dang/waiting/canceled/detail";
+    }
+
+    // TODO : Waiting entity 취소 시간 필드 추가
+    @GetMapping("/waiting/canceled/detail")
+    public String showCancelWaitingDetail(@RequestParam(defaultValue = "1") Long waitingId, Model model) {
+        Waiting waiting = waitingRepository.findById(waitingId).get();
+        Store store = storeRepository.findByStoreId(waiting.getStoreId());
+
+        model.addAttribute("waitingNumber", waiting.getWaitingNumber());
+        model.addAttribute("waitingStatus", waiting.getWaitingStatus());
+        model.addAttribute("createdDate", waiting.getCreatedDate());
+        model.addAttribute("peopleCount", waiting.getCustomerInfo().getPeopleCount());
+        model.addAttribute("storeName", store.getStoreName());
+
+        return "customer/waiting/canceled-waiting-detail";
     }
 }
