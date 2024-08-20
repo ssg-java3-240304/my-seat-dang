@@ -17,12 +17,12 @@ public class WaitingCustomerService {
     private final WaitingRepository waitingRepository;
     private final AuthService authService;
 
-    public void createWaiting(Long storeId, Long peopleCount) {
+    public Long createWaiting(Long storeId, Long peopleCount) {
         Member customer = authService.getAuthenticatedMember();
 
         Waiting waiting = Waiting.builder()
-                .waitingNumber(waitingRepository.findMaxWaitingNumberByStoreId(storeId)+1)
-                .waitingOrder(waitingRepository.findMaxWaitingOrderByStoreId(storeId)+1)
+                .waitingNumber(waitingRepository.findMaxWaitingNumberByStoreId(storeId) + 1)
+                .waitingOrder(waitingRepository.findMaxWaitingOrderByStoreId(storeId) + 1)
                 .storeId(storeId)
                 .customerInfo(CustomerInfo.builder()
                         .customerId(customer.getMemberId())
@@ -33,6 +33,6 @@ public class WaitingCustomerService {
                 .visitedTime(null)
                 .build();
 
-        waitingRepository.save(waiting);
+        return waitingRepository.save(waiting).getId();
     }
 }
