@@ -28,15 +28,21 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
     int updateWaitingNumberByCancel(@Param("storeId") Long storeId, @Param("waitingNumber") Long waitingNumber);
 
     @Modifying
-    @Query("update Waiting w set w.waitingStatus = :waitingStatus,"
-            + " w.visitedTime = CASE WHEN :waitingStatus = com.matdang.seatdang.waiting.entity.WaitingStatus.VISITED"
-            + " THEN CURRENT_TIMESTAMP ELSE w.visitedTime END"
+    @Query("update Waiting w set w.waitingStatus =  com.matdang.seatdang.waiting.entity.WaitingStatus.VISITED,"
+            + " w.visitedTime = CURRENT_TIMESTAMP"
             + " where w.id = :id")
-    int updateStatus(@Param("waitingStatus") WaitingStatus waitingStatus, @Param("id") Long id);
+    int updateStatusByVisit(@Param("id") Long id);
+
+    @Modifying
+    @Query("update Waiting w set w.waitingStatus =  com.matdang.seatdang.waiting.entity.WaitingStatus.SHOP_CANCELED,"
+            + " w.canceledTime = CURRENT_TIMESTAMP"
+            + " where w.id = :id")
+    int updateStatusByShopCancel(@Param("id") Long id);
 
     @Modifying
     @Query("update Waiting w"
-            + " set w.waitingStatus = com.matdang.seatdang.waiting.entity.WaitingStatus.SHOP_CANCELED"
+            + " set w.waitingStatus = com.matdang.seatdang.waiting.entity.WaitingStatus.SHOP_CANCELED,"
+            + " w.canceledTime = CURRENT_TIMESTAMP"
             + " where w.waitingStatus = com.matdang.seatdang.waiting.entity.WaitingStatus.WAITING"
             + " and w.storeId = :storeId")
     int cancelAllWaiting(@Param("storeId") Long storeId);
