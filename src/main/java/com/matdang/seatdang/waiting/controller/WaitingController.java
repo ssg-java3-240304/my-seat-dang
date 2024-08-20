@@ -106,6 +106,7 @@ public class WaitingController {
     public void initData() {
         StoreVo storeVo = new StoreVo(1L, "달콤커피", StoreType.CUSTOM, "서울시강남구");
         storeRepository.save(Store.builder()
+                        .storeName("마싯당")
                 .storeSetting(StoreSetting.builder()
                         .waitingPeopleCount(10)
                         .waitingTime(WaitingTime.builder()
