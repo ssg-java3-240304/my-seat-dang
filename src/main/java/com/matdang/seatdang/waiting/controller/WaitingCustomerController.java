@@ -3,6 +3,7 @@ package com.matdang.seatdang.waiting.controller;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.waiting.controller.dto.AwaitingWaitingResponse;
+import com.matdang.seatdang.waiting.controller.dto.CanceledWaitingResponse;
 import com.matdang.seatdang.waiting.controller.dto.ReadyWaitingResponse;
 import com.matdang.seatdang.waiting.controller.dto.WaitingRequest;
 import com.matdang.seatdang.waiting.entity.Waiting;
@@ -54,7 +55,6 @@ public class WaitingCustomerController {
     public String showAwaitingWaitingDetail(@PathVariable Long waitingId, Model model) {
         Waiting waiting = waitingRepository.findById(waitingId).get();
         Store store = storeRepository.findByStoreId(waiting.getStoreId());
-
         model.addAttribute("awaitingWaitingResponse", AwaitingWaitingResponse.create(waiting, store));
 
         return "customer/waiting/awaiting-waiting-detail";
@@ -66,7 +66,9 @@ public class WaitingCustomerController {
         int result = waitingRepository.cancelWaitingByCustomer(waitingId);
         if (result == 1) {
             log.info("=== 웨이팅 고객 취소 ===");
-        } else log.error("== 웨이팅 고객 취소 오류 ===");
+        } else {
+            log.error("== 웨이팅 고객 취소 오류 ===");
+        }
 
         redirectAttributes.addAttribute("waitingId", waitingId);
 
@@ -75,15 +77,10 @@ public class WaitingCustomerController {
 
     // TODO : Waiting entity 취소 시간 필드 추가
     @GetMapping("/waiting/{waitingId}/canceled/detail")
-    public String showCancelWaitingDetail(@RequestParam(defaultValue = "1") Long waitingId, Model model) {
+    public String showCanceledWaitingDetail(@RequestParam(defaultValue = "1") Long waitingId, Model model) {
         Waiting waiting = waitingRepository.findById(waitingId).get();
         Store store = storeRepository.findByStoreId(waiting.getStoreId());
-
-        model.addAttribute("waitingNumber", waiting.getWaitingNumber());
-        model.addAttribute("waitingStatus", waiting.getWaitingStatus());
-        model.addAttribute("createdDate", waiting.getCreatedDate());
-        model.addAttribute("peopleCount", waiting.getCustomerInfo().getPeopleCount());
-        model.addAttribute("storeName", store.getStoreName());
+        model.addAttribute("canceledWaitingResponse", CanceledWaitingResponse.create(waiting, store));
 
         return "customer/waiting/canceled-waiting-detail";
     }
