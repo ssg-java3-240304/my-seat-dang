@@ -2,6 +2,7 @@ package com.matdang.seatdang.waiting.controller;
 
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
+import com.matdang.seatdang.waiting.controller.dto.AwaitingWaitingResponse;
 import com.matdang.seatdang.waiting.controller.dto.ReadyWaitingResponse;
 import com.matdang.seatdang.waiting.controller.dto.WaitingRequest;
 import com.matdang.seatdang.waiting.entity.Waiting;
@@ -43,7 +44,6 @@ public class WaitingCustomerController {
         log.debug("=== create Waiting ===");
         Long waitingId = waitingCustomerService.createWaiting(waitingRequest.getStoreId(),
                 waitingRequest.getPeopleCount());
-
         redirectAttributes.addAttribute("waitingId", waitingId);
 
         return "redirect:/my-seat-dang/waiting/{waitingId}/awaiting/detail";
@@ -51,16 +51,11 @@ public class WaitingCustomerController {
 
     // TODO : 취소 후 url에 접속 못하게 막기(if문 상태처리)
     @GetMapping("/waiting/{waitingId}/awaiting/detail")
-    public String showWaitingDetail(@PathVariable Long waitingId, Model model) {
+    public String showAwaitingWaitingDetail(@PathVariable Long waitingId, Model model) {
         Waiting waiting = waitingRepository.findById(waitingId).get();
         Store store = storeRepository.findByStoreId(waiting.getStoreId());
 
-        model.addAttribute("waitingId", waitingId);
-        model.addAttribute("waitingNumber", waiting.getWaitingNumber());
-        model.addAttribute("waitingStatus", waiting.getWaitingStatus());
-        model.addAttribute("createdDate", waiting.getCreatedDate());
-        model.addAttribute("peopleCount", waiting.getCustomerInfo().getPeopleCount());
-        model.addAttribute("storeName", store.getStoreName());
+        model.addAttribute("awaitingWaitingResponse", AwaitingWaitingResponse.create(waiting, store));
 
         return "customer/waiting/awaiting-waiting-detail";
     }
