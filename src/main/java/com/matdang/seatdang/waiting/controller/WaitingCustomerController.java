@@ -7,11 +7,13 @@ import com.matdang.seatdang.waiting.controller.dto.WaitingRequest;
 import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.service.WaitingCustomerService;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Slf4j
 @Controller
@@ -37,20 +39,19 @@ public class WaitingCustomerController {
     }
 
     @PostMapping("/waiting")
-    public String createWaiting(@ModelAttribute WaitingRequest waitingRequest) {
+    public String createWaiting(@ModelAttribute WaitingRequest waitingRequest, RedirectAttributes redirectAttributes) {
         log.debug("=== create Waiting ===");
-        waitingCustomerService.createWaiting(waitingRequest.getStoreId(), waitingRequest.getPeopleCount());
+        Long waitingId = waitingCustomerService.createWaiting(waitingRequest.getStoreId(),
+                waitingRequest.getPeopleCount());
 
-        /**
-         * TODO : 변경 필요
-         * 현재 등록한 웨이팅 상세페이지로 이동
-         */
-        return "redirect:/my-seat-dang/waiting";
+        redirectAttributes.addAttribute("waitingId", waitingId);
+
+        return "redirect:/my-seat-dang/waiting/{waitingId}/awaiting/detail";
     }
 
     // TODO : 취소 후 url에 접속 못하게 막기(if문 상태처리)
-    @GetMapping("/waiting/awaiting/detail")
-    public String showWaitingDetail(@RequestParam(defaultValue = "1") Long waitingId, Model model) {
+    @GetMapping("/waiting/{waitingId}/awaiting/detail")
+    public String showWaitingDetail(@PathVariable Long waitingId, Model model) {
         Waiting waiting = waitingRepository.findById(waitingId).get();
         Store store = storeRepository.findByStoreId(waiting.getStoreId());
 
@@ -60,7 +61,6 @@ public class WaitingCustomerController {
         model.addAttribute("createdDate", waiting.getCreatedDate());
         model.addAttribute("peopleCount", waiting.getCustomerInfo().getPeopleCount());
         model.addAttribute("storeName", store.getStoreName());
-
 
         return "customer/waiting/awaiting-waiting-detail";
     }
