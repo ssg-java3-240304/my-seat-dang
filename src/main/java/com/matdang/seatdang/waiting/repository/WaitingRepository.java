@@ -42,19 +42,24 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
 
 
     @Modifying
-    @Query("delete from Waiting w" +
-            " where w.storeId = :storeId")
+    @Query("delete from Waiting w"
+            + " where w.storeId = :storeId")
     int deleteAllByStoreId(@Param("storeId") Long storeId);
 
     // COALESCE == IFNULL, ifnull도 가능
-    @Query("select COALESCE(max(w.waitingNumber), 0)" +
-            " from Waiting w" +
-            " where w.storeId = :storeId")
+    @Query("select COALESCE(max(w.waitingNumber), 0)"
+            + " from Waiting w"
+            + " where w.storeId = :storeId")
     Long findMaxWaitingNumberByStoreId(@Param("storeId") Long storeId);
 
-    @Query("select COALESCE(max(w.waitingOrder), 0)" +
-            " from Waiting w" +
-            " where w.storeId = :storeId" +
-            " and w.waitingStatus = com.matdang.seatdang.waiting.entity.WaitingStatus.WAITING")
+    @Query("select COALESCE(max(w.waitingOrder), 0)"
+            + " from Waiting w"
+            + " where w.storeId = :storeId"
+            + " and w.waitingStatus = com.matdang.seatdang.waiting.entity.WaitingStatus.WAITING")
     Long findMaxWaitingOrderByStoreId(@Param("storeId") Long storeId);
+
+    @Query("select w"
+            + " from Waiting w"
+            + " where w.customerInfo.customerId = :customerId")
+    List<Waiting> findAllByCustomerId(@Param("customerId") Long customerId);
 }
