@@ -62,4 +62,10 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
             + " from Waiting w"
             + " where w.customerInfo.customerId = :customerId")
     List<Waiting> findAllByCustomerId(@Param("customerId") Long customerId);
+
+    @Query("select COUNT(w)"
+            + " from Waiting w"
+            + " where w.storeId= :storeId"
+            + " and w.waitingStatus = com.matdang.seatdang.waiting.entity.WaitingStatus.WAITING")
+    Integer countWaitingByStoreIdAndWaitingStatus(@Param("storeId") Long storeId);
 }
