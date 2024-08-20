@@ -2,6 +2,7 @@ package com.matdang.seatdang.waiting.controller;
 
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
+import com.matdang.seatdang.waiting.controller.dto.ReadyWaitingResponse;
 import com.matdang.seatdang.waiting.controller.dto.WaitingRequest;
 import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
@@ -25,14 +26,13 @@ public class WaitingCustomerController {
      * TODO : 삭제 필요
      * defaultValue는 test 용도임
      */
+    // TODO : 웨이팅 후 다시 주소 접근 차단
     @GetMapping("/waiting")
     public String readyWaiting(@RequestParam(defaultValue = "1") Long storeId, Model model) {
         Store store = storeRepository.findByStoreId(storeId);
-
         model.addAttribute("waitingTeam", waitingRepository.countWaitingByStoreIdAndWaitingStatus(storeId));
-        model.addAttribute("storeName", store.getStoreName());
-        model.addAttribute("waitingPeopleCount", store.getStoreSetting().getWaitingPeopleCount());
-        model.addAttribute("storeId", storeId);
+        model.addAttribute("readyWaitingResponse", ReadyWaitingResponse.create(store));
+
         return "customer/waiting/waiting";
     }
 
