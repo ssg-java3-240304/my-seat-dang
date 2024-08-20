@@ -85,12 +85,14 @@
                 <!--                        </article>-->
                 <!--                        &lt;!&ndash; /article &ndash;&gt;-->
                 <!--                    </div>-->
-                <div class="row">
+                <div class="row" id = "image-container">
+<!--                    여기에 새로운 이미지 블록 추가-->
                     <th:block th:each="image : ${imageList}">
                         <div class="col-md-6">
                             <article class="blog">
                                 <figure>
                                     <img th:src="${image.generatedUrl}" alt="Generated Image">
+<!--                                    <span class="ribbon off">old</span>-->
                                 </figure>
                                 <div class="post_info">
                                     <small th:text="${#temporals.format(image.createdAt, 'yyyy-MM-dd')}">생성 날짜</small>
@@ -159,8 +161,9 @@
                     <!--								<small>Category - 11.08.2016</small>-->
                     <!--								<h3><a href="#" title="">Verear qualisque ex minimum...</a></h3>-->
                     <!--							</li>-->
-                    <div class="form-group">
-                        <form th:action="@{/ai/generate}" method="post">
+                    <div class="form-group" >
+<!--                        <form id="generateForm" th:action="@{/ai/generate}" method="post">-->
+                        <form id = "generateForm" method="post">
                             <!--                                <label for="cakeDescription">케이크 시안</label>-->
                             <!--                                <textarea id="cakeDescription" name="cakeDescription" class="form-control" style="height: 180px;" placeholder="만들고 싶은 케이크를 작성해주세요"></textarea>-->
 
@@ -207,6 +210,11 @@
     <!-- /row -->
     </div>
     <!-- /container -->
+
+    <!-- 로딩 인디케이터 추가 -->
+    <div id="loading-indicator" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+        <p>로딩 중...</p>
+    </div>
 
 </main>
 <!-- /main -->
@@ -269,7 +277,62 @@
     <!--            });-->
     <!--        });-->
     <!--    </script>-->
+    <script>
+        // 폼 전송 이벤트를 캡처
+        $('#generateForm').submit(function (event) {
+            event.preventDefault();
 
+            // 폼 데이터 수집
+            let formData = $(this).serialize();
+
+            // 로딩 인디케이터 표시
+            $('#loading-indicator').show();
+
+            // '[@{/ai/generate}]'
+
+            // AJAX 요청
+            $.ajax({
+                url: '/ai/generate',  // 서버에서 이미지를 생성하는 엔드포인트
+                type: 'POST',
+                data: formData,
+                dataType: 'json',  // 서버 응답이 JSON이라고 명시
+                success: function (data) {
+                    $('#loading-indicator').hide(); // 로딩 숨김
+                    console.log(data); // object로 받아옴
+                    if (data.url !== null && data.url !== '') {
+                        // 성공적으로 생성된 이미지와 관련 정보를 처리
+                        let newImageBlock = `
+        <div class="col-md-6">
+            <article class="blog">
+                <figure>
+                    <img src="${data.url}" alt="Generated Image">
+                    <span class="ribbon off">new</span>
+                </figure>
+                <div class="post_info">
+                    <small>${new Date(data.createdAt).toLocaleDateString()}</small>
+                    <h1>입력한 값</h1>
+                    <h2>${data.description}</h2>
+                    <p>이 이미지는 AI로 생성된 케이크 시안입니다.</p>
+                </div>
+            </article>
+        </div>
+    `;
+
+
+                        // 새로운 블록을 추가
+                        $('#image-container').append(newImageBlock);
+                    } else {
+                        alert("이미지 생성 중 문제가 발생했습니다.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    $('#loading-indicator').hide();
+                    console.error('Error:', error);
+                    alert('요청 중 문제가 발생했습니다.');
+                }
+            });
+        });
+    </script>
 </div>
 </body>
 </html>
