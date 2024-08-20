@@ -197,4 +197,30 @@ class WaitingCustomerTest {
         // then
         assertThat(findResult).isEqualTo(5);
     }
+
+    @Test
+    @DisplayName("상점 id로 존재하지 않는 웨이팅 상태인 웨이팅 개수 가져오기")
+    void countWaitingByStoreIdAndWaitingStatusAndNotExistence() {
+        // given
+        Store storeA = storeRepository.save(Store.builder()
+                .build());
+
+        for (long i = 5; i < 10; i++) {
+            waitingRepository.save(Waiting.builder()
+                    .waitingNumber(i)
+                    .waitingOrder(i)
+                    .storeId(storeA.getStoreId())
+                    .customerInfo(new CustomerInfo(i-5, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
+                    .waitingStatus(WaitingStatus.VISITED)
+                    .visitedTime(null)
+                    .build());
+        }
+        em.flush();
+        em.clear();
+        // when
+        Integer findResult = waitingRepository.countWaitingByStoreIdAndWaitingStatus(storeA.getStoreId());
+
+        // then
+        assertThat(findResult).isEqualTo(0);
+    }
 }
