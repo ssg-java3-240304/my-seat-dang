@@ -61,7 +61,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/","/login","/signup","/signupProc","/check-nickname","/check-email", "/mainmypage/change-password", "/storeRegist", "/storeUpdate").permitAll() // 누구나 허용
+                        .requestMatchers("/","/login","/signup", "/my-seat-dang","/my-seat-dang/search","/my-seat-dang/store/detail/*","/signupProc","/check-nickname","/check-email", "/mainmypage/change-password", "/storeRegist", "/storeUpdate").permitAll() // 누구나 허용
 //                        .requestMatchers("/","/login","/signup","/signupProc","/check-nickname","/check-email").permitAll() // 누구나 허용
                         .requestMatchers("/payment/**").permitAll() // /payment 하위 경로는 인증 없이 허용
                         .requestMatchers("/admin/**").hasRole("ADMIN") // ROLE_ADMIN 권한이 있는 사용자만 허용
