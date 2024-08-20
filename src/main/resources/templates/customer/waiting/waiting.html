@@ -7,6 +7,10 @@
 <body>
 <h1>Create Waiting</h1>
 
+<div>
+    <p>Do you want to register for waiting at <span th:text="${storeName}"></span>?</p>
+    <p>Current Waiting Teams: <span th:text="${waitingTeam}"></span></p>
+</div>
 <form action="/my-seat-dang/waiting" method="post">
     <!-- Hidden field for storeId -->
     <input type="hidden" name="storeId" th:value="${storeId}"/>
@@ -16,7 +20,7 @@
         <input type="number" id="peopleCount" name="peopleCount" min="1"
                th:max="${waitingPeopleCount}" value="2" required/>
     </div>
-    <button type="submit">create</button>
+    <button type="submit">Create</button>
 </form>
 
 <!-- Optional: Add a link to go back to the home page or other pages -->
