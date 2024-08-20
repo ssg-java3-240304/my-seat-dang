@@ -37,8 +37,6 @@ public class Reservation {
     private List<OrderedMenu> orderedMenuList;
     @Enumerated(EnumType.STRING)
     private ReservationStatus reservationStatus;
-    @Embedded
-    private ChatRoom chatRoom;
 
     @PrePersist
     protected void onCreate() {

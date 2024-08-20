@@ -21,9 +21,9 @@ public class ReservationSaveRequestDto {
     private LocalDateTime reservedAt;
     private List<OrderedMenu> orderedMenuList;
     private ReservationStatus reservationStatus;
-    private ChatRoom chatRoom;
 
     public Reservation toEntity() {
+        //validate 코드 필요
         return Reservation.builder()
                 .storeOwner(this.storeOwner)
                 .customer(this.customer)
@@ -31,7 +31,6 @@ public class ReservationSaveRequestDto {
                 .reservedAt(this.reservedAt)
                 .orderedMenuList(this.orderedMenuList)
                 .reservationStatus(this.reservationStatus)
-                .chatRoom(this.chatRoom)
                 .build();
     }
 }

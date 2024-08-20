@@ -18,7 +18,7 @@ public class ReservationCommandService {
 
     public void createCustomMenuReservation(ReservationSaveRequestDto saveRequestDto) {
         log.debug("create empty reservation dto: {}", saveRequestDto);
-        saveRequestDto.setReservationStatus(ReservationStatus.CREATING);
+        saveRequestDto.setReservationStatus(ReservationStatus.DETAILING);
         boolean reservationExists =reservationRepository.findByCustomer_CustomerIdAndReservedAt(saveRequestDto.getCustomer().getCustomerId(), saveRequestDto.getReservedAt()).isPresent();
         if (reservationExists) {
             throw new RuntimeException("같은 시간에 중복된 예약이 있습니다");
