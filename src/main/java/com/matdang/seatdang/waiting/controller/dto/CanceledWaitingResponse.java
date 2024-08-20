@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Data
 @Setter(AccessLevel.PRIVATE)
@@ -15,10 +16,13 @@ import lombok.Setter;
 public class CanceledWaitingResponse {
     private Long waitingNumber;
     private WaitingStatus waitingStatus;
-    private LocalDateTime createdDate;
-    private LocalDateTime canceledTime;
     private Integer peopleCount;
     private String storeName;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    private LocalDateTime createdDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    private LocalDateTime canceledTime;
 
     public static CanceledWaitingResponse create(Waiting waiting, Store store) {
         CanceledWaitingResponse canceledWaitingResponse = new CanceledWaitingResponse();
