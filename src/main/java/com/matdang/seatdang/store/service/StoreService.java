@@ -3,6 +3,7 @@ package com.matdang.seatdang.store.service;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.matdang.seatdang.common.storeEnum.StoreType;
 import com.matdang.seatdang.store.dto.StoreListResponseDto;
+import com.matdang.seatdang.store.dto.StoreResponseDto;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
 import jakarta.transaction.Transactional;
@@ -38,8 +39,8 @@ public class StoreService {
         return storePage.map(StoreListResponseDto::fromStore);
     }
 
-    public Store findByStoreId(Long storeId) {
-        return storeRepository.findByStoreId(storeId);
+    public StoreResponseDto findByStoreId(Long storeId) {
+        return StoreResponseDto.fromEntity(storeRepository.findByStoreId(storeId));
     }
 
     public int getMaxReservationInTime(Long storeId){
