@@ -126,7 +126,8 @@
             <th>People Count</th>
             <th>Waiting Status</th>
             <th>Created Date</th>
-            <th>Visited Time</th>
+            <th th:if="${status == 1}">Visited Time</th>
+            <th th:if="${status >= 2}">Canceled Time</th>
             <th th:if="${status == 0}">Status Change</th>
         </tr>
         </thead>
@@ -138,7 +139,8 @@
             <td th:text="${waiting.peopleCount}"></td>
             <td th:text="${waiting.waitingStatus}"></td>
             <td th:text="${{waiting.createdDate}}"></td>
-            <td th:text="${{waiting.visitedTime}}"></td>
+            <td th:if="${status == 1}" th:text="${{waiting.visitedTime}}"></td>
+            <td th:if="${status >= 2}" th:text="${{waiting.canceledTime}}"></td>
             <td th:if="${status == 0}">
                 <div class="row-buttons">
                     <form th:if="${waiting.waitingOrder == 1}" th:action="@{/store-owner/waiting}" method="post">
