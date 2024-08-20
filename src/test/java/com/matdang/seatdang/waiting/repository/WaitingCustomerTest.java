@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 @SpringBootTest
-public class WaitingCustomerTest {
+class WaitingCustomerTest {
     @Autowired
     private WaitingRepository waitingRepository;
     @Autowired
@@ -53,5 +53,19 @@ public class WaitingCustomerTest {
 
         // then
         assertThat(findResult).isEqualTo(9L);
+    }
+
+    @Test
+    @DisplayName("상점 id의 웨이팅(전체 상태)이 존재하지 않을때 웨이팅 번호 0으로 가져오기")
+    void findMaxWaitingNumberByStoreIdAndNotExistence() {
+        // given
+        Store storeA = storeRepository.save(Store.builder()
+                .build());
+
+        // when
+        Long findResult = waitingRepository.findMaxWaitingNumberByStoreId(storeA.getStoreId());
+
+        // then
+        assertThat(findResult).isEqualTo(0L);
     }
 }
