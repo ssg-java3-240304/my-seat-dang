@@ -109,6 +109,7 @@ public class WaitingController {
                         .storeName("마싯당")
                 .storeSetting(StoreSetting.builder()
                         .waitingPeopleCount(10)
+                        .waitingStatus(com.matdang.seatdang.store.vo.WaitingStatus.OPEN)
                         .waitingTime(WaitingTime.builder()
                                 .waitingOpenTime(LocalTime.of(9, 0))
                                 .waitingCloseTime(LocalTime.of(22, 0))
