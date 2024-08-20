@@ -21,4 +21,7 @@ public class WaitingDto {
     private LocalDateTime createdDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime visitedTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    private LocalDateTime canceledTime;
+
 }
