@@ -8,5 +8,5 @@ import lombok.Data;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class WaitingRequest {
     private Long storeId;
-    private Long peopleCount;
+    private Integer peopleCount;
 }

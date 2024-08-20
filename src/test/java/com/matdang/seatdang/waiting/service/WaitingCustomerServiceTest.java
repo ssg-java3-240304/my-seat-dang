@@ -56,7 +56,7 @@ class WaitingCustomerServiceTest {
                     .waitingNumber(i)
                     .waitingOrder(i)
                     .storeId(storeA.getStoreId())
-                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
+                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
                     .waitingStatus(WaitingStatus.WAITING)
                     .visitedTime(null)
                     .build());
@@ -66,7 +66,7 @@ class WaitingCustomerServiceTest {
                     .waitingNumber(i)
                     .waitingOrder(i)
                     .storeId(storeA.getStoreId())
-                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
+                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
                     .waitingStatus(WaitingStatus.VISITED)
                     .visitedTime(null)
                     .build());
@@ -79,7 +79,7 @@ class WaitingCustomerServiceTest {
                     .waitingNumber(i)
                     .waitingOrder(i)
                     .storeId(storeB.getStoreId())
-                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
+                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
                     .waitingStatus(WaitingStatus.WAITING)
                     .visitedTime(null)
                     .build());
@@ -93,7 +93,7 @@ class WaitingCustomerServiceTest {
                 .build();
         when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
         // when
-        waitingCustomerService.createWaiting(storeA.getStoreId(), 2L);
+        waitingCustomerService.createWaiting(storeA.getStoreId(), 2);
         em.flush();
         em.clear();
         List<Waiting> findResult = waitingRepository.findAllByCustomerId(50L);

@@ -41,7 +41,7 @@ public class WaitingStorage {
     private LocalDateTime visitedTime;
 
     public WaitingStorage(Long waitingNumber, Long waitingOrder, Long storeId, Long customerId
-            , String customerPhone, Long peopleCount, LocalDateTime createdDate, WaitingStatus waitingStatus,
+            , String customerPhone, Integer peopleCount, LocalDateTime createdDate, WaitingStatus waitingStatus,
                           LocalDateTime visitedTime) {
         this.waitingNumber = waitingNumber;
         this.waitingOrder = waitingOrder;

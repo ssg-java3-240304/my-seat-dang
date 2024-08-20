@@ -17,7 +17,7 @@ public class WaitingCustomerService {
     private final WaitingRepository waitingRepository;
     private final AuthService authService;
 
-    public Long createWaiting(Long storeId, Long peopleCount) {
+    public Long createWaiting(Long storeId, Integer peopleCount) {
         Member customer = authService.getAuthenticatedMember();
 
         Waiting waiting = Waiting.builder()

@@ -12,5 +12,5 @@ import lombok.*;
 public class CustomerInfo {
     private Long customerId;
     private String customerPhone;
-    private Long peopleCount; // 인원 수
+    private Integer peopleCount; // 인원 수
 }

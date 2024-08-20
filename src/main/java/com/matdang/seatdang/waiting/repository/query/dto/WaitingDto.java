@@ -14,7 +14,7 @@ public class WaitingDto {
     private Long waitingOrder;
 
     private String customerPhone;
-    private Long peopleCount;
+    private Integer peopleCount;
     private WaitingStatus waitingStatus;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
