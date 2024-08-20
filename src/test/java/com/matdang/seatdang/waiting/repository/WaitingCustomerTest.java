@@ -68,4 +68,38 @@ class WaitingCustomerTest {
         // then
         assertThat(findResult).isEqualTo(0L);
     }
+
+    @Test
+    @DisplayName("상점 id로 존재하는 웨이팅 상태의 웨이팅 순서 최대값 가져오기")
+    void findMaxWaitingOrderByStoreId() {
+        // given
+        Store storeA = storeRepository.save(Store.builder()
+                .build());
+        for (long i = 0; i < 5; i++) {
+            waitingRepository.save(Waiting.builder()
+                    .waitingNumber(i)
+                    .waitingOrder(i)
+                    .storeId(storeA.getStoreId())
+                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
+                    .waitingStatus(WaitingStatus.WAITING)
+                    .visitedTime(null)
+                    .build());
+        }
+        for (long i = 5; i < 10; i++) {
+            waitingRepository.save(Waiting.builder()
+                    .waitingNumber(i)
+                    .waitingOrder(i)
+                    .storeId(storeA.getStoreId())
+                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
+                    .waitingStatus(WaitingStatus.VISITED)
+                    .visitedTime(null)
+                    .build());
+        }
+
+        // when
+        Long findResult = waitingRepository.findMaxWaitingOrderByStoreId(storeA.getStoreId());
+
+        // then
+        assertThat(findResult).isEqualTo(4L);
+    }
 }
