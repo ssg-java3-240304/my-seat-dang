@@ -3,6 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Create Waiting</title>
+    <script>
+        // 페이지가 로드된 후 실행되는 스크립트
+        window.onload = function() {
+            // 폼 요소를 가져옵니다.
+            const form = document.getElementById('waitingForm');
+
+            // 폼의 submit 이벤트 리스너 추가
+            form.addEventListener('submit', function(event) {
+                // 확인 창을 표시하여 사용자의 선택을 요청합니다.
+                const confirmed = confirm('정말 등록하시겠습니까?');
+                if (!confirmed) {
+                    // 사용자가 취소를 클릭하면 폼 제출을 취소합니다.
+                    event.preventDefault();
+                }
+                // 사용자가 확인을 클릭하면 폼이 제출됩니다.
+            });
+        };
+    </script>
 </head>
 <body>
 <h1>Create Waiting</h1>
@@ -11,7 +29,7 @@
     <p>Do you want to register for waiting at <span th:text="${readyWaitingResponse.storeName}"></span>?</p>
     <p>Current Waiting Teams: <span th:text="${waitingTeam}"></span></p>
 </div>
-<form action="/my-seat-dang/waiting" method="post">
+<form id="waitingForm" action="/my-seat-dang/waiting" method="post">
     <!-- Hidden field for storeId -->
     <input type="hidden" name="storeId" th:value="${readyWaitingResponse.storeId}"/>
 
