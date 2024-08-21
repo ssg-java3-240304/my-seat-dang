@@ -13,6 +13,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -133,15 +134,17 @@ class WaitingRepositoryTest {
     @DisplayName("상점 id로 웨이팅 전체 취소")
     void cancelAllWaiting() {
         // given
+        PageRequest pageable = PageRequest.of(0, 10);
+
         // when
         int result = waitingRepository.cancelAllWaiting(1L);
         // then
         assertThat(result).isEqualTo(10);
-        assertThat(waitingQueryRepository.findAllByStoreIdAndWaitingStatus(1L, WaitingStatus.WAITING).size())
+        assertThat(waitingQueryRepository.findAllByStoreIdAndWaitingStatus(1L, WaitingStatus.WAITING, pageable)
+                .getTotalElements())
                 .isEqualTo(0);
-        assertThat(waitingQueryRepository.findAllByStoreIdAndWaitingStatus(1L, WaitingStatus.SHOP_CANCELED)
-                .size()).isEqualTo(20);
-
+        assertThat(waitingQueryRepository.findAllByStoreIdAndWaitingStatus(1L, WaitingStatus.SHOP_CANCELED, pageable)
+                .getTotalElements()).isEqualTo(20);
     }
 
     @Test
@@ -154,7 +157,6 @@ class WaitingRepositoryTest {
         // then
         assertThat(result).isEqualTo(50);
         assertThat(findResult.size()).isEqualTo(0);
-
     }
 
 

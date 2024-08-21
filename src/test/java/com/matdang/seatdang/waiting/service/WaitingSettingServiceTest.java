@@ -19,6 +19,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -190,18 +191,20 @@ class WaitingSettingServiceTest {
         em.flush();
         em.clear();
 
+        PageRequest pageable = PageRequest.of(0, 10);
+
         // when
         waitingSettingService.changeWaitingStatus(3, store.getStoreId());
 
         // then
         assertThat(storeRepository.findByStoreId(store.getStoreId()).getStoreSetting().getWaitingStatus()).isEqualTo(
                 com.matdang.seatdang.store.vo.WaitingStatus.UNAVAILABLE);
-        assertThat(waitingQueryRepository.findAllByStoreIdAndWaitingStatus(store.getStoreId(), WaitingStatus.WAITING)
-                .size())
+        assertThat(waitingQueryRepository.findAllByStoreIdAndWaitingStatus(store.getStoreId(), WaitingStatus.WAITING,
+                        pageable).getTotalElements())
                 .isEqualTo(0);
         assertThat(
-                waitingQueryRepository.findAllByStoreIdAndWaitingStatus(store.getStoreId(), WaitingStatus.SHOP_CANCELED)
-                        .size())
+                waitingQueryRepository.findAllByStoreIdAndWaitingStatus(store.getStoreId(), WaitingStatus.SHOP_CANCELED,
+                                pageable).getTotalElements())
                 .isEqualTo(10);
     }
 

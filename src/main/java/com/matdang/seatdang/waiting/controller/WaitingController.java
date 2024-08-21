@@ -106,7 +106,7 @@ public class WaitingController {
     /**
      * test 실행시 주석 필요
      */
-    @PostConstruct
+//    @PostConstruct
     public void initData() {
         StoreVo storeVo = new StoreVo(1L, "달콤커피", StoreType.CUSTOM, "서울시강남구");
         storeRepository.save(Store.builder()
