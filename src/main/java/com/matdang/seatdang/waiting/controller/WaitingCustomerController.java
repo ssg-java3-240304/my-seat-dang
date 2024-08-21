@@ -5,6 +5,7 @@ import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.waiting.controller.dto.AwaitingWaitingResponse;
 import com.matdang.seatdang.waiting.controller.dto.CanceledWaitingResponse;
 import com.matdang.seatdang.waiting.controller.dto.ReadyWaitingResponse;
+import com.matdang.seatdang.waiting.controller.dto.VisitedWaitingResponse;
 import com.matdang.seatdang.waiting.controller.dto.WaitingRequest;
 import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
@@ -83,5 +84,13 @@ public class WaitingCustomerController {
         return "customer/waiting/canceled-waiting-detail";
     }
 
-    // TODO : 입장 페이지 만들기
+
+    @GetMapping("/waiting/{waitingId}/visited/detail")
+    public String showVisitedWaitingDetail(@PathVariable Long waitingId, Model model) {
+        Waiting waiting = waitingRepository.findById(waitingId).get();
+        Store store = storeRepository.findByStoreId(waiting.getStoreId());
+        model.addAttribute("visitedWaitingResponse", VisitedWaitingResponse.create(waiting, store));
+
+        return "customer/waiting/visited-waiting-detail";
+    }
 }
