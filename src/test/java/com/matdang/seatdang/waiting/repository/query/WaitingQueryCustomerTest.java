@@ -17,6 +17,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -59,15 +62,17 @@ public class WaitingQueryCustomerTest {
         em.flush();
         em.clear();
 
+        PageRequest pageable = PageRequest.of(0, 100);
+
         // when
-        List<WaitingInfoDto> findResult = waitingQueryRepository.findAllByCustomerIdAndWaitingStatus(
-                1L, WaitingStatus.valueOf(status));
+        Page<WaitingInfoDto> findResult = waitingQueryRepository.findAllByCustomerIdAndWaitingStatus(
+                1L, WaitingStatus.valueOf(status), pageable);
 
         // then
-        assertThat(findResult.size()).isEqualTo(1);
-        assertThat(findResult).extracting(WaitingInfoDto::getWaitingStatus)
+        assertThat(findResult.getContent().size()).isEqualTo(1);
+        assertThat(findResult.getContent()).extracting(WaitingInfoDto::getWaitingStatus)
                 .containsExactly(WaitingStatus.valueOf(status));
-        assertThat(findResult).extracting(WaitingInfoDto::getStoreName).containsExactly("마싯당");
+        assertThat(findResult.getContent()).extracting(WaitingInfoDto::getStoreName).containsExactly("마싯당");
     }
 
     @Test
@@ -91,14 +96,17 @@ public class WaitingQueryCustomerTest {
         em.flush();
         em.clear();
 
+
+        PageRequest pageable = PageRequest.of(0, 100);
+
         // when
-        List<WaitingInfoDto> findResult = waitingQueryRepository.findAllByCustomerIdAndCancelStatus(
-                1L);
+        Page<WaitingInfoDto> findResult = waitingQueryRepository.findAllByCustomerIdAndCancelStatus(
+                1L, pageable);
 
         // then
-        assertThat(findResult.size()).isEqualTo(3);
-        assertThat(findResult).extracting(WaitingInfoDto::getWaitingStatus)
+        assertThat(findResult.getContent().size()).isEqualTo(3);
+        assertThat(findResult.getContent()).extracting(WaitingInfoDto::getWaitingStatus)
                 .containsExactlyInAnyOrder(WaitingStatus.NO_SHOW, WaitingStatus.CUSTOMER_CANCELED, WaitingStatus.SHOP_CANCELED);
-        assertThat(findResult).extracting(WaitingInfoDto::getStoreName).contains("마싯당");
+        assertThat(findResult.getContent()).extracting(WaitingInfoDto::getStoreName).contains("마싯당");
     }
 }
