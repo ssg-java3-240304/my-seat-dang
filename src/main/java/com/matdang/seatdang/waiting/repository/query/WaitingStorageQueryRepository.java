@@ -31,4 +31,20 @@ public interface WaitingStorageQueryRepository extends JpaRepository<WaitingStor
             + " com.matdang.seatdang.waiting.entity.WaitingStatus.CUSTOMER_CANCELED)")
     Page<WaitingInfoDto> findAllByCustomerIdAndCancelStatus(@Param("customerId") Long customerId,
                                                             Pageable pageable);
+
+    @Query("select count(w)"
+            + " from WaitingStorage w"
+            + " where w.customerInfo.customerId = :customerId"
+            + " and w.waitingStatus = :waitingStatus")
+    int countWaitingStorageByCustomerIdAndWaitingStatus(@Param("customerId") Long customerId,
+                                                        @Param("waitingStatus") WaitingStatus waitingStatus);
+
+    @Query("select count(w)"
+            + " from WaitingStorage w"
+            + " where w.customerInfo.customerId = :customerId"
+            + " and w.waitingStatus in ("
+            + " com.matdang.seatdang.waiting.entity.WaitingStatus.SHOP_CANCELED,"
+            + " com.matdang.seatdang.waiting.entity.WaitingStatus.NO_SHOW,"
+            + " com.matdang.seatdang.waiting.entity.WaitingStatus.CUSTOMER_CANCELED)")
+    int countWaitingStorageByCustomerIdAndCancelStatus(@Param("customerId") Long customerId);
 }
