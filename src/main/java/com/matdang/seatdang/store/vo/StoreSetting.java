@@ -28,4 +28,6 @@ public class StoreSetting {
     private WaitingStatus waitingStatus = WaitingStatus.UNAVAILABLE;
 
     private Integer waitingPeopleCount;
+    private Integer maxReservationInTime;
+    private Integer maxReservationInDay;
 }

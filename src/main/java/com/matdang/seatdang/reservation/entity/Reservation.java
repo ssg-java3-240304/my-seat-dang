@@ -1,13 +1,14 @@
 package com.matdang.seatdang.reservation.entity;
 
-import com.matdang.seatdang.reservation.dto.ReservationDto;
 import com.matdang.seatdang.reservation.vo.*;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
+@Builder
 @Entity
 @Table(name = "tbl_reservation")
 @Data
@@ -25,6 +26,7 @@ public class Reservation {
     private CustomerInfo customer;
     @Embedded
     private StoreInfo store;
+    @Column(updatable = false)
     private LocalDateTime createdAt;
     private LocalDateTime reservedAt;
     @ElementCollection(fetch = FetchType.EAGER)
@@ -32,17 +34,12 @@ public class Reservation {
             name = "tbl_orderedMenu"
             , joinColumns = @JoinColumn(name = "menu_id", referencedColumnName = "id")
     )
-    private Set<OrderedMenu> orderedMenuSet;
+    private List<OrderedMenu> orderedMenuList;
     @Enumerated(EnumType.STRING)
     private ReservationStatus reservationStatus;
-    @Embedded
-    private ChatRoom chatRoom;
 
-    public void setEmpty(ReservationDto dto){
-        this.store = dto.getStore();
-        this.customer = dto.getCustomer();
-        this.storeOwner = dto.getStoreOwner();
-        this.reservedAt = dto.getReservedAt();
-        this.chatRoom = dto.getChatRoom();
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
     }
 }
