@@ -9,10 +9,14 @@ import com.matdang.seatdang.waiting.controller.dto.ReadyWaitingResponse;
 import com.matdang.seatdang.waiting.controller.dto.VisitedWaitingResponse;
 import com.matdang.seatdang.waiting.controller.dto.WaitingRequest;
 import com.matdang.seatdang.waiting.entity.Waiting;
+import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
+import com.matdang.seatdang.waiting.repository.query.WaitingQueryRepository;
+import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
 import com.matdang.seatdang.waiting.service.WaitingCustomerService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.websocket.server.PathParam;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -26,6 +30,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 public class WaitingCustomerController {
     private final WaitingCustomerService waitingCustomerService;
+    private final WaitingQueryRepository waitingQueryRepository;
     private final WaitingRepository waitingRepository;
     private final StoreRepository storeRepository;
     private final AuthService authService;
@@ -64,6 +69,16 @@ public class WaitingCustomerController {
         redirectAttributes.addAttribute("waitingId", waitingId);
 
         return "redirect:/my-seat-dang/waiting/{waitingId}/awaiting/detail";
+    }
+
+    @GetMapping("/waiting/awaiting")
+    public String showAwaitingWaiting(Model model) {
+        Long memberId = authService.getAuthenticatedMember().getMemberId();
+        List<WaitingInfoDto> waitings = waitingQueryRepository.findAllByCustomerIdAndWaitingStatus(
+                memberId, WaitingStatus.WAITING);
+        model.addAttribute("waitings", waitings);
+
+        return "customer/waiting/awaiting";
     }
 
     // TODO : 취소 후 url에 접속 못하게 막기(if문 상태처리)
