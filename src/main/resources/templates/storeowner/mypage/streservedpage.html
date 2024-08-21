@@ -21,9 +21,13 @@
   <link href="/vendor/admin/datatables/dataTables.bootstrap4.css" rel="stylesheet">
   <!-- Your custom styles -->
   <link href="/css/admin/custom.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/css/storeowner/storechatstyle.css">
 </head>
 <body>
 <main layout:fragment="main">
+  <div class="container-fluid">
+    <!-- Left Section: Reservations -->
+    <div class="left-section">
   <div class="box_general">
     <div class="header_box">
       <div class="filter">
@@ -31,7 +35,7 @@
     </div>
     <div class="list_general">
       <ul>
-        <li th:each="reservation, stat : ${reservations}" th:object="${reservation}">
+        <li th:each="reservation : ${reservations}" th:object="${reservation}">
           <figure><img src="/img/admin/item_1.jpg" alt=""></figure>
           <h4 th:text="*{storeName}">Store Name</h4>
           <ul class="booking_list">
@@ -39,17 +43,82 @@
             <li><strong>Booking details</strong>Details</li>
             <li><strong>Client</strong> <span th:text="*{storeOwnerName}"></span></li>
           </ul>
-          <p> <a th:href="@{/templates/storeowner/storeownerchat(reservationId=${reservation.reservationId}, storeName=${reservation.storeName}, storeOwnerName=${reservation.storeOwnerName}, chatUrl=${chatAccessUrl})}">
-            채팅하기
-            <span id="chat-badge" class="badge badge-danger" style="display: none;">0</span>
-          </a></p>
+          <p>
+            <button class="chat-button btn btn-primary"
+                    th:data-reservation-id="*{reservationId}"
+                    th:data-store-name="*{storeName}"
+                    th:data-storeowner-name="*{storeOwnerName}"
+                    th:data-chat-url="${chatAccessUrl}">
+              채팅하기
+            </button>
+          </p>
         </li>
       </ul>
     </div>
   </div>
+    </div>
+
+  <!-- Right Section: Chat -->
+  <div class="right-section">
+    <div id="user_chat_data" class="user_chat_data">
+      <div class="button-container">
+        <button id="payment-info-button" class="btn btn-primary" data-toggle="modal" data-target="#payment-info-modal">결제폼생성</button>
+      </div>
+      <div class="profile_name">
+        <img src="./img/profile.png" class="mr-3 rounded-circle">
+        <span id="store-name" th:text="*{storeName}"></span>
+      </div>
+      <div class="container-fluid chat_section" id="chat-box"></div>
+      <div class="type_msg">
+        <div class="input_msg_write">
+          <button id="chat-attach" class="msg_attach_btn" type="button">
+            <i class="fa fa-paperclip" aria-hidden="true"></i>
+          </button>
+          <input id="chat-outgoing-msg" type="text" class="write_msg" placeholder="Type a message" />
+          <button id="chat-send" class="msg_send_btn" type="button">
+            <i class="fa fa-paper-plane" aria-hidden="true"></i>
+          </button>
+          <input id="chat-file-input" type="file" style="display: none;" />
+        </div>
+        <div id="file-preview" class="file-preview"></div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- 결제정보 입력폼 -->
+  <div class="modal fade" id="payment-info-modal" tabindex="-1" role="dialog" aria-labelledby="paymentInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="paymentInfoModalLabel">결제 정보 입력</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="payment-info-form">
+            <div class="form-group">
+              <label for="itemName">상품명</label>
+              <input type="text" class="form-control" id="itemName" name="itemName" placeholder="상품명">
+            </div>
+            <div class="form-group">
+              <label for="quantity">수량</label>
+              <input type="number" class="form-control" id="quantity" name="quantity" placeholder="수량">
+            </div>
+            <div class="form-group">
+              <label for="totalAmount">결제 금액</label>
+              <input type="number" class="form-control" id="totalAmount" name="totalAmount" placeholder="총 금액">
+            </div>
+            <button type="button" class="btn btn-primary" id="submit-payment-info">결제 정보 보내기</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </main>
-
+</body>
 <div layout:fragment="js">
   <!-- Bootstrap core JavaScript -->
   <script src="/vendor/admin/jquery/jquery.min.js"></script>
@@ -66,9 +135,302 @@
   <!-- 이 페이지 전용 스크립트 -->
   <script th:src="@{/js/customer/jarallax.min.js}"></script>
   <script th:src="@{/js/customer/jarallax-video.min.js}"></script>
+  <script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- 이 페이지 전용 스크립트 -->
+  <script th:inline="javascript">
+    // 전역 변수 선언
+    let eventSource = null;
+    let storeOwnerName = '';
+    let reservationId = '';
+    let chatUrl = '';
+
+    function scrollToBottom() {
+      const chatSection = document.querySelector('.chat_section');
+      chatSection.scrollTop = chatSection.scrollHeight;
+    }
+
+    function clearChatBox() {
+      const chatBox = document.querySelector('#chat-box');
+      chatBox.innerHTML = ''; // 이전 채팅 내용을 모두 삭제
+    }
+
+    function removeEventListeners(selector, eventName) {
+      const elements = document.querySelectorAll(selector);
+      elements.forEach(el => {
+        const clone = el.cloneNode(true);
+        el.parentNode.replaceChild(clone, el);
+      });
+    }
+
+    // 채팅 버튼 클릭 시 이벤트
+    document.querySelectorAll('.chat-button').forEach(button => {
+      button.addEventListener('click', function () {
+
+        // 기존 SSE 연결 종료
+        if (eventSource !== null) {
+          console.log("Closing previous SSE connection");
+          eventSource.close();
+          eventSource = null; // 기존 연결 해제
+        }
+
+        clearChatBox(); // 이전 채팅 내용 삭제
+
+        document.querySelector('.right-section').style.display = 'block';
+        // 필요한 정보 가져오기
+        reservationId = this.getAttribute('data-reservation-id');
+        const storeName = this.getAttribute('data-store-name');
+        storeOwnerName = this.getAttribute('data-storeowner-name');
+        chatUrl = this.getAttribute('data-chat-url');
+
+        console.log("Reservation ID:", reservationId);
+        console.log("Store Name:", storeName);
+        console.log("Store Owner Name:", storeOwnerName);
+        console.log("Chat URL:", chatUrl);
+
+        document.querySelector("#store-name").textContent = storeName;
+
+        // SSE 연결하기
+        eventSource = new EventSource(`${chatUrl}/chat/roomNum/${reservationId}`);
+        eventSource.onmessage = (event) => {
+          const data = JSON.parse(event.data);
+          console.log("Received data:", data);
+
+          // 결제 정보가 포함된 메시지인 경우 처리
+          if (data.itemName && data.quantity && data.totalAmount) {
+            addPaymentInfoToChat(data);
+          } else if (data.sender === storeOwnerName) {
+            initMyMessage(data);
+          } else {
+            initYourMessage(data);
+          }
+        };
+
+        eventSource.onerror = function() {
+          console.error("EventSource failed, closing connection.");
+          eventSource.close();
+          eventSource = null; // 오류 발생 시 연결 해제
+        };
+
+        // 기존에 등록된 이벤트 리스너 제거
+        removeEventListeners('#chat-send', 'click');
+        removeEventListeners('#chat-outgoing-msg', 'keydown');
+        removeEventListeners('#chat-attach', 'click');
+        removeEventListeners('#chat-file-input', 'change');
+        removeEventListeners('#open-payment-modal', 'click');
+
+        // 메시지 전송 이벤트 리스너 등록
+        document.querySelector("#chat-send").addEventListener('click', () => addMessage(storeOwnerName, reservationId, chatUrl));
+        document.querySelector("#chat-outgoing-msg").addEventListener('keydown', (e) => {
+          if (e.keyCode === 13) {
+            e.preventDefault();
+            addMessage(storeOwnerName, reservationId, chatUrl);
+          }
+        });
+
+        // 파일 첨부 버튼 이벤트 리스너 등록
+        document.querySelector("#chat-attach").addEventListener("click", () => {
+          document.querySelector("#chat-file-input").click();
+        });
+
+        document.querySelector("#chat-file-input").addEventListener("change", () => {
+          const fileInput = document.querySelector("#chat-file-input");
+          const filePreview = document.querySelector("#file-preview");
+          filePreview.innerHTML = ''; // Clear previous preview
+
+          if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            const previewContainer = document.createElement('div');
+            previewContainer.className = 'file-preview-item';
+
+            if (file.type.startsWith('image/')) {
+              // Image file
+              reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                previewContainer.appendChild(img);
+              };
+              reader.readAsDataURL(file);
+            } else {
+              // Non-image file
+              const fileName = document.createElement('span');
+              fileName.textContent = file.name;
+              previewContainer.appendChild(fileName);
+            }
+            filePreview.appendChild(previewContainer);
+          }
+          scrollToBottom();
+        });
+
+        // 결제 정보 모달 열기 버튼 이벤트 리스너 등록
+        document.querySelector("#open-payment-modal").addEventListener('click', () => {
+          $('#payment-info-modal').modal('show');
+        });
+      });
+
+      function getSendMsgBox(data) {
+        const date = new Date(data.createdAt);
+        const timeString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+        const imgTag = data.customerImage ? `<img src="${data.customerImage}" alt="image" class="chat-image" style="max-width: 100%; max-height: 200px; cursor: pointer;" />` : '';
+        return `<div>
+        <p style="text-align: right;">${data.sender}</p>
+        <div class="sent_msg">
+            ${imgTag}
+            <p style="text-align: right;">${data.msg}</p>
+            <span class="time_date">${timeString}</span>
+        </div>
+      </div>`;
+      }
+
+      function getReceiveMsgBox(data) {
+        const date = new Date(data.createdAt);
+        const timeString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+        const imgTag = data.customerImage ? `<img src="${data.customerImage}" alt="image" class="chat-image" style="max-width: 100%; max-height: 200px; cursor: pointer;" />` : '';
+        return `<div>
+        <p>${data.sender}</p>
+        <div class="received_withd_msg">
+            ${imgTag}
+            <p>${data.msg}</p>
+            <span class="time_date">${timeString}</span>
+        </div>
+        <div></div>
+      </div>`;
+      }
+
+      function initMyMessage(data) {
+        let chatBox = document.querySelector("#chat-box");
+        let sendBox = document.createElement("div");
+        sendBox.className = "outgoing_msg";
+        sendBox.innerHTML = getSendMsgBox(data);
+        chatBox.append(sendBox);
+        scrollToBottom();
+      }
+
+      function initYourMessage(data) {
+        let chatBox = document.querySelector("#chat-box");
+        let receivedBox = document.createElement("div");
+        receivedBox.className = "received_msg";
+        receivedBox.innerHTML = getReceiveMsgBox(data);
+        chatBox.append(receivedBox);
+        scrollToBottom();
+      }
+
+      function addPaymentInfoToChat(data) {
+        console.log('Adding payment info:', data); // 데이터 확인
+
+        const chatBox = document.querySelector("#chat-box");
+        const date = new Date();
+        const timeString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+        const paymentInfoBox = document.createElement("div");
+        paymentInfoBox.className = "payment-box;";
+        paymentInfoBox.innerHTML = `
+        <div class="payment-info-box">
+          <p><strong>상품명:</strong> ${data.itemName}</p>
+          <p><strong>수량:</strong> ${data.quantity}</p>
+          <p><strong>결제 금액:</strong> ${data.totalAmount}원</p>
+          <button class="btn btn-primary btn-sm payment-btn" onclick="handlePayment()">결제하기</button>
+          <div></div>
+          <span class="time_date">${timeString}</span>
+        </div>`;
+        chatBox.append(paymentInfoBox);
+        scrollToBottom();
+      }
+    });
+
+    async function addMessage(senderName, reservationId, chatUrl) {
+      let msgInput = document.querySelector("#chat-outgoing-msg");
+      let fileInput = document.querySelector("#chat-file-input");
+      let filePreview = document.querySelector("#file-preview");
+      let message = msgInput.value.trim();
+
+      // 파일이 첨부되었거나 메시지가 비어있지 않을 경우에만 전송
+      if (message === "" && !fileInput.files.length) {
+        return;
+      }
+
+      let formData = new FormData();
+
+      // 메시지가 비어있지 않거나 파일이 첨부된 경우 메시지 추가
+      if (message !== "" || fileInput.files.length > 0) {
+        formData.append("chat", new Blob([JSON.stringify({
+          sender: senderName,
+          roomNum: reservationId,
+          msg: message
+        })], { type: "application/json" }));
+      }
+
+      // 파일이 있는 경우 파일 추가
+      if (fileInput.files.length > 0) {
+        formData.append("customerImage", fileInput.files[0]);
+      }
+
+      await fetch(`${chatUrl}/chat`, {
+        method: "post",
+        body: formData
+      });
+
+      // 입력 필드와 파일 필드 초기화
+      msgInput.value = "";
+      fileInput.value = "";
+      filePreview.innerHTML = ""; // 파일 미리보기 영역 초기화
+      scrollToBottom();
+    }
+
+    async function handlePayment() {
+      if (storeOwnerName === sender) {
+        alert("결제버튼은 고객용입니다.");  // 점주인 경우 알림 표시
+        return;
+      }
+    }
+
+    // 결제 정보 전송 버튼 이벤트 리스너 등록
+    document.querySelector('#submit-payment-info').addEventListener('click', async function() {
+      const itemName = document.querySelector('#itemName').value.trim();
+      const quantity = document.querySelector('#quantity').value.trim();
+      const totalAmount = document.querySelector('#totalAmount').value.trim();
+
+      if (!itemName || !quantity || !totalAmount) {
+        alert('모든 필드를 입력해주세요.');
+        return;
+      }
+
+      const payInfo = {
+        sender: storeOwnerName,
+        roomNum: reservationId,
+        msg: "결제 요청이 도착했습니다.",
+        itemName: itemName,
+        quantity: quantity,
+        totalAmount: totalAmount,
+        createdAt: new Date().toISOString()
+      };
+
+      let formData = new FormData();
+      formData.append('chat', new Blob([JSON.stringify(payInfo)], { type: 'application/json' }));
+
+      try {
+        const response = await fetch(`${chatUrl}/chat`, {
+          method: 'POST',
+          body: formData
+        });
+
+        if (response.ok) {
+          console.log('결제 정보 전송 완료:', await response.json());
+          alert('결제 정보가 성공적으로 전송되었습니다.');
+          $('#submit-payment-info').modal('hide'); // 모달 창 닫기
+          $('#payment-info-form')[0].reset(); // 폼 리셋
+          console.log('모달 닫기 실행');
+        } else {
+          console.error('서버 오류:', await response.text());
+          alert('결제 정보 전송 중 오류가 발생했습니다.');
+        }
+      } catch (error) {
+        console.error('전송 오류:', error);
+        alert('결제 정보 전송 중 오류가 발생했습니다.');
+      }
+    });
+  </script>
 </div>
-</body>
 </html>
 
