@@ -3,12 +3,15 @@ package com.matdang.seatdang.waiting.repository.query;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.matdang.seatdang.store.entity.Store;
+import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.entity.WaitingStorage;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingDto;
+import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +19,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +30,8 @@ import org.springframework.transaction.annotation.Transactional;
 class WaitingQueryRepositoryTest {
     @Autowired
     private WaitingQueryRepository waitingQueryRepository;
+    @Autowired
+    private StoreRepository storeRepository;
     @Autowired
     private WaitingRepository waitingRepository;
     @Autowired
@@ -122,4 +128,5 @@ class WaitingQueryRepositoryTest {
         // then
         assertThat(findResult.size()).isEqualTo(50);
     }
+
 }
