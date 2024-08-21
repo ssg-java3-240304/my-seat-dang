@@ -4,6 +4,7 @@ import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.entity.WaitingStorage;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingDto;
+import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -40,4 +41,13 @@ public interface WaitingQueryRepository extends JpaRepository<Waiting, Long> {
             + " w.createdDate, w.waitingStatus, w.visitedTime, w.canceledTime) from Waiting w "
             + " where w.storeId = :storeId")
     List<WaitingStorage> findAllByStoreId(@Param("storeId") Long storeId);
+
+    @Query("select new com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto("
+            + " w.id, s.storeName, w.waitingNumber, w.customerInfo.peopleCount, w.waitingStatus)"
+            + " from Waiting w"
+            + " join Store s on w.storeId = s.storeId"
+            + " where w.customerInfo.customerId = :customerId"
+            + " and w.waitingStatus = :waitingStatus")
+    List<WaitingInfoDto> findAllByCustomerIdAndWaitingStatus(@Param("customerId") Long customerId,
+                                                             @Param("waitingStatus") WaitingStatus waitingStatus);
 }
