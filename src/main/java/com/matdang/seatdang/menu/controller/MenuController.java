@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Controller
-@RequestMapping("/storeowner/menu")
+@RequestMapping("/store-owner/menu")
 @RequiredArgsConstructor
 public class MenuController {
     private final FileService fileService;
