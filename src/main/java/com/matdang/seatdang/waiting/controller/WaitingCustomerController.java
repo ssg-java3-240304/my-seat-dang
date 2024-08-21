@@ -16,6 +16,9 @@ import com.matdang.seatdang.waiting.service.WaitingCustomerService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +49,7 @@ public class WaitingCustomerController {
     /**
      * TODO : 삭제 필요
      * defaultValue는 test 용도임
-     *
+     * <p>
      * TODO : URL 변경
      */
     // TODO : 웨이팅 후 다시 주소 접근 차단
@@ -71,10 +74,14 @@ public class WaitingCustomerController {
     }
 
     @GetMapping("/waiting")
-    public String showWaiting(@RequestParam(defaultValue = "0") int status, Model model) {
-        List<WaitingInfoDto> waitings = waitingCustomerService.showWaiting(status);
-        model.addAttribute("waitings", waitings);
-
+    public String showWaiting(@RequestParam(defaultValue = "0") int status,
+                              @RequestParam(defaultValue = "0") int page,
+                              Model model) {
+        Page<WaitingInfoDto> waitings = waitingCustomerService.showWaiting(status, page);
+        model.addAttribute("status", status);
+        model.addAttribute("waitings", waitings.getContent());
+        model.addAttribute("currentPage", waitings.getNumber());
+        model.addAttribute("totalPages", waitings.getTotalPages());
         return "customer/waiting/waiting";
     }
 
