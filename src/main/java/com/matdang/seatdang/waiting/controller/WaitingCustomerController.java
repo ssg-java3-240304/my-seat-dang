@@ -9,13 +9,10 @@ import com.matdang.seatdang.waiting.controller.dto.ReadyWaitingResponse;
 import com.matdang.seatdang.waiting.controller.dto.VisitedWaitingResponse;
 import com.matdang.seatdang.waiting.controller.dto.WaitingRequest;
 import com.matdang.seatdang.waiting.entity.Waiting;
-import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.repository.query.WaitingQueryRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
 import com.matdang.seatdang.waiting.service.WaitingCustomerService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.websocket.server.PathParam;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +46,8 @@ public class WaitingCustomerController {
     /**
      * TODO : 삭제 필요
      * defaultValue는 test 용도임
+     *
+     * TODO : URL 변경
      */
     // TODO : 웨이팅 후 다시 주소 접근 차단
     @GetMapping("/waiting/{storeId}")
@@ -58,7 +57,7 @@ public class WaitingCustomerController {
         model.addAttribute("waitingTeam", waitingRepository.countWaitingByStoreIdAndWaitingStatus(storeId));
         model.addAttribute("readyWaitingResponse", ReadyWaitingResponse.create(store));
 
-        return "customer/waiting/waiting";
+        return "customer/waiting/registration";
     }
 
     @PostMapping("/waiting")
@@ -71,14 +70,12 @@ public class WaitingCustomerController {
         return "redirect:/my-seat-dang/waiting/{waitingId}/awaiting/detail";
     }
 
-    @GetMapping("/waiting/awaiting")
-    public String showAwaitingWaiting(Model model) {
-        Long memberId = authService.getAuthenticatedMember().getMemberId();
-        List<WaitingInfoDto> waitings = waitingQueryRepository.findAllByCustomerIdAndWaitingStatus(
-                memberId, WaitingStatus.WAITING);
+    @GetMapping("/waiting")
+    public String showWaiting(@RequestParam(defaultValue = "0") int status, Model model) {
+        List<WaitingInfoDto> waitings = waitingCustomerService.showWaiting(status);
         model.addAttribute("waitings", waitings);
 
-        return "customer/waiting/awaiting";
+        return "customer/waiting/waiting";
     }
 
     // TODO : 취소 후 url에 접속 못하게 막기(if문 상태처리)
