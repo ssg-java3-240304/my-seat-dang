@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<!--원본 blog.html-->
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{customer/layout/default}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Foogra - Discover & Book the best restaurants at the best price">
+    <meta name="author" content="Ansonika">
+    <title>Foogra - Discover & Book the best restaurants at the best price</title>
+
+    <!-- Favicons-->
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" type="image/x-icon" href="img/apple-touch-icon-57x57-precomposed.png">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="img/apple-touch-icon-72x72-precomposed.png">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114"
+          href="img/apple-touch-icon-114x114-precomposed.png">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144"
+          href="img/apple-touch-icon-144x144-precomposed.png">
+
+    <!-- GOOGLE WEB FONT -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+
+    <!-- SPECIFIC CSS -->
+
+    <link rel="stylesheet" th:href="@{/css/customer/blog.css}">
+
+
+    <!-- YOUR CUSTOM CSS -->
+    <link rel="stylesheet" th:href="@{/css/custom.css}">
+
+
+</head>
+<body>
+<main class="page_header element_to_stick" layout:fragment="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-8 col-lg-7 col-md-7 d-none d-md-block">
+                <div class="breadcrumbs blog">
+                    <ul>
+                        <li><a href="#">마이페이지</a></li>
+                        <li>시안생성하기</a></li>
+                        <!--				                <li>Page active</li>-->
+                    </ul>
+                </div>
+            </div>
+            <!--					케이크시안 프롬프트 생성-->
+            <!--                <div class="col-xl-4 col-lg-5 col-md-5">-->
+            <!--                    <div class="search_bar_list">-->
+            <!--                        <input type="text" class="form-control" placeholder="원하는 케이크시안을 적어주세요">-->
+            <!--                        <input type="submit" value="생성">-->
+            <!--&lt;!&ndash;                        <input type="text" class="form-control" placeholder="원하는 케이크시안을 적어주세요" style="width: 100%; height: 50px; font-size: 18px;">&ndash;&gt;-->
+            <!--&lt;!&ndash;                        <input type="submit" value="생성" style="height: 50px; font-size: 18px;">&ndash;&gt;-->
+            <!--                    </div>-->
+            <!--                </div>-->
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /page_header -->
+
+    <div class="container margin_30_40">
+        <div class="row">
+            <div class="col-lg-9">
+                <!--                <div class="row">-->
+                <!--&lt;!&ndash;                    동적으로 추가될 공간&ndash;&gt;-->
+                <!--                    <div class="col-md-6">-->
+                <!--                        <article class="blog">-->
+                <!--                            <figure>-->
+                <!--                                <img src="img/blog-1.jpg" alt="">-->
+                <!--                            </figure>-->
+                <!--                            <div class="post_info">-->
+                <!--                                <small>Category - 20 Nov. 2017</small>-->
+                <!--                                <h2>Ea exerci option hendrerit</a></h2>-->
+                <!--                                <p>Quodsi sanctus pro eu, ne audire scripserit quo. Vel an enim offendit salutandi, in eos quod omnes epicurei, ex veri qualisque scriptorem mei.</p>-->
+                <!--                                <ul>-->
+                <!--                                    <li>-->
+                <!--                                        <div class="thumb"><img src="img/avatar.jpg" alt=""></div> Admin-->
+                <!--                                    </li>-->
+                <!--                                    <li><i class="icon_comment_alt"></i>20</li>-->
+                <!--                                </ul>-->
+                <!--                            </div>-->
+                <!--                        </article>-->
+                <!--                        &lt;!&ndash; /article &ndash;&gt;-->
+                <!--                    </div>-->
+                <div class="row" id = "image-container">
+<!--                    여기에 새로운 이미지 블록 추가-->
+                    <th:block th:each="image : ${imageList}">
+                        <div class="col-md-6">
+                            <article class="blog">
+                                <figure>
+                                    <img th:src="${image.generatedUrl}" alt="Generated Image">
+<!--                                    <span class="ribbon off">old</span>-->
+                                </figure>
+                                <div class="post_info">
+                                    <small th:text="${#temporals.format(image.createdAt, 'yyyy-MM-dd')}">생성 날짜</small>
+                                    <h1>입력한 값</h1>
+                                    <h2 th:text="${image.inputText}">사용자 입력</h2>
+                                    <p>이 이미지는 AI로 생성된 케이크 시안입니다.</p>
+                                </div>
+                            </article>
+                        </div>
+                    </th:block>
+                </div>
+
+
+                <!--                    여기까지였다.-->
+
+                <!-- /col -->
+                <!--                    <div class="col-md-6">-->
+                <!--                        <article class="blog">-->
+                <!--                            <figure>-->
+                <!--                                <a href="blog-post.html"><img src="img/blog-6.jpg" alt="">-->
+                <!--                                    <div class="preview"><span>Read more</span></div>-->
+                <!--                                </a>-->
+                <!--                            </figure>-->
+                <!--                            <div class="post_info">-->
+                <!--                                <small>Category - 20 Nov. 2017</small>-->
+                <!--                                <h2><a href="blog-post.html">Te congue everti his salutandi</a></h2>-->
+                <!--                                <p>Quodsi sanctus pro eu, ne audire scripserit quo. Vel an enim offendit salutandi, in eos quod omnes epicurei, ex veri qualisque scriptorem mei.</p>-->
+                <!--                                <ul>-->
+                <!--                                    <li>-->
+                <!--                                        <div class="thumb"><img src="img/avatar.jpg" alt=""></div> Admin-->
+                <!--                                    </li>-->
+                <!--                                    <li><i class="icon_comment_alt"></i>20</li>-->
+                <!--                                </ul>-->
+                <!--                            </div>-->
+                <!--                        </article>-->
+                <!--                        &lt;!&ndash; /article &ndash;&gt;-->
+                <!--                    </div>-->
+                <!-- /col -->
+            </div>
+            <!-- /row -->
+
+            <div class="pagination_fg">
+                <a href="#">&laquo;</a>
+                <a href="#" class="active">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <a href="#">4</a>
+                <a href="#">5</a>
+                <a href="#">&raquo;</a>
+            </div>
+
+        </div>
+        <!-- /col -->
+
+        <aside class="col-lg-3">
+            <div class="widget">
+                <div class="widget-title first">
+                    <!--							음..-->
+                    <h4>AI 시안생성 하기</h4>
+                </div>
+                <ul class="comments-list">
+                    <!--							<li>-->
+                    <!--								<div class="alignleft">-->
+                    <!--									<a href="#0"><img src="img/blog-5.jpg" alt=""></a>-->
+                    <!--								</div>-->
+                    <!--								<small>Category - 11.08.2016</small>-->
+                    <!--								<h3><a href="#" title="">Verear qualisque ex minimum...</a></h3>-->
+                    <!--							</li>-->
+                    <div class="form-group" >
+<!--                        <form id="generateForm" th:action="@{/ai/generate}" method="post">-->
+                        <form id = "generateForm" method="post">
+                            <!--                                <label for="cakeDescription">케이크 시안</label>-->
+                            <!--                                <textarea id="cakeDescription" name="cakeDescription" class="form-control" style="height: 180px;" placeholder="만들고 싶은 케이크를 작성해주세요"></textarea>-->
+
+                            <label for="cakePrompt">케이크 시안 </label>
+                            <input id="cakePrompt" type="text" name="cakeDescription" class="form-control"
+                                   placeholder="원하는 케이크시안을 적어주세요" style="height: 180px;;">
+
+                            <input type="submit" value="생성" class="btn btn-primary" style="margin-top: 20px;">
+                        </form>
+                    </div>
+                </ul>
+            </div>
+            <!-- /widget -->
+            <!--					<div class="widget">-->
+            <!--						<div class="widget-title">-->
+            <!--							<h4>Categories</h4>-->
+            <!--						</div>-->
+            <!--						<ul class="cats">-->
+            <!--							<li><a href="#">Food <span>(12)</span></a></li>-->
+            <!--							<li><a href="#">Places to visit <span>(21)</span></a></li>-->
+            <!--							<li><a href="#">New Places <span>(44)</span></a></li>-->
+            <!--							<li><a href="#">Suggestions and guides <span>(31)</span></a></li>-->
+            <!--						</ul>-->
+            <!--					</div>-->
+            <!-- /widget -->
+            <!--					<div class="widget">-->
+            <!--						<div class="widget-title">-->
+            <!--							<h4>Popular Tags</h4>-->
+            <!--						</div>-->
+            <!--						<div class="tags">-->
+            <!--							<a href="#">Food</a>-->
+            <!--							<a href="#">Bars</a>-->
+            <!--							<a href="#">Cooktails</a>-->
+            <!--							<a href="#">Shops</a>-->
+            <!--							<a href="#">Best Offers</a>-->
+            <!--							<a href="#">Transports</a>-->
+            <!--							<a href="#">Restaurants</a>-->
+            <!--						</div>-->
+            <!--					</div>-->
+            <!-- /widget -->
+        </aside>
+        <!-- /aside -->
+    </div>
+    <!-- /row -->
+    </div>
+    <!-- /container -->
+
+    <!-- 로딩 인디케이터 추가 -->
+    <div id="loading-indicator" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+        <p>로딩 중...</p>
+    </div>
+
+</main>
+<!-- /main -->
+
+
+<div id="toTop"></div><!-- Back to top button -->
+
+<div class="layer"></div><!-- Opacity Mask Menu Mobile -->
+<!-- /Sign In Modal -->
+
+<!-- COMMON SCRIPTS -->
+<div layout:fragment="js">
+    <script th:src="@{/js/customer/common_scripts.min.js}"></script>
+    <script th:src="@{/js/customer/common_func.js}"></script>
+    <script th:src="@{/js/customer/assets/validate.js}"></script>
+    <!--    <script>-->
+    <!--        $(document).ready(function () {-->
+    <!--            $('form').submit(function (event) {-->
+    <!--                event.preventDefault();-->
+
+    <!--                // 폼 데이터 수집-->
+    <!--                var formData = $(this).serialize();-->
+
+    <!--                // AJAX 요청-->
+    <!--                $.ajax({-->
+    <!--                    url: '/ai/generate',-->
+    <!--                    type: 'POST',-->
+    <!--                    data: formData,-->
+    <!--                    dataType: 'json',-->
+    <!--                    success: function (data) {-->
+    <!--                        if (data.imageUrl) {-->
+    <!--                            // 성공적으로 생성된 이미지 및 정보 처리-->
+    <!--                            var newArticle = `-->
+    <!--                            <div class="col-md-6">-->
+    <!--                                <article class="blog">-->
+    <!--                                    <figure>-->
+    <!--                                        <img src="${data.imageUrl}" alt="Generated Image">-->
+    <!--                                    </figure>-->
+    <!--                                    <div class="post_info">-->
+    <!--                                        <small>${data.cakeDescription} - ${data.generatedDate}</small>-->
+    <!--                                        <h2>AI 생성 이미지</h2>-->
+    <!--                                        <p>케이크 설명: ${data.cakeDescription}</p>-->
+    <!--                                    </div>-->
+    <!--                                </article>-->
+    <!--                            </div>-->
+    <!--                        `;-->
+
+    <!--                            // 새로운 글을 블로그 리스트에 추가-->
+    <!--                            $('.row').append(newArticle);-->
+    <!--                        } else if (data.message) {-->
+    <!--                            // 오류 메시지를 처리-->
+    <!--                            alert(data.message);-->
+    <!--                        }-->
+    <!--                    },-->
+    <!--                    error: function (xhr, status, error) {-->
+    <!--                        console.error('Error:', error);-->
+    <!--                        alert('요청 중 문제가 발생했습니다.');-->
+    <!--                    }-->
+    <!--                });-->
+    <!--            });-->
+    <!--        });-->
+    <!--    </script>-->
+    <script>
+        // 폼 전송 이벤트를 캡처
+        $('#generateForm').submit(function (event) {
+            event.preventDefault();
+
+            // 폼 데이터 수집
+            let formData = $(this).serialize();
+
+            // 로딩 인디케이터 표시
+            $('#loading-indicator').show();
+
+            // '[@{/ai/generate}]'
+
+            // AJAX 요청
+            $.ajax({
+                url: '/ai/generate',  // 서버에서 이미지를 생성하는 엔드포인트
+                type: 'POST',
+                data: formData,
+                dataType: 'json',  // 서버 응답이 JSON이라고 명시
+                success: function (data) {
+                    $('#loading-indicator').hide(); // 로딩 숨김
+                    console.log(data); // object로 받아옴
+                    if (data.url !== null && data.url !== '') {
+                        // 성공적으로 생성된 이미지와 관련 정보를 처리
+                        let newImageBlock = `
+        <div class="col-md-6">
+            <article class="blog">
+                <figure>
+                    <img src="${data.url}" alt="Generated Image">
+                    <span class="ribbon off">new</span>
+                </figure>
+                <div class="post_info">
+                    <small>${new Date(data.createdAt).toLocaleDateString()}</small>
+                    <h1>입력한 값</h1>
+                    <h2>${data.description}</h2>
+                    <p>이 이미지는 AI로 생성된 케이크 시안입니다.</p>
+                </div>
+            </article>
+        </div>
+    `;
+
+
+                        // 새로운 블록을 추가
+                        $('#image-container').append(newImageBlock);
+                    } else {
+                        alert("이미지 생성 중 문제가 발생했습니다.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    $('#loading-indicator').hide();
+                    console.error('Error:', error);
+                    alert('요청 중 문제가 발생했습니다.');
+                }
+            });
+        });
+    </script>
+</div>
+</body>
+</html>

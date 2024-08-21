@@ -183,5 +183,41 @@ public class FileService {
         return files;
     }
 
+    // ai로 생성된이미지 url을 다운받아서 NCP에 업로드
+    public String uploadFile(InputStream inputStream, String filePath, ObjectMetadata metadata) {
+        // 파일 확장자를 URL로부터 유추
+        String fileExtension;
+        if (filePath.endsWith(".jpeg") || filePath.endsWith(".jpg")) {
+            fileExtension = ".jpg"; // 기본적으로 둘 다 .jpg로 처리
+            metadata.setContentType("image/jpeg"); // 여기서 명시적으로 Content-Type을 설정
+        } else if (filePath.endsWith(".png")) {
+            fileExtension = ".png";
+            metadata.setContentType("image/png"); // 여기서 명시적으로 Content-Type을 설정
+        } else {
+            throw new IllegalArgumentException("지원되지 않는 이미지 형식입니다.");
+        }
+
+        String uploadFileName = getUuidFileName("generated-image" + fileExtension); // 파일명을 UUID로 생성
+
+        try {
+            String keyName = filePath + "/" + uploadFileName;
+
+            // S3에 업로드
+            amazonS3Client.putObject(
+                    new PutObjectRequest(bucketName, keyName, inputStream, metadata)
+                            .withCannedAcl(CannedAccessControlList.PublicRead)
+            );
+
+            // S3에 업로드한 파일의 URL 반환
+            return "https://kr.object.ncloudstorage.com/" + bucketName + "/" + keyName;
+
+        } catch (Exception e) {
+            throw new RuntimeException("파일 업로드 실패", e);
+        }
+    }
+
+
+
+
 
 }
