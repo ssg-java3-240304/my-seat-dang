@@ -6,10 +6,9 @@ import lombok.*;
 
 @Embeddable
 @Data
-@Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderedMenu {
+public class ReservationRequestMenu {
     private String menuName;
     private int menuPrice;
     private String imageUrl;

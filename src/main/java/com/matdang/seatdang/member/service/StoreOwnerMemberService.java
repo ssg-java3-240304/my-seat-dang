@@ -1,5 +1,6 @@
 package com.matdang.seatdang.member.service;
 
+import com.matdang.seatdang.member.dto.StoreOwnerResponseDto;
 import com.matdang.seatdang.member.entity.Customer;
 import com.matdang.seatdang.member.entity.StoreOwner;
 import com.matdang.seatdang.member.repository.MemberRepository;
@@ -15,8 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class StoreOwnerMemberService {
     private final StoreOwnerRepository storeOwnerRepository;
 
-    public StoreOwner findByStoreId(Long storeId) {
+    public StoreOwnerResponseDto findByStoreId(Long storeId) {
         // DB에서 최신 Customer 정보를 조회
-        return (StoreOwner) storeOwnerRepository.findByStore_storeId(storeId).orElseThrow(() -> new RuntimeException("StoreOwner not found"));
+        return new StoreOwnerResponseDto().fromEntity((StoreOwner)storeOwnerRepository
+                .findByStore_storeId(storeId).orElseThrow(() -> new RuntimeException("StoreOwner not found")));
     }
 }
