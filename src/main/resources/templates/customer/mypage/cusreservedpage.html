@@ -38,8 +38,8 @@
               <figure><img src="/img/admin/item_1.jpg" alt=""></figure>
               <h4 th:text="*{storeName}">Store Name</h4>
               <ul class="booking_list">
-                <li><strong>Booking date:</strong> <span>1212</span></li>
-                <li><strong>Booking details:</strong> <span></span>1212</li>
+                <li><strong>Booking date:</strong> <span>Date</span></li>
+                <li><strong>Booking details:</strong> <span></span>Details</li>
                 <li><strong>Client:</strong> <span th:text="*{customerName}"></span></li>
               </ul>
               <p>
@@ -52,6 +52,7 @@
                         th:data-chat-url="${chatAccessUrl}">
                   채팅하기
                 </button>
+              </p>
             </li>
           </ul>
         </div>
@@ -61,7 +62,7 @@
     <div class="right-section">
       <div id="user_chat_data" class="user_chat_data">
         <div class="profile_name">
-          &nbsp;&nbsp;&nbsp;&nbsp;<img src="./img/profile.png" class="mr-3 rounded-circle"> &nbsp;&nbsp;
+          <img src="./img/profile.png" class="mr-3 rounded-circle">
           <span id="store-name" th:text="*{storeName}"></span>
         </div>
         <div class="container-fluid chat_section" id="chat-box"></div>
@@ -270,16 +271,16 @@
         scrollToBottom();
       }
 
-      function addPaymentInfoToChat(data) {
+      function addPaymentInfoToChat(data, reservationId, customerId, storeId) {
         console.log('Adding payment info:', data); // 데이터 확인
 
         const chatBox = document.querySelector("#chat-box");
         const date = new Date();
         const timeString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
         const paymentInfoBox = document.createElement("div");
-        paymentInfoBox.className = "received_msg";
+        paymentInfoBox.className = "payment-box";
         paymentInfoBox.innerHTML = `
-      <div class="payment-info-box">
+      <div class="payment-customer">
         <p><strong>상품명:</strong> ${data.itemName}</p>
         <p><strong>수량:</strong> ${data.quantity}</p>
         <p><strong>결제 금액:</strong> ${data.totalAmount}원</p>

@@ -19,22 +19,4 @@ import java.util.List;
 @RequestMapping("/store")
 @RequiredArgsConstructor
 public class ReservationController {
-
-    @Autowired
-    private ReservationService reservationService;
-
-
-
-    @GetMapping("streservedpage")
-    public String storereservedpage(Model model) {
-        // 고객 ID가 제공되면 해당 고객의 예약 목록을 가져와서 모델에 추가합니다.
-        Long storeOwnerId = ((StoreOwnerUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
-        List<ResponseDto> reservations = reservationService.getReservationsByStoreOwnerId(storeOwnerId);
-        model.addAttribute("reservations", reservations);
-
-        log.debug("reservation = {}",reservations);
-
-        return "store/mypage/streservedpage";
-
-    }
 }

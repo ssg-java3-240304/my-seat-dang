@@ -1,10 +1,17 @@
 package com.matdang.seatdang.chat.contorller;
 
+import com.matdang.seatdang.auth.principal.StoreOwnerUserDetails;
+import com.matdang.seatdang.reservation.dto.ResponseDto;
+import com.matdang.seatdang.reservation.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @Controller
@@ -12,25 +19,23 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/store")
 @RequiredArgsConstructor
 public class StoreOwnerChatController {
-        @GetMapping("/storeownerchat")
-        public String storeChatPage(@RequestParam("reservationId") Long reservationId,
-                                @RequestParam("storeName") String storeName,
-                                @RequestParam("storeOwnerName") String storeOwnerName,
-                                @RequestParam("chatUrl") String chatUrl,
-                                Model model) {
-            // 데이터가 URL 파라미터로 넘어오기 때문에 별도의 데이터 처리 로직이 필요하지 않을 수 있음
-            model.addAttribute("reservationId", reservationId);
-            model.addAttribute("storeName", storeName);
-            model.addAttribute("storeOwnerName", storeOwnerName);
-            model.addAttribute("chatAccessUrl", chatUrl);
+    @Autowired
+    private final ReservationService reservationService;
+        @GetMapping("/streservedpage")
+        public String storeChatPage(Model model,  @RequestParam(required = false)String chatUrl) {
 
-            if (chatUrl == null || chatUrl.isEmpty()) {
-                log.warn("chatUrl is null or empty");
+            // SecurityContext에서 고객 ID를 가져옴
+            Long storeOwnerId = ((StoreOwnerUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+            if (chatUrl == null) {
+                chatUrl = "http://localhost:8080";  // 또는 기본 URL 설정
             }
 
-            log.info("Received parameters - reservationId: {}, storeName: {}, storeOwnerName: {}, chatUrl: {}",
-                    reservationId, storeName, storeOwnerName, chatUrl);
+            // 예약 목록 가져오기
+            List<ResponseDto> reservations = reservationService.getReservationsByStoreOwnerId(storeOwnerId);
+            model.addAttribute("chatAccessUrl", chatUrl);
+            model.addAttribute("reservations", reservations);
 
-            return "store/mypage/storeownerchat";
+            log.debug("reservation = {}",reservations);
+            return "storeowner/mypage/streservedpage";
         }
 }
