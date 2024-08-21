@@ -39,6 +39,9 @@
         .header_in {
             z-index: 100 !important;
         }
+        .right-section {
+            display: none;
+        }
     </style>
 
 
@@ -187,6 +190,9 @@
                 }
 
                 clearChatBox(); // 이전 채팅 내용 삭제
+
+                // 오른쪽 섹션을 표시
+                document.querySelector('.right-section').style.display = 'block';
 
                 const reservationId = this.getAttribute('data-reservation-id');
                 const storeName = this.getAttribute('data-store-name');
