@@ -46,22 +46,22 @@ public class AIController {
 //        return "ai/test";
 //    }
 
-
-    @GetMapping("/ai-image")
-    public String getImage(Model model) throws IOException, InterruptedException {
-        String imageUrl = aiService.generatePictureV2("케이크 시안을 원하는데 아빠가 좋아할거같은 케이크 시안 부탁해");
-
-        // 파일 저장 경로 설정 (예: "ai-generated-images/케이크-시안.jpg")
-        String filePath = "ai-generated-images/cake-idea.jpg";
-
-        // 이미지 URL을 통해 S3에 업로드
-        String uploadedImageUrl = aiService.uploadImageToS3(imageUrl, filePath);
-
-        // 업로드된 이미지 URL을 모델에 추가하여 뷰에 전달
-        model.addAttribute("url", uploadedImageUrl);
-
-        return "ai/test";
-    }
+    // test 용도
+//    @GetMapping("/ai-image")
+//    public String getImage(Model model) throws IOException, InterruptedException {
+//        String imageUrl = aiService.generatePictureV2("케이크 시안을 원하는데 아빠가 좋아할거같은 케이크 시안 부탁해");
+//
+//        // 파일 저장 경로 설정 (예: "ai-generated-images/케이크-시안.jpg")
+//        String filePath = "ai-generated-images/cake-idea.jpg";
+//
+//        // 이미지 URL을 통해 S3에 업로드
+//        String uploadedImageUrl = aiService.uploadImageToS3(imageUrl, filePath);
+//
+//        // 업로드된 이미지 URL을 모델에 추가하여 뷰에 전달
+//        model.addAttribute("url", uploadedImageUrl);
+//
+//        return "ai/test";
+//    }
 
 
 
