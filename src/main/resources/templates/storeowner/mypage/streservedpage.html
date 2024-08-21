@@ -176,6 +176,7 @@
 
         clearChatBox(); // 이전 채팅 내용 삭제
 
+        document.querySelector('.right-section').style.display = 'block';
         // 필요한 정보 가져오기
         reservationId = this.getAttribute('data-reservation-id');
         const storeName = this.getAttribute('data-store-name');
@@ -417,9 +418,9 @@
         if (response.ok) {
           console.log('결제 정보 전송 완료:', await response.json());
           alert('결제 정보가 성공적으로 전송되었습니다.');
+          $('#submit-payment-info').modal('hide'); // 모달 창 닫기
           $('#payment-info-form')[0].reset(); // 폼 리셋
           console.log('모달 닫기 실행');
-          $('#payment-info-modal').modal('hide'); // 모달 창 닫기
         } else {
           console.error('서버 오류:', await response.text());
           alert('결제 정보 전송 중 오류가 발생했습니다.');

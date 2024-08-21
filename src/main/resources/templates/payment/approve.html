@@ -10,6 +10,13 @@
             font-weight: bold;
         }
     </style>
+    <script>
+        window.onload = function() {
+            window.parent.postMessage({
+                status: 'success',
+            }, '*');
+        };
+    </script>
 </head>
 <body>
 

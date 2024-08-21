@@ -289,3 +289,7 @@
 .button-container {
     text-align: right;
 }
+
+.right-section {
+    display: none;
+}

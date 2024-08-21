@@ -80,31 +80,6 @@
                 </div>
             </div>
         </div>
-
-        <div class="list_general">
-          <ul>
-            <li th:each="reservation : ${reservations}" th:object="${reservation}">
-              <figure><img src="/img/admin/item_1.jpg" alt=""></figure>
-              <h4 th:text="*{storeName}">Store Name</h4>
-              <ul class="booking_list">
-                <li><strong>Booking date:</strong> <span>Date</span></li>
-                <li><strong>Booking details:</strong> <span></span>Details</li>
-                <li><strong>Client:</strong> <span th:text="*{customerName}"></span></li>
-              </ul>
-              <p>
-                <button class="chat-button btn btn-primary"
-                        th:data-reservation-id="*{reservationId}"
-                        th:data-store-name="*{storeName}"
-                        th:data-customer-name="*{customerName}"
-                        th:data-customer-id="*{customerId}"
-                        th:data-store-id="*{storeId}"
-                        th:data-chat-url="${chatAccessUrl}">
-                  채팅하기
-                </button>
-              </p>
-            </li>
-          </ul>
-
         <!-- Right Section: Chat -->
         <div class="right-section">
             <div id="user_chat_data" class="user_chat_data">
@@ -133,7 +108,7 @@
             </div>
         </div>
     </div>
-</div>
+
     <!-- AI 이미지 선택 모달 -->
     <div id="aiImageModal" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -452,6 +427,26 @@
 
             window.location.href = `/payment/request?${queryString}`;
         }
+        window.addEventListener('message', function(event) {
+            if (event.origin !== "https://your-trusted-domain.com") {
+                return;
+            }
+
+            const data = event.data;
+
+            if (data.status === 'success') {
+                alert('결제가 성공적으로 완료되었습니다!');
+                updatePaymentStatusUI(event.target);
+            } else if (data.status === 'failure') {
+                alert('결제에 실패했습니다. 다시 시도해 주세요.');
+            }
+        });
+
+        function updatePaymentStatusUI(button) {
+            const paymentInfoBox = button.parentNode;
+            paymentInfoBox.innerHTML += '<p><strong>결제 상태:</strong> 완료</p>';
+            button.disabled = true;
+        }
 
     </script>
     <script>
@@ -486,7 +481,7 @@
                 formData.append("chat", new Blob([JSON.stringify({
                     sender: window.customerName,
                     roomNum: window.reservationId,
-                    msg: "", // 메시지 내용 비워두기 (이미지만 전송)
+                    msg: "시안입니다", // 메시지 내용 비워두기 (이미지만 전송)
                     customerImage: selectedImageUrl
                 })], { type: "application/json" }));
 
@@ -543,38 +538,6 @@
             scrollToBottom();
         });
 
-        // 메시지 전송 함수
-        async function addMessage(customerName, reservationId, chatUrl) {
-            let msgInput = document.querySelector("#chat-outgoing-msg");
-            let fileInput = document.querySelector("#chat-file-input");
-            let filePreview = document.querySelector("#file-preview");
-            let message = msgInput.value.trim();
-
-            if (message === "" && !fileInput.files.length) {
-                return;
-            }
-
-            let formData = new FormData();
-            formData.append("chat", new Blob([JSON.stringify({
-                sender: customerName,
-                roomNum: reservationId,
-                msg: message
-            })], { type: "application/json" }));
-
-            if (fileInput.files.length > 0) {
-                formData.append("customerImage", fileInput.files[0]);
-            }
-
-            await fetch(`${chatUrl}/chat`, {
-                method: "post",
-                body: formData
-            });
-
-            msgInput.value = "";
-            fileInput.value = "";
-            filePreview.innerHTML = ""; // 파일 미리보기 초기화
-            scrollToBottom();
-        }
     </script>
     <!--  <script>-->
     <!--    // "닫기" 버튼에 이벤트 추가-->
