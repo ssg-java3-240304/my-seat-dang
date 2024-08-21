@@ -18,8 +18,9 @@ public interface WaitingQueryRepository extends JpaRepository<Waiting, Long> {
             + " w.waitingStatus, w.createdDate, w.visitedTime, w.canceledTime)"
             + " from Waiting w"
             + " where w.storeId = :storeId and w.waitingStatus = :waitingStatus")
-    List<WaitingDto> findAllByStoreIdAndWaitingStatus(@Param("storeId") Long storeId,
-                                                      @Param("waitingStatus") WaitingStatus waitingStatus);
+    Page<WaitingDto> findAllByStoreIdAndWaitingStatus(@Param("storeId") Long storeId,
+                                                      @Param("waitingStatus") WaitingStatus waitingStatus,
+                                                      Pageable pageable);
 
     @Query("select new com.matdang.seatdang.waiting.repository.query.dto.WaitingDto("
             + "w.id, w.waitingNumber,w.waitingOrder, w.customerInfo.customerPhone, w.customerInfo.peopleCount,"
@@ -27,7 +28,7 @@ public interface WaitingQueryRepository extends JpaRepository<Waiting, Long> {
             + " from Waiting w"
             + " where w.storeId = :storeId and w.waitingStatus = com.matdang.seatdang.waiting.entity.WaitingStatus.WAITING"
             + " order by w.waitingOrder")
-    List<WaitingDto> findAllByWaitingStatusOrderByWaitingOrder(@Param("storeId") Long storeId);
+    Page<WaitingDto> findAllByWaitingStatusOrderByWaitingOrder(@Param("storeId") Long storeId, Pageable pageable);
 
     @Query("select new com.matdang.seatdang.waiting.repository.query.dto.WaitingDto("
             + "w.id, w.waitingNumber,w.waitingOrder, w.customerInfo.customerPhone, w.customerInfo.peopleCount,"
@@ -36,7 +37,7 @@ public interface WaitingQueryRepository extends JpaRepository<Waiting, Long> {
             + "com.matdang.seatdang.waiting.entity.WaitingStatus.SHOP_CANCELED, "
             + "com.matdang.seatdang.waiting.entity.WaitingStatus.NO_SHOW, "
             + "com.matdang.seatdang.waiting.entity.WaitingStatus.CUSTOMER_CANCELED)")
-    List<WaitingDto> findAllByCancelStatus(@Param("storeId") Long storeId);
+    Page<WaitingDto> findAllByCancelStatus(@Param("storeId") Long storeId, Pageable pageable);
 
     @Query("select new com.matdang.seatdang.waiting.entity.WaitingStorage(w.waitingNumber, w.waitingOrder,w.storeId,"
             + " w.customerInfo.customerId, w.customerInfo.customerPhone, w.customerInfo.peopleCount,"

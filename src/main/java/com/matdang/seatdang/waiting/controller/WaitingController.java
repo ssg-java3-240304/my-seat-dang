@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,19 +52,22 @@ public class WaitingController {
 
     @GetMapping
     public String showWaiting(@RequestParam(defaultValue = "0") int status,
+                              @RequestParam(defaultValue = "0") int page,
                               Model model) {
         Long storeId = authService.getAuthenticatedStoreId();
         log.debug("storeId = {}", storeId);
         log.info("===  showWaiting  ===");
 
-        List<WaitingDto> waitings = waitingService.showWaiting(storeId, status);
-        createEstimatedWaitingTime(status, model, waitings, storeId);
+        Page<WaitingDto> waitings = waitingService.showWaiting(storeId, status ,page);
+        createEstimatedWaitingTime(status, model, waitings.getContent(), storeId);
 
         model.addAttribute("waitingStatus", waitingSettingService.findWaitingStatus(storeId));
-        model.addAttribute("waitingPeople", WaitingPeople.create(waitings));
+        model.addAttribute("waitingPeople", WaitingPeople.create(waitings.getContent()));
         model.addAttribute("waitings", waitings);
         model.addAttribute("storeId", storeId);
         model.addAttribute("status", status);
+        model.addAttribute("currentPage", waitings.getNumber());
+        model.addAttribute("totalPages", waitings.getTotalPages());
         return "storeowner/waiting/main";
     }
 
@@ -102,11 +106,11 @@ public class WaitingController {
     /**
      * test 실행시 주석 필요
      */
-//    @PostConstruct
+    @PostConstruct
     public void initData() {
         StoreVo storeVo = new StoreVo(1L, "달콤커피", StoreType.CUSTOM, "서울시강남구");
         storeRepository.save(Store.builder()
-                        .storeName("마싯당")
+                .storeName("마싯당")
                 .storeSetting(StoreSetting.builder()
                         .waitingPeopleCount(10)
                         .waitingStatus(com.matdang.seatdang.store.vo.WaitingStatus.OPEN)
