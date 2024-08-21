@@ -96,8 +96,7 @@
                                 </figure>
                                 <div class="post_info">
                                     <small th:text="${#temporals.format(image.createdAt, 'yyyy-MM-dd')}">생성 날짜</small>
-                                    <h1>입력한 값</h1>
-                                    <h2 th:text="${image.inputText}">사용자 입력</h2>
+                                    <h3 th:text="${image.inputText}"></h3>
                                     <p>이 이미지는 AI로 생성된 케이크 시안입니다.</p>
                                 </div>
                             </article>
@@ -212,9 +211,19 @@
     <!-- /container -->
 
     <!-- 로딩 인디케이터 추가 -->
+<!--    <div id="loading-indicator" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">-->
+<!--        <p>케이크 시안 생성중입니다 기다려 주세요🍰 <br> -마싯당-</p>-->
+<!--    </div>-->
+    <!-- 로딩 인디케이터 추가 -->
     <div id="loading-indicator" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-        <p>로딩 중...</p>
+        <div style="background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); text-align: center; max-width: 300px;">
+            <p style="margin: 0; font-size: 16px; font-weight: 500;">
+                케이크 시안 생성중입니다 <br> 조금만 기다려 주세요🍰 <br> -마싯당-
+            </p>
+        </div>
     </div>
+
+
 
 </main>
 <!-- /main -->
@@ -310,8 +319,7 @@
                 </figure>
                 <div class="post_info">
                     <small>${new Date(data.createdAt).toLocaleDateString()}</small>
-                    <h1>입력한 값</h1>
-                    <h2>${data.description}</h2>
+                    <h3>${data.description}</h3>
                     <p>이 이미지는 AI로 생성된 케이크 시안입니다.</p>
                 </div>
             </article>
@@ -327,8 +335,15 @@
                 },
                 error: function (xhr, status, error) {
                     $('#loading-indicator').hide();
+                    // console.error('Error:', error);
+                    // alert('요청 중 문제가 발생했습니다.');
                     console.error('Error:', error);
-                    alert('요청 중 문제가 발생했습니다.');
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        // 서버에서 보낸 오류 메시지를 표시
+                        alert(xhr.responseJSON.message);
+                    } else {
+                        alert('요청 중 문제가 발생했습니다.');
+                    }
                 }
             });
         });
