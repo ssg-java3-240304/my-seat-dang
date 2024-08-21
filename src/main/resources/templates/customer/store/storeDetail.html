@@ -3,7 +3,7 @@
       layout:decorate="~{customer/layout/default}">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title th:text="${store.storeName}"></title>
     <link th:href="@{/css/customer/detail-page.css}" rel="stylesheet">
 
 </head>
@@ -441,6 +441,10 @@ class="read_more", style="display: none;"-->
 
                     if (currentTime < now) {
                         listItem.classList.add('disabled');
+                    }
+
+                    if(currentTime < now) {
+                        listItem.style.display = 'none';
                     }
 
                     // 시간 선택 시 선택한 시간 보이게 하기

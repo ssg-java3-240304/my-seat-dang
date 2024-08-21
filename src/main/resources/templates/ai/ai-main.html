@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<!--원래 없음.. header.html가보면 모달창있는거 가져옴-->
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{customer/layout/default}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--    main page only css-->
+    <link th:href="@{/css/customer/booking-sign_up.css}" rel="stylesheet">
+    <!--	스크롤추가-->
+    <!--	<style>-->
+    <!--		.scrollable-container {-->
+    <!--			max-height: 80vh; /* Adjust this value as needed */-->
+    <!--			overflow-y: scroll;-->
+    <!--		}-->
+    <!--	</style>-->
+</head>
+<main class="bg_gray pattern" layout:fragment="main">
+    <div layout:fragment="js">
+        <!-- 이 페이지 전용 스크립트 -->
+        <script th:src="@{/js/customer/jarallax.min.js}"></script>
+        <script th:src="@{/js/customer/jarallax-video.min.js}"></script>
+        <!-- 모달 자동 표시 스크립트 -->
+    </div>
+</main>
