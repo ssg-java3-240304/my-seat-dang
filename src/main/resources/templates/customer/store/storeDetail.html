@@ -421,8 +421,8 @@ class="read_more", style="display: none;"-->
 
         // 예약시 시간 선택
         document.addEventListener('DOMContentLoaded', function () {
-            const timeList = document.getElementById('time-list');
-            const selectedTimeSpan = document.getElementById('selected_time');
+            const $timeList = document.getElementById('time-list');
+            const $selectedTimeSpan = document.getElementById('selected_time');
             const now = new Date();
 
             const generateTimes = () => {
@@ -450,11 +450,11 @@ class="read_more", style="display: none;"-->
                     // 시간 선택 시 선택한 시간 보이게 하기
                     listItem.addEventListener('click', function(event) {
                         if (!listItem.classList.contains('disabled')) {
-                            selectedTimeSpan.textContent = timeStr;
+                            $selectedTimeSpan.textContent = timeStr;
                         }
                     });
 
-                    timeList.appendChild(listItem);
+                    $timeList.appendChild(listItem);
                     currentTime.setMinutes(currentTime.getMinutes() + 30);
                 }
             };
