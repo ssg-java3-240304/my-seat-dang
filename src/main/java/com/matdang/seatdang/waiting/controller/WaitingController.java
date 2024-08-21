@@ -168,6 +168,14 @@ public class WaitingController {
                 }
             }
         }
+        waitingRepository.save(Waiting.builder()
+                .waitingNumber(41L)
+                .waitingOrder(41L)
+                .storeId(1L)
+                .customerInfo(new CustomerInfo(2L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+                .waitingStatus(WaitingStatus.VISITED)
+                .visitedTime(null)
+                .build());
 
         for (long i = 1; i <= 10; i++) {
             waitingRepository.save(Waiting.builder()
