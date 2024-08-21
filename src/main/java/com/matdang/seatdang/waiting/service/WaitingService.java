@@ -33,22 +33,17 @@ public class WaitingService {
     @Transactional
     public int updateStatus(UpdateRequest updateRequest) {
         if (updateRequest.getChangeStatus() != null) {
-            int visited = 0;
-            int canceled = 0;
             if (updateRequest.getChangeStatus() == 1) {
-                visited = waitingRepository.updateAllWaitingNumberByVisit(updateRequest.getStoreId());
+                int visited = waitingRepository.updateAllWaitingNumberByVisit(updateRequest.getStoreId());
+                return waitingRepository.updateStatusByVisit(updateRequest.getId()) + visited;
             }
             if (updateRequest.getChangeStatus() == 2) {
-                canceled = waitingRepository.updateWaitingNumberByCancel(updateRequest.getStoreId(),
+                int canceled = waitingRepository.updateWaitingNumberByCancel(updateRequest.getStoreId(),
                         updateRequest.getWaitingNumber());
+                return waitingRepository.updateStatusByShopCancel(updateRequest.getId()) + canceled;
             }
-
-            return waitingRepository.updateStatus(WaitingStatus.findWaiting(updateRequest.getChangeStatus()),
-                    updateRequest.getId()) + visited + canceled;
         }
 
         return 0;
     }
-
-
 }

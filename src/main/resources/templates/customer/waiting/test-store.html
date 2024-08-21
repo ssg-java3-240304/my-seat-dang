@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Test Store</title>
+    <script>
+        window.onload = function() {
+            const isRegistered = [[${isRegistered}]];
+
+            // 버튼 클릭 이벤트 리스너 추가
+            document.getElementById('goWaitingPage').addEventListener('click', function(event) {
+                if (isRegistered) {
+                    // 웨이팅이 등록된 경우 알림창 표시하고 링크 이동 방지
+                    alert('이미 웨이팅이 등록되었습니다.');
+                    event.preventDefault(); // 링크 클릭을 막습니다.
+                }
+                // isRegistered가 false인 경우에는 이동을 허용함
+            });
+        };
+    </script>
+</head>
+<body>
+<h1>Store Test Page</h1>
+
+<p>Store ID: <span th:text="${storeId}"></span></p>
+
+<a id="goWaitingPage" th:href="@{|/my-seat-dang/waiting/${storeId}|}">
+    <button type="button">Go to Waiting Page</button>
+</a>
+</body>
+</html>

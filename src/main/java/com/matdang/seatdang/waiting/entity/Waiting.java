@@ -27,4 +27,5 @@ public class Waiting extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private WaitingStatus waitingStatus;
     private LocalDateTime visitedTime;
+    private LocalDateTime canceledTime;
 }

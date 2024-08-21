@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Waiting List</title>
+</head>
+<body>
+<h1>Waiting List</h1>
+
+<!-- 버튼들 -->
+<div>
+    <button th:onclick="|window.location.href='@{/my-seat-dang/waiting(status=0)}'|">방문 예정</button>
+    <button th:onclick="|window.location.href='@{/my-seat-dang/waiting(status=1)}'|">방문 완료</button>
+    <button th:onclick="|window.location.href='@{/my-seat-dang/waiting(status=2)}'|">취소/노쇼</button>
+</div>
+
+<hr/>
+
+<!-- 웨이팅 리스트 -->
+<div>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Store Name</th>
+            <th>Waiting Number</th>
+            <th>People Count</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="waiting : ${waitings}">
+            <td th:text="${waiting.storeName}">Store Name</td>
+            <td th:text="${waiting.waitingNumber}">Waiting Number</td>
+            <td th:text="${waiting.peopleCount}">People Count</td>
+            <td th:text="${waiting.waitingStatus}">Status</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

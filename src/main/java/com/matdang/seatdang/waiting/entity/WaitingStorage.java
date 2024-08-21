@@ -39,10 +39,11 @@ public class WaitingStorage {
     @Enumerated(EnumType.STRING)
     private WaitingStatus waitingStatus;
     private LocalDateTime visitedTime;
+    private LocalDateTime canceledTime;
 
-    public WaitingStorage(Long waitingNumber, Long waitingOrder, Long storeId, Long customerId
-            , String customerPhone, Long peopleCount, LocalDateTime createdDate, WaitingStatus waitingStatus,
-                          LocalDateTime visitedTime) {
+    public WaitingStorage(Long waitingNumber, Long waitingOrder, Long storeId, Long customerId,
+                          String customerPhone, Integer peopleCount, LocalDateTime createdDate,
+                          WaitingStatus waitingStatus, LocalDateTime visitedTime, LocalDateTime canceledTime) {
         this.waitingNumber = waitingNumber;
         this.waitingOrder = waitingOrder;
         this.storeId = storeId;
@@ -50,5 +51,6 @@ public class WaitingStorage {
         this.createdDate = createdDate;
         this.waitingStatus = waitingStatus;
         this.visitedTime = visitedTime;
+        this.canceledTime = canceledTime;
     }
 }
