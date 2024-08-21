@@ -16,6 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class AwaitingWaitingResponse {
     private Long waitingId;
     private Long waitingNumber;
+    private Long waitingOrder;
     private WaitingStatus waitingStatus;
     private Integer peopleCount;
     private String storeName;
@@ -27,6 +28,7 @@ public class AwaitingWaitingResponse {
         AwaitingWaitingResponse awaitingWaitingResponse = new AwaitingWaitingResponse();
         awaitingWaitingResponse.waitingId = waiting.getId();
         awaitingWaitingResponse.waitingNumber = waiting.getWaitingNumber();
+        awaitingWaitingResponse.waitingOrder = waiting.getWaitingOrder();
         awaitingWaitingResponse.waitingStatus = waiting.getWaitingStatus();
         awaitingWaitingResponse.createdDate = waiting.getCreatedDate();
         awaitingWaitingResponse.peopleCount = waiting.getCustomerInfo().getPeopleCount();
