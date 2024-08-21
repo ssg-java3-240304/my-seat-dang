@@ -6,17 +6,24 @@ import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
+import com.matdang.seatdang.waiting.repository.query.WaitingQueryRepository;
+import com.matdang.seatdang.waiting.repository.query.dto.WaitingDto;
+import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class WaitingCustomerService {
     private final WaitingRepository waitingRepository;
+    private final WaitingQueryRepository waitingQueryRepository;
     private final AuthService authService;
 
+
+    @Transactional
     public Long createWaiting(Long storeId, Integer peopleCount) {
         Member customer = authService.getAuthenticatedMember();
 
@@ -34,5 +41,18 @@ public class WaitingCustomerService {
                 .build();
 
         return waitingRepository.save(waiting).getId();
+    }
+
+    public List<WaitingInfoDto> showWaiting(int status) {
+        Long memberId = authService.getAuthenticatedMember().getMemberId();
+        if (status <= 1) {
+            return waitingQueryRepository.findAllByCustomerIdAndWaitingStatus(
+                    memberId, WaitingStatus.findWaiting(status));
+        }
+        if (status == 2) {
+            return waitingQueryRepository.findAllByCustomerIdAndCancelStatus(memberId);
+        }
+
+        return null;
     }
 }
