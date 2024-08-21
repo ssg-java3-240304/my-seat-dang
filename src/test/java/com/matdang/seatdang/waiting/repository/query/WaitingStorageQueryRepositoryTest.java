@@ -103,7 +103,66 @@ class WaitingStorageQueryRepositoryTest {
         // then
         assertThat(findResult.getContent().size()).isEqualTo(3);
         assertThat(findResult.getContent()).extracting(WaitingInfoDto::getWaitingStatus)
-                .containsExactlyInAnyOrder(WaitingStatus.NO_SHOW, WaitingStatus.CUSTOMER_CANCELED, WaitingStatus.SHOP_CANCELED);
+                .containsExactlyInAnyOrder(WaitingStatus.NO_SHOW, WaitingStatus.CUSTOMER_CANCELED,
+                        WaitingStatus.SHOP_CANCELED);
         assertThat(findResult.getContent()).extracting(WaitingInfoDto::getStoreName).contains("마싯당");
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"WAITING", "VISITED"})
+    @DisplayName("고객id로 특정 웨이팅 상태 개수 찾기")
+    void countWaitingStorageByCustomerIdAndWaitingStatus(String status) {
+        // given
+        Store storeA = storeRepository.save(Store.builder()
+                .storeName("마싯당")
+                .build());
+
+        for (WaitingStatus waitingStatus : WaitingStatus.values()) {
+            waitingStorageRepository.save(WaitingStorage.builder()
+                    .waitingNumber(1L)
+                    .waitingOrder(1L)
+                    .storeId(storeA.getStoreId())
+                    .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+                    .waitingStatus(waitingStatus)
+                    .visitedTime(null)
+                    .build());
+        }
+        em.flush();
+        em.clear();
+
+        // when
+        int findResult = waitingStorageQueryRepository.countWaitingStorageByCustomerIdAndWaitingStatus(1L,
+                WaitingStatus.valueOf(status));
+
+        // then
+        assertThat(findResult).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("고객id로 취소 상태 웨이팅 개수 찾기")
+    void countWaitingStorageByCustomerIdAndCancelStatus() {
+        // given
+        Store storeA = storeRepository.save(Store.builder()
+                .storeName("마싯당")
+                .build());
+
+        for (WaitingStatus waitingStatus : WaitingStatus.values()) {
+            waitingStorageRepository.save(WaitingStorage.builder()
+                    .waitingNumber(1L)
+                    .waitingOrder(1L)
+                    .storeId(storeA.getStoreId())
+                    .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+                    .waitingStatus(waitingStatus)
+                    .visitedTime(null)
+                    .build());
+        }
+        em.flush();
+        em.clear();
+
+        // when
+        int findResult = waitingStorageQueryRepository.countWaitingStorageByCustomerIdAndCancelStatus(1L);
+
+        // then
+        assertThat(findResult).isEqualTo(3);
     }
 }
