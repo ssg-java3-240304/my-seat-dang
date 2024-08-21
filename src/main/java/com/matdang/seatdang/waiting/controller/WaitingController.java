@@ -160,7 +160,7 @@ public class WaitingController {
                                 .waitingNumber(i)
                                 .waitingOrder(i)
                                 .storeId(1L)
-                                .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+                                .customerInfo(new CustomerInfo(2L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
                                 .waitingStatus(value)
                                 .visitedTime(null)
                                 .build());
