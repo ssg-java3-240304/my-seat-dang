@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link th:href="@{/css/customer/detail-page.css}" rel="stylesheet">
-
+    <link th:href="@{/css/customer/customcss/storeDetail.css}" rel="stylesheet">
 </head>
 <body>
 <main layout:fragment="main">
@@ -309,62 +309,62 @@ class="read_more", style="display: none;"-->
 
             <div class="col-lg-4" id="sidebar_fixed">
                 <div class="box_booking mobile_fixed">
-<!--                    <div class="head">-->
-<!--&lt;!&ndash;                        <h3>상품을 먼저 선택해주세요.</h3>&ndash;&gt;-->
-<!--&lt;!&ndash;                        <div class="offer">Up to -40% off</div>&ndash;&gt;-->
-<!--&lt;!&ndash;                        <a href="#0" class="close_panel_mobile"><i class="icon_close"></i></a>&ndash;&gt;-->
-<!--                    </div>-->
-                    <!-- /head -->
-                    <div class="main">
-                        <input type="text" id="datepicker_field">
-                        <div id="DatePicker"></div>
-                        <div class="dropdown time">
-                            <a href="#" data-bs-toggle="dropdown">Hour <span id="selected_time"></span></a>
-                            <div class="dropdown-menu">
-                                <div class="dropdown-menu-content">
-                                    <div class="radio_select add_bottom_15">
-                                        <ul id="time-list" class="time-list">
-                                        </ul>
+                    <form th:action="@{/my-seat-dang/reservation/create-custom}" method="post">
+                        <div class="head">
+                            <h3>주문제작 상품 예약</h3>
+    <!--                        <div class="offer">Up to -40% off</div>-->
+                            <a href="#0" class="close_panel_mobile"><i class="icon_close"></i></a>
+                        </div>
+
+                        <div class="main">
+                            <input type="text" id="datepicker_field" name="date">
+                            <div id="DatePicker"></div>
+                            <div class="dropdown time last-option">
+                                <a href="#" data-bs-toggle="dropdown">Hour <span id="selected_time"></span></a>
+                                <div class="dropdown-menu">
+                                    <div class="dropdown-menu-content">
+                                        <div class="radio_select hour-container add_bottom_15" id="time-list">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <!-- /dropdown -->
-                        <div class="dropdown people">
-                            <a href="#" data-bs-toggle="dropdown">People <span id="selected_people"></span></a>
-                            <div class="dropdown-menu">
-                                <div class="dropdown-menu-content">
-                                    <h4>How many people?</h4>
-                                    <div class="radio_select">
-                                        <ul>
-                                            <li>
-                                                <input type="radio" id="people_1" name="people" value="1">
-                                                <label for="people_1">1</label>
-                                            </li>
-                                            <li>
-                                                <input type="radio" id="people_2" name="people" value="2">
-                                                <label for="people_2">2</label>
-                                            </li>
-                                            <li>
-                                                <input type="radio" id="people_3" name="people" value="3">
-                                                <label for="people_3">3</label>
-                                            </li>
-                                            <li>
-                                                <input type="radio" id="people_4" name="people" value="4 이상">
-                                                <label for="people_4">4 이상</label>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <!-- /people_select -->
+                            <!-- /dropdown -->
+                            <input name="store.storeId" th:value="${store.storeId}" hidden="hidden">
+                            <input name="store.storeName" th:value="${store.storeName}" hidden="hidden">
+                            <input name="store.storePhone" th:value="${store.phone}" hidden="hidden">
+                            <input name="menuList[0].menuName" th:value="${menus.get(0).menuName}" hidden="hidden">
+                            <input name="menuList[0].menuType" th:value="ORDER_MADE" hidden="hidden">
+                            <input name="menuList[0].imageUrl" th:value="${menus.get(0).image}" hidden="hidden">
+                            <input name="menuList[0].menuPrice" th:value="0" hidden="hidden">
+                            <div class="input-group mb-3">
+                                <label class="input-group-text d-flex w-auto" for="option_sheet">1. 케이크 맛</label>
+                                <select class="form-select" id="option_sheet" name="menuList[0].customMenuOpt.sheet" required>
+                                    <option selected disabled>맛을 선택하세요</option>
+                                    <option value="블루베리크림치즈">블루베리크림치즈</option>
+                                    <option value="당근호두파운드">당근호두파운드</option>
+                                    <option value="초코크림">초코크림</option>
+                                </select>
+                            </div>
+                            <div class="input-group mb-3 ">
+                                <label class="input-group-text d-flex w-auto" for="option_size">2. 사이즈</label>
+                                <select class="form-select" id="option_size" name="menuList[0].customMenuOpt.size" required>
+                                    <option selected disabled>사이즈를 선택하세요</option>
+                                    <option value="SS(지름11cm)">SS(지름11cm)</option>
+                                    <option value="M(지름14cm)">M(지름14cm)</option>
+                                    <option value="L(2호)">L(2호)</option>
+                                </select>
+                            </div>
+                            <label for="option_lettering" class="form-label">3.레터링</label>
+                            <input id="option_lettering" name="menuList[0].customMenuOpt.lettering" class="form-control menu-option  last-option" placeholder="ex) 마싯당 잘되게 해주세요...">
+                            <div class="btn_1_mobile">
+                                <button type="submit" class="btn_1 full-width mb_5">예약하기</button>
+                                <div class="text-center go-ai-image">
+                                    <span>아직 시안이 없으신가요?</span>
+                                    <a th:href="@{/my-seat-dang}">AI 시안 생성하러 가기</a>
                                 </div>
                             </div>
                         </div>
-                        <!-- /dropdown -->
-                        <div class="btn_1_mobile">
-                            <a href="booking.html" class="btn_1 full-width mb_5">Reserve Now</a>
-<!--                            <div class="text-center"><small>No money charged on this steps</small></div>-->
-                        </div>
-                    </div>
+                    </form>
                 </div>
                 <!-- /box_booking -->
                 <div class="btn_reserve_fixed"><a href="#0" class="btn_1 full-width">Reserve Now</a></div>
@@ -375,93 +375,83 @@ class="read_more", style="display: none;"-->
     </div>
     <!-- /container -->
 </main>
-<div layout:fragment="js">
+<th:block layout:fragment="js">
     <!-- 이 페이지 전용 스크립트 -->
     <script th:src="@{/js/customer/sticky_sidebar.min.js}"></script>
     <script th:src="@{/js/customer/specific_detail.js}"></script>
     <script th:src="@{/js/customer/datepicker.min.js}"></script>
-    <script th:src="@{/js/customer/datepicker_func_1.js}"></script>
-    <script>
-        // 더보기
-        // $(document).ready(function() {
-        //     var items = $('.menu_item');
-        //     var itemsToShow = 5;
-        //
-        //     function updateMenuDisplay() {
-        //         var totalItems = items.length;
-        //         if (totalItems <= itemsToShow) {
-        //             items.addClass('show'); // Show all items if 5 or fewer
-        //             $('.read_more').hide(); // Hide 'Show More' button
-        //             $('.read_more_close').hide(); // Hide 'Show Less' button
-        //         } else {
-        //             items.slice(0, itemsToShow).addClass('show'); // Show first 5 items
-        //             $('.read_more').show(); // Show 'Show More' button
-        //             $('.read_more_close').hide(); // Hide 'Show Less' button
-        //         }
-        //     }
-        //
-        //     $('.read_more').click(function() {
-        //         var visibleItems = items.filter('.show').length;
-        //         items.slice(visibleItems, visibleItems + itemsToShow).addClass('show').slideDown();
-        //
-        //         if (items.filter('.show').length === items.length) {
-        //             $(this).hide(); // Hide 'Show More' button if all items are visible
-        //             $('.read_more_close').show(); // Show 'Show Less' button if all items are visible
-        //         }
-        //     });
-        //
-        //     $('.read_more_close').click(function() {
-        //         items.removeClass('show').hide(); // Hide all items
-        //         items.slice(0, itemsToShow).addClass('show').slideDown(); // Show first 5 items
-        //         $('.read_more').show(); // Show 'Show More' button
-        //         $(this).hide(); // Hide 'Show Less' button
-        //     });
-        //     updateMenuDisplay();
-        // });
+    <script th:inline="javascript">
 
-        // 예약시 시간 선택
-        document.addEventListener('DOMContentLoaded', function () {
-            const timeList = document.getElementById('time-list');
-            const selectedTimeSpan = document.getElementById('selected_time');
-            const now = new Date();
+        let selectedDate = new Date();
+        const timeList = document.getElementById('time-list');
+        const selectedTimeSpan = document.getElementById('selected_time');
+        const now = new Date();
 
-            const generateTimes = () => {
-                let currentTime = new Date();
-                currentTime.setHours(0, 0, 0, 0); // Start at 00:00
+        // store.opentime과 store.closetime을 가져옵니다.
+        /* <![CDATA[ */
+        const storeOpenTime = /*[[${store.openTime}]]*/ '';
+        const storeCloseTime = /*[[${store.closeTime}]]*/ '';
+        /* ]]> */
+        console.log(storeOpenTime);
+        console.log(storeCloseTime);
 
-                for (let i = 0; i < 48; i++) { // 24 hours * 2 (30-minute intervals)
-                    const timeStr = currentTime.toTimeString().substring(0, 5);
-                    const timeValue = currentTime.toTimeString().substring(0, 5);
+        // 시간 목록을 생성하기 전에 기존 목록을 지웁니다.
+        const clearTimeList = () => {
+            while (timeList.firstChild) {
+                timeList.removeChild(timeList.firstChild);
+            }
+        };
 
-                    const listItem = document.createElement('li');
-                    listItem.innerHTML = `
-                        <input type="radio" id="time-${timeValue}" name="time" value="${timeValue}" ${currentTime < now ? 'disabled' : ''}>
-                        <label for="time-${timeValue}">${timeStr}</label>
-            `;
+        const generateTimes = () => {
+            let currentTime = new Date();
+            currentTime.setHours(0, 0, 0, 0); // Start at 00:00
 
-                    if (currentTime < now) {
-                        listItem.classList.add('disabled');
-                    }
+            // 매장의 오픈 시간과 클로즈 시간을 Date 객체로 변환합니다.
+            const [openHours, openMinutes] = storeOpenTime.split(':');
+            const [closeHours, closeMinutes] = storeCloseTime.split(':');
 
-                    if(currentTime < now) {
-                        listItem.style.display = 'none';
-                    }
+            const openTime = new Date();
+            openTime.setHours(openHours, openMinutes, 0, 0);
 
-                    // 시간 선택 시 선택한 시간 보이게 하기
-                    listItem.addEventListener('click', function(event) {
-                        if (!listItem.classList.contains('disabled')) {
-                            selectedTimeSpan.textContent = timeStr;
-                        }
-                    });
+            const closeTime = new Date();
+            closeTime.setHours(closeHours, closeMinutes, 0, 0);
 
-                    timeList.appendChild(listItem);
-                    currentTime.setMinutes(currentTime.getMinutes() + 30);
+            for (let i = 0; i < 48; i++) { // 24 hours * 2 (30-minute intervals)
+                const timeStr = currentTime.toTimeString().substring(0, 5);
+                const timeValue = currentTime.toTimeString().substring(0, 5);
+
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                            <input type="radio" id="time-${timeValue}" name="time" value="${timeValue}">
+                            <label for="time-${timeValue}">${timeStr}</label>
+                `;
+                listItem.classList.add("hour-item");
+
+                if (currentTime < openTime || currentTime >= closeTime) {
+                    listItem.style.display = 'none'; // 예약 가능 시간에 벗어난 시간은 숨깁니다.
                 }
-            };
 
-            generateTimes();
-        });
+                //금일의 지나간 예약시간은 숨깁니다
+                if (((selectedDate.getDate() === now.getDate()) &&(currentTime < now))) {
+                    listItem.classList.add('disabled-label');
+                    const inputElement = listItem.querySelector('input');
+                    inputElement.disabled = true;
+                    // listItem.classList.add('disabled');
+                }
+
+                listItem.addEventListener('click', function(event) {
+                    if (!listItem.classList.contains('disabled-label')) {
+                        selectedTimeSpan.textContent = timeStr;
+                    }
+                });
+
+                timeList.appendChild(listItem);
+                currentTime.setMinutes(currentTime.getMinutes() + 30);
+            }
+        };
+        generateTimes();
     </script>
-</div>
+    <script th:src="@{/js/customer/datepicker_func_3.js}"></script>
+</th:block>
 </body>
 </html>
