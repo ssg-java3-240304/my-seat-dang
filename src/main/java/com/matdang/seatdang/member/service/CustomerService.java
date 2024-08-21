@@ -44,6 +44,21 @@ public class CustomerService {
         return customerRepository.findById(memberId).orElseThrow(() -> new RuntimeException("Customer not found"));
     }
 
+    // ai 생성횟수 차감 로직
+    @Transactional
+    public void decrementImageGenLeft(Customer customer) {
+        if (customer.getImageGenLeft() > 0) {
+            // 빌더를 사용해 새로운 Customer 객체 생성
+            Customer updatedCustomer = customer.toBuilder()
+                    .imageGenLeft(customer.getImageGenLeft() - 1)
+                    .build();
+
+            // 변경된 객체를 저장
+            customerRepository.save(updatedCustomer);
+        }
+    }
+
+
 
 
     @Transactional
