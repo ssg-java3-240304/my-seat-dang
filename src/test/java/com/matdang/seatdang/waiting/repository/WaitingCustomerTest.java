@@ -8,6 +8,8 @@ import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -248,5 +250,31 @@ class WaitingCustomerTest {
         // then
         assertThat(result).isEqualTo(1);
         assertThat(waitingRepository.findById(waiting.getId()).get().getWaitingStatus()).isEqualTo(WaitingStatus.CUSTOMER_CANCELED);
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {"WAITING,true", "VISITED,false", "SHOP_CANCELED,false"})
+    @DisplayName("웨이팅을 등록한 상태에서 다시 웨이팅 불가")
+    void isRegisteredWaiting(String status, boolean result) {
+        // given
+        Store storeA = storeRepository.save(Store.builder()
+                .build());
+
+        Waiting waiting = waitingRepository.save(Waiting.builder()
+                .waitingNumber(1L)
+                .waitingOrder(1L)
+                .storeId(storeA.getStoreId())
+                .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+                .waitingStatus(WaitingStatus.valueOf(status))
+                .visitedTime(null)
+                .build());
+        em.flush();
+        em.clear();
+
+        // when
+        boolean findResult = waitingRepository.isRegisteredWaiting(storeA.getStoreId(), 1L);
+
+        // then
+        assertThat(findResult).isEqualTo(result);
     }
 }
