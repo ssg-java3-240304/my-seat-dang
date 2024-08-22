@@ -109,14 +109,14 @@ public class WaitingController {
     /**
      * test 실행시 주석 필요
      */
-//    @PostConstruct
+    @PostConstruct
     public void initData() throws InterruptedException {
         StoreVo storeVo = new StoreVo(1L, "달콤커피", StoreType.CUSTOM, "서울시강남구");
         storeRepository.save(Store.builder()
                 .storeName("마싯당")
                 .storeSetting(StoreSetting.builder()
                         .waitingPeopleCount(10)
-                        .waitingStatus(com.matdang.seatdang.store.vo.WaitingStatus.OPEN)
+                        .waitingStatus(com.matdang.seatdang.store.vo.WaitingStatus.CLOSE)
                         .waitingTime(WaitingTime.builder()
                                 .waitingOpenTime(LocalTime.of(9, 0))
                                 .waitingCloseTime(LocalTime.of(22, 0))
@@ -199,18 +199,22 @@ public class WaitingController {
                     .build());
         }
         {
-            long i = 41L;
+            long i = 51L;
             for (WaitingStatus value : WaitingStatus.values()) {
-                for (int j = 0; j < 10; j++, i++) {
-                    waitingStorageRepository.save(WaitingStorage.builder()
-                            .waitingNumber(i)
-                            .waitingOrder(i)
-                            .storeId(2L)
-                            .customerInfo(new CustomerInfo(2L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
-                            .createdDate(LocalDateTime.now())
-                            .waitingStatus(value)
-                            .visitedTime(null)
-                            .build());
+                if (value != WaitingStatus.WAITING) {
+
+                    for (int j = 0; j < 10; j++, i++) {
+                        waitingStorageRepository.save(WaitingStorage.builder()
+                                .id(i)
+                                .waitingNumber(i)
+                                .waitingOrder(i)
+                                .storeId(2L)
+                                .customerInfo(new CustomerInfo(2L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+                                .createdDate(LocalDateTime.now())
+                                .waitingStatus(value)
+                                .visitedTime(null)
+                                .build());
+                    }
                 }
             }
         }
