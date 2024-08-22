@@ -15,15 +15,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class WaitingCustomerService {
     private final WaitingRepository waitingRepository;
     private final WaitingQueryRepository waitingQueryRepository;
     private final AuthService authService;
 
-    @Transactional
-    public Long createWaiting(Long storeId, Integer peopleCount) {
+
+    public synchronized Long createWaiting(Long storeId, Integer peopleCount) {
         Member customer = authService.getAuthenticatedMember();
 
         Waiting waiting = Waiting.builder()
@@ -50,6 +49,8 @@ public class WaitingCustomerService {
         return waitingRepository.cancelWaitingByCustomer(waitingId) + result;
     }
 
+
+    @Transactional(readOnly = true)
     public Page<WaitingInfoProjection> showWaiting(int status, int page) {
         PageRequest pageable = PageRequest.of(page, 10);
         Long memberId = authService.getAuthenticatedMember().getMemberId();
