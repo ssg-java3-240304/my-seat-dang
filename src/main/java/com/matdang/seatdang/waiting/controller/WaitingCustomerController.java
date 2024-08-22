@@ -32,16 +32,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 public class WaitingCustomerController {
     private final WaitingCustomerService waitingCustomerService;
-    private final WaitingQueryRepository waitingQueryRepository;
     private final WaitingRepository waitingRepository;
     private final StoreRepository storeRepository;
     private final AuthService authService;
 
     @GetMapping("/test-store")
-    public String showStore(@RequestParam(defaultValue = "1") Long storeId, Model model) {
+    public String showStore(@RequestParam(defaultValue = "2") Long storeId, Model model) {
         Long memberId = authService.getAuthenticatedMember().getMemberId();
         boolean isRegistered = waitingRepository.isRegisteredWaiting(storeId, memberId);
-        isRegistered = false;
 
         model.addAttribute("storeId", storeId);
         model.addAttribute("isRegistered", isRegistered);
@@ -60,9 +58,9 @@ public class WaitingCustomerController {
     public String readyWaiting(@PathVariable Long storeId, Model model, HttpServletRequest request) {
         String referer = request.getHeader("Referer");
         // 유효한 referer URL인지 확인 (예: "https://example.com/somepage")
-//        if (referer == null || !referer.startsWith("http://localhost:8080/my-seat-dang/test-store")) {
-//            return "error/403";
-//        }
+        if (referer == null || !referer.startsWith("http://localhost:8080/my-seat-dang/test-store")) {
+            return "error/403";
+        }
 
         Store store = storeRepository.findByStoreId(storeId);
 
@@ -99,9 +97,9 @@ public class WaitingCustomerController {
     @GetMapping("/waiting/{waitingId}/awaiting/detail")
     public String showAwaitingWaitingDetail(@PathVariable Long waitingId, Model model, HttpServletRequest request) {
         String referer = request.getHeader("Referer");
-//        if (referer == null || !referer.startsWith("http://localhost:8080/my-seat-dang/waiting")) {
-//            return "error/403";
-//        }
+        if (referer == null || !referer.startsWith("http://localhost:8080/my-seat-dang/waiting")) {
+            return "error/403";
+        }
 
         Waiting waiting = waitingRepository.findById(waitingId).get();
         Store store = storeRepository.findByStoreId(waiting.getStoreId());
