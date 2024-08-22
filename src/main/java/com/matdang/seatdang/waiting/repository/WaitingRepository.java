@@ -74,7 +74,7 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
             + " and w.waitingStatus = com.matdang.seatdang.waiting.entity.WaitingStatus.WAITING")
     Integer countWaitingByStoreIdAndWaitingStatus(@Param("storeId") Long storeId);
 
-    @Modifying
+    @Modifying(clearAutomatically = true)
     @Query("update Waiting w"
             + " set w.waitingStatus = com.matdang.seatdang.waiting.entity.WaitingStatus.CUSTOMER_CANCELED,"
             + " w.canceledTime = CURRENT_TIMESTAMP"
