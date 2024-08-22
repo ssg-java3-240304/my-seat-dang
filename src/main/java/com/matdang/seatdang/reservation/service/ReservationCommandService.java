@@ -25,7 +25,7 @@ public class ReservationCommandService {
         saveRequestDto.setReservationStatus(ReservationStatus.DETAILING);
         boolean reservationExists =reservationRepository.findByCustomer_CustomerIdAndReservedAt(saveRequestDto.getCustomer().getCustomerId(), LocalDateTime.of(saveRequestDto.getDate(),saveRequestDto.getTime())).isPresent();
         if (reservationExists) {
-            throw new RuntimeException("같은 시간에 중복된 예약이 있습니다");
+            throw new ReservationException("같은 시간에 중복된 예약이 있습니다");
         }
         reservationRepository.save(saveRequestDto.toEntity());
     }
@@ -35,5 +35,9 @@ public class ReservationCommandService {
         Optional<Reservation> optReservation = reservationRepository.findById(reservationId);
         Reservation reservation = optReservation.orElseThrow( ()-> new ReservationException("예약을 찾을수 없습니다"));
         reservation.updateStatus(reservationStatus);
+    }
+
+    public void cancelReservation(Long reservationId) {
+
     }
 }
