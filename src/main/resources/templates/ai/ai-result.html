@@ -96,8 +96,7 @@
                                 </figure>
                                 <div class="post_info">
                                     <small th:text="${#temporals.format(image.createdAt, 'yyyy-MM-dd')}">생성 날짜</small>
-                                    <h1>입력한 값</h1>
-                                    <h2 th:text="${image.inputText}">사용자 입력</h2>
+                                    <h3 th:text="${image.inputText}"></h3>
                                     <p>이 이미지는 AI로 생성된 케이크 시안입니다.</p>
                                 </div>
                             </article>
@@ -212,9 +211,28 @@
     <!-- /container -->
 
     <!-- 로딩 인디케이터 추가 -->
+<!--    <div id="loading-indicator" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">-->
+<!--        <p>케이크 시안 생성중입니다 기다려 주세요🍰 <br> -마싯당-</p>-->
+<!--    </div>-->
+    <!-- 로딩 인디케이터 추가 -->
+<!--    <div id="loading-indicator" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">-->
+<!--        <div style="background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); text-align: center; max-width: 300px;">-->
+<!--            <p style="margin: 0; font-size: 16px; font-weight: 500;">-->
+<!--                케이크 시안 생성중입니다 <br> 조금만 기다려 주세요🍰 <br> -마싯당- -->
+<!--            </p>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    더 큰 버전-->
     <div id="loading-indicator" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-        <p>로딩 중...</p>
+        <div style="background-color: #fff; padding: 40px; border-radius: 20px; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); text-align: center; max-width: 500px;">
+            <p style="margin: 0; font-size: 24px; font-weight: 500;">
+                케이크 시안 생성중입니다 <br> 조금만 기다려 주세요🍰 <br> -마싯당-
+            </p>
+        </div>
     </div>
+
+
+
 
 </main>
 <!-- /main -->
@@ -230,53 +248,6 @@
     <script th:src="@{/js/customer/common_scripts.min.js}"></script>
     <script th:src="@{/js/customer/common_func.js}"></script>
     <script th:src="@{/js/customer/assets/validate.js}"></script>
-    <!--    <script>-->
-    <!--        $(document).ready(function () {-->
-    <!--            $('form').submit(function (event) {-->
-    <!--                event.preventDefault();-->
-
-    <!--                // 폼 데이터 수집-->
-    <!--                var formData = $(this).serialize();-->
-
-    <!--                // AJAX 요청-->
-    <!--                $.ajax({-->
-    <!--                    url: '/ai/generate',-->
-    <!--                    type: 'POST',-->
-    <!--                    data: formData,-->
-    <!--                    dataType: 'json',-->
-    <!--                    success: function (data) {-->
-    <!--                        if (data.imageUrl) {-->
-    <!--                            // 성공적으로 생성된 이미지 및 정보 처리-->
-    <!--                            var newArticle = `-->
-    <!--                            <div class="col-md-6">-->
-    <!--                                <article class="blog">-->
-    <!--                                    <figure>-->
-    <!--                                        <img src="${data.imageUrl}" alt="Generated Image">-->
-    <!--                                    </figure>-->
-    <!--                                    <div class="post_info">-->
-    <!--                                        <small>${data.cakeDescription} - ${data.generatedDate}</small>-->
-    <!--                                        <h2>AI 생성 이미지</h2>-->
-    <!--                                        <p>케이크 설명: ${data.cakeDescription}</p>-->
-    <!--                                    </div>-->
-    <!--                                </article>-->
-    <!--                            </div>-->
-    <!--                        `;-->
-
-    <!--                            // 새로운 글을 블로그 리스트에 추가-->
-    <!--                            $('.row').append(newArticle);-->
-    <!--                        } else if (data.message) {-->
-    <!--                            // 오류 메시지를 처리-->
-    <!--                            alert(data.message);-->
-    <!--                        }-->
-    <!--                    },-->
-    <!--                    error: function (xhr, status, error) {-->
-    <!--                        console.error('Error:', error);-->
-    <!--                        alert('요청 중 문제가 발생했습니다.');-->
-    <!--                    }-->
-    <!--                });-->
-    <!--            });-->
-    <!--        });-->
-    <!--    </script>-->
     <script>
         // 폼 전송 이벤트를 캡처
         $('#generateForm').submit(function (event) {
@@ -310,8 +281,7 @@
                 </figure>
                 <div class="post_info">
                     <small>${new Date(data.createdAt).toLocaleDateString()}</small>
-                    <h1>입력한 값</h1>
-                    <h2>${data.description}</h2>
+                    <h3>${data.description}</h3>
                     <p>이 이미지는 AI로 생성된 케이크 시안입니다.</p>
                 </div>
             </article>
@@ -327,8 +297,15 @@
                 },
                 error: function (xhr, status, error) {
                     $('#loading-indicator').hide();
+                    // console.error('Error:', error);
+                    // alert('요청 중 문제가 발생했습니다.');
                     console.error('Error:', error);
-                    alert('요청 중 문제가 발생했습니다.');
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        // 서버에서 보낸 오류 메시지를 표시
+                        alert(xhr.responseJSON.message);
+                    } else {
+                        alert('요청 중 문제가 발생했습니다.');
+                    }
                 }
             });
         });
