@@ -40,7 +40,7 @@ public interface WaitingQueryRepository extends JpaRepository<Waiting, Long> {
             + "com.matdang.seatdang.waiting.entity.WaitingStatus.CUSTOMER_CANCELED)")
     Page<WaitingDto> findAllByCancelStatus(@Param("storeId") Long storeId, Pageable pageable);
 
-    @Query("select new com.matdang.seatdang.waiting.entity.WaitingStorage(w.waitingNumber, w.waitingOrder,w.storeId,"
+    @Query("select new com.matdang.seatdang.waiting.entity.WaitingStorage(w.id, w.waitingNumber, w.waitingOrder,w.storeId,"
             + " w.customerInfo.customerId, w.customerInfo.customerPhone, w.customerInfo.peopleCount,"
             + " w.createdDate, w.waitingStatus, w.visitedTime, w.canceledTime) from Waiting w "
             + " where w.storeId = :storeId")
