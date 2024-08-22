@@ -10,6 +10,7 @@
             border-color: #0d6efd;
             box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.2);
         }
+
         .disabled-link {
             pointer-events: none;
             color: #6c757d;
@@ -43,6 +44,7 @@
             <th>Waiting Number</th>
             <th>People Count</th>
             <th>Status</th>
+            <th>Detail</th>
         </tr>
         </thead>
         <tbody>
@@ -51,6 +53,15 @@
             <td th:text="${waiting.waitingNumber}">Waiting Number</td>
             <td th:text="${waiting.peopleCount}">People Count</td>
             <td th:text="${waiting.waitingStatus}">Status</td>
+
+            <td>
+                <!-- Define the URL based on status -->
+                <a th:with="urlPath=${'/my-seat-dang/waiting/' + waiting.id +
+                  (status == 0 ? '/awaiting/detail' :
+                  (status == 1 ? '/visited/detail' :
+                  (status == 2 ? '/canceled/detail' : '')))}"
+                   th:href="${urlPath}" class="btn btn-info">상세</a>
+            </td>
         </tr>
         </tbody>
     </table>
@@ -62,7 +73,8 @@
     <ul class="pagination justify-content-center">
         <!-- Previous Button (Always Visible but Disabled if on First Page) -->
         <li class="page-item">
-            <a class="page-link" th:href="${currentPage == 0} ? '#' : @{/my-seat-dang/waiting(status=${status}, page=${currentPage - 1})}"
+            <a class="page-link"
+               th:href="${currentPage == 0} ? '#' : @{/my-seat-dang/waiting(status=${status}, page=${currentPage - 1})}"
                th:classappend="${currentPage == 0} ? 'disabled-link' : ''">
                 &laquo; Previous
             </a>
@@ -75,7 +87,8 @@
 
         <!-- Next Button (Always Visible but Disabled if on Last Page) -->
         <li class="page-item">
-            <a class="page-link" th:href="${currentPage == totalPages - 1} ? '#' : @{/my-seat-dang/waiting(status=${status}, page=${currentPage + 1})}"
+            <a class="page-link"
+               th:href="${currentPage == totalPages - 1} ? '#' : @{/my-seat-dang/waiting(status=${status}, page=${currentPage + 1})}"
                th:classappend="${currentPage == totalPages - 1} ? 'disabled-link' : ''">
                 Next &raquo;
             </a>
