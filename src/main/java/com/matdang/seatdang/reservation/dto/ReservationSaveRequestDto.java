@@ -6,9 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Builder
 @Data
@@ -18,8 +23,10 @@ public class ReservationSaveRequestDto {
     private StoreOwnerInfo storeOwner;
     private CustomerInfo customer;
     private StoreInfo store;
-    private LocalDateTime reservedAt;
-    private List<OrderedMenu> orderedMenuList;
+    @DateTimeFormat(pattern = "MM/dd/yyyy")
+    private LocalDate date;
+    private LocalTime time;
+    private List<ReservationRequestMenu> menuList;
     private ReservationStatus reservationStatus;
 
     public Reservation toEntity() {
@@ -28,9 +35,21 @@ public class ReservationSaveRequestDto {
                 .storeOwner(this.storeOwner)
                 .customer(this.customer)
                 .store(this.store)
-                .reservedAt(this.reservedAt)
-                .orderedMenuList(this.orderedMenuList)
+                .reservedAt(LocalDateTime.of(this.date, this.time))
+                .orderedMenuList(convertToOrderedMenuList())
                 .reservationStatus(this.reservationStatus)
                 .build();
+    }
+
+    private List<OrderedMenu> convertToOrderedMenuList() {
+        return this.menuList.stream()
+                .map(menu -> new OrderedMenu(
+                        menu.getMenuName(),
+                        menu.getMenuPrice(),
+                        menu.getImageUrl(),
+                        menu.getMenuType(),
+                        menu.getCustomMenuOpt()
+                ))
+                .collect(Collectors.toList());
     }
 }

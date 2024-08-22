@@ -55,8 +55,9 @@ class ReservationCommandServiceTest {
                 .store(new StoreInfo(store.getStoreId(), store.getStoreName(), "02-1234-1234"))
                 .storeOwner(new StoreOwnerInfo(storeOwner.getMemberId(), storeOwner.getMemberName()))
                 .customer(new CustomerInfo(1L, "이재용", "02-1234-1234"))
-                .reservedAt(LocalDateTime.of(2024,8,20,15,30))
-                .orderedMenuList(List.of(new OrderedMenu("떡케이크", 30000, "imageurl", null)))
+                .date(LocalDate.of(2024,8,20))
+                .time(LocalTime.of(15,30))
+                .menuList(List.of(new ReservationRequestMenu("떡케이크", 30000, "imageurl",null, null)))
                 .build();
 
         //when

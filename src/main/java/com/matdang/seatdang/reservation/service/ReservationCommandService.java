@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Slf4j
 @RequiredArgsConstructor
 @Transactional
@@ -19,7 +21,7 @@ public class ReservationCommandService {
     public void createCustomMenuReservation(ReservationSaveRequestDto saveRequestDto) {
         log.debug("create empty reservation dto: {}", saveRequestDto);
         saveRequestDto.setReservationStatus(ReservationStatus.DETAILING);
-        boolean reservationExists =reservationRepository.findByCustomer_CustomerIdAndReservedAt(saveRequestDto.getCustomer().getCustomerId(), saveRequestDto.getReservedAt()).isPresent();
+        boolean reservationExists =reservationRepository.findByCustomer_CustomerIdAndReservedAt(saveRequestDto.getCustomer().getCustomerId(), LocalDateTime.of(saveRequestDto.getDate(),saveRequestDto.getTime())).isPresent();
         if (reservationExists) {
             throw new RuntimeException("같은 시간에 중복된 예약이 있습니다");
         }

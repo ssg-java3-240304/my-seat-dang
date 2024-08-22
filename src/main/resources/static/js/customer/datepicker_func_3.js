@@ -1,3 +1,5 @@
+
+
 // Datepicker
 var dates = {}
 dates[new Date('10/23/2019')] = '-40%';
@@ -20,7 +22,13 @@ $('#DatePicker').datepicker({
             return [true, '', ''];
         }
     },
-
+    onSelect: function(dateText, inst) {
+        // 날짜가 선택될 때마다 콘솔에 'checked!' 출력
+        console.log('date click!!');
+        selectedDate = new Date(dateText);
+        clearTimeList();
+        generateTimes();
+    }
 
 
 });
