@@ -32,5 +32,7 @@
 <form id="cancelWaitingForm"  th:action="@{|/my-seat-dang/waiting/${waitingDetailResponse.waitingId}/awaiting/detail|}" method="post">
     <button type="submit">Cancel Waiting</button>
 </form>
+
+<a th:href="@{|/my-seat-dang/waiting?status=0|}" class="btn btn-secondary">Back to Waiting List</a>
 </body>
 </html>
