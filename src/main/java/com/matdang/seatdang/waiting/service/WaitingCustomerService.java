@@ -7,11 +7,15 @@ import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.repository.query.WaitingQueryRepository;
+import com.matdang.seatdang.waiting.repository.query.WaitingStorageQueryRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingDto;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
+import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoProjection;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class WaitingCustomerService {
     private final WaitingRepository waitingRepository;
     private final WaitingQueryRepository waitingQueryRepository;
+    private final WaitingStorageQueryRepository waitingStorageQueryRepository;
     private final AuthService authService;
 
 
@@ -46,15 +51,17 @@ public class WaitingCustomerService {
         return waitingRepository.save(waiting).getId();
     }
 
-    public Page<WaitingInfoDto> showWaiting(int status, int page) {
+    public Page<WaitingInfoProjection> showWaiting(int status, int page) {
         PageRequest pageable = PageRequest.of(page, 10);
         Long memberId = authService.getAuthenticatedMember().getMemberId();
+
         if (status <= 1) {
-            return waitingQueryRepository.findAllByCustomerIdAndWaitingStatus(
-                    memberId, WaitingStatus.findWaiting(status), pageable);
+            return waitingQueryRepository.findUnionAllByCustomerIdAndWaitingStatus(memberId,
+                    WaitingStatus.findWaiting(status),
+                    pageable);
         }
         if (status == 2) {
-            return waitingQueryRepository.findAllByCustomerIdAndCancelStatus(memberId, pageable);
+            return waitingQueryRepository.findUnionAllByCustomerIdAndCancelStatus(memberId, pageable);
         }
 
         return Page.empty();
