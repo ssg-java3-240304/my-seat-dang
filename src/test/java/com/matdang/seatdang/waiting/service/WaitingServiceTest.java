@@ -90,7 +90,7 @@ class WaitingServiceTest {
         updateRequest.setChangeStatus(status);
         updateRequest.setStoreId(shopId);
         updateRequest.setId(findWaitings.get(0).getId());
-        updateRequest.setWaitingNumber(1L);
+        updateRequest.setWaitingOrder(1L);
 
         // when
         waitingService.updateStatus(updateRequest);

@@ -108,7 +108,7 @@
                             <form th:action="@{/store-owner/waiting}" method="post">
                                 <input type="hidden" name="id" th:value="${waiting.id}"/>
                                 <input type="hidden" name="storeId" th:value="${storeId}"/>
-                                <input type="hidden" name="waitingNumber" th:value="${waiting.waitingOrder}"/>
+                                <input type="hidden" name="waitingOrder" th:value="${waiting.waitingOrder}"/>
                                 <input type="hidden" name="changeStatus" value="2"/>
                                 <button type="submit" class="btn btn-danger">취소</button>
                             </form>

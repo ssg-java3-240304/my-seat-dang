@@ -24,8 +24,8 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
     @Query("update Waiting w set w.waitingOrder = w.waitingOrder-1"
             + " where w.waitingStatus  = com.matdang.seatdang.waiting.entity.WaitingStatus.WAITING"
             + " and w.storeId = :storeId"
-            + " and w.waitingOrder > :waitingNumber")
-    int updateWaitingNumberByCancel(@Param("storeId") Long storeId, @Param("waitingNumber") Long waitingNumber);
+            + " and w.waitingOrder > :waitingOrder")
+    int updateWaitingNumberByCancel(@Param("storeId") Long storeId, @Param("waitingOrder") Long waitingOrder);
 
     @Modifying
     @Query("update Waiting w set w.waitingStatus =  com.matdang.seatdang.waiting.entity.WaitingStatus.VISITED,"
@@ -77,7 +77,6 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
     Integer countWaitingByStoreIdAndWaitingStatus(@Param("storeId") Long storeId);
 
     @Modifying
-    @Transactional
     @Query("update Waiting w"
             + " set w.waitingStatus = com.matdang.seatdang.waiting.entity.WaitingStatus.CUSTOMER_CANCELED,"
             + " w.canceledTime = CURRENT_TIMESTAMP"

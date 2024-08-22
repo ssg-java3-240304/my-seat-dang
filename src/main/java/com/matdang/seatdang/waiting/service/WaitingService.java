@@ -46,7 +46,7 @@ public class WaitingService {
             }
             if (updateRequest.getChangeStatus() == 2) {
                 int canceled = waitingRepository.updateWaitingNumberByCancel(updateRequest.getStoreId(),
-                        updateRequest.getWaitingNumber());
+                        updateRequest.getWaitingOrder());
                 return waitingRepository.updateStatusByShopCancel(updateRequest.getId()) + canceled;
             }
         }
