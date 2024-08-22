@@ -8,8 +8,11 @@ import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
+import com.matdang.seatdang.waiting.entity.WaitingStorage;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
+import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
+import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoProjection;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -44,6 +47,8 @@ class WaitingCustomerServiceTest {
     private StoreRepository storeRepository;
     @Autowired
     private WaitingRepository waitingRepository;
+    @Autowired
+    private WaitingStorageRepository waitingStorageRepository;
     @Autowired
     private EntityManager em;
     @MockBean
@@ -113,7 +118,7 @@ class WaitingCustomerServiceTest {
     }
 
     @ParameterizedTest
-    @CsvSource(value = {"0,10","1,10", "2,30"})
+    @CsvSource(value = {"0,20","1,20", "2,60"})
     @DisplayName("웨이팅 상태별 조회")
     void showWaiting(int status, int size) {
         Store storeA = storeRepository.save(Store.builder()
@@ -125,6 +130,14 @@ class WaitingCustomerServiceTest {
             for (WaitingStatus value : WaitingStatus.values()) {
                 for (int j = 0; j < 10; j++, i++) {
                     waitingRepository.save(Waiting.builder()
+                            .waitingNumber(i)
+                            .waitingOrder(i)
+                            .storeId(storeA.getStoreId())
+                            .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+                            .waitingStatus(value)
+                            .visitedTime(null)
+                            .build());
+                    waitingStorageRepository.save(WaitingStorage.builder()
                             .waitingNumber(i)
                             .waitingOrder(i)
                             .storeId(storeA.getStoreId())
@@ -158,8 +171,7 @@ class WaitingCustomerServiceTest {
 
 
         // when
-        Page<WaitingInfoDto> findResult = waitingCustomerService.showWaiting(status,0);
-        System.out.println("findResult = " + findResult);
+        Page<WaitingInfoProjection> findResult = waitingCustomerService.showWaiting(status, 0);
 
         // then
         assertThat(findResult.getTotalElements()).isEqualTo(size);
