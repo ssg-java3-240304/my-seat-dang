@@ -101,7 +101,6 @@ public class WaitingQueryCustomerTest {
         em.flush();
         em.clear();
 
-
         PageRequest pageable = PageRequest.of(0, 100);
 
         // when
@@ -111,7 +110,8 @@ public class WaitingQueryCustomerTest {
         // then
         assertThat(findResult.getContent().size()).isEqualTo(3);
         assertThat(findResult.getContent()).extracting(WaitingInfoDto::getWaitingStatus)
-                .containsExactlyInAnyOrder(WaitingStatus.NO_SHOW, WaitingStatus.CUSTOMER_CANCELED, WaitingStatus.SHOP_CANCELED);
+                .containsExactlyInAnyOrder(WaitingStatus.NO_SHOW, WaitingStatus.CUSTOMER_CANCELED,
+                        WaitingStatus.SHOP_CANCELED);
         assertThat(findResult.getContent()).extracting(WaitingInfoDto::getStoreName).contains("마싯당");
     }
 
@@ -170,6 +170,49 @@ public class WaitingQueryCustomerTest {
         assertThat(findResult.getTotalElements()).isEqualTo(2);
         assertThat(findResult.getContent()).extracting(WaitingInfoProjection::getWaitingStatus)
                 .containsOnly(WaitingStatus.valueOf(status));
+        assertThat(findResult.getContent()).extracting(WaitingInfoProjection::getStoreName).containsOnly("마싯당");
+    }
+
+    @Test
+    @DisplayName("고객 id로 취소상태의 웨이팅(기존 + 저장소) 모두 가져오기")
+    void findUnionAllByCustomerIdAndCancelStatus() {
+        // given
+        Store storeA = storeRepository.save(Store.builder()
+                .storeName("마싯당")
+                .build());
+
+        for (WaitingStatus status : WaitingStatus.values()) {
+            waitingRepository.save(Waiting.builder()
+                    .waitingNumber(1L)
+                    .waitingOrder(1L)
+                    .storeId(storeA.getStoreId())
+                    .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+                    .waitingStatus(status)
+                    .visitedTime(null)
+                    .build());
+            waitingStorageRepository.save(WaitingStorage.builder()
+                    .waitingNumber(1L)
+                    .waitingOrder(1L)
+                    .storeId(storeA.getStoreId())
+                    .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+                    .waitingStatus(status)
+                    .visitedTime(null)
+                    .build());
+        }
+        em.flush();
+        em.clear();
+
+        PageRequest pageable = PageRequest.of(0, 10);
+
+        // when
+        Page<WaitingInfoProjection> findResult = waitingQueryRepository.findUnionAllByCustomerIdAndCancelStatus(
+                1L, pageable);
+
+        // then
+        assertThat(findResult.getTotalElements()).isEqualTo(3+3);
+        assertThat(findResult.getContent()).extracting(WaitingInfoProjection::getWaitingStatus)
+                .containsOnly(WaitingStatus.NO_SHOW, WaitingStatus.CUSTOMER_CANCELED,
+                        WaitingStatus.SHOP_CANCELED);
         assertThat(findResult.getContent()).extracting(WaitingInfoProjection::getStoreName).containsOnly("마싯당");
     }
 }
