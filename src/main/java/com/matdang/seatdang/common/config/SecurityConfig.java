@@ -19,6 +19,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.web.client.RestTemplate;
 
@@ -67,7 +68,7 @@ public class SecurityConfig {
                         .requestMatchers("/payment/**").permitAll() // /payment 하위 경로는 인증 없이 허용
                         .requestMatchers("/admin/**").hasRole("ADMIN") // ROLE_ADMIN 권한이 있는 사용자만 허용
                         .requestMatchers("/my-seat-dang/mypage/**").hasRole("CUSTOMER") // ROLE_Customer
-                        .requestMatchers("/store/**").hasRole("STORE_OWNER") // ROLE_STORE_OWNER 권한이 있는 사용자만 허용
+                        .requestMatchers("/store-owner/**").hasRole("STORE_OWNER") // ROLE_STORE_OWNER 권한이 있는 사용자만 허용
                         .anyRequest().authenticated() // 나머지 로그인 사용자만 이용가능
                 )
                 .oauth2Login(oauth2 -> oauth2
@@ -83,18 +84,19 @@ public class SecurityConfig {
                         .loginProcessingUrl("/loginProc")
                         .usernameParameter("memberEmail") // 현재 name = "memberEmail" // 기본인 username이 아니라서 써줌
                         .passwordParameter("memberPassword") // 현재 name = "memberPassword" // 기본인 password가 아니라서 써줌
-                        .successHandler((request, response, authentication) -> {
-                            // 사용자가 로그인하기 전에 가려고 했던 URL을 가져옴
-                            SavedRequest savedRequest = (SavedRequest) request.getSession().getAttribute("SPRING_SECURITY_SAVED_REQUEST");
-
-                            // 만약 savedRequest가 있으면 그 URL로 리다이렉트, 없으면 기본 URL로 리다이렉트
-                            if (savedRequest != null) {
-                                String targetUrl = savedRequest.getRedirectUrl();
-                                response.sendRedirect(targetUrl);
-                            } else {
-                                response.sendRedirect("/my-seat-dang");
-                            }
-                        })
+//                        .successHandler((request, response, authentication) -> {
+//                            // 사용자가 로그인하기 전에 가려고 했던 URL을 가져옴
+//                            SavedRequest savedRequest = (SavedRequest) request.getSession().getAttribute("SPRING_SECURITY_SAVED_REQUEST");
+//
+//                            // 만약 savedRequest가 있으면 그 URL로 리다이렉트, 없으면 기본 URL로 리다이렉트
+//                            if (savedRequest != null) {
+//                                String targetUrl = savedRequest.getRedirectUrl();
+//                                response.sendRedirect(targetUrl);
+//                            } else {
+//                                response.sendRedirect("/my-seat-dang");
+//                            }
+//                        })
+                        .successHandler(customAuthenticationSuccessHandler())
                         .permitAll() // 아무나 가능
                 );
         http
@@ -173,6 +175,32 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
                 .requestMatchers("/assets/**","/css/**","/img/**","/js/**","/sass/**","/scss/**","/vendor/**","/video/**");
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
+        return (request, response, authentication) -> {
+            String targetUrl;
+
+            // 사용자의 역할에 따라 리다이렉트할 URL 결정
+            if (authentication.getAuthorities().stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"))) {
+                targetUrl = "/admin/main";
+            } else if (authentication.getAuthorities().stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_STORE_OWNER"))) {
+                targetUrl = "/store-owner/main";
+            } else if (authentication.getAuthorities().stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_CUSTOMER"))) {
+                targetUrl = "/my-seat-dang";
+            } else {
+                targetUrl = "/my-seat-dang"; // 기본 URL
+            }
+
+            // 사용자가 로그인하기 전에 가려고 했던 URL이 있는지 확인
+            SavedRequest savedRequest = (SavedRequest) request.getSession().getAttribute("SPRING_SECURITY_SAVED_REQUEST");
+            if (savedRequest != null) {
+                targetUrl = savedRequest.getRedirectUrl();
+            }
+
+            response.sendRedirect(targetUrl);
+        };
     }
 
 
