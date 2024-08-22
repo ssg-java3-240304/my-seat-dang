@@ -3,6 +3,7 @@ package com.matdang.seatdang.waiting.controller.dto;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
+import com.matdang.seatdang.waiting.entity.WaitingStorage;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -24,14 +25,23 @@ public class CanceledWaitingResponse {
     @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime canceledTime;
 
-    public static CanceledWaitingResponse create(Waiting waiting, Store store) {
+    public static CanceledWaitingResponse create(Object waiting, Store store) {
         CanceledWaitingResponse canceledWaitingResponse = new CanceledWaitingResponse();
-        canceledWaitingResponse.waitingNumber = waiting.getWaitingNumber();
-        canceledWaitingResponse.waitingStatus = waiting.getWaitingStatus();
-        canceledWaitingResponse.createdDate = waiting.getCreatedDate();
-        canceledWaitingResponse.peopleCount = waiting.getCustomerInfo().getPeopleCount();
-        canceledWaitingResponse.canceledTime = waiting.getCanceledTime();
-        canceledWaitingResponse.storeName = store.getStoreName();
+        if (waiting instanceof Waiting) {
+            canceledWaitingResponse.waitingNumber = ((Waiting) waiting).getWaitingNumber();
+            canceledWaitingResponse.waitingStatus = ((Waiting) waiting).getWaitingStatus();
+            canceledWaitingResponse.createdDate = ((Waiting) waiting).getCreatedDate();
+            canceledWaitingResponse.peopleCount = ((Waiting) waiting).getCustomerInfo().getPeopleCount();
+            canceledWaitingResponse.canceledTime = ((Waiting) waiting).getCanceledTime();
+            canceledWaitingResponse.storeName = store.getStoreName();
+        } else if (waiting instanceof WaitingStorage) {
+            canceledWaitingResponse.waitingNumber = ((WaitingStorage) waiting).getWaitingNumber();
+            canceledWaitingResponse.waitingStatus = ((WaitingStorage) waiting).getWaitingStatus();
+            canceledWaitingResponse.createdDate = ((WaitingStorage) waiting).getCreatedDate();
+            canceledWaitingResponse.peopleCount = ((WaitingStorage) waiting).getCustomerInfo().getPeopleCount();
+            canceledWaitingResponse.canceledTime = ((WaitingStorage) waiting).getCanceledTime();
+            canceledWaitingResponse.storeName = store.getStoreName();
+        }
 
         return canceledWaitingResponse;
     }

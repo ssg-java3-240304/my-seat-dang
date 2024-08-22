@@ -3,6 +3,7 @@ package com.matdang.seatdang.waiting.controller.dto;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
+import com.matdang.seatdang.waiting.entity.WaitingStorage;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -24,15 +25,25 @@ public class AwaitingWaitingResponse {
     @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime createdDate;
 
-    public static AwaitingWaitingResponse create(Waiting waiting, Store store) {
+    public static AwaitingWaitingResponse create(Object waiting, Store store) {
         AwaitingWaitingResponse awaitingWaitingResponse = new AwaitingWaitingResponse();
-        awaitingWaitingResponse.waitingId = waiting.getId();
-        awaitingWaitingResponse.waitingNumber = waiting.getWaitingNumber();
-        awaitingWaitingResponse.waitingOrder = waiting.getWaitingOrder();
-        awaitingWaitingResponse.waitingStatus = waiting.getWaitingStatus();
-        awaitingWaitingResponse.createdDate = waiting.getCreatedDate();
-        awaitingWaitingResponse.peopleCount = waiting.getCustomerInfo().getPeopleCount();
-        awaitingWaitingResponse.storeName = store.getStoreName();
+        if (waiting instanceof Waiting) {
+            awaitingWaitingResponse.waitingId = ((Waiting) waiting).getId();
+            awaitingWaitingResponse.waitingNumber = ((Waiting) waiting).getWaitingNumber();
+            awaitingWaitingResponse.waitingOrder = ((Waiting) waiting).getWaitingOrder();
+            awaitingWaitingResponse.waitingStatus = ((Waiting) waiting).getWaitingStatus();
+            awaitingWaitingResponse.createdDate = ((Waiting) waiting).getCreatedDate();
+            awaitingWaitingResponse.peopleCount = ((Waiting) waiting).getCustomerInfo().getPeopleCount();
+            awaitingWaitingResponse.storeName = store.getStoreName();
+        } else if (waiting instanceof WaitingStorage) {
+            awaitingWaitingResponse.waitingId = ((WaitingStorage) waiting).getId();
+            awaitingWaitingResponse.waitingNumber = ((WaitingStorage) waiting).getWaitingNumber();
+            awaitingWaitingResponse.waitingOrder = ((WaitingStorage) waiting).getWaitingOrder();
+            awaitingWaitingResponse.waitingStatus = ((WaitingStorage) waiting).getWaitingStatus();
+            awaitingWaitingResponse.createdDate = ((WaitingStorage) waiting).getCreatedDate();
+            awaitingWaitingResponse.peopleCount = ((WaitingStorage) waiting).getCustomerInfo().getPeopleCount();
+            awaitingWaitingResponse.storeName = store.getStoreName();
+        }
 
         return awaitingWaitingResponse;
     }
