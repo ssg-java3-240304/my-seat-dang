@@ -38,9 +38,10 @@ public class WaitingCustomerController {
     private final AuthService authService;
 
     @GetMapping("/test-store")
-    public String showStore(@RequestParam(defaultValue = "2") Long storeId, Model model) {
+    public String showStore(@RequestParam(defaultValue = "1") Long storeId, Model model) {
         Long memberId = authService.getAuthenticatedMember().getMemberId();
         boolean isRegistered = waitingRepository.isRegisteredWaiting(storeId, memberId);
+        isRegistered = false;
 
         model.addAttribute("storeId", storeId);
         model.addAttribute("isRegistered", isRegistered);
@@ -59,9 +60,9 @@ public class WaitingCustomerController {
     public String readyWaiting(@PathVariable Long storeId, Model model, HttpServletRequest request) {
         String referer = request.getHeader("Referer");
         // 유효한 referer URL인지 확인 (예: "https://example.com/somepage")
-        if (referer == null || !referer.startsWith("http://localhost:8080/my-seat-dang/test-store")) {
-            return "error/403";
-        }
+//        if (referer == null || !referer.startsWith("http://localhost:8080/my-seat-dang/test-store")) {
+//            return "error/403";
+//        }
 
         Store store = storeRepository.findByStoreId(storeId);
 
@@ -98,9 +99,9 @@ public class WaitingCustomerController {
     @GetMapping("/waiting/{waitingId}/awaiting/detail")
     public String showAwaitingWaitingDetail(@PathVariable Long waitingId, Model model, HttpServletRequest request) {
         String referer = request.getHeader("Referer");
-        if (referer == null || !referer.startsWith("http://localhost:8080/my-seat-dang/waiting")) {
-            return "error/403";
-        }
+//        if (referer == null || !referer.startsWith("http://localhost:8080/my-seat-dang/waiting")) {
+//            return "error/403";
+//        }
 
         Waiting waiting = waitingRepository.findById(waitingId).get();
         Store store = storeRepository.findByStoreId(waiting.getStoreId());
@@ -111,8 +112,8 @@ public class WaitingCustomerController {
 
     @PostMapping("/waiting/{waitingId}/awaiting/detail")
     public String cancelWaiting(@PathVariable Long waitingId, RedirectAttributes redirectAttributes) {
-        int result = waitingRepository.cancelWaitingByCustomer(waitingId);
-        if (result == 1) {
+        int result = waitingCustomerService.cancelWaitingByCustomer(waitingId);
+        if (result > 0) {
             log.info("=== 웨이팅 고객 취소 ===");
         } else {
             log.error("== 웨이팅 고객 취소 오류 ===");
