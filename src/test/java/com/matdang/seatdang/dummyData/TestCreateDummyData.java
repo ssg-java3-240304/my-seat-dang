@@ -152,7 +152,7 @@ public class TestCreateDummyData {
                                     .build()
                             )
                             .build();
-                }else if(2<storeTypeFixer && storeTypeFixer<=4){
+                }else if(2 <= storeTypeFixer && storeTypeFixer<4){
                     store = Store.builder()
                             .storeName(name)
                             .storeAddress(addr)
