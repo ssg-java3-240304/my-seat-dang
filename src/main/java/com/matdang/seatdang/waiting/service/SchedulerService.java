@@ -29,7 +29,7 @@ public class SchedulerService {
     private final WaitingStorageRepository waitingStorageRepository;
 
     // 매일 오전 5시에 실행
-    @Scheduled(cron = "0 30 * * * ?")
+    @Scheduled(cron = "0 0 5 * * ?")
     public void relocateWaitingData() {
         log.info("[Relocate Waiting Data] This runs at 5:00 AM every day.");
 
