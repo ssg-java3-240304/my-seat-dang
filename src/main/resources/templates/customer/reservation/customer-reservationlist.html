@@ -481,7 +481,7 @@
                 formData.append("chat", new Blob([JSON.stringify({
                     sender: window.customerName,
                     roomNum: window.reservationId,
-                    msg: "시안입니다", // 메시지 내용 비워두기 (이미지만 전송)
+                    msg: "", // 메시지 내용 비워두기 (이미지만 전송)
                     customerImage: selectedImageUrl
                 })], { type: "application/json" }));
 

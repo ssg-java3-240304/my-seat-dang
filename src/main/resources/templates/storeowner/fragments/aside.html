@@ -45,10 +45,22 @@
                     </a>
                     <ul class="sidenav-second-level" id="collapseMenuListings">
                         <li>
-                            <a th:href="@{/storeowner/menu}">메뉴 목록</a>
+                            <a th:href="@{/store-owner/menu}">메뉴 목록</a>
                         </li>
                         <li>
-                            <a th:href="@{/storeowner/menu/regist}">메뉴 등록</a>
+                            <a th:href="@{/store-owner/menu/regist}">메뉴 등록</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="My Reservations">
+                    <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseReservationListings">
+                        <i class="fa fa-fw fa-list"></i>
+                        <span class="nav-link-text">예약 관리</span>
+                    </a>
+                    <ul class="sidenav-second-level" id="collapseReservationListings">
+                        <li>
+                            <a th:href="@{/store-owner/reservation/list}">예약 목록</a>
                         </li>
                     </ul>
                 </li>
