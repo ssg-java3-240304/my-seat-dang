@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{storeowner/layout/default}">
+<head>
+    <meta charset="UTF-8">
+    <title>Store Settings</title>
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => section.style.display = 'none');
+            document.getElementById(sectionId).style.display = 'block';
+
+            // 선택된 섹션을 세션 저장소에 저장
+            sessionStorage.setItem('selectedSection', sectionId);
+        }
+
+        function confirmStatusChange(status) {
+            let statusText = "";
+            switch (status) {
+                case 1:
+                    statusText = "웨이팅 접수";
+                    break;
+                case 2:
+                    statusText = "웨이팅 마감";
+                    break;
+                case 3:
+                    statusText = "웨이팅 이용불가";
+                    break;
+            }
+
+            if (confirm(`정말로 ${statusText} 상태로 변경하시겠습니까?`)) {
+                document.getElementById("statusForm").elements["status"].value = status;
+                document.getElementById("statusForm").submit();
+            }
+        }
+
+        window.onload = function() {
+            const sectionId = sessionStorage.getItem('selectedSection') || 'availableWaitingTimeSection';
+            showSection(sectionId);
+        }
+    </script>
+</head>
+<body>
+<div layout:fragment="content">
+    <h1>Store Settings</h1>
+
+    <!-- Section Buttons -->
+    <div>
+        <button type="button" onclick="showSection('availableWaitingTimeSection')">Available Waiting Time</button>
+        <button type="button" onclick="showSection('estimatedWaitingTimeSection')">Estimated Waiting Time</button>
+        <button type="button" onclick="showSection('waitingPeopleCountSection')">Waiting People Count</button>
+        <button type="button" onclick="showSection('waitingStatusSection')">Waiting Status</button>
+    </div>
+
+    <!-- Available Waiting Time Section -->
+    <div id="availableWaitingTimeSection" class="section">
+        <h2>Available Waiting Time Settings</h2>
+        <form th:action="@{/store-owner/setting/waiting/available-waiting-time}" method="post">
+            <div>
+                <label for="waitingOpenTime">Waiting Open Time:</label>
+                <input type="time" id="waitingOpenTime" name="waitingOpenTime"
+                       th:value="${availableWaitingTime.waitingOpenTime}"/>
+            </div>
+
+            <div>
+                <label for="waitingCloseTime">Waiting Close Time:</label>
+                <input type="time" id="waitingCloseTime" name="waitingCloseTime"
+                       th:value="${availableWaitingTime.waitingCloseTime}"/>
+            </div>
+
+            <button type="submit">Update</button>
+        </form>
+        <script>
+            document.querySelectorAll('input[type="time"]').forEach(input => {
+                input.addEventListener('change', function () {
+                    let time = this.value.split(':');
+                    let minutes = Math.round(time[1] / 10) * 10; // 10분 단위로 반올림
+                    if (minutes == 60) {
+                        minutes = 0;
+                        time[0] = ('0' + (parseInt(time[0]) + 1)).slice(-2);
+                    }
+                    this.value = time[0] + ':' + ('0' + minutes).slice(-2);
+                });
+            });
+        </script>
+    </div>
+
+    <!-- Estimated Waiting Time Section -->
+    <div id="estimatedWaitingTimeSection" class="section" style="display:none;">
+        <h2>Set Estimated Waiting Time</h2>
+        <form th:action="@{/store-owner/setting/waiting/estimated-waiting-time}" method="post">
+            <div>
+                <label for="estimatedWaitingTime">Estimated Waiting Time (minutes):</label>
+                <input type="number" id="estimatedWaitingTime" name="estimatedWaitingTime"
+                       min="0" max="60" th:value="${estimatedWaitingTime}" required />
+            </div>
+            <button type="submit">Update</button>
+        </form>
+    </div>
+
+    <!-- Waiting People Count Section -->
+    <div id="waitingPeopleCountSection" class="section" style="display:none;">
+        <h2>Waiting People Count Setting</h2>
+        <form th:action="@{/store-owner/setting/waiting/waiting-people-count}" method="post">
+            <div>
+                <label for="waitingPeopleCount">Waiting People Count:</label>
+                <input type="number" id="waitingPeopleCount" name="waitingPeopleCount"
+                       th:value="${waitingPeopleCount}" required min="0" max="20">
+            </div>
+            <button type="submit">Update</button>
+        </form>
+    </div>
+
+    <!-- Waiting Status Section -->
+    <div id="waitingStatusSection" class="section" style="display:none;">
+        <h2>Change Waiting Status</h2>
+        <p>현재 상태: <span th:text="${waitingStatus.waitingStatus}"></span></p>
+        <form id="statusForm" th:action="@{/store-owner/setting/waiting/waiting-status}" method="post">
+            <input type="hidden" name="status" value="0" />
+            <div>
+                <button type="button" onclick="confirmStatusChange(1)">웨이팅 접수</button>
+                <button type="button" onclick="confirmStatusChange(2)">웨이팅 마감</button>
+                <button type="button" onclick="confirmStatusChange(3)">웨이팅 이용불가</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div layout:fragment="script">
+    <!-- Custom scripts for all pages-->
+    <script th:src="@{/js/admin/admin.js}"></script>
+    <!-- Custom scripts for this page-->
+    <script th:src="@{/js/admin/admin-charts.js}"></script>
+</div>
+</body>
+</html>

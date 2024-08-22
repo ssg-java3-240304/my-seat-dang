@@ -5,34 +5,45 @@
     <title>Title</title>
 </head>
 <body>
-<header th:fragment="headerFragment" class="header_in clearfix element_to_stick">
+<header th:fragment="headerFragment" class="header_in clearfix">
     <div class="container">
         <div id="logo">
-            <a th:href="@{/}">
-                <!--                    <img th:src="@{/img/customer/logo.svg}" width="140" height="35" alt="" class="logo_normal">-->
-                <!--                    <img th:src="@{/img/customer/logo_sticky.svg}" width="140" height="35" alt="" class="logo_sticky">-->
+            <a th:href="@{/my-seat-dang}" class="box_1">
+                <i aria-hidden="true" class="icon-food_icon_bread_2 fs1" style="font-size: 1.5em"></i>
+                마싯당
             </a>
         </div>
         <ul id="top_menu">
             <!--   인증된 사용자에게는 로그아웃 버튼이, 인증되지 않은 사용자에게는 로그인 버튼이 표시  -->
             <li sec:authorize="isAuthenticated()">
                 <!-- 세션 기반 로그인 사용자일 경우 -->
-                <span sec:authorize="authentication.principal instanceof T(org.springframework.security.core.userdetails.UserDetails)">
-                    <span sec:authentication="principal.realName"></span>
-                </span>
-                    <span sec:authorize="authentication.principal instanceof T(org.springframework.security.oauth2.core.user.OAuth2User)">
-                <span sec:authentication="principal.name"></span>
-                </span>
-
-                <a th:href="@{/logout}" style="border: 2px solid #000; padding: 5px 10px; border-radius: 5px;">로그아웃</a>
+                <div class="dropdown user clearfix">
+                    <a href="#" data-bs-toggle="dropdown">
+                        <th:block sec:authorize="authentication.principal instanceof T(org.springframework.security.core.userdetails.UserDetails)">
+                            <figure><img th:src="@{${#authentication.principal.customerProfileImage}}" alt=""></figure><span th:text="${#authentication.principal.realName}"></span>
+                        </th:block>
+                        <th:block sec:authorize="authentication.principal instanceof T(org.springframework.security.oauth2.core.user.OAuth2User)">
+                            <figure><img th:src="@{img/customer/avatar1.jpg}" alt=""></figure><span th:text="${#authentication.principal.name}"></span>
+                        </th:block>
+                    </a>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-menu-content">
+                            <ul>
+                                <li><a th:href="@{/my-seat-dang/mypage/edit-profile}">내 프로필</a></li>
+<!--                                <li><a th:href="@{/ai-result}">케이크시안 생성하기</a></li>-->
+<!--                                <li><a th:href="@{/}">예약</a></li>-->
+<!--                                <li><a th:href="@{/}">결제내역</a></li>-->
+                                <li><a th:href="@{/logout}"><i class="icon_key"></i>로그아웃</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- /dropdown -->
             </li>
 
             <li sec:authorize="!isAuthenticated()">
                 <a href="#sign-in-dialog" id="sign-in" class="login">로그인</a>
             </li>
-            <!--                <li><a href="#sign-in-dialog" id="sign-in" class="login"></a></li>-->
-<!--            <li><a th:href="@{/customer/wishlist.html}" class="wishlist_bt_top" title="Your wishlist">Your wishlist</a>-->
-<!--            </li>-->
         </ul>
         <!-- /top_menu -->
         <a href="#0" class="open_close">
@@ -47,61 +58,27 @@
             </div>
             <ul>
                 <li class="submenu">
-                    <a href="#" class="show-submenu">Home</a>
+                    <a href="#" class="show-submenu">테스트 페이지</a>
                     <ul>
-                        <li><a th:href="@{/detail}">매장상세 예시</a></li>
-                        <li class="third-level"><a href="#">마시땅! <strong>New!</strong></a>
-                            <ul>
-                                <li><a th:href="@{/}">마시쪙 <strong>New!</strong></a></li>
-                                <li><a th:href="@{/}">마시땅</a></li>
-                                <li><a th:href="@{/}">많이먹어</a></li>
-                            </ul>
-                        </li>
                         <li><a th:href="@{/admin/main}">관리자페이지</a></li>
-                        <li><a th:href="@{/store/main}">점주페이지</a></li>
+                        <li><a th:href="@{/storeowner/main}">점주페이지</a></li>
                         <li><a th:href="@{/mypage}">마이페이지</a></li>
-                        <li><a th:href="@{/}">항목3</a></li>
-                        <li><a th:href="@{/mainmypage}">마이페이지(회원수정)</a></li>
                     </ul>
                 </li>
                 <li class="submenu">
-                    <a href="#" class="show-submenu">Listing</a>
+                    <a href="#0" class="show-submenu">AI 이미지생성</a>
                     <ul>
-                        <li class="third-level"><a href="#">pages 1</a>
-                            <ul>
-                                <li><a th:href="@{/}">대박</a></li>
-                                <li><a th:href="@{/}">날거</a></li>
-                                <li><a th:href="@{/}">에오</a></li>
-                            </ul>
-                        </li>
-                        <li class="third-level"><a href="#">pages 2</a>
-                            <ul>
-                                <li><a th:href="@{/}">Detail page 1</a></li>
-                                <li><a th:href="@{/}">Detail page 2</a></li>
-                                <li><a th:href="@{/}">Detail page 3</a></li>
-                                <li><a th:href="@{/}">Detail page 4</a></li>
-                                <li><a th:href="@{/}">Detail page 5</a></li>
-                                <li><a th:href="@{/}">Detail page 6</a></li>
-                            </ul>
-                        </li>
+                        <li><a th:href="@{/ai-result}">케이크시안 생성하기</a></li>
                     </ul>
                 </li>
                 <li class="submenu">
-                    <a href="#0" class="show-submenu">Other Pages</a>
+                    <a href="#0" class="show-submenu">마이 페이지</a>
                     <ul>
-                        <li><a th:href="@{/}">test page</a></li>
-                        <li><a th:href="@{/}">test page</a></li>
-                        <li><a th:href="@{/}">test page</a></li>
-                        <li><a th:href="@{/}">test page</a></li>
-                        <li><a th:href="@{/}">test page</a></li>
-                        <li><a th:href="@{/}">test page</a></li>
-                        <li><a th:href="@{/}">test page</a></li>
-                        <li><a th:href="@{/}">test page</a></li>
-                        <li><a th:href="@{/}">test page</a></li>
-                        <li><a th:href="@{/}">test page</a></li>
+<!--                        <li><a th:href="@{/ai-result}">케이크시안 생성하기</a></li>-->
+                        <li><a th:href="@{/my-seat-dang/reservation/list}">예약</a></li>
+                        <li><a th:href="@{/}">결제내역</a></li>
                     </ul>
                 </li>
-                <li><a th:href="@{/}">yammy</a></li>
                 <!--                    <li><a th:href="@{/}"></a></li>-->
             </ul>
         </nav>

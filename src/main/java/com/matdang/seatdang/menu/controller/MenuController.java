@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Controller
-@RequestMapping("/store/menu")
+@RequestMapping("/store-owner/menu")
 @RequiredArgsConstructor
 public class MenuController {
     private final FileService fileService;
@@ -49,13 +49,13 @@ public class MenuController {
         model.addAttribute("pageCriteria", new PageCriteria(page, limit, totalCount, url));
         log.debug("page url = {} page = {}", url, menuPageResponse.getNumber() );
 
-        return "store/menu/menuList";
+        return "storeowner/menu/menuList";
     }
 
     @GetMapping("/regist")
     public String regist(Model model) {
         log.debug("Get menu/regist");
-        return "store/menu/menuRegist";
+        return "storeowner/menu/menuRegist";
     }
 
     @PostMapping("/regist")
@@ -78,7 +78,7 @@ public class MenuController {
         menuRequestDto.setStoreId(userDetails.getStore().getStoreId());
 
         menuCommandService.regist(menuRequestDto.toMenuDto());
-        return "redirect:/store/menu/regist";
+        return "redirect:/storeowner/menu/regist";
     }
 
     //메뉴 수정
@@ -88,7 +88,7 @@ public class MenuController {
         log.debug("menuId: {}", menuId);
         MenuDto menuDTO = menuQueryService.findByMenuId(menuId);
         model.addAttribute("menu", menuDTO);
-        return "store/menu/menuUpdate";
+        return "storeowner/menu/menuUpdate";
     }
 
     @PostMapping("/update")
@@ -108,7 +108,7 @@ public class MenuController {
         }
         menuCommandService.update(menuRequestDto.toMenuDto());
         log.debug("메뉴 수정 완료");
-        return "redirect:/store/menu";
+        return "redirect:/storeowner/menu";
     }
 
     @PostMapping("/delete")
@@ -118,6 +118,6 @@ public class MenuController {
 
         menuCommandService.delete(menuId);
         log.debug("메뉴 삭제 완료");
-        return "redirect:/store/menu";
+        return "redirect:/storeowner/menu";
     }
 }

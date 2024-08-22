@@ -1,13 +1,9 @@
 package com.matdang.seatdang.store.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.ListObjectsV2Request;
-import com.amazonaws.services.s3.model.ListObjectsV2Result;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.matdang.seatdang.common.storeEnum.StoreType;
-import com.matdang.seatdang.object_storage.model.dto.FileDto;
-import com.matdang.seatdang.object_storage.service.FileService;
 import com.matdang.seatdang.store.dto.StoreListResponseDto;
+import com.matdang.seatdang.store.dto.StoreResponseDto;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
 import jakarta.transaction.Transactional;
@@ -17,9 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Optional;
 
 import static com.matdang.seatdang.common.storeEnum.StoreType.CUSTOM;
 import static com.matdang.seatdang.common.storeEnum.StoreType.GENERAL_RESERVATION;
@@ -45,7 +39,17 @@ public class StoreService {
         return storePage.map(StoreListResponseDto::fromStore);
     }
 
-    public Store findByStoreId(Long storeId) {
-        return storeRepository.findByStoreId(storeId);
+    public StoreResponseDto findByStoreId(Long storeId) {
+        return StoreResponseDto.fromEntity(storeRepository.findByStoreId(storeId));
+    }
+
+    public int getMaxReservationInTime(Long storeId){
+        Optional<Store> optStore = storeRepository.findById(storeId);
+        Store store = optStore.orElse(null);
+        if(store != null){
+            return store.getStoreSetting().getMaxReservationInTime();
+        }else {
+            return 0;
+        }
     }
 }

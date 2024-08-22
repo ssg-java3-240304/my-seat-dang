@@ -1,5 +1,6 @@
 package com.matdang.seatdang.reservation.service;
 
+import com.matdang.seatdang.reservation.dto.ReservationSlotReturnDto;
 import com.matdang.seatdang.reservation.dto.ReservationTicketRequestDTO;
 import com.matdang.seatdang.reservation.entity.ReservationSlot;
 import com.matdang.seatdang.reservation.repository.ReservationSlotRepository;
@@ -35,9 +36,15 @@ public class ReservationSlotCommandService {
             });
 
         if(slot.getUsedSlots()<slot.getMaxReservation()) {
-            return slot.tryAddSlot();
+            return slot.tryIncreaseSlot();
         }else{
             return ReservationTicket.UNAVAILABLE;
         }
+    }
+
+    public synchronized void returnSlot(ReservationSlotReturnDto requestDTO) {
+        log.debug("reservation slot returned service input: {}", requestDTO);
+        Optional<ReservationSlot> OptSlot = reservationSlotRepository.findByStoreAndDateAndTime(requestDTO.getStoreId(), requestDTO.getDate(), requestDTO.getTime());
+        OptSlot.ifPresent(ReservationSlot::returnSlot);
     }
 }

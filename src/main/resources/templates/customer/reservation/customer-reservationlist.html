@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{customer/layout/default}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- main page only css -->
+    <link th:href="@{/css/customer/home.css}" rel="stylesheet">
+    <!-- Favicons -->
+    <link rel="shortcut icon" th:href="@{img/favicon.ico}" type="image/x-icon">
+    <link rel="apple-touch-icon" type="image/x-icon" th:href="@{img/apple-touch-icon-57x57-precomposed.png}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72"
+          th:href="@{img/apple-touch-icon-72x72-precomposed.png}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114"
+          th:href="@{img/apple-touch-icon-114x114-precomposed.png}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144"
+          th:href="@{img/apple-touch-icon-144x144-precomposed.png}">
+    <!-- Bootstrap core CSS -->
+    <link href="/vendor/admin/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Main styles -->
+    <link href="/css/admin/admin.css" rel="stylesheet">
+    <!-- Icon fonts -->
+    <link href="/vendor/admin/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <!-- Plugin styles -->
+    <link href="/vendor/admin/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+    <!-- Your custom styles -->
+    <link href="/css/admin/custom.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/css/customer/chatstyle.css">
+    <style>
+        /* 모달과 모달 배경의 z-index 값을 높게 설정 */
+        .modal {
+            z-index: 2000 !important;
+        }
+
+        .modal-backdrop {
+            z-index: 1999 !important;
+        }
+
+        /* 헤더의 z-index 값을 낮게 조정 */
+        .header_in {
+            z-index: 100 !important;
+        }
+        .right-section {
+            display: none;
+        }
+    </style>
+
+
+</head>
+<body>
+<main layout:fragment="main">
+    <div class="container-fluid">
+        <!-- Left Section: Reservations -->
+        <div class="left-section">
+            <div class="box_general">
+                <div class="header_box">
+                    <div class="filter"></div>
+                </div>
+                <div class="list_general">
+                    <ul>
+                        <li th:each="reservation : ${reservations}" th:object="${reservation}">
+                            <figure><img src="/img/admin/item_1.jpg" alt=""></figure>
+                            <h4 th:text="*{storeName}">Store Name</h4>
+                            <ul class="booking_list">
+                                <li><strong>Booking date:</strong> <span>1212</span></li>
+                                <li><strong>Booking details:</strong> <span></span>1212</li>
+                                <li><strong>Client:</strong> <span th:text="*{customerName}"></span></li>
+                            </ul>
+                            <p>
+                                <button class="chat-button btn btn-primary"
+                                        th:data-reservation-id="*{reservationId}"
+                                        th:data-store-name="*{storeName}"
+                                        th:data-customer-name="*{customerName}"
+                                        th:data-customer-id="*{customerId}"
+                                        th:data-store-id="*{storeId}"
+                                        th:data-chat-url="${chatAccessUrl}">
+                                    채팅하기
+                                </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Right Section: Chat -->
+        <div class="right-section">
+            <div id="user_chat_data" class="user_chat_data">
+                <div class="profile_name">
+                    <img src="./img/profile.png" class="mr-3 rounded-circle">
+                    <span id="store-name" th:text="*{storeName}"></span>
+                </div>
+                <div class="container-fluid chat_section" id="chat-box"></div>
+                <div class="type_msg">
+                    <div class="input_msg_write">
+                        <button id="chat-attach" class="msg_attach_btn" type="button" style="border: 2px solid #4CAF50;">
+                            <i class="fa fa-paperclip" aria-hidden="true"></i>
+                        </button>
+                        <!--            ai버튼 그냥 아무거나 넣어놨습니다 구별하기위해 빨간색해놨어요 디자인 바꿔주세요..-->
+                        <button id="chat-ai" class="msg_attach_btn" type="button" style="border: 2px solid #4CAF50;">
+                            <i class="fa fa-birthday-cake" aria-hidden="true"></i>
+                        </button>
+                        <input id="chat-outgoing-msg" type="text" class="write_msg" placeholder="Type a message"/>
+                        <button id="chat-send" class="msg_send_btn" type="button">
+                            <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                        </button>
+                        <input id="chat-file-input" type="file" style="display: none;"/>
+                    </div>
+                    <div id="file-preview" class="file-preview"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI 이미지 선택 모달 -->
+    <div id="aiImageModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">AI 이미지 선택</h5>
+                    <button type="button" class="close" id="closeBtn" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- 이미지 선택 그리드 -->
+                    <div class="image-selection-grid" style="max-height: 500px; overflow-y: auto;">
+                        <!-- 여기에 max-height로 스크롤 -->
+                        <div th:each="image : ${imageList}"
+                             style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <input type="radio" name="selectedImage" th:value="${image.generatedUrl}"
+                                   class="select-image-radio" style="margin-right: 10px;">
+                            <img th:src="@{${image.generatedUrl}}" th:alt="${image.inputText}" class="selectable-image"
+                                 style="width: 100px; height: 100px; cursor: pointer;">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="closeBtn2" data-dismiss="modal">닫기</button>
+                    <button type="button" class="btn btn-primary" id="selectImageButton">선택하기</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!--  여기까지 ai 모달-->
+</main>
+</body>
+<div layout:fragment="js">
+    <!-- Bootstrap core JavaScript -->
+    <script src="/vendor/admin/jquery/jquery.min.js"></script>
+    <script src="/vendor/admin/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Core plugin JavaScript -->
+    <script src="/vendor/admin/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Page level plugin JavaScript -->
+    <script src="/vendor/admin/chart.js/Chart.min.js"></script>
+    <script src="/vendor/admin/datatables/jquery.dataTables.js"></script>
+    <script src="/vendor/admin/datatables/dataTables.bootstrap4.js"></script>
+    <script src="/vendor/admin/jquery.magnific-popup.min.js"></script>
+    <!-- Custom scripts for all pages -->
+    <script src="/js/admin/admin.js"></script>
+    <!-- 이 페이지 전용 스크립트 -->
+    <script th:src="@{/js/customer/jarallax.min.js}"></script>
+    <script th:src="@{/js/customer/jarallax-video.min.js}"></script>
+
+    <script th:inline="javascript">
+        let eventSource = null;
+
+        function scrollToBottom() {
+            const chatSection = document.querySelector('.chat_section');
+            chatSection.scrollTop = chatSection.scrollHeight;
+        }
+
+        function clearChatBox() {
+            const chatBox = document.querySelector('#chat-box');
+            chatBox.innerHTML = ''; // 이전 채팅 내용을 모두 삭제
+        }
+
+        function removeEventListeners(selector, eventName) {
+            const elements = document.querySelectorAll(selector);
+            elements.forEach(el => {
+                const clone = el.cloneNode(true);
+                el.parentNode.replaceChild(clone, el);
+            });
+        }
+
+        document.querySelectorAll('.chat-button').forEach(button => {
+            button.addEventListener('click', function () {
+
+                // 기존 SSE 연결 종료
+                if (eventSource !== null) {
+                    console.log("Closing previous SSE connection");
+                    eventSource.close();
+                    eventSource = null; // 기존 연결 해제
+                }
+
+                clearChatBox(); // 이전 채팅 내용 삭제
+
+                // 오른쪽 섹션을 표시
+                document.querySelector('.right-section').style.display = 'block';
+
+                const reservationId = this.getAttribute('data-reservation-id');
+                const storeName = this.getAttribute('data-store-name');
+                const customerName = this.getAttribute('data-customer-name'); // 문제 해결: customerName 변수 정의
+                const customerId = this.getAttribute('data-customer-id');
+                const storeId = this.getAttribute('data-store-id');
+                const chatUrl = this.getAttribute('data-chat-url');
+
+
+                // 전역 변수 업데이트( ai 업로드에서도 사용해야되서)
+                window.customerName = customerName;
+                window.reservationId = reservationId;
+                window.chatUrl = chatUrl;
+
+                console.log("Reservation ID:", reservationId);
+                console.log("Store Name:", storeName);
+                console.log("Customer Name:", customerName);
+                console.log("Customer ID:", customerId);
+                console.log("Store ID:", storeId);
+                console.log("Chat URL:", chatUrl);
+
+                document.querySelector("#store-name").textContent = storeName;
+
+                // SSE 연결하기
+                eventSource = new EventSource(`${chatUrl}/chat/roomNum/${reservationId}`);
+                eventSource.onmessage = (event) => {
+                    const data = JSON.parse(event.data);
+                    console.log("Received data:", data);
+
+                    // 결제 정보가 포함된 메시지인 경우 처리
+                    if (data.itemName && data.quantity && data.totalAmount) {
+                        addPaymentInfoToChat(data, reservationId, customerId, storeId);
+                    }
+
+                    if (data.sender === customerName) {
+                        initMyMessage(data);
+                    } else {
+                        initYourMessage(data);
+                    }
+                };
+
+                eventSource.onerror = function () {
+                    console.error("EventSource failed, closing connection.");
+                    eventSource.close();
+                    eventSource = null; // 오류 발생 시 연결 해제
+                };
+
+                // 기존에 등록된 이벤트 리스너 제거
+                removeEventListeners('#chat-send', 'click');
+                removeEventListeners('#chat-outgoing-msg', 'keydown');
+                removeEventListeners('#chat-attach', 'click');
+                removeEventListeners('#chat-file-input', 'change');
+
+                document.querySelector("#chat-send").addEventListener('click', () => addMessage(customerName, reservationId, chatUrl));
+                document.querySelector("#chat-outgoing-msg").addEventListener('keydown', (e) => {
+                    if (e.keyCode === 13) {
+                        e.preventDefault();
+                        addMessage(customerName, reservationId, chatUrl);
+                    }
+                });
+
+                document.querySelector("#chat-attach").addEventListener("click", () => {
+                    document.querySelector("#chat-file-input").click();
+                });
+
+                document.querySelector("#chat-file-input").addEventListener("change", () => {
+                    const fileInput = document.querySelector("#chat-file-input");
+                    const filePreview = document.querySelector("#file-preview");
+                    filePreview.innerHTML = ''; // Clear previous preview
+
+                    if (fileInput.files.length > 0) {
+                        const file = fileInput.files[0];
+                        const reader = new FileReader();
+
+                        const previewContainer = document.createElement('div');
+                        previewContainer.className = 'file-preview-item';
+
+                        if (file.type.startsWith('image/')) {
+                            // Image file
+                            reader.onload = function (e) {
+                                const img = document.createElement('img');
+                                img.src = e.target.result;
+                                previewContainer.appendChild(img);
+                            };
+                            reader.readAsDataURL(file);
+                        } else {
+                            // Non-image file
+                            const fileName = document.createElement('span');
+                            fileName.textContent = file.name;
+                            previewContainer.appendChild(fileName);
+                        }
+                        filePreview.appendChild(previewContainer);
+                    }
+                    scrollToBottom();
+                });
+            });
+
+            function getSendMsgBox(data) {
+                const date = new Date(data.createdAt);
+                const timeString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+                const imgTag = data.customerImage ? `<img src="${data.customerImage}" alt="image" class="chat-image" style="max-width: 100%; max-height: 200px; cursor: pointer;" />` : '';
+                return `<div>
+      <p style="text-align: right;">${data.sender}</p>
+      <div class="sent_msg">
+          ${imgTag}
+          <p style="text-align: right;">${data.msg}</p>
+          <span class="time_date">${timeString}</span>
+      </div>
+    </div>`;
+            }
+
+            function getReceiveMsgBox(data) {
+                const date = new Date(data.createdAt);
+                const timeString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+                const imgTag = data.customerImage ? `<img src="${data.customerImage}" alt="image" class="chat-image" style="max-width: 100%; max-height: 200px; cursor: pointer;" />` : '';
+                return `<div>
+      <p>${data.sender}</p>
+      <div class="received_withd_msg">
+          ${imgTag}
+          <p>${data.msg}</p>
+          <span class="time_date">${timeString}</span>
+      </div>
+      <div></div>
+    </div>`;
+            }
+
+            function initMyMessage(data) {
+                let chatBox = document.querySelector("#chat-box");
+                let sendBox = document.createElement("div");
+                sendBox.className = "outgoing_msg";
+                sendBox.innerHTML = getSendMsgBox(data);
+                chatBox.append(sendBox);
+                scrollToBottom();
+            }
+
+            function initYourMessage(data) {
+                let chatBox = document.querySelector("#chat-box");
+                let receivedBox = document.createElement("div");
+                receivedBox.className = "received_msg";
+                receivedBox.innerHTML = getReceiveMsgBox(data);
+                chatBox.append(receivedBox);
+                scrollToBottom();
+            }
+
+
+      function addPaymentInfoToChat(data, reservationId, customerId, storeId) {
+        console.log('Adding payment info:', data); // 데이터 확인
+
+        const chatBox = document.querySelector("#chat-box");
+        const date = new Date();
+        const timeString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+        const paymentInfoBox = document.createElement("div");
+        paymentInfoBox.className = "payment-box";
+        paymentInfoBox.innerHTML = `
+      <div class="payment-customer">
+        <p><strong>상품명:</strong> ${data.itemName}</p>
+        <p><strong>수량:</strong> ${data.quantity}</p>
+        <p><strong>결제 금액:</strong> ${data.totalAmount}원</p>
+        <button class="btn btn-primary btn-sm payment-btn" onclick="handlePayment(this, '${reservationId}', '${customerId}', '${storeId}')">결제하기</button>
+        <div></div>
+        <span class="time_date">${timeString}</span>
+      </div>`;
+                chatBox.append(paymentInfoBox);
+                scrollToBottom();
+            }
+        });
+
+        async function addMessage(customerName, reservationId, chatUrl) {
+            let msgInput = document.querySelector("#chat-outgoing-msg");
+            let fileInput = document.querySelector("#chat-file-input");
+            let filePreview = document.querySelector("#file-preview");
+            let message = msgInput.value.trim();
+
+            // 파일이 첨부되었거나 메시지가 비어있지 않을 경우에만 전송
+            if (message === "" && !fileInput.files.length) {
+                return;
+            }
+
+            let formData = new FormData();
+
+            // 메시지가 비어있지 않거나 파일이 첨부된 경우 메시지 추가
+            if (message !== "" || fileInput.files.length > 0) {
+                formData.append("chat", new Blob([JSON.stringify({
+                    sender: customerName,
+                    roomNum: reservationId,
+                    msg: message
+                })], {type: "application/json"}));
+            }
+
+            // 파일이 있는 경우 파일 추가
+            if (fileInput.files.length > 0) {
+                formData.append("customerImage", fileInput.files[0]);
+            }
+
+            await fetch(`${chatUrl}/chat`, {
+                method: "post",
+                body: formData
+            });
+
+            // 입력 필드와 파일 필드 초기화
+            msgInput.value = "";
+            fileInput.value = "";
+            filePreview.innerHTML = ""; // 파일 미리보기 영역 초기화
+            scrollToBottom();
+        }
+
+        async function handlePayment(button, reservationId, customerId, storeId) {
+            const partnerOrderId = reservationId;
+            const partnerUserId = customerId;
+            const shopId = storeId;
+            console.log(reservationId, customerId, storeId);
+            const paragraphs = button.parentNode.querySelectorAll('p');
+            let itemName = '';
+            let quantity = '';
+            let totalAmount = '';
+
+            paragraphs.forEach(p => {
+                if (p.textContent.includes('상품명:')) {
+                    itemName = p.textContent.replace('상품명:', '').trim();
+                } else if (p.textContent.includes('수량:')) {
+                    quantity = p.textContent.replace('수량:', '').trim();
+                } else if (p.textContent.includes('결제 금액:')) {
+                    totalAmount = p.textContent.replace('결제 금액:', '').trim().replace(/[^0-9]/g, '');
+                }
+            });
+
+            const taxFreeAmount = 0;
+
+            const queryString = `partnerOrderId=${encodeURIComponent(partnerOrderId)}&partnerUserId=${encodeURIComponent(partnerUserId)}&shopId=${encodeURIComponent(shopId)}&itemName=${encodeURIComponent(itemName)}&quantity=${encodeURIComponent(quantity)}&totalAmount=${encodeURIComponent(totalAmount)}&taxFreeAmount=${encodeURIComponent(taxFreeAmount)}`;
+
+            window.location.href = `/payment/request?${queryString}`;
+        }
+        window.addEventListener('message', function(event) {
+            if (event.origin !== "https://your-trusted-domain.com") {
+                return;
+            }
+
+            const data = event.data;
+
+            if (data.status === 'success') {
+                alert('결제가 성공적으로 완료되었습니다!');
+                updatePaymentStatusUI(event.target);
+            } else if (data.status === 'failure') {
+                alert('결제에 실패했습니다. 다시 시도해 주세요.');
+            }
+        });
+
+        function updatePaymentStatusUI(button) {
+            const paymentInfoBox = button.parentNode;
+            paymentInfoBox.innerHTML += '<p><strong>결제 상태:</strong> 완료</p>';
+            button.disabled = true;
+        }
+
+    </script>
+    <script>
+        let selectedImageUrl = null;
+
+        document.querySelector("#closeBtn").addEventListener("click", () => {
+            $('#aiImageModal').modal('hide');
+        });
+
+        document.querySelector("#closeBtn2").addEventListener("click", () => {
+            $('#aiImageModal').modal('hide');
+        });
+
+        // AI 이미지 선택 모달 열기
+        document.querySelector("#chat-ai").addEventListener("click", () => {
+            $('#aiImageModal').modal('show');
+        });
+
+        // 라디오 버튼 클릭 시 선택된 이미지 URL 업데이트
+        document.querySelectorAll('.select-image-radio').forEach(radio => {
+            radio.addEventListener('change', function () {
+                selectedImageUrl = this.value;
+                document.querySelectorAll('.selectable-image').forEach(img => img.style.border = 'none');
+                this.nextElementSibling.style.border = '2px solid blue';
+            });
+        });
+
+        // "선택하기" 버튼 클릭 시 이미지 전송
+        document.querySelector("#selectImageButton").addEventListener("click", () => {
+            if (selectedImageUrl) {
+                let formData = new FormData();
+                formData.append("chat", new Blob([JSON.stringify({
+                    sender: window.customerName,
+                    roomNum: window.reservationId,
+                    msg: "", // 메시지 내용 비워두기 (이미지만 전송)
+                    customerImage: selectedImageUrl
+                })], { type: "application/json" }));
+
+                $.ajax({
+                    url: `${window.chatUrl}/chat`,
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        $('#aiImageModal').modal('hide');
+                        selectedImageUrl = null;
+                    },
+                    error: function (error) {
+                        console.error('Error sending image:', error);
+                    }
+                });
+            } else {
+                alert("이미지를 선택하세요.");
+            }
+        });
+
+        // 파일 업로드 처리
+        document.querySelector("#chat-attach").addEventListener("click", () => {
+            document.querySelector("#chat-file-input").click();
+        });
+
+        document.querySelector("#chat-file-input").addEventListener("change", () => {
+            const fileInput = document.querySelector("#chat-file-input");
+            const filePreview = document.querySelector("#file-preview");
+            filePreview.innerHTML = ''; // 이전 미리보기 초기화
+
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+
+                const previewContainer = document.createElement('div');
+                previewContainer.className = 'file-preview-item';
+
+                if (file.type.startsWith('image/')) {
+                    reader.onload = function (e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        previewContainer.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    const fileName = document.createElement('span');
+                    fileName.textContent = file.name;
+                    previewContainer.appendChild(fileName);
+                }
+                filePreview.appendChild(previewContainer);
+            }
+            scrollToBottom();
+        });
+
+    </script>
+    <!--  <script>-->
+    <!--    // "닫기" 버튼에 이벤트 추가-->
+    <!--    document.querySelector('closebtn').addEventListener('click', function() {-->
+    <!--    $('#aiImageModal').modal('hide');-->
+    <!--    });-->
+
+    <!--    // "선택하기" 버튼에 이벤트 추가 (선택 후 모달 닫기)-->
+    <!--    document.getElementById('selectImageButton').addEventListener('click', function() {-->
+    <!--    $('#aiImageModal').modal('hide');-->
+    <!--    });-->
+    <!--  </script>-->
+</div>
+</html>

@@ -7,13 +7,15 @@ spring:
     mongodb:
       uri: ${MONGO_DB_URI}
   datasource:
-#    url: ${TEST_DB_URL}
-#    username: ${TEST_DB_USERNAME}
-#    password: ${TEST_DB_PASSWORD}
-    url: jdbc:mysql://localhost:3306/myseatdangdb
-    username: amatdang
-    password: amatdang
-    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    url: ${TEST_DB_URL}
+    username: ${TEST_DB_USERNAME}
+    password: ${TEST_DB_PASSWORD}
+#    url: jdbc:mysql://localhost:3306/myseatdangdb
+#    username: sh
+#    password: sh
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+
 
   jpa:
     generate-ddl: true

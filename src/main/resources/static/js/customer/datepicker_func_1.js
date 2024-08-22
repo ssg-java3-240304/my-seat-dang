@@ -10,7 +10,6 @@ $('#DatePicker').datepicker({
     altField: '#datepicker_field',
     minDate: 0,
     beforeShowDay: function(date) {
-
         var hlText = dates[date];
         var date2 = new Date(date);
         var tglAja = date2.getDate();
@@ -29,7 +28,6 @@ $('#DatePicker').datepicker({
 function updateDatePickerCells(a, b) {
 
     var num = parseInt(a);
-
     setTimeout(function() {
 
         $('.ui-datepicker td > *').each(function(idx, elem) {

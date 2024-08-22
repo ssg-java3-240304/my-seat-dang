@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{storeowner/layout/default}" xmlns="http://www.w3.org/1999/html">
+
+<div layout:fragment="content">
+    <form th:action="@{/templates/storeowner/storeRegist}" method="post" enctype="multipart/form-data">
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="#">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">Add listing</li>
+        </ol>
+        <div class="box_general padding_bottom">
+            <div class="header_box version_2">
+                <h2><i class="fa fa-file"></i>Basic info</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>매장명</label>
+                        <input type="text" id="storeName" class="form-control" placeholder="매장명을 입력하세요." required><br>
+                        <div class="input-group-append">
+                            <button class="btn_1 medium" type="button" id="checkStoreNameBtn">중복 체크</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>카테고리</label>
+                        <div class="styled-select">
+                            <select id="storeType" required>
+                                <option value="GENERAL_RESERVATION">예약(베이커리)</option>
+                                <option value="CUSTOM">예약(제작케이크)</option>
+                                <option value="GENERAL_WAITING">웨이팅(베이커리)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /row-->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>매장소개</label>
+                        <textarea id="description" class="form-control"></textarea>
+                    </div>
+                </div>
+            </div>
+            <!-- /row-->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>공지사항</label>
+                        <textarea id="notice" class="form-control"></textarea>
+                    </div>
+                </div>
+            </div>
+            <!-- /row-->
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>매장 전화번호</label>
+                        <input type="text" id="phone" class="form-control" placeholder="02-000-0000" required>
+                    </div>
+                </div>
+            </div>
+            <!-- /row-->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>대표 매장 이미지 (필수/ 최대 1개)</label>
+                        <form enctype="multipart/form-data">
+                            <div><img src="" class="photo-preview" id="preview" width="200px" height="200px" alt="이미지 미리보기"/></div>
+                            <input type="file" id="thumbnail" required>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- /row-->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>추가 매장 이미지 (최대 3개)</label>
+                        <form enctype="multipart/form-data">
+                            <div id="previewContainer"></div> <!-- 이미지 미리보기 -->
+                            <input type="file" id="images" multiple>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- /row-->
+        </div>
+        <!-- /box_general-->
+        <div class="box_general padding_bottom">
+            <div class="header_box version_2">
+                <h2><i class="fa fa-map-marker"></i>매장 주소</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input type="text" id="sample6_postcode" class="form-control" placeholder="우편번호" required><br>
+                        <input type="text" id="sample6_address" class="form-control" placeholder="주소" required><br>
+                        <input type="text" id="sample6_extraAddress" class="form-control" placeholder="참고항목" required><br>
+                        <input type="text" id="sample6_detailAddress" class="form-control" placeholder="상세주소" required><br>
+                        <input type="button" class="btn_1 medium" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /box_general-->
+        <div class="box_general padding_bottom">
+            <div class="header_box version_2">
+                <h2><i class="fa fa-clock-o"></i>영업시간</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="fix_spacing">시간</label>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <input type="time" id="openTime" class="form-control"/>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <input type="time" id="closeTime" class="form-control"/>
+                    </div>
+                </div>
+            </div>
+            <!-- /row-->
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="fix_spacing">브레이크 타임</label>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <input type="time" id="startBreakTime" class="form-control"/>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <input type="time" id="endBreakTime" class="form-control"/>
+                    </div>
+                </div>
+            </div>
+            <!-- /row-->
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="fix_spacing">라스트 오더</label>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <input type="time" id="lastOrder" class="form-control"/>
+                    </div>
+                </div>
+            </div>
+            <!-- /row-->
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="fix_spacing">정기휴무</label>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="styled-select">
+                            <select id="regularDayOff">
+                                <option value="없음">없음</option>
+                                <option value="월요일">월요일</option>
+                                <option value="화요일">화요일</option>
+                                <option value="수요일">수요일</option>
+                                <option value="목요일">목요일</option>
+                                <option value="금요일">금요일</option>
+                                <option value="토요일">토요일</option>
+                                <option value="일요일">일요일</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /row-->
+        </div>
+        <!-- /box_general-->
+        <button type="submit" id="submitBtn" class="btn_1 medium">등록</button>
+    </form>
+</div>
+
+<!-- Custom scripts for this page-->
+<div layout:fragment="script">
+    <script th:src="@{/vendor/admin/dropzone.min.js}"></script>
+    <script th:src="@{/vendor/admin/bootstrap-datepicker.js}"></script>
+    <script>
+        $('input.date-pick').datepicker();
+    </script>
+    <!-- WYSIWYG Editor -->
+    <script th:src="@{/js/admin/editor/summernote-bs4.min.js}"></script>
+    <script>
+        $('.editor').summernote({
+            fontSizes: ['10', '14'],
+            toolbar: [
+                // [groupName, [list of button]]
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['font', ['strikethrough']],
+                ['fontsize', ['fontsize']],
+                ['para', ['ul', 'ol', 'paragraph']]
+            ],
+            placeholder: 'Write here ....',
+            tabsize: 2,
+            height: 200
+        });
+    </script>
+
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script>
+        function sample6_execDaumPostcode() {
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                    // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                    // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                    var addr = ''; // 주소 변수
+                    var extraAddr = ''; // 참고항목 변수
+
+                    //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                        addr = data.roadAddress;
+                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                        addr = data.jibunAddress;
+                    }
+
+                    // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                    if(data.userSelectedType === 'R'){
+                        // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                        // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                        if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                            extraAddr += data.bname;
+                        }
+                        // 건물명이 있고, 공동주택일 경우 추가한다.
+                        if(data.buildingName !== '' && data.apartment === 'Y'){
+                            extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                        }
+                        // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                        if(extraAddr !== ''){
+                            extraAddr = ' (' + extraAddr + ')';
+                        }
+                        // 조합된 참고항목을 해당 필드에 넣는다.
+                        document.getElementById("sample6_extraAddress").value = extraAddr;
+
+                    } else {
+                        document.getElementById("sample6_extraAddress").value = '';
+                    }
+
+                    // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                    document.getElementById('sample6_postcode').value = data.zonecode;
+                    document.getElementById("sample6_address").value = addr;
+                    // 커서를 상세주소 필드로 이동한다.
+                    document.getElementById("sample6_detailAddress").focus();
+                }
+            }).open();
+        }
+    </script>
+
+    <script>
+        document.querySelector("#thumbnail").onchange = () => {
+            const file = document.querySelector("#thumbnail").files[0];
+            if (file){
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    document.querySelector("#preview").src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+
+        document.getElementById('images').addEventListener('change', function(event) {
+            const files = event.target.files;
+            const previewContainer = document.getElementById('previewContainer');
+
+            // 기존 미리보기 이미지 삭제
+            previewContainer.innerHTML = '';
+            const maxFiles = 3;
+
+            // 파일 수 제한
+            if (files.length > maxFiles) {
+                alert('최대 3개의 이미지만 선택할 수 있습니다.');
+                event.target.value = ''; // 입력 필드 초기화
+                return;
+            }
+
+            // 이미지 미리보기
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        // 이미지 엘리먼트 생성
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'photo-preview';
+                        img.style.width = '200px'; // 미리보기 크기 설정
+                        img.style.height = '200px'; // 미리보기 크기 설정
+                        previewContainer.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+
+        let isclicked = 0;
+        document.querySelector("#checkStoreNameBtn").onclick = () => {
+            $.ajax({
+                url: '[[@{/store/storeNameCheck}]]',
+                method: 'get',
+                data: {storeName: $('#storeName').val()},
+                dataType: 'json',
+                success (data){
+                    if (data === 0){
+                        alert("사용가능한 매장명입니다.");
+                        isclicked = 1;
+                    } else {
+                        alert("이미 사용 중인 매장명입니다.");
+                    }
+                    console.log(data)
+                },
+                error(error) {
+                    console.log(error)
+                }
+            });
+        }
+
+        document.querySelector("#submitBtn").onclick = (e) => {
+            e.preventDefault();
+
+            if (isclicked !== 1){
+                alert("매장명 중복체크를 해주세요.");
+                return;
+            }
+
+            if (!$('#thumbnail')[0].files[0]) {
+                alert("대표 매장 이미지를 업로드 해주세요.");
+                return;
+            }
+
+            // 주소 정보 가져오기
+            const postcode = document.getElementById('sample6_postcode').value.trim();
+            const address = document.getElementById('sample6_address').value.trim();
+            const extraAddress = document.getElementById('sample6_extraAddress').value.trim();
+            const detailAddress = document.getElementById('sample6_detailAddress').value.trim();
+
+            // 주소 정보 조합
+            const fullAddress = `${postcode} ${address} ${extraAddress} ${detailAddress}`;
+
+            const formData = new FormData();
+            formData.append('storeName', $('#storeName').val());
+            formData.append('storeType', $('#storeType').val());
+            formData.append('description', $('#description').val());
+            formData.append('notice', $('#notice').val());
+            formData.append('phone', $('#phone').val());
+
+            formData.append('thumbnail', $('#thumbnail')[0].files[0]);
+
+            const extraFiles = document.getElementById('images').files;
+            if (extraFiles.length >= 1){
+                for (let i = 0; i < extraFiles.length; i++) {
+                    formData.append('images', extraFiles[i]);
+                }
+            }
+
+            formData.append('storeAddress', fullAddress);
+            formData.append('openTime', $('#openTime').val());
+            formData.append('closeTime', $('#closeTime').val());
+            formData.append('startBreakTime', $('#startBreakTime').val());
+            formData.append('endBreakTime', $('#endBreakTime').val());
+            formData.append('lastOrder', $('#lastOrder').val());
+            formData.append('regularDayOff', $('#regularDayOff').val());
+
+            $.ajax({
+                url: '[[@{/store/storeRegist}]]',
+                method: 'post',
+                contentType: false,
+                processData: false,
+                data : formData,
+                success (data){
+                    console.log(data);
+                    alert("매장을 성공적으로 등록했습니다.");
+                    window.location.reload();
+                },
+                error (error){
+                    console.log(error);
+                    alert("매장 등록에 실패하셨습니다.");
+                }
+            });
+        }
+    </script>
+</div>
+<!--</body>-->
+</html>

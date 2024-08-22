@@ -1,6 +1,5 @@
 package com.matdang.seatdang.chat.service;
 
-import com.matdang.seatdang.chat.dto.ChatPaymentRequestDto;
 import com.matdang.seatdang.chat.entity.Chat;
 import com.matdang.seatdang.chat.repository.ChatRepository;
 import com.matdang.seatdang.object_storage.service.FileService;
@@ -18,13 +17,6 @@ public class ChatService {
     private final FileService fileService;
 
     public Mono<Chat> saveChatWithImage(Chat chat, MultipartFile customerImage) {
-        // 결제 정보가 있는 경우, 채팅 메시지에 결제 정보를 추가
-//        if (chatPaymentRequestDto != null) {
-//            chat.setItemName(chatPaymentRequestDto.getItemName());
-//            chat.setQuantity(chatPaymentRequestDto.getQuantity());
-//            chat.setTotalAmount(chatPaymentRequestDto.getTotalAmount());
-//            System.out.println(chat);
-//        }
 
         // 이미지 업로드 및 URL 설정
         if (customerImage != null && !customerImage.isEmpty()) {
