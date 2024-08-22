@@ -73,4 +73,21 @@ class ReservationCommandServiceTest {
             System.out.println(reservation);
         });
     }
+
+
+    @Transactional
+    @DisplayName("예약 상태 변경")
+    @Test
+    public void test2() {
+        //given
+        Long reservationId = 1L;
+        ReservationStatus reservationStatus = ReservationStatus.AWAITING_PAYMENT;
+        //when
+        reservationCommandService.updateStatusCustomReservation(reservationId, reservationStatus);
+        Optional<Reservation> optResult = reservationRepository.findById(reservationId);
+        Reservation result = optResult.orElse(null);
+        //then
+        assertThat(result).isNotNull();
+        assertThat(result.getReservationStatus()).isEqualTo(reservationStatus);
+    }
 }

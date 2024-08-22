@@ -42,4 +42,8 @@ public class Reservation {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
+
+    public void updateStatus(ReservationStatus reservationStatus) {
+        this.reservationStatus = reservationStatus;
+    }
 }
