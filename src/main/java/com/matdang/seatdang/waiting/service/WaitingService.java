@@ -11,8 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -41,11 +39,11 @@ public class WaitingService {
     public int updateStatus(UpdateRequest updateRequest) {
         if (updateRequest.getChangeStatus() != null) {
             if (updateRequest.getChangeStatus() == 1) {
-                int visited = waitingRepository.updateAllWaitingNumberByVisit(updateRequest.getStoreId());
+                int visited = waitingRepository.updateAllWaitingOrderByVisit(updateRequest.getStoreId());
                 return waitingRepository.updateStatusByVisit(updateRequest.getId()) + visited;
             }
             if (updateRequest.getChangeStatus() == 2) {
-                int canceled = waitingRepository.updateWaitingNumberByCancel(updateRequest.getStoreId(),
+                int canceled = waitingRepository.updateWaitingOrderByCancel(updateRequest.getStoreId(),
                         updateRequest.getWaitingOrder());
                 return waitingRepository.updateStatusByShopCancel(updateRequest.getId()) + canceled;
             }

@@ -1,7 +1,6 @@
 package com.matdang.seatdang.waiting.repository;
 
 import com.matdang.seatdang.waiting.repository.query.WaitingQueryRepository;
-import com.matdang.seatdang.waiting.repository.query.dto.WaitingDto;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
@@ -16,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -113,7 +111,7 @@ class WaitingRepositoryTest {
         List<Waiting> findWaiting = waitingRepository.findAll();
         em.clear();
         // when
-        int result = waitingRepository.updateAllWaitingNumberByVisit(1L);
+        int result = waitingRepository.updateAllWaitingOrderByVisit(1L);
         // then
         assertThat(result).isEqualTo(10);
         assertThat(waitingRepository.findById(findWaiting.get(0).getId()).get().getWaitingOrder()).isEqualTo(
@@ -125,7 +123,7 @@ class WaitingRepositoryTest {
     void updateWaitingNumberByCancel() {
         // given
         // when
-        int result = waitingRepository.updateWaitingNumberByCancel(1L, 5L);
+        int result = waitingRepository.updateWaitingOrderByCancel(1L, 5L);
         // then
         assertThat(result).isEqualTo(4);
     }

@@ -1,12 +1,10 @@
 package com.matdang.seatdang.waiting.repository;
 
 import com.matdang.seatdang.waiting.entity.Waiting;
-import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,14 +16,14 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
     @Query("update Waiting w set w.waitingOrder = w.waitingOrder-1"
             + " where w.waitingStatus = com.matdang.seatdang.waiting.entity.WaitingStatus.WAITING"
             + " and w.storeId = :storeId")
-    int updateAllWaitingNumberByVisit(@Param("storeId") Long storeId);
+    int updateAllWaitingOrderByVisit(@Param("storeId") Long storeId);
 
     @Modifying
     @Query("update Waiting w set w.waitingOrder = w.waitingOrder-1"
             + " where w.waitingStatus  = com.matdang.seatdang.waiting.entity.WaitingStatus.WAITING"
             + " and w.storeId = :storeId"
             + " and w.waitingOrder > :waitingOrder")
-    int updateWaitingNumberByCancel(@Param("storeId") Long storeId, @Param("waitingOrder") Long waitingOrder);
+    int updateWaitingOrderByCancel(@Param("storeId") Long storeId, @Param("waitingOrder") Long waitingOrder);
 
     @Modifying
     @Query("update Waiting w set w.waitingStatus =  com.matdang.seatdang.waiting.entity.WaitingStatus.VISITED,"
