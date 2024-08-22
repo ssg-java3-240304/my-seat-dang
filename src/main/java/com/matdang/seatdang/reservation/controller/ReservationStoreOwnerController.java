@@ -17,13 +17,13 @@ import java.util.List;
 
 @Controller
 @Slf4j
-@RequestMapping("/store")
+@RequestMapping("/store-owner/reservation")
 @RequiredArgsConstructor
 public class ReservationStoreOwnerController {
     private final ReservationService reservationService;
     private final ChatConfig chatConfig;  // ChatConfig를 의존성 주입으로 받음
 
-    @GetMapping("/store-reservationlist")
+    @GetMapping("/list")
     public String storeChatPage(Model model) {
 
         // SecurityContext에서 고객 ID를 가져옴
