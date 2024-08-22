@@ -12,6 +12,7 @@ import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.repository.query.WaitingQueryRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
+import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoProjection;
 import com.matdang.seatdang.waiting.service.WaitingCustomerService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -77,11 +78,12 @@ public class WaitingCustomerController {
     public String showWaiting(@RequestParam(defaultValue = "0") int status,
                               @RequestParam(defaultValue = "0") int page,
                               Model model) {
-        Page<WaitingInfoDto> waitings = waitingCustomerService.showWaiting(status, page);
+        Page<WaitingInfoProjection> waitings = waitingCustomerService.showWaiting(status, page);
         model.addAttribute("status", status);
         model.addAttribute("waitings", waitings.getContent());
         model.addAttribute("currentPage", waitings.getNumber());
         model.addAttribute("totalPages", waitings.getTotalPages());
+
         return "customer/waiting/waiting";
     }
 
