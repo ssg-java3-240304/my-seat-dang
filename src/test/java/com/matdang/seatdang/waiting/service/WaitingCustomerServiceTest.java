@@ -14,6 +14,7 @@ import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoProjection;
 import jakarta.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -224,7 +225,7 @@ class WaitingCustomerServiceTest {
 
     @Test
     @DisplayName(" 웨이팅 100개 등록")
-    void createWaitingByNotConcurrency() throws InterruptedException {
+    void createWaitingByNotConcurrency(){
         // given
         Customer mockCustomer = Customer.builder()
                 .memberId(1L)
@@ -243,8 +244,8 @@ class WaitingCustomerServiceTest {
 
     //    @Disabled
     @Test
-    @Rollback(value = false)
-    @DisplayName("동시에 웨이팅 100개 등록 동시성 테스트")
+//    @Rollback(value = false)
+    @DisplayName("동시에 웨이팅 50개 등록 동시성 테스트")
     void createWaitingByConcurrency() throws InterruptedException {
         // given
         int threadCount = 50;
@@ -273,5 +274,80 @@ class WaitingCustomerServiceTest {
         Long findResult = waitingRepository.findMaxWaitingOrderByStoreId(1L);
 
         assertThat(findResult).isEqualTo(50);
+    }
+
+    @Test
+    @DisplayName("웨이팅 10개 취소")
+    void cancelWaitingByNotConcurrency() {
+        // given
+        Customer mockCustomer = Customer.builder()
+                .memberId(1L)
+                .memberPhone("010-1234-1234")
+                .build();
+        when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
+        List<Long> waitingIds = new ArrayList<>();
+        for (int i = 0; i < 50; i++) {
+            Long id = waitingCustomerService.createWaiting(1L, 2);
+            waitingIds.add(id);
+        }
+
+        // when
+        for (int i = 0; i < 10; i++) {
+            waitingCustomerService.cancelWaitingByCustomer(waitingIds.get(i));
+        }
+
+        // then
+        Long findResult = waitingRepository.findMaxWaitingOrderByStoreId(1L);
+
+        assertThat(findResult).isEqualTo(40);
+    }
+
+
+    //    @Disabled
+    @Test
+    @Rollback(value = false)
+    @DisplayName("동시에 웨이팅 10개 취소 동시성 테스트")
+    void cancelWaitingByConcurrency() throws InterruptedException {
+        // given
+        Customer mockCustomer = Customer.builder()
+                .memberId(1L)
+                .memberPhone("010-1234-1234")
+                .build();
+        when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
+
+        List<Long> waitingIds = new ArrayList<>();
+        for (int i = 0; i < 50; i++) {
+            Long id = waitingCustomerService.createWaiting(1L, 2);
+            waitingIds.add(id);
+        }
+
+        em.flush();
+        em.clear();
+
+        int threadCount = 10;
+        ExecutorService executorService = Executors.newFixedThreadPool(8);
+        CountDownLatch latch = new CountDownLatch(threadCount);
+
+        // when
+        for (int i = 0; i < threadCount; i++) {
+            long waitingId = waitingIds.get(i);
+            executorService.execute(() -> {
+                try {
+                    System.out.println("Thread started for waitingId = " + waitingId);
+                    int result = waitingCustomerService.cancelWaitingByCustomer(waitingId);
+                    System.out.println("Thread finished with result = " + result);
+                } catch (Exception e) {
+                    e.printStackTrace(); // 예외를 출력합니다
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+        latch.await();
+        executorService.shutdown();
+
+        // then
+        Long findResult = waitingRepository.findMaxWaitingOrderByStoreId(1L);
+        assertThat(findResult).isEqualTo(40);
     }
 }
