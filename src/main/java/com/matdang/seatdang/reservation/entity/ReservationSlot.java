@@ -18,37 +18,6 @@ import java.time.LocalTime;
                 @UniqueConstraint(columnNames = {"store_id", "date", "time"})
         }
 )
-//public class ReservationSlot {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
-//    @Column(nullable = false)
-//    private Long storeId;
-//    @Column(nullable = false)
-//    private LocalDate date;
-//    @Column(nullable = false)
-//    private LocalTime time;
-//    @Column(nullable = false)
-//    private int maxReservation;
-//    @Column(nullable = false)
-//    private int usedSlots;
-//
-//    public ReservationSlot(Long storeId, LocalDate date, LocalTime time, int maxReservation) {
-//        this.storeId = storeId;
-//        this.date = date;
-//        this.time = time;
-//        this.maxReservation = maxReservation;
-//        this.usedSlots = 0;
-//    }
-//
-//    public ReservationTicket tryAddSlot(){
-//        if(usedSlots < maxReservation){
-//            usedSlots++;
-//            return ReservationTicket.AVAILABLE;
-//        }else
-//            return ReservationTicket.UNAVAILABLE;
-//    }
-//}
 
 public class ReservationSlot {
 
@@ -65,11 +34,20 @@ public class ReservationSlot {
         this.usedSlots = 0;
     }
 
-    public ReservationTicket tryAddSlot(){
+    public ReservationTicket tryIncreaseSlot(){
         if(usedSlots < maxReservation){
             usedSlots++;
             return ReservationTicket.AVAILABLE;
         }else
             return ReservationTicket.UNAVAILABLE;
+    }
+
+    public void returnSlot(){
+        System.out.println("이게 왜 0이냐"+this.usedSlots);
+        if(0 < this.usedSlots){
+            usedSlots--;
+        }else if(this.usedSlots == 0){
+            throw(new IllegalStateException("예약 슬롯이 0입니다. 더 이상 차감할수 없습니다"));
+        }
     }
 }
