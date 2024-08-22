@@ -47,15 +47,15 @@ public class TestCreateDummyData {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @CsvSource({
-            "customer@test.com, '이재용'",
-            "customer2@test.com, '카리나'",
-            "customer3@test.com, '서강준'",
-            "customer4@test.com, '차은우'",
-            "customer5@test.com, '윈터'"
+            "customer@test.com, '이재용', 'https://kr.object.ncloudstorage.com/myseatdang-bucket/member/fa6265015dbc9466b5047f11cabe160b_res.jpeg'",
+            "customer2@test.com, '카리나', 'https://kr.object.ncloudstorage.com/myseatdang-bucket/member/c150140d8344c1d3e3bc9f6ae3f293e8_res.jpeg'",
+            "customer3@test.com, '서강준', 'profile.jpg'",
+            "customer4@test.com, '차은우', 'profile.jpg'",
+            "customer5@test.com, '윈터', 'profile.jpg'"
     })
     @DisplayName("일반 회원 더미 데이터 세팅")
     @ParameterizedTest
-    public void Test1(String email, String memberName) {
+    public void Test1(String email, String memberName, String profileImage) {
         //given
         Customer customer = Customer.builder()
                 .memberEmail(email)
@@ -69,7 +69,7 @@ public class TestCreateDummyData {
                 .customerGender(Gender.MALE)
                 .customerBirthday(LocalDate.of(1990, 1, 1))
                 .customerNickName("미식가"+memberName)
-                .customerProfileImage("profile.jpg")
+                .customerProfileImage(profileImage)
                 .build();
         //when
         Customer savedCustomer = (Customer) memberRepository.save(customer);
