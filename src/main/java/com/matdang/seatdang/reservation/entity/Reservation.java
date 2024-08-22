@@ -1,12 +1,13 @@
 package com.matdang.seatdang.reservation.entity;
 
+import com.matdang.seatdang.common.exception.ReservationException;
+import com.matdang.seatdang.reservation.dto.ReservationCancelRequestDto;
 import com.matdang.seatdang.reservation.vo.*;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @Builder
 @Entity
@@ -37,9 +38,29 @@ public class Reservation {
     private List<OrderedMenu> orderedMenuList;
     @Enumerated(EnumType.STRING)
     private ReservationStatus reservationStatus;
+    @Embedded
+    ReservationCancellationRecord cancellationRecord;
 
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
+    }
+
+    public void updateStatus(ReservationStatus newStatus) {
+        if(reservationStatus.canTransitionTo(newStatus)){
+            this.reservationStatus = newStatus;
+        }else{
+            throw(new ReservationException("이전 예약 상태로 되돌아갈수 없습니다"));
+        }
+    }
+
+    public void cancel(ReservationCancellationRecord record) {
+        if(this.reservationStatus == ReservationStatus.CANCELED){
+            throw new IllegalStateException("이미 취소된 예약입니다");
+        }else if(!this.reservationStatus.canTransitionTo(ReservationStatus.CANCELED)){
+            throw new IllegalStateException("완료된 예약은 취소할 수 없습니다");
+        }
+        this.reservationStatus = ReservationStatus.CANCELED;
+        this.cancellationRecord = record;
     }
 }

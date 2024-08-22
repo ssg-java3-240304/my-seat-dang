@@ -71,9 +71,9 @@ class MemberRepositoryTest {
     @Test
     public void testCreateAdmin() {
         Admin admin = Admin.builder()
-                .memberEmail("1234@naver.com")
+                .memberEmail("admin@naver.com")
                 .joinDate(LocalDate.now())
-                .memberName("Admin Name")
+                .memberName("김관리자")
                 .memberPassword(bCryptPasswordEncoder.encode("1234"))
                 .memberPhone("010-1234-5678")
                 .memberRole(MemberRole.ROLE_ADMIN)

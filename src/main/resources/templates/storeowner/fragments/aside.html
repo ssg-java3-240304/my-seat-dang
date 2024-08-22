@@ -7,7 +7,7 @@
 <body>
 <aside th:fragment="aside">
     <nav class="navbar navbar-expand-lg navbar-dark bg-default fixed-top" id="mainNav">
-        <a class="navbar-brand" th:href="@{/admin/main}"><img th:src="@{/img/admin/logo.svg}" alt="" width="142" height="36"></a>
+        <a class="navbar-brand" th:href="@{/store-owner/main}"><img th:src="@{/img/admin/logo.svg}" alt="" width="142" height="36"></a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -45,10 +45,22 @@
                     </a>
                     <ul class="sidenav-second-level" id="collapseMenuListings">
                         <li>
-                            <a th:href="@{/storeowner/menu}">메뉴 목록</a>
+                            <a th:href="@{/store-owner/menu}">메뉴 목록</a>
                         </li>
                         <li>
-                            <a th:href="@{/storeowner/menu/regist}">메뉴 등록</a>
+                            <a th:href="@{/store-owner/menu/regist}">메뉴 등록</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="My Reservations">
+                    <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseReservationListings">
+                        <i class="fa fa-fw fa-list"></i>
+                        <span class="nav-link-text">예약 관리</span>
+                    </a>
+                    <ul class="sidenav-second-level" id="collapseReservationListings">
+                        <li>
+                            <a th:href="@{/store-owner/reservation/list}">예약 목록</a>
                         </li>
                     </ul>
                 </li>
@@ -235,8 +247,12 @@
                         </div>
                     </form>
                 </li>
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-fw fa-sign-out"></i>Logout</a>-->
+
+<!--                </li>-->
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-fw fa-sign-out"></i>Logout</a>
+                    <a class="nav-link" th:href="@{/logout}"><i class="fa fa-fw fa-sign-out"></i>로그아웃</a>
                 </li>
             </ul>
         </div>

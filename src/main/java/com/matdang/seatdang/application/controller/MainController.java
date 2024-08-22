@@ -16,4 +16,10 @@ public class MainController {
     public String storeOwnerMain(){
         return "storeowner/main";
     }
+
+    @GetMapping("/admin/main")
+    public String adminMain() {
+        return "admin/main";
+    }
+
 }

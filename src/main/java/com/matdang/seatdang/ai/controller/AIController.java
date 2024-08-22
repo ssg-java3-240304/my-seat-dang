@@ -73,7 +73,7 @@ public class AIController {
         Customer customer = customerService.findById(customerId);
 
         if (customer.getImageGenLeft() <= 0) {
-            ErrorResponseDto errorResponse = new ErrorResponseDto("생성 가능한 이미지 횟수가 부족합니다.", LocalDateTime.now());
+            ErrorResponseDto errorResponse = new ErrorResponseDto("생성 가능한 이미지 횟수가 부족합니다. ", LocalDateTime.now());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
 

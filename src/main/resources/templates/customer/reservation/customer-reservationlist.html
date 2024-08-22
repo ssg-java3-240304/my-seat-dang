@@ -84,7 +84,7 @@
         <div class="right-section">
             <div id="user_chat_data" class="user_chat_data">
                 <div class="profile_name">
-                    &nbsp;&nbsp;&nbsp;&nbsp;<img src="./img/profile.png" class="mr-3 rounded-circle"> &nbsp;&nbsp;
+                    <img src="./img/profile.png" class="mr-3 rounded-circle">
                     <span id="store-name" th:text="*{storeName}"></span>
                 </div>
                 <div class="container-fluid chat_section" id="chat-box"></div>
@@ -108,6 +108,7 @@
             </div>
         </div>
     </div>
+
     <!-- AI 이미지 선택 모달 -->
     <div id="aiImageModal" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -136,6 +137,7 @@
                     <button type="button" class="btn btn-primary" id="selectImageButton">선택하기</button>
                 </div>
             </div>
+
         </div>
     </div>
     <!--  여기까지 ai 모달-->
@@ -337,16 +339,17 @@
                 scrollToBottom();
             }
 
-            function addPaymentInfoToChat(data) {
-                console.log('Adding payment info:', data); // 데이터 확인
 
-                const chatBox = document.querySelector("#chat-box");
-                const date = new Date();
-                const timeString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
-                const paymentInfoBox = document.createElement("div");
-                paymentInfoBox.className = "received_msg";
-                paymentInfoBox.innerHTML = `
-      <div class="payment-info-box">
+      function addPaymentInfoToChat(data, reservationId, customerId, storeId) {
+        console.log('Adding payment info:', data); // 데이터 확인
+
+        const chatBox = document.querySelector("#chat-box");
+        const date = new Date();
+        const timeString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+        const paymentInfoBox = document.createElement("div");
+        paymentInfoBox.className = "payment-box";
+        paymentInfoBox.innerHTML = `
+      <div class="payment-customer">
         <p><strong>상품명:</strong> ${data.itemName}</p>
         <p><strong>수량:</strong> ${data.quantity}</p>
         <p><strong>결제 금액:</strong> ${data.totalAmount}원</p>
@@ -423,6 +426,26 @@
             const queryString = `partnerOrderId=${encodeURIComponent(partnerOrderId)}&partnerUserId=${encodeURIComponent(partnerUserId)}&shopId=${encodeURIComponent(shopId)}&itemName=${encodeURIComponent(itemName)}&quantity=${encodeURIComponent(quantity)}&totalAmount=${encodeURIComponent(totalAmount)}&taxFreeAmount=${encodeURIComponent(taxFreeAmount)}`;
 
             window.location.href = `/payment/request?${queryString}`;
+        }
+        window.addEventListener('message', function(event) {
+            if (event.origin !== "https://your-trusted-domain.com") {
+                return;
+            }
+
+            const data = event.data;
+
+            if (data.status === 'success') {
+                alert('결제가 성공적으로 완료되었습니다!');
+                updatePaymentStatusUI(event.target);
+            } else if (data.status === 'failure') {
+                alert('결제에 실패했습니다. 다시 시도해 주세요.');
+            }
+        });
+
+        function updatePaymentStatusUI(button) {
+            const paymentInfoBox = button.parentNode;
+            paymentInfoBox.innerHTML += '<p><strong>결제 상태:</strong> 완료</p>';
+            button.disabled = true;
         }
 
     </script>
@@ -515,38 +538,6 @@
             scrollToBottom();
         });
 
-        // 메시지 전송 함수
-        async function addMessage(customerName, reservationId, chatUrl) {
-            let msgInput = document.querySelector("#chat-outgoing-msg");
-            let fileInput = document.querySelector("#chat-file-input");
-            let filePreview = document.querySelector("#file-preview");
-            let message = msgInput.value.trim();
-
-            if (message === "" && !fileInput.files.length) {
-                return;
-            }
-
-            let formData = new FormData();
-            formData.append("chat", new Blob([JSON.stringify({
-                sender: customerName,
-                roomNum: reservationId,
-                msg: message
-            })], { type: "application/json" }));
-
-            if (fileInput.files.length > 0) {
-                formData.append("customerImage", fileInput.files[0]);
-            }
-
-            await fetch(`${chatUrl}/chat`, {
-                method: "post",
-                body: formData
-            });
-
-            msgInput.value = "";
-            fileInput.value = "";
-            filePreview.innerHTML = ""; // 파일 미리보기 초기화
-            scrollToBottom();
-        }
     </script>
     <!--  <script>-->
     <!--    // "닫기" 버튼에 이벤트 추가-->
