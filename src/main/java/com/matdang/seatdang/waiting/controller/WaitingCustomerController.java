@@ -9,13 +9,16 @@ import com.matdang.seatdang.waiting.controller.dto.ReadyWaitingResponse;
 import com.matdang.seatdang.waiting.controller.dto.VisitedWaitingResponse;
 import com.matdang.seatdang.waiting.controller.dto.WaitingRequest;
 import com.matdang.seatdang.waiting.entity.Waiting;
+import com.matdang.seatdang.waiting.entity.WaitingStorage;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
+import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
 import com.matdang.seatdang.waiting.repository.query.WaitingQueryRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoProjection;
 import com.matdang.seatdang.waiting.service.WaitingCustomerService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -32,6 +35,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 public class WaitingCustomerController {
     private final WaitingCustomerService waitingCustomerService;
+    private final WaitingStorageRepository waitingStorageRepository;
     private final WaitingRepository waitingRepository;
     private final StoreRepository storeRepository;
     private final AuthService authService;
@@ -94,19 +98,6 @@ public class WaitingCustomerController {
     }
 
     // TODO : 취소 후 url에 접속 못하게 막기(if문 상태처리)
-    @GetMapping("/waiting/{waitingId}/awaiting/detail")
-    public String showAwaitingWaitingDetail(@PathVariable Long waitingId, Model model, HttpServletRequest request) {
-        String referer = request.getHeader("Referer");
-        if (referer == null || !referer.startsWith("http://localhost:8080/my-seat-dang/waiting")) {
-            return "error/403";
-        }
-
-        Waiting waiting = waitingRepository.findById(waitingId).get();
-        Store store = storeRepository.findByStoreId(waiting.getStoreId());
-        model.addAttribute("awaitingWaitingResponse", AwaitingWaitingResponse.create(waiting, store));
-
-        return "customer/waiting/awaiting-waiting-detail";
-    }
 
     @PostMapping("/waiting/{waitingId}/awaiting/detail")
     public String cancelWaiting(@PathVariable Long waitingId, RedirectAttributes redirectAttributes) {
@@ -122,22 +113,71 @@ public class WaitingCustomerController {
         return "redirect:/my-seat-dang/waiting/{waitingId}/canceled/detail";
     }
 
-    @GetMapping("/waiting/{waitingId}/canceled/detail")
-    public String showCanceledWaitingDetail(@PathVariable Long waitingId, Model model) {
-        Waiting waiting = waitingRepository.findById(waitingId).get();
-        Store store = storeRepository.findByStoreId(waiting.getStoreId());
-        model.addAttribute("canceledWaitingResponse", CanceledWaitingResponse.create(waiting, store));
+    @GetMapping("/waiting/{waitingId}/{status}/detail")
+    public String showWaitingDetail(@PathVariable Long waitingId, @PathVariable String status, Model model,
+                                    HttpServletRequest request) {
+        // Referer 검증 (awaiting 상태일 때만)
+        if ("awaiting".equals(status)) {
+            String referer = request.getHeader("Referer");
+            if (referer == null || !referer.startsWith("http://localhost:8080/my-seat-dang/waiting")) {
+                return "error/403";
+            }
+        }
 
-        return "customer/waiting/canceled-waiting-detail";
+        Object response = getWaitingDetailResponse(waitingId, status);
+        model.addAttribute("waitingDetailResponse", response);
+
+        // 상태에 따라 뷰 이름을 반환
+        return getViewName(status);
     }
 
+    private Object getWaitingDetailResponse(Long waitingId, String status) {
+        Object waiting = findWaitingEntity(waitingId);
+        Store store = storeRepository.findByStoreId(getStoreId(waiting));
 
-    @GetMapping("/waiting/{waitingId}/visited/detail")
-    public String showVisitedWaitingDetail(@PathVariable Long waitingId, Model model) {
-        Waiting waiting = waitingRepository.findById(waitingId).get();
-        Store store = storeRepository.findByStoreId(waiting.getStoreId());
-        model.addAttribute("visitedWaitingResponse", VisitedWaitingResponse.create(waiting, store));
+        switch (status) {
+            case "canceled":
+                return CanceledWaitingResponse.create(waiting, store);
+            case "visited":
+                return VisitedWaitingResponse.create(waiting, store);
+            case "awaiting":
+                return AwaitingWaitingResponse.create(waiting, store);
+            default:
+                throw new IllegalArgumentException("Invalid status: " + status);
+        }
+    }
 
-        return "customer/waiting/visited-waiting-detail";
+    private Object findWaitingEntity(Long waitingId) {
+        Optional<Waiting> waiting = waitingRepository.findById(waitingId);
+        if (waiting.isPresent()) {
+            return waiting.get();
+        }
+
+        Optional<WaitingStorage> waitingStorage = waitingStorageRepository.findById(waitingId);
+        return waitingStorage.orElse(null);
+    }
+
+    private Long getStoreId(Object waiting) {
+        if (waiting instanceof Waiting) {
+            return ((Waiting) waiting).getStoreId();
+        } else if (waiting instanceof WaitingStorage) {
+            return ((WaitingStorage) waiting).getStoreId();
+        } else {
+            return null;
+        }
+    }
+
+    // 상태에 따라 뷰 이름을 반환하는 메서드
+    private String getViewName(String status) {
+        switch (status) {
+            case "canceled":
+                return "customer/waiting/canceled-waiting-detail";
+            case "visited":
+                return "customer/waiting/visited-waiting-detail";
+            case "awaiting":
+                return "customer/waiting/awaiting-waiting-detail";
+            default:
+                throw new IllegalArgumentException("Invalid status: " + status);
+        }
     }
 }
