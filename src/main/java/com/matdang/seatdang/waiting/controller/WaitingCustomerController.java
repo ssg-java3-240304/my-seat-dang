@@ -14,6 +14,7 @@ import com.matdang.seatdang.waiting.repository.query.WaitingQueryRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoProjection;
 import com.matdang.seatdang.waiting.service.WaitingCustomerService;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +38,7 @@ public class WaitingCustomerController {
     private final AuthService authService;
 
     @GetMapping("/test-store")
-    public String showStore(@RequestParam(defaultValue = "1") Long storeId, Model model) {
+    public String showStore(@RequestParam(defaultValue = "2") Long storeId, Model model) {
         Long memberId = authService.getAuthenticatedMember().getMemberId();
         boolean isRegistered = waitingRepository.isRegisteredWaiting(storeId, memberId);
 
@@ -53,9 +54,15 @@ public class WaitingCustomerController {
      * <p>
      * TODO : URL 변경
      */
-    // TODO : 웨이팅 후 다시 주소 접근 차단
+    // TODO : URL 직접 접근 막기 - 개선필요
     @GetMapping("/waiting/{storeId}")
-    public String readyWaiting(@PathVariable Long storeId, Model model) {
+    public String readyWaiting(@PathVariable Long storeId, Model model, HttpServletRequest request) {
+        String referer = request.getHeader("Referer");
+        // 유효한 referer URL인지 확인 (예: "https://example.com/somepage")
+        if (referer == null || !referer.startsWith("http://localhost:8080/my-seat-dang/test-store")) {
+            return "error/403";
+        }
+
         Store store = storeRepository.findByStoreId(storeId);
 
         model.addAttribute("waitingTeam", waitingRepository.countWaitingByStoreIdAndWaitingStatus(storeId));
@@ -89,7 +96,12 @@ public class WaitingCustomerController {
 
     // TODO : 취소 후 url에 접속 못하게 막기(if문 상태처리)
     @GetMapping("/waiting/{waitingId}/awaiting/detail")
-    public String showAwaitingWaitingDetail(@PathVariable Long waitingId, Model model) {
+    public String showAwaitingWaitingDetail(@PathVariable Long waitingId, Model model, HttpServletRequest request) {
+        String referer = request.getHeader("Referer");
+        if (referer == null || !referer.startsWith("http://localhost:8080/my-seat-dang/waiting")) {
+            return "error/403";
+        }
+
         Waiting waiting = waitingRepository.findById(waitingId).get();
         Store store = storeRepository.findByStoreId(waiting.getStoreId());
         model.addAttribute("awaitingWaitingResponse", AwaitingWaitingResponse.create(waiting, store));
