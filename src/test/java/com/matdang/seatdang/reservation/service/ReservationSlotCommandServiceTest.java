@@ -1,5 +1,6 @@
 package com.matdang.seatdang.reservation.service;
 
+import com.matdang.seatdang.reservation.dto.ReservationSlotReturnDto;
 import com.matdang.seatdang.reservation.dto.ReservationTicketRequestDTO;
 import com.matdang.seatdang.reservation.entity.ReservationSlot;
 import com.matdang.seatdang.reservation.repository.ReservationSlotRepository;
@@ -12,10 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Optional;
 import java.util.concurrent.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class ReservationSlotCommandServiceTest {
@@ -72,6 +73,7 @@ class ReservationSlotCommandServiceTest {
         executor.shutdown();
     }
 
+    @Transactional
     @DisplayName("예약 티켓 1건 발권")
     @Test
     public void test2() {
@@ -85,5 +87,40 @@ class ReservationSlotCommandServiceTest {
         ReservationTicket ticket = reservationSlotCommandService.getReservationTicket(new ReservationTicketRequestDTO(storeId, date, time, maxReservation));
         //then
         assertThat(ticket).isEqualTo(ReservationTicket.AVAILABLE);
+    }
+
+    @Transactional
+    @DisplayName("슬롯 1개 반환")
+    @Test
+    public void test3() {
+        //given
+        Long storeId = 5L;
+        LocalDate date = LocalDate.now().plusDays(7);
+        LocalTime time = LocalTime.of(12, 30);
+        int maxReservation = 5;
+        ReservationSlot reservationSlot = new ReservationSlot(storeId, date, time, maxReservation);
+        reservationSlotRepository.save(reservationSlot);
+        reservationSlotRepository.flush();
+
+        Optional<ReservationSlot> optReservationSlot = reservationSlotRepository.findByStoreAndDateAndTime(storeId, date, time);
+        reservationSlot = optReservationSlot.orElse(null);
+        if(reservationSlot != null){
+            System.out.println("예약슬롯 증가 시도 결과 = "+reservationSlot.tryIncreaseSlot());
+            System.out.println("예약슬롯 = "+reservationSlot.getUsedSlots());
+        }
+
+        ReservationSlotReturnDto dto = ReservationSlotReturnDto.builder()
+                .storeId(storeId)
+                .date(date)
+                .time(time)
+                .build();
+        //when
+        reservationSlotCommandService.returnSlot(dto);
+        //then
+        reservationSlotRepository.flush();
+        Optional<ReservationSlot> optSlot2 = reservationSlotRepository.findByStoreAndDateAndTime(storeId, date, time);
+        ReservationSlot slot2 = optSlot2.orElse(null);
+        assertThat(slot2).isNotNull();
+        assertThat(slot2.getUsedSlots()).isEqualTo(0);
     }
 }
