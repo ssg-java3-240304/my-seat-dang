@@ -19,6 +19,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URLEncoder;
@@ -61,16 +62,17 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/","/login","/signup", "/my-seat-dang","/my-seat-dang/search","/my-seat-dang/store/detail/*","/signupProc","/check-nickname","/check-email", "/mainmypage/change-password", "/storeRegist", "/storeUpdate").permitAll() // 누구나 허용
+                        .requestMatchers("/","/login","/signup", "/my-seat-dang","/my-seat-dang/search","/my-seat-dang/store/detail/*","/signupProc","/check-nickname","/check-email", "/storeRegist", "/storeUpdate").permitAll() // 누구나 허용
 //                        .requestMatchers("/","/login","/signup","/signupProc","/check-nickname","/check-email").permitAll() // 누구나 허용
                         .requestMatchers("/payment/**").permitAll() // /payment 하위 경로는 인증 없이 허용
                         .requestMatchers("/admin/**").hasRole("ADMIN") // ROLE_ADMIN 권한이 있는 사용자만 허용
+                        .requestMatchers("/my-seat-dang/mypage/**").hasRole("CUSTOMER") // ROLE_Customer
                         .requestMatchers("/store/**").hasRole("STORE_OWNER") // ROLE_STORE_OWNER 권한이 있는 사용자만 허용
                         .anyRequest().authenticated() // 나머지 로그인 사용자만 이용가능
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/login") // OAuth2 로그인 페이지 설정
-                        .defaultSuccessUrl("/", true) // 로그인 성공 후 리다이렉트될 URL
+                        .defaultSuccessUrl("/my-seat-dang", true) // 로그인 성공 후 리다이렉트될 URL
                         .failureUrl("/login?error=true") // 로그인 실패 시 리다이렉트될 URL
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService) // 커스텀 OAuth2UserService 설정 가능
@@ -81,6 +83,18 @@ public class SecurityConfig {
                         .loginProcessingUrl("/loginProc")
                         .usernameParameter("memberEmail") // 현재 name = "memberEmail" // 기본인 username이 아니라서 써줌
                         .passwordParameter("memberPassword") // 현재 name = "memberPassword" // 기본인 password가 아니라서 써줌
+                        .successHandler((request, response, authentication) -> {
+                            // 사용자가 로그인하기 전에 가려고 했던 URL을 가져옴
+                            SavedRequest savedRequest = (SavedRequest) request.getSession().getAttribute("SPRING_SECURITY_SAVED_REQUEST");
+
+                            // 만약 savedRequest가 있으면 그 URL로 리다이렉트, 없으면 기본 URL로 리다이렉트
+                            if (savedRequest != null) {
+                                String targetUrl = savedRequest.getRedirectUrl();
+                                response.sendRedirect(targetUrl);
+                            } else {
+                                response.sendRedirect("/my-seat-dang");
+                            }
+                        })
                         .permitAll() // 아무나 가능
                 );
         http

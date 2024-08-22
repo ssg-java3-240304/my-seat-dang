@@ -217,7 +217,7 @@
                             </div>
                             <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel"
                                  aria-labelledby="profile-tab" tabindex="0">
-                                <form th:action="@{/mainmypage/update}" th:object="${customer}" method="post" name="detailsForm" id="detailsForm" enctype="multipart/form-data" class="row gy-3 gy-xxl-4">
+                                <form th:action="@{/my-seat-dang/mypage/update}" th:object="${customer}" method="post" name="detailsForm" id="detailsForm" enctype="multipart/form-data" class="row gy-3 gy-xxl-4">
                                     <div class="col-12">
                                         <div class="row gy-2">
                                             <!--                                            <label class="col-12 form-label m-0">Profile Image</label>-->
@@ -327,7 +327,7 @@
                             <!--                            </div>-->
                             <div class="tab-pane fade" id="password-tab-pane" role="tabpanel"
                                  aria-labelledby="password-tab" tabindex="0">
-                                <form th:action="@{/mainmypage/change-password}" method="post" name="passwordForm" id="passwordForm">
+                                <form th:action="@{/my-seat-dang/mypage/edit-profile/change-password}" method="post" name="passwordForm" id="passwordForm">
                                     <div class="row gy-3 gy-xxl-4">
                                         <div class="col-12">
                                             <label for="newPassword" class="form-label">New Password</label>
