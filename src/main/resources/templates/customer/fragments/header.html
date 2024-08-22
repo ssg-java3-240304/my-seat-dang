@@ -29,7 +29,10 @@
                     <div class="dropdown-menu">
                         <div class="dropdown-menu-content">
                             <ul>
-                                <li><a th:href="@{/mainmypage}"><i class="icon_document"></i>내 프로필</a></li>
+                                <li><a th:href="@{/my-seat-dang/mypage/edit-profile}">내 프로필</a></li>
+<!--                                <li><a th:href="@{/ai-result}">케이크시안 생성하기</a></li>-->
+<!--                                <li><a th:href="@{/}">예약</a></li>-->
+<!--                                <li><a th:href="@{/}">결제내역</a></li>-->
                                 <li><a th:href="@{/logout}"><i class="icon_key"></i>로그아웃</a></li>
                             </ul>
                         </div>
@@ -60,21 +63,18 @@
                         <li><a th:href="@{/admin/main}">관리자페이지</a></li>
                         <li><a th:href="@{/storeowner/main}">점주페이지</a></li>
                         <li><a th:href="@{/mypage}">마이페이지</a></li>
-
-
                     </ul>
                 </li>
-<!--                <li class="submenu">-->
-<!--                    <a href="#0" class="show-submenu">AI 시안</a>-->
-<!--                    <ul>-->
-<!--                        <li><a th:href="@{/ai-result}">케이크시안 생성하기</a></li>-->
-<!--                    </ul>-->
-<!--                </li>-->
+                <li class="submenu">
+                    <a href="#0" class="show-submenu">AI 이미지생성</a>
+                    <ul>
+                        <li><a th:href="@{/ai-result}">케이크시안 생성하기</a></li>
+                    </ul>
+                </li>
                 <li class="submenu">
                     <a href="#0" class="show-submenu">마이 페이지</a>
                     <ul>
-                        <li><a th:href="@{/ai-result}">케이크시안 생성하기</a></li>
-                        <li><a th:href="@{/my-seat-dang/mypage/edit-profile}">회원정보수정</a></li>
+<!--                        <li><a th:href="@{/ai-result}">케이크시안 생성하기</a></li>-->
                         <li><a th:href="@{/}">예약</a></li>
                         <li><a th:href="@{/}">결제내역</a></li>
                     </ul>
