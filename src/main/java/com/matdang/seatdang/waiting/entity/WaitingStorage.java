@@ -1,5 +1,6 @@
 package com.matdang.seatdang.waiting.entity;
 
+import com.matdang.seatdang.payment.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -12,19 +13,21 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.domain.Persistable;
 
 @Entity
 @Data
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
-public class WaitingStorage {
+public class WaitingStorage extends StorageBaseEntity implements Persistable<Long> {
 
     @Id
-    @GeneratedValue
     private Long id;
 
     private Long waitingNumber;
@@ -41,9 +44,10 @@ public class WaitingStorage {
     private LocalDateTime visitedTime;
     private LocalDateTime canceledTime;
 
-    public WaitingStorage(Long waitingNumber, Long waitingOrder, Long storeId, Long customerId,
+    public WaitingStorage(Long id, Long waitingNumber, Long waitingOrder, Long storeId, Long customerId,
                           String customerPhone, Integer peopleCount, LocalDateTime createdDate,
                           WaitingStatus waitingStatus, LocalDateTime visitedTime, LocalDateTime canceledTime) {
+        this.id = id;
         this.waitingNumber = waitingNumber;
         this.waitingOrder = waitingOrder;
         this.storeId = storeId;
@@ -52,5 +56,10 @@ public class WaitingStorage {
         this.waitingStatus = waitingStatus;
         this.visitedTime = visitedTime;
         this.canceledTime = canceledTime;
+    }
+
+    @Override
+    public boolean isNew() {
+        return getSavedDate() == null;
     }
 }
