@@ -1,13 +1,18 @@
 package com.matdang.seatdang.reservation.controller;
 
+import com.matdang.seatdang.ai.entity.GeneratedImageUrl;
+import com.matdang.seatdang.ai.repository.GeneratedImageUrlRepository;
 import com.matdang.seatdang.auth.service.AuthService;
+import com.matdang.seatdang.chat.chatconfig.ChatConfig;
 import com.matdang.seatdang.member.dto.StoreOwnerResponseDto;
 import com.matdang.seatdang.member.entity.Member;
 import com.matdang.seatdang.member.service.CustomerService;
 import com.matdang.seatdang.member.service.StoreOwnerMemberService;
 import com.matdang.seatdang.reservation.dto.ReservationSaveRequestDto;
 import com.matdang.seatdang.reservation.dto.ReservationTicketRequestDTO;
+import com.matdang.seatdang.reservation.dto.ResponseDto;
 import com.matdang.seatdang.reservation.service.ReservationCommandService;
+import com.matdang.seatdang.reservation.service.ReservationService;
 import com.matdang.seatdang.reservation.service.ReservationSlotCommandService;
 import com.matdang.seatdang.reservation.vo.CustomerInfo;
 import com.matdang.seatdang.reservation.vo.ReservationTicket;
@@ -15,12 +20,11 @@ import com.matdang.seatdang.reservation.vo.StoreOwnerInfo;
 import com.matdang.seatdang.store.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -33,11 +37,30 @@ public class ReservationCustomerController {
     private final CustomerService customerService;
     private final StoreOwnerMemberService storeOwnerMemberService;
     private final AuthService authService;
+    private final ReservationService reservationService;
+    private final GeneratedImageUrlRepository generatedImageUrlRepository;
+    private final ChatConfig chatConfig;  // ChatConfig를 의존성 주입으로 받음
 //    private final
 
-    @GetMapping("list")
-    public String list(Model model){
-        return "/customer/mypage/mypage";
+    @GetMapping("/cus-reservationlist")
+    public String reservedPage(Model model) {
+
+        Long customerId = authService.getAuthenticatedMember().getMemberId();
+        String chatUrl = chatConfig.getServerUrl();
+
+        // 예약 목록 가져오기
+        List<ResponseDto> reservations = reservationService.getReservationsByCustomerId(customerId);
+
+        // 고객이 생성한 모든 이미지 담기
+        List<GeneratedImageUrl> imageList = generatedImageUrlRepository.findAllByCustomerId(customerId);
+
+//        model.addAttribute("chatAccessUrl", chatUrl);
+        model.addAttribute("reservations", reservations);
+        model.addAttribute("imageList", imageList); // 회원이 생성한 ai 생성 이미지 추가
+        model.addAttribute("chatAccessUrl",chatUrl);
+        log.info("reservations = {}", reservations);
+        log.info("url = {}", chatUrl);
+        return "customer/reservation/cus-reservationlist";
     }
 
     @PostMapping("create-custom")
