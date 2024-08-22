@@ -5,15 +5,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
-import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.entity.WaitingStorage;
-import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
-import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoProjection;
 import jakarta.persistence.EntityManager;
-import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,20 +18,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
-public class WaitingQueryCustomerTest {
+class WaitingStorageQueryRepositoryTest {
     @Autowired
-    private WaitingQueryRepository waitingQueryRepository;
-    @Autowired
-    private WaitingStorageRepository waitingStorageRepository;
+    private WaitingStorageQueryRepository waitingStorageQueryRepository;
     @Autowired
     private StoreRepository storeRepository;
     @Autowired
-    private WaitingRepository waitingRepository;
+    private WaitingStorageRepository waitingStorageRepository;
     @Autowired
     private EntityManager em;
 
@@ -48,7 +41,7 @@ public class WaitingQueryCustomerTest {
                 .storeName("마싯당")
                 .build());
 
-        Waiting waiting = waitingRepository.save(Waiting.builder()
+        WaitingStorage waiting = waitingStorageRepository.save(WaitingStorage.builder()
                 .waitingNumber(1L)
                 .waitingOrder(1L)
                 .storeId(storeA.getStoreId())
@@ -56,7 +49,7 @@ public class WaitingQueryCustomerTest {
                 .waitingStatus(WaitingStatus.valueOf(status))
                 .visitedTime(null)
                 .build());
-        Waiting waiting2 = waitingRepository.save(Waiting.builder()
+        WaitingStorage waiting2 = waitingStorageRepository.save(WaitingStorage.builder()
                 .waitingNumber(1L)
                 .waitingOrder(1L)
                 .storeId(storeA.getStoreId())
@@ -70,7 +63,7 @@ public class WaitingQueryCustomerTest {
         PageRequest pageable = PageRequest.of(0, 100);
 
         // when
-        Page<WaitingInfoDto> findResult = waitingQueryRepository.findAllByCustomerIdAndWaitingStatus(
+        Page<WaitingInfoDto> findResult = waitingStorageQueryRepository.findAllByCustomerIdAndWaitingStatus(
                 1L, WaitingStatus.valueOf(status), pageable);
 
         // then
@@ -89,7 +82,7 @@ public class WaitingQueryCustomerTest {
                 .build());
 
         for (WaitingStatus status : WaitingStatus.values()) {
-            waitingRepository.save(Waiting.builder()
+            waitingStorageRepository.save(WaitingStorage.builder()
                     .waitingNumber(1L)
                     .waitingOrder(1L)
                     .storeId(storeA.getStoreId())
@@ -104,7 +97,7 @@ public class WaitingQueryCustomerTest {
         PageRequest pageable = PageRequest.of(0, 100);
 
         // when
-        Page<WaitingInfoDto> findResult = waitingQueryRepository.findAllByCustomerIdAndCancelStatus(
+        Page<WaitingInfoDto> findResult = waitingStorageQueryRepository.findAllByCustomerIdAndCancelStatus(
                 1L, pageable);
 
         // then
@@ -116,103 +109,60 @@ public class WaitingQueryCustomerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"WAITING", "VISITED", "CUSTOMER_CANCELED"})
-    @DisplayName("고객 id로 특정 상태의 웨이팅(기존 + 저장소) 모두 가져오기")
-    void findUnionAllByCustomerIdAndWaitingStatus(String status) {
+    @ValueSource(strings = {"WAITING", "VISITED"})
+    @DisplayName("고객id로 특정 웨이팅 상태 개수 찾기")
+    void countWaitingStorageByCustomerIdAndWaitingStatus(String status) {
         // given
         Store storeA = storeRepository.save(Store.builder()
                 .storeName("마싯당")
                 .build());
 
-        Waiting waiting = waitingRepository.save(Waiting.builder()
-                .waitingNumber(1L)
-                .waitingOrder(1L)
-                .storeId(storeA.getStoreId())
-                .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
-                .waitingStatus(WaitingStatus.valueOf(status))
-                .visitedTime(null)
-                .build());
-        Waiting waiting2 = waitingRepository.save(Waiting.builder()
-                .waitingNumber(1L)
-                .waitingOrder(1L)
-                .storeId(storeA.getStoreId())
-                .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
-                .waitingStatus(WaitingStatus.SHOP_CANCELED)
-                .visitedTime(null)
-                .build());
-
-        WaitingStorage waiting3 = waitingStorageRepository.save(WaitingStorage.builder()
-                .waitingNumber(1L)
-                .waitingOrder(1L)
-                .storeId(storeA.getStoreId())
-                .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
-                .waitingStatus(WaitingStatus.valueOf(status))
-                .visitedTime(null)
-                .build());
-        WaitingStorage waiting4 = waitingStorageRepository.save(WaitingStorage.builder()
-                .waitingNumber(1L)
-                .waitingOrder(1L)
-                .storeId(storeA.getStoreId())
-                .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
-                .waitingStatus(WaitingStatus.SHOP_CANCELED)
-                .visitedTime(null)
-                .build());
-        em.flush();
-        em.clear();
-
-        PageRequest pageable = PageRequest.of(0, 10);
-
-        // when
-        Page<WaitingInfoProjection> findResult = waitingQueryRepository.findUnionAllByCustomerIdAndWaitingStatus(
-                1L, WaitingStatus.valueOf(status), pageable);
-
-        // then
-        assertThat(findResult.getTotalElements()).isEqualTo(2);
-        assertThat(findResult.getContent()).extracting(WaitingInfoProjection::getWaitingStatus)
-                .containsOnly(WaitingStatus.valueOf(status));
-        assertThat(findResult.getContent()).extracting(WaitingInfoProjection::getStoreName).containsOnly("마싯당");
-    }
-
-    @Test
-    @DisplayName("고객 id로 취소상태의 웨이팅(기존 + 저장소) 모두 가져오기")
-    void findUnionAllByCustomerIdAndCancelStatus() {
-        // given
-        Store storeA = storeRepository.save(Store.builder()
-                .storeName("마싯당")
-                .build());
-
-        for (WaitingStatus status : WaitingStatus.values()) {
-            waitingRepository.save(Waiting.builder()
-                    .waitingNumber(1L)
-                    .waitingOrder(1L)
-                    .storeId(storeA.getStoreId())
-                    .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
-                    .waitingStatus(status)
-                    .visitedTime(null)
-                    .build());
+        for (WaitingStatus waitingStatus : WaitingStatus.values()) {
             waitingStorageRepository.save(WaitingStorage.builder()
                     .waitingNumber(1L)
                     .waitingOrder(1L)
                     .storeId(storeA.getStoreId())
                     .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
-                    .waitingStatus(status)
+                    .waitingStatus(waitingStatus)
                     .visitedTime(null)
                     .build());
         }
         em.flush();
         em.clear();
 
-        PageRequest pageable = PageRequest.of(0, 10);
-
         // when
-        Page<WaitingInfoProjection> findResult = waitingQueryRepository.findUnionAllByCustomerIdAndCancelStatus(
-                1L, pageable);
+        int findResult = waitingStorageQueryRepository.countWaitingStorageByCustomerIdAndWaitingStatus(1L,
+                WaitingStatus.valueOf(status));
 
         // then
-        assertThat(findResult.getTotalElements()).isEqualTo(3+3);
-        assertThat(findResult.getContent()).extracting(WaitingInfoProjection::getWaitingStatus)
-                .containsOnly(WaitingStatus.NO_SHOW, WaitingStatus.CUSTOMER_CANCELED,
-                        WaitingStatus.SHOP_CANCELED);
-        assertThat(findResult.getContent()).extracting(WaitingInfoProjection::getStoreName).containsOnly("마싯당");
+        assertThat(findResult).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("고객id로 취소 상태 웨이팅 개수 찾기")
+    void countWaitingStorageByCustomerIdAndCancelStatus() {
+        // given
+        Store storeA = storeRepository.save(Store.builder()
+                .storeName("마싯당")
+                .build());
+
+        for (WaitingStatus waitingStatus : WaitingStatus.values()) {
+            waitingStorageRepository.save(WaitingStorage.builder()
+                    .waitingNumber(1L)
+                    .waitingOrder(1L)
+                    .storeId(storeA.getStoreId())
+                    .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+                    .waitingStatus(waitingStatus)
+                    .visitedTime(null)
+                    .build());
+        }
+        em.flush();
+        em.clear();
+
+        // when
+        int findResult = waitingStorageQueryRepository.countWaitingStorageByCustomerIdAndCancelStatus(1L);
+
+        // then
+        assertThat(findResult).isEqualTo(3);
     }
 }

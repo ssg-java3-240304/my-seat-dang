@@ -1,7 +1,6 @@
 package com.matdang.seatdang.waiting.repository;
 
 import com.matdang.seatdang.waiting.repository.query.WaitingQueryRepository;
-import com.matdang.seatdang.waiting.repository.query.dto.WaitingDto;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
@@ -13,9 +12,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -112,7 +111,7 @@ class WaitingRepositoryTest {
         List<Waiting> findWaiting = waitingRepository.findAll();
         em.clear();
         // when
-        int result = waitingRepository.updateAllWaitingNumberByVisit(1L);
+        int result = waitingRepository.updateAllWaitingOrderByVisit(1L);
         // then
         assertThat(result).isEqualTo(10);
         assertThat(waitingRepository.findById(findWaiting.get(0).getId()).get().getWaitingOrder()).isEqualTo(
@@ -124,7 +123,7 @@ class WaitingRepositoryTest {
     void updateWaitingNumberByCancel() {
         // given
         // when
-        int result = waitingRepository.updateWaitingNumberByCancel(1L, 5L);
+        int result = waitingRepository.updateWaitingOrderByCancel(1L, 5L);
         // then
         assertThat(result).isEqualTo(4);
     }
@@ -133,15 +132,17 @@ class WaitingRepositoryTest {
     @DisplayName("상점 id로 웨이팅 전체 취소")
     void cancelAllWaiting() {
         // given
+        PageRequest pageable = PageRequest.of(0, 10);
+
         // when
         int result = waitingRepository.cancelAllWaiting(1L);
         // then
         assertThat(result).isEqualTo(10);
-        assertThat(waitingQueryRepository.findAllByStoreIdAndWaitingStatus(1L, WaitingStatus.WAITING).size())
+        assertThat(waitingQueryRepository.findAllByStoreIdAndWaitingStatus(1L, WaitingStatus.WAITING, pageable)
+                .getTotalElements())
                 .isEqualTo(0);
-        assertThat(waitingQueryRepository.findAllByStoreIdAndWaitingStatus(1L, WaitingStatus.SHOP_CANCELED)
-                .size()).isEqualTo(20);
-
+        assertThat(waitingQueryRepository.findAllByStoreIdAndWaitingStatus(1L, WaitingStatus.SHOP_CANCELED, pageable)
+                .getTotalElements()).isEqualTo(20);
     }
 
     @Test
@@ -154,7 +155,6 @@ class WaitingRepositoryTest {
         // then
         assertThat(result).isEqualTo(50);
         assertThat(findResult.size()).isEqualTo(0);
-
     }
 
 

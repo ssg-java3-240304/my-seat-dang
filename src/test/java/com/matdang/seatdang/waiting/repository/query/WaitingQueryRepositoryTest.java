@@ -22,6 +22,9 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -30,8 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 class WaitingQueryRepositoryTest {
     @Autowired
     private WaitingQueryRepository waitingQueryRepository;
-    @Autowired
-    private StoreRepository storeRepository;
+
     @Autowired
     private WaitingRepository waitingRepository;
     @Autowired
@@ -75,12 +77,14 @@ class WaitingQueryRepositoryTest {
     @DisplayName("상점 id로 특정 상태인 웨이팅 모두 조회 ")
     void findAllByStoreIdAndWaitingStatus(long shopId, String status, int size) {
         // given
+        PageRequest pageable = PageRequest.of(0, 10);
+
         // when
-        List<WaitingDto> findWaitings = waitingQueryRepository.findAllByStoreIdAndWaitingStatus(shopId,
-                WaitingStatus.valueOf(status));
+        Page<WaitingDto> findWaitings = waitingQueryRepository.findAllByStoreIdAndWaitingStatus(shopId,
+                WaitingStatus.valueOf(status),pageable);
 
         // then
-        assertThat(findWaitings.size()).isEqualTo(size);
+        assertThat(findWaitings.getTotalElements()).isEqualTo(size);
     }
 
     @ParameterizedTest
@@ -88,10 +92,12 @@ class WaitingQueryRepositoryTest {
     @DisplayName("상점 id로 취소 상태(노쇼, 점주, 고객) 웨이팅 모두 조회")
     void findAllByCancelStatus(Long storeId, int size) {
         // given
+        PageRequest pageable = PageRequest.of(0, 10);
+
         // when
-        List<WaitingDto> findWaitings = waitingQueryRepository.findAllByCancelStatus(storeId);
+        Page<WaitingDto> findWaitings = waitingQueryRepository.findAllByCancelStatus(storeId,pageable);
         // then
-        assertThat(findWaitings.size()).isEqualTo(size);
+        assertThat(findWaitings.getTotalElements()).isEqualTo(size);
     }
 
     @Test
@@ -108,12 +114,15 @@ class WaitingQueryRepositoryTest {
                     .visitedTime(null)
                     .build());
         }
+
+        PageRequest pageable = PageRequest.of(0, 10);
+
         // when
-        List<WaitingDto> findWaitings = waitingQueryRepository.findAllByWaitingStatusOrderByWaitingOrder(3L);
+        Page<WaitingDto> findWaitings = waitingQueryRepository.findAllByWaitingStatusOrderByWaitingOrder(3L, pageable);
         // then
 
-        for (int i = 0; i < findWaitings.size(); i++) {
-            assertThat(findWaitings.get(i).getWaitingOrder()).isEqualTo(i + 1);
+        for (int i = 0; i < findWaitings.getTotalElements(); i++) {
+            assertThat(findWaitings.getContent().get(i).getWaitingOrder()).isEqualTo(i + 1);
         }
     }
 

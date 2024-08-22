@@ -12,10 +12,15 @@ import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.repository.query.WaitingQueryRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
+import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoProjection;
 import com.matdang.seatdang.waiting.service.WaitingCustomerService;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +41,7 @@ public class WaitingCustomerController {
     public String showStore(@RequestParam(defaultValue = "1") Long storeId, Model model) {
         Long memberId = authService.getAuthenticatedMember().getMemberId();
         boolean isRegistered = waitingRepository.isRegisteredWaiting(storeId, memberId);
+        isRegistered = false;
 
         model.addAttribute("storeId", storeId);
         model.addAttribute("isRegistered", isRegistered);
@@ -46,12 +52,18 @@ public class WaitingCustomerController {
     /**
      * TODO : 삭제 필요
      * defaultValue는 test 용도임
-     *
+     * <p>
      * TODO : URL 변경
      */
-    // TODO : 웨이팅 후 다시 주소 접근 차단
+    // TODO : URL 직접 접근 막기 - 개선필요
     @GetMapping("/waiting/{storeId}")
-    public String readyWaiting(@PathVariable Long storeId, Model model) {
+    public String readyWaiting(@PathVariable Long storeId, Model model, HttpServletRequest request) {
+        String referer = request.getHeader("Referer");
+        // 유효한 referer URL인지 확인 (예: "https://example.com/somepage")
+//        if (referer == null || !referer.startsWith("http://localhost:8080/my-seat-dang/test-store")) {
+//            return "error/403";
+//        }
+
         Store store = storeRepository.findByStoreId(storeId);
 
         model.addAttribute("waitingTeam", waitingRepository.countWaitingByStoreIdAndWaitingStatus(storeId));
@@ -71,16 +83,26 @@ public class WaitingCustomerController {
     }
 
     @GetMapping("/waiting")
-    public String showWaiting(@RequestParam(defaultValue = "0") int status, Model model) {
-        List<WaitingInfoDto> waitings = waitingCustomerService.showWaiting(status);
-        model.addAttribute("waitings", waitings);
+    public String showWaiting(@RequestParam(defaultValue = "0") int status,
+                              @RequestParam(defaultValue = "0") int page,
+                              Model model) {
+        Page<WaitingInfoProjection> waitings = waitingCustomerService.showWaiting(status, page);
+        model.addAttribute("status", status);
+        model.addAttribute("waitings", waitings.getContent());
+        model.addAttribute("currentPage", waitings.getNumber());
+        model.addAttribute("totalPages", waitings.getTotalPages());
 
         return "customer/waiting/waiting";
     }
 
     // TODO : 취소 후 url에 접속 못하게 막기(if문 상태처리)
     @GetMapping("/waiting/{waitingId}/awaiting/detail")
-    public String showAwaitingWaitingDetail(@PathVariable Long waitingId, Model model) {
+    public String showAwaitingWaitingDetail(@PathVariable Long waitingId, Model model, HttpServletRequest request) {
+        String referer = request.getHeader("Referer");
+//        if (referer == null || !referer.startsWith("http://localhost:8080/my-seat-dang/waiting")) {
+//            return "error/403";
+//        }
+
         Waiting waiting = waitingRepository.findById(waitingId).get();
         Store store = storeRepository.findByStoreId(waiting.getStoreId());
         model.addAttribute("awaitingWaitingResponse", AwaitingWaitingResponse.create(waiting, store));
@@ -90,8 +112,8 @@ public class WaitingCustomerController {
 
     @PostMapping("/waiting/{waitingId}/awaiting/detail")
     public String cancelWaiting(@PathVariable Long waitingId, RedirectAttributes redirectAttributes) {
-        int result = waitingRepository.cancelWaitingByCustomer(waitingId);
-        if (result == 1) {
+        int result = waitingCustomerService.cancelWaitingByCustomer(waitingId);
+        if (result > 0) {
             log.info("=== 웨이팅 고객 취소 ===");
         } else {
             log.error("== 웨이팅 고객 취소 오류 ===");

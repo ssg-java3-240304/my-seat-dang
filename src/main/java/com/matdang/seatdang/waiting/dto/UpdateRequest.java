@@ -6,7 +6,7 @@ import lombok.Data;
 public class UpdateRequest {
     private Long id;
     private Long storeId;
-    private Long waitingNumber;
+    private Long waitingOrder;
     private Integer changeStatus;
     private Integer status = 0;
 }

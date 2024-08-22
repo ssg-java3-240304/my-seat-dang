@@ -13,6 +13,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -71,9 +73,9 @@ class WaitingServiceTest {
     void showWaiting(long storeId, int status, int size) {
         // given
         // when
-        List<WaitingDto> waitings = waitingService.showWaiting(storeId, status);
+        Page<WaitingDto> waitings = waitingService.showWaiting(storeId, status, 0);
         // then
-        assertThat(waitings.size()).isEqualTo(size);
+        assertThat(waitings.getTotalElements()).isEqualTo(size);
     }
 
     @ParameterizedTest
@@ -88,7 +90,7 @@ class WaitingServiceTest {
         updateRequest.setChangeStatus(status);
         updateRequest.setStoreId(shopId);
         updateRequest.setId(findWaitings.get(0).getId());
-        updateRequest.setWaitingNumber(1L);
+        updateRequest.setWaitingOrder(1L);
 
         // when
         waitingService.updateStatus(updateRequest);

@@ -11,6 +11,8 @@ import com.matdang.seatdang.store.vo.StoreSetting;
 import com.matdang.seatdang.store.vo.WaitingTime;
 import com.matdang.seatdang.waiting.controller.dto.WaitingPeople;
 import com.matdang.seatdang.waiting.dto.UpdateRequest;
+import com.matdang.seatdang.waiting.entity.WaitingStorage;
+import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingDto;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.entity.Waiting;
@@ -25,6 +27,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,22 +51,26 @@ public class WaitingController {
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final StoreRepository storeRepository;
+    private final WaitingStorageRepository waitingStorageRepository;
 
     @GetMapping
     public String showWaiting(@RequestParam(defaultValue = "0") int status,
+                              @RequestParam(defaultValue = "0") int page,
                               Model model) {
         Long storeId = authService.getAuthenticatedStoreId();
         log.debug("storeId = {}", storeId);
         log.info("===  showWaiting  ===");
 
-        List<WaitingDto> waitings = waitingService.showWaiting(storeId, status);
-        createEstimatedWaitingTime(status, model, waitings, storeId);
+        Page<WaitingDto> waitings = waitingService.showWaiting(storeId, status, page);
+        createEstimatedWaitingTime(status, model, waitings.getContent(), storeId);
 
         model.addAttribute("waitingStatus", waitingSettingService.findWaitingStatus(storeId));
-        model.addAttribute("waitingPeople", WaitingPeople.create(waitings));
+        model.addAttribute("waitingPeople", WaitingPeople.create(waitings.getContent()));
         model.addAttribute("waitings", waitings);
         model.addAttribute("storeId", storeId);
         model.addAttribute("status", status);
+        model.addAttribute("currentPage", waitings.getNumber());
+        model.addAttribute("totalPages", waitings.getTotalPages());
         return "storeowner/waiting/main";
     }
 
@@ -103,10 +110,22 @@ public class WaitingController {
      * test 실행시 주석 필요
      */
     @PostConstruct
-    public void initData() {
+    public void initData() throws InterruptedException {
         StoreVo storeVo = new StoreVo(1L, "달콤커피", StoreType.CUSTOM, "서울시강남구");
         storeRepository.save(Store.builder()
-                        .storeName("마싯당")
+                .storeName("마싯당")
+                .storeSetting(StoreSetting.builder()
+                        .waitingPeopleCount(10)
+                        .waitingStatus(com.matdang.seatdang.store.vo.WaitingStatus.OPEN)
+                        .waitingTime(WaitingTime.builder()
+                                .waitingOpenTime(LocalTime.of(9, 0))
+                                .waitingCloseTime(LocalTime.of(22, 0))
+                                .build())
+                        .build())
+                .build());
+
+        storeRepository.save(Store.builder()
+                .storeName("마싯당-스토리지")
                 .storeSetting(StoreSetting.builder()
                         .waitingPeopleCount(10)
                         .waitingStatus(com.matdang.seatdang.store.vo.WaitingStatus.OPEN)
@@ -168,14 +187,6 @@ public class WaitingController {
                 }
             }
         }
-        waitingRepository.save(Waiting.builder()
-                .waitingNumber(41L)
-                .waitingOrder(41L)
-                .storeId(1L)
-                .customerInfo(new CustomerInfo(2L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
-                .waitingStatus(WaitingStatus.VISITED)
-                .visitedTime(null)
-                .build());
 
         for (long i = 1; i <= 10; i++) {
             waitingRepository.save(Waiting.builder()
@@ -187,8 +198,21 @@ public class WaitingController {
                     .visitedTime(null)
                     .build());
         }
-
-        storeRepository.save(Store.builder()
-                .build());
+        {
+            long i = 41L;
+            for (WaitingStatus value : WaitingStatus.values()) {
+                for (int j = 0; j < 10; j++, i++) {
+                    waitingStorageRepository.save(WaitingStorage.builder()
+                            .waitingNumber(i)
+                            .waitingOrder(i)
+                            .storeId(2L)
+                            .customerInfo(new CustomerInfo(2L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+                            .createdDate(LocalDateTime.now())
+                            .waitingStatus(value)
+                            .visitedTime(null)
+                            .build());
+                }
+            }
+        }
     }
 }

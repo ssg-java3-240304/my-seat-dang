@@ -8,8 +8,11 @@ import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
+import com.matdang.seatdang.waiting.entity.WaitingStorage;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
+import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
+import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoProjection;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,6 +27,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,6 +47,8 @@ class WaitingCustomerServiceTest {
     private StoreRepository storeRepository;
     @Autowired
     private WaitingRepository waitingRepository;
+    @Autowired
+    private WaitingStorageRepository waitingStorageRepository;
     @Autowired
     private EntityManager em;
     @MockBean
@@ -112,11 +118,11 @@ class WaitingCustomerServiceTest {
     }
 
     @ParameterizedTest
-    @CsvSource(value = {"0,10","1,10", "2,30"})
+    @CsvSource(value = {"0,20", "1,20", "2,60"})
     @DisplayName("웨이팅 상태별 조회")
     void showWaiting(int status, int size) {
         Store storeA = storeRepository.save(Store.builder()
-                        .storeName("마싯당")
+                .storeName("마싯당")
                 .build());
         // given
         {
@@ -124,6 +130,14 @@ class WaitingCustomerServiceTest {
             for (WaitingStatus value : WaitingStatus.values()) {
                 for (int j = 0; j < 10; j++, i++) {
                     waitingRepository.save(Waiting.builder()
+                            .waitingNumber(i)
+                            .waitingOrder(i)
+                            .storeId(storeA.getStoreId())
+                            .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+                            .waitingStatus(value)
+                            .visitedTime(null)
+                            .build());
+                    waitingStorageRepository.save(WaitingStorage.builder()
                             .waitingNumber(i)
                             .waitingOrder(i)
                             .storeId(storeA.getStoreId())
@@ -155,12 +169,51 @@ class WaitingCustomerServiceTest {
                 .build();
         when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
 
-
         // when
-        List<WaitingInfoDto> findResult = waitingCustomerService.showWaiting(status);
-        System.out.println("findResult = " + findResult);
+        Page<WaitingInfoProjection> findResult = waitingCustomerService.showWaiting(status, 0);
 
         // then
-        assertThat(findResult.size()).isEqualTo(size);
+        assertThat(findResult.getTotalElements()).isEqualTo(size);
+    }
+
+    @Test
+    @DisplayName("웨이팅 id로 웨이팅 취소")
+    void cancelWaitingByCustomer() {
+        // given
+        Waiting waiting = waitingRepository.save(Waiting.builder()
+                .waitingNumber(0L)
+                .waitingOrder(0L)
+                .storeId(1L)
+                .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+                .waitingStatus(WaitingStatus.WAITING)
+                .visitedTime(null)
+                .build());
+
+        waitingRepository.save(Waiting.builder()
+                .waitingNumber(1L)
+                .waitingOrder(1L)
+                .storeId(1L)
+                .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+                .waitingStatus(WaitingStatus.WAITING)
+                .visitedTime(null)
+                .build());
+        waitingRepository.save(Waiting.builder()
+                .waitingNumber(2L)
+                .waitingOrder(2L)
+                .storeId(1L)
+                .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+                .waitingStatus(WaitingStatus.WAITING)
+                .visitedTime(null)
+                .build());
+        em.flush();
+        em.clear();
+
+        // when
+        int result = waitingCustomerService.cancelWaitingByCustomer(waiting.getId());
+
+        // then
+        assertThat(waitingRepository.findById(waiting.getId()).get().getWaitingStatus()).isEqualTo(
+                WaitingStatus.CUSTOMER_CANCELED);
+        assertThat(result).isEqualTo(3);
     }
 }
