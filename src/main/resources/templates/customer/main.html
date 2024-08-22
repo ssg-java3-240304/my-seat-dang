@@ -15,7 +15,7 @@
                 <div class="row justify-content-center">
                     <div class="col-xl-9 col-lg-10 col-md-8">
                         <h1>마 싯 당</h1>
-                        <p>우리는 빵에 살고 빵에 죽는다</p>
+                        <p>제과점 웨이팅부터 예약까지 한번에</p>
                         <form method="get" th:action="@{/my-seat-dang/search}">
                             <div class="row g-0 custom-search-input">
                                 <div class="col-lg-4">
@@ -48,6 +48,19 @@
     <!-- 이 페이지 전용 스크립트 -->
     <script th:src="@{/js/customer/jarallax.min.js}"></script>
     <script th:src="@{/js/customer/jarallax-video.min.js}"></script>
+    <script>
+        const $header = document.querySelector('header');
+        function replaceHeaderClass(newClasses) {
+            $header.className = ''; // 기존 클래스 초기화
+            // 클래스 이름을 공백으로 분리하고 각각 추가
+            newClasses.split(' ').forEach(function(className) {
+                $header.classList.add(className);
+            });
+        }
+
+        replaceHeaderClass('header clearfix element_to_stick');
+        // console.log(`header = ${$header}`);
+    </script>
 </div>
 </body>
 </html>
