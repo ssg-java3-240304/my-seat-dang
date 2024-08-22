@@ -99,4 +99,49 @@ public interface WaitingQueryRepository extends JpaRepository<Waiting, Long> {
     Page<WaitingInfoProjection> findUnionAllByCustomerIdAndWaitingStatus(@Param("customerId") Long customerId,
                                                                          @Param("waitingStatus") WaitingStatus waitingStatus,
                                                                          Pageable pageable);
+
+    @Query(value = "SELECT id, store_name AS storeName, waiting_number AS waitingNumber, "
+            + "people_count AS peopleCount, waiting_status AS waitingStatus "
+            + "FROM ("
+            + "    SELECT w.id, s.store_name, w.waiting_number, w.people_count, w.waiting_status, w.created_date "
+            + "    FROM waiting w "
+            + "    JOIN store s ON w.store_id = s.store_id "
+            + "    WHERE w.customer_id = :customerId "
+            + "      AND w.waiting_status IN ("
+            + "          'SHOP_CANCELED',"
+            + "          'NO_SHOW',"
+            + "          'CUSTOMER_CANCELED'"
+            + "      ) "
+            + "    UNION ALL "
+            + "    SELECT ws.id, s.store_name, ws.waiting_number, ws.people_count, ws.waiting_status, ws.created_date "
+            + "    FROM waiting_storage ws "
+            + "    JOIN store s ON ws.store_id = s.store_id "
+            + "    WHERE ws.customer_id = :customerId "
+            + "      AND ws.waiting_status IN ("
+            + "          'SHOP_CANCELED',"
+            + "          'NO_SHOW',"
+            + "          'CUSTOMER_CANCELED'"
+            + "      ) "
+            + ") AS combined "
+            + "ORDER BY created_date DESC",
+            countQuery = "SELECT COUNT(*) FROM ("
+                    + "    SELECT 1 "
+                    + "    FROM waiting w "
+                    + "    WHERE w.customer_id = :customerId "
+                    + "      AND w.waiting_status IN ("
+                    + "          'SHOP_CANCELED',"
+                    + "          'NO_SHOW',"
+                    + "          'CUSTOMER_CANCELED') "
+                    + "    UNION ALL "
+                    + "    SELECT 1 "
+                    + "    FROM waiting_storage ws "
+                    + "    WHERE ws.customer_id = :customerId "
+                    + "      AND ws.waiting_status IN ("
+                    + "          'SHOP_CANCELED',"
+                    + "          'NO_SHOW',"
+                    + "          'CUSTOMER_CANCELED') "
+                    + ") AS combined",
+            nativeQuery = true)
+    Page<WaitingInfoProjection> findUnionAllByCustomerIdAndCancelStatus(@Param("customerId") Long customerId,
+                                                                        Pageable pageable);
 }
