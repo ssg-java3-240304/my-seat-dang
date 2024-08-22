@@ -1,9 +1,11 @@
 package com.matdang.seatdang.reservation.service;
 
 import com.matdang.seatdang.member.entity.Member;
+import com.matdang.seatdang.member.entity.MemberRole;
 import com.matdang.seatdang.member.entity.StoreOwner;
 import com.matdang.seatdang.member.repository.MemberRepository;
 import com.matdang.seatdang.member.vo.StoreVo;
+import com.matdang.seatdang.reservation.dto.ReservationCancelRequestDto;
 import com.matdang.seatdang.reservation.dto.ReservationSaveRequestDto;
 import com.matdang.seatdang.reservation.dto.ReservationTicketRequestDTO;
 import com.matdang.seatdang.reservation.entity.Reservation;
@@ -80,7 +82,7 @@ class ReservationCommandServiceTest {
     @Test
     public void test2() {
         //given
-        Long reservationId = 1L;
+        Long reservationId = 2L;
         ReservationStatus reservationStatus = ReservationStatus.AWAITING_PAYMENT;
         //when
         reservationCommandService.updateStatusCustomReservation(reservationId, reservationStatus);
@@ -89,5 +91,32 @@ class ReservationCommandServiceTest {
         //then
         assertThat(result).isNotNull();
         assertThat(result.getReservationStatus()).isEqualTo(reservationStatus);
+    }
+
+    @Transactional
+    @DisplayName("예약 취소")
+    @Test
+    public void test3() {
+        //given
+        Long reservationId = 2L;
+        LocalDateTime cancelledAt = LocalDateTime.now();
+        MemberRole canceller = MemberRole.ROLE_STORE_OWNER;
+        String content = "돌잔치 미룹니다";
+        ReservationCancelRequestDto dto = ReservationCancelRequestDto.builder()
+                .reservationId(reservationId)
+                .cancelledAt(cancelledAt)
+                .cancelledBy(canceller)
+                .reason(content)
+                .build();
+        //when
+        reservationCommandService.cancelReservation(dto);
+        Optional<Reservation> optResult = reservationRepository.findById(reservationId);
+        Reservation result = optResult.orElse(null);
+        //then
+        assertThat(result).isNotNull();
+        assertThat(result.getReservationStatus()).isEqualTo(ReservationStatus.CANCELED);
+        assertThat(result.getCancellationRecord().getCancelledAt()).isEqualTo(cancelledAt);
+        assertThat(result.getCancellationRecord().getCancelledBy()).isEqualTo(canceller);
+        assertThat(result.getCancellationRecord().getReason()).isEqualTo(content);
     }
 }

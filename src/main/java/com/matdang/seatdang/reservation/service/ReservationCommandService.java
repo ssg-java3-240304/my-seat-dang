@@ -1,7 +1,10 @@
 package com.matdang.seatdang.reservation.service;
 
 import com.matdang.seatdang.common.exception.ReservationException;
+import com.matdang.seatdang.reservation.dto.ReservationCancelRequestDto;
 import com.matdang.seatdang.reservation.dto.ReservationSaveRequestDto;
+import com.matdang.seatdang.reservation.dto.ReservationSlotReturnDto;
+import com.matdang.seatdang.reservation.dto.ReservationTicketRequestDTO;
 import com.matdang.seatdang.reservation.entity.Reservation;
 import com.matdang.seatdang.reservation.repository.ReservationRepository;
 import com.matdang.seatdang.reservation.vo.ReservationStatus;
@@ -19,6 +22,7 @@ import java.util.Optional;
 @Service
 public class ReservationCommandService {
     private final ReservationRepository reservationRepository;
+    private final ReservationSlotCommandService reservationSlotCommandService;
 
     public void createCustomMenuReservation(ReservationSaveRequestDto saveRequestDto) {
         log.debug("create empty reservation dto: {}", saveRequestDto);
@@ -37,7 +41,17 @@ public class ReservationCommandService {
         reservation.updateStatus(reservationStatus);
     }
 
-    public void cancelReservation(Long reservationId) {
+    public void cancelReservation(ReservationCancelRequestDto cancelRequestDto) {
+        log.debug("cancel reservation service: {}", cancelRequestDto);
+        Optional<Reservation> optReservation = reservationRepository.findById(cancelRequestDto.getReservationId());
+        Reservation reservation = optReservation.orElseThrow( ()-> new ReservationException("예약을 찾을수 없습니다"));
+        reservation.cancel(cancelRequestDto.convertToReservationCancellationRecord());
 
+        //예약 슬롯 반환
+        reservationSlotCommandService.returnSlot(ReservationSlotReturnDto.builder()
+                .storeId(reservation.getStore().getStoreId())
+                .date(reservation.getReservedAt().toLocalDate())
+                .time(reservation.getReservedAt().toLocalTime())
+                .build());
     }
 }
