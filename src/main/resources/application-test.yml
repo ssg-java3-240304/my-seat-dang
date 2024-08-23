@@ -6,8 +6,10 @@ spring:
   data:
     mongodb:
       uri: ${MONGO_DB_URI}
+    redis:
+      host: localhost
+      port: 6739
   datasource:
-
     url: ${TEST_DB_URL}
     username: ${TEST_DB_USERNAME}
     password: ${TEST_DB_PASSWORD}
