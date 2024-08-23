@@ -16,11 +16,11 @@ class WaitingPeopleTest {
         // given
         List<WaitingDto> waitingDtoList = new ArrayList<>();
         waitingDtoList.add(new WaitingDto(1L, 1L, 1L, "010-1111-1111",
-                2L, null, null, null));
+                2, null, null, null, null));
         waitingDtoList.add(new WaitingDto(1L, 1L, 1L, "010-1111-1111",
-                3L, null, null, null));
+                3, null, null, null, null));
         waitingDtoList.add(new WaitingDto(1L, 1L, 1L, "010-1111-1111",
-                5L, null, null, null));
+                5, null, null, null, null));
         // when
         WaitingPeople waitingPeople = WaitingPeople.create(waitingDtoList);
 
