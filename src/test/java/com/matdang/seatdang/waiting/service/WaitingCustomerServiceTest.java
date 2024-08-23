@@ -309,17 +309,30 @@ class WaitingCustomerServiceTest {
     @DisplayName("동시에 웨이팅 10개 취소 동시성 테스트")
     void cancelWaitingByConcurrency() throws InterruptedException {
         // given
+        int threadCount1 = 50;
+        ExecutorService executorService1 = Executors.newFixedThreadPool(8);
+        CountDownLatch latch1 = new CountDownLatch(threadCount1);
+
         Customer mockCustomer = Customer.builder()
                 .memberId(1L)
                 .memberPhone("010-1234-1234")
                 .build();
         when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
-
         List<Long> waitingIds = new ArrayList<>();
-        for (int i = 0; i < 50; i++) {
-            Long id = waitingCustomerService.createWaiting(1L, 2);
-            waitingIds.add(id);
+
+        // when
+        for (int i = 0; i < threadCount1; i++) {
+            executorService1.execute(() -> {
+                try {
+                   Long id = waitingCustomerService.createWaiting(1L, 2);
+                    waitingIds.add(id);
+                } finally {
+                    latch1.countDown();
+                }
+            });
         }
+        latch1.await();
+        executorService1.shutdown();
 
         em.flush();
         em.clear();
