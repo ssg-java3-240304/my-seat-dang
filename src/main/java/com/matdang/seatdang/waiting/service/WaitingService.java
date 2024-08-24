@@ -1,10 +1,12 @@
 package com.matdang.seatdang.waiting.service;
 
+import com.matdang.seatdang.common.annotation.DoNotUse;
 import com.matdang.seatdang.waiting.dto.UpdateRequest;
 import com.matdang.seatdang.waiting.repository.query.WaitingQueryRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingDto;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
+import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,6 +37,11 @@ public class WaitingService {
         return Page.empty();
     }
 
+    /**
+     * {@link RedissonLockWaitingFacade#updateStatus(UpdateRequest)} 을
+     * 사용하세요.
+     */
+    @DoNotUse(message = "이 메서드를 직접 사용하지 마세요.")
     @Transactional
     public int updateStatus(UpdateRequest updateRequest) {
         if (updateRequest.getChangeStatus() != null) {
