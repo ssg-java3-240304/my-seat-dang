@@ -39,7 +39,7 @@ class WaitingStorageRepositoryTest {
                             .waitingNumber(i)
                             .waitingOrder(i)
                             .storeId(1L)
-                            .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
+                            .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
                             .waitingStatus(value)
                             .visitedTime(null)
                             .build());
@@ -52,7 +52,7 @@ class WaitingStorageRepositoryTest {
                     .waitingNumber(i)
                     .waitingOrder(i)
                     .storeId(2L)
-                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
+                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
                     .waitingStatus(WaitingStatus.WAITING)
                     .visitedTime(null)
                     .build());

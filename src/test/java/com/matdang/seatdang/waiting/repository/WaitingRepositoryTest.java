@@ -1,7 +1,6 @@
 package com.matdang.seatdang.waiting.repository;
 
 import com.matdang.seatdang.waiting.repository.query.WaitingQueryRepository;
-import com.matdang.seatdang.waiting.repository.query.dto.WaitingDto;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
@@ -13,9 +12,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,7 +39,7 @@ class WaitingRepositoryTest {
                             .waitingNumber(i)
                             .waitingOrder(i)
                             .storeId(1L)
-                            .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
+                            .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
                             .waitingStatus(value)
                             .visitedTime(null)
                             .build());
@@ -53,7 +52,7 @@ class WaitingRepositoryTest {
                     .waitingNumber(i)
                     .waitingOrder(i)
                     .storeId(2L)
-                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
+                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
                     .waitingStatus(WaitingStatus.WAITING)
                     .visitedTime(null)
                     .build());
@@ -75,21 +74,34 @@ class WaitingRepositoryTest {
         assertThat(findWaitings.size()).isEqualTo(size);
     }
 
-
-    @ParameterizedTest
-    @CsvSource(value = {"1,NO_SHOW", "2,VISITED", "3,CUSTOMER_CANCELED", "4,SHOP_CANCELED"})
-    @DisplayName("id로 상태 변경")
-    void updateStatus(int index, String status) {
+    @Test
+    @DisplayName("id로 입장 상태 변경")
+    void updateStatusByVisit() {
         // given
         List<Waiting> findWaiting = waitingRepository.findAll();
         em.clear();
 
         // when
-        int result = waitingRepository.updateStatus(WaitingStatus.valueOf(status), findWaiting.get(index).getId());
+        int result = waitingRepository.updateStatusByVisit(findWaiting.get(1).getId());
         // then
         assertThat(result).isEqualTo(1);
-        assertThat(waitingRepository.findById(findWaiting.get(index).getId()).get().getWaitingStatus()).isEqualTo(
-                WaitingStatus.valueOf(status));
+        assertThat(waitingRepository.findById(findWaiting.get(1).getId()).get().getWaitingStatus())
+                .isEqualTo(WaitingStatus.VISITED);
+    }
+
+    @Test
+    @DisplayName("id로 점주 취소 상태 변경")
+    void updateStatusByShopCancel() {
+        // given
+        List<Waiting> findWaiting = waitingRepository.findAll();
+        em.clear();
+
+        // when
+        int result = waitingRepository.updateStatusByShopCancel(findWaiting.get(1).getId());
+        // then
+        assertThat(result).isEqualTo(1);
+        assertThat(waitingRepository.findById(findWaiting.get(1).getId()).get().getWaitingStatus())
+                .isEqualTo(WaitingStatus.SHOP_CANCELED);
     }
 
     @Test
@@ -99,7 +111,7 @@ class WaitingRepositoryTest {
         List<Waiting> findWaiting = waitingRepository.findAll();
         em.clear();
         // when
-        int result = waitingRepository.updateAllWaitingNumberByVisit(1L);
+        int result = waitingRepository.updateAllWaitingOrderByVisit(1L);
         // then
         assertThat(result).isEqualTo(10);
         assertThat(waitingRepository.findById(findWaiting.get(0).getId()).get().getWaitingOrder()).isEqualTo(
@@ -111,7 +123,7 @@ class WaitingRepositoryTest {
     void updateWaitingNumberByCancel() {
         // given
         // when
-        int result = waitingRepository.updateWaitingNumberByCancel(1L, 5L);
+        int result = waitingRepository.updateWaitingOrderByCancel(1L, 5L);
         // then
         assertThat(result).isEqualTo(4);
     }
@@ -120,15 +132,17 @@ class WaitingRepositoryTest {
     @DisplayName("상점 id로 웨이팅 전체 취소")
     void cancelAllWaiting() {
         // given
+        PageRequest pageable = PageRequest.of(0, 10);
+
         // when
         int result = waitingRepository.cancelAllWaiting(1L);
         // then
         assertThat(result).isEqualTo(10);
-        assertThat(waitingQueryRepository.findAllByStoreIdAndWaitingStatus(1L, WaitingStatus.WAITING).size())
+        assertThat(waitingQueryRepository.findAllByStoreIdAndWaitingStatus(1L, WaitingStatus.WAITING, pageable)
+                .getTotalElements())
                 .isEqualTo(0);
-        assertThat(waitingQueryRepository.findAllByStoreIdAndWaitingStatus(1L, WaitingStatus.SHOP_CANCELED)
-                .size()).isEqualTo(20);
-
+        assertThat(waitingQueryRepository.findAllByStoreIdAndWaitingStatus(1L, WaitingStatus.SHOP_CANCELED, pageable)
+                .getTotalElements()).isEqualTo(20);
     }
 
     @Test
@@ -141,7 +155,6 @@ class WaitingRepositoryTest {
         // then
         assertThat(result).isEqualTo(50);
         assertThat(findResult.size()).isEqualTo(0);
-
     }
 
 
