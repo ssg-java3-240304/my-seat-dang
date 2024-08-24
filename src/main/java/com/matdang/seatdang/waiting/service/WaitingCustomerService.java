@@ -1,6 +1,7 @@
 package com.matdang.seatdang.waiting.service;
 
 import com.matdang.seatdang.auth.service.AuthService;
+import com.matdang.seatdang.common.annotation.DoNotUse;
 import com.matdang.seatdang.member.entity.Member;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.entity.Waiting;
@@ -28,6 +29,13 @@ public class WaitingCustomerService {
     private final AuthService authService;
     private final RedissonClient redissonClient; // RedissonClient 추가
 
+
+    /**
+     * {@link com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingFacade#createWaiting(Long, Integer)} 을
+     * 사용하세요.
+     */
+    @DoNotUse(message = "이 메서드를 직접 사용하지 마세요.")
+    @Transactional
     public Long createWaiting(Long storeId, Integer peopleCount) {
 //        RLock lock = redissonClient.getLock("waitingLock:" + storeId); // 락 키 설정
 //        lock.lock(); // 락 획득
@@ -57,7 +65,8 @@ public class WaitingCustomerService {
     @Transactional
     public int cancelWaitingByCustomer(Long waitingId) {
         Optional<Waiting> optionalWaiting = waitingRepository.findById(waitingId);
-        Waiting waiting = optionalWaiting.orElseThrow(() -> new NoSuchElementException("No waiting found with id: " + waitingId));
+        Waiting waiting = optionalWaiting.orElseThrow(
+                () -> new NoSuchElementException("No waiting found with id: " + waitingId));
 
 //        Waiting waiting = waitingRepository.findById(waitingId).get();
         RLock lock = redissonClient.getLock("waitingLock:" + waiting.getStoreId()); // 락 키 설정
