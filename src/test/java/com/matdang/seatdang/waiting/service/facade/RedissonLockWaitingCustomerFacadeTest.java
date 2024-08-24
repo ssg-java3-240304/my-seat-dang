@@ -1,14 +1,11 @@
 package com.matdang.seatdang.waiting.service.facade;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 import com.matdang.seatdang.auth.service.AuthService;
 import com.matdang.seatdang.member.entity.Customer;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
-import com.matdang.seatdang.waiting.service.WaitingCustomerService;
-import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -19,13 +16,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
-class RedissonLockWaitingFacadeTest {
+class RedissonLockWaitingCustomerFacadeTest {
     @Autowired
-    private RedissonLockWaitingFacade redissonLockWaitingFacade;
+    private RedissonLockWaitingCustomerFacade redissonLockWaitingCustomerFacade;
 
     @Autowired
     private WaitingRepository waitingRepository;
@@ -49,7 +44,7 @@ class RedissonLockWaitingFacadeTest {
         for (int i = 0; i < threadCount; i++) {
             executorService.execute(() -> {
                 try {
-                    redissonLockWaitingFacade.createWaiting(1L, 2);
+                    redissonLockWaitingCustomerFacade.createWaiting(1L, 2);
                 } finally {
                     latch.countDown();
                 }
@@ -77,7 +72,7 @@ class RedissonLockWaitingFacadeTest {
         when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
         List<Long> waitingIds = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
-            Long id = redissonLockWaitingFacade.createWaiting(1L, 2);
+            Long id = redissonLockWaitingCustomerFacade.createWaiting(1L, 2);
             waitingIds.add(id);
         }
 
@@ -90,7 +85,7 @@ class RedissonLockWaitingFacadeTest {
             long waitingId = waitingIds.get(i);
             executorService.execute(() -> {
                 try {
-                    redissonLockWaitingFacade.cancelWaitingByCustomer(waitingId);
+                    redissonLockWaitingCustomerFacade.cancelWaitingByCustomer(waitingId);
                 } catch (Exception e) {
                     e.printStackTrace(); // 예외를 출력합니다
                 } finally {
@@ -116,7 +111,7 @@ class RedissonLockWaitingFacadeTest {
         when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
         List<Long> waitingIds = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
-            Long id = redissonLockWaitingFacade.createWaiting(1L, 2);
+            Long id = redissonLockWaitingCustomerFacade.createWaiting(1L, 2);
             waitingIds.add(id);
         }
 
@@ -129,7 +124,7 @@ class RedissonLockWaitingFacadeTest {
             // 등록 50번
             executorService.execute(() -> {
                 try {
-                    redissonLockWaitingFacade.createWaiting(1L, 2);
+                    redissonLockWaitingCustomerFacade.createWaiting(1L, 2);
                 } catch (Exception e) {
                     e.printStackTrace(); // 예외를 출력합니다
                 } finally {
@@ -140,7 +135,7 @@ class RedissonLockWaitingFacadeTest {
             long waitingId = waitingIds.get(i);
             executorService.execute(() -> {
                 try {
-                    redissonLockWaitingFacade.cancelWaitingByCustomer(waitingId);
+                    redissonLockWaitingCustomerFacade.cancelWaitingByCustomer(waitingId);
                 } catch (Exception e) {
                     e.printStackTrace(); // 예외를 출력합니다
                 } finally {

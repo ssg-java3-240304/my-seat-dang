@@ -9,13 +9,12 @@ import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.repository.query.WaitingQueryRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoProjection;
+import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingCustomerFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +24,7 @@ public class WaitingCustomerService {
     private final AuthService authService;
 
     /**
-     * {@link com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingFacade#createWaiting(Long, Integer)} 을
+     * {@link RedissonLockWaitingCustomerFacade#createWaiting(Long, Integer)} 을
      * 사용하세요.
      */
     @DoNotUse(message = "이 메서드를 직접 사용하지 마세요.")
@@ -50,7 +49,7 @@ public class WaitingCustomerService {
 
 
     /**
-     * {@link com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingFacade#cancelWaitingByCustomer(Long)} 을
+     * {@link RedissonLockWaitingCustomerFacade#cancelWaitingByCustomer(Long)} 을
      * 사용하세요.
      */
     @DoNotUse(message = "이 메서드를 직접 사용하지 마세요.")

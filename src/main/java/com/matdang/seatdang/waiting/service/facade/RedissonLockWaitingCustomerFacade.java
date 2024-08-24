@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
-public class RedissonLockWaitingFacade {
+public class RedissonLockWaitingCustomerFacade {
     private final RedissonClient redissonClient; // RedissonClient 추가
     private final WaitingCustomerService waitingCustomerService;
     private final WaitingRepository waitingRepository;
