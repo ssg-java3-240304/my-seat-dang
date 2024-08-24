@@ -9,13 +9,16 @@ import com.matdang.seatdang.member.dto.StoreOwnerResponseDto;
 import com.matdang.seatdang.member.entity.Member;
 import com.matdang.seatdang.member.service.CustomerService;
 import com.matdang.seatdang.member.service.StoreOwnerMemberService;
+import com.matdang.seatdang.reservation.dto.ReservationResponseDto;
 import com.matdang.seatdang.reservation.dto.ReservationSaveRequestDto;
 import com.matdang.seatdang.reservation.dto.ReservationTicketRequestDTO;
 import com.matdang.seatdang.reservation.dto.ResponseDto;
 import com.matdang.seatdang.reservation.service.ReservationCommandService;
+import com.matdang.seatdang.reservation.service.ReservationQueryService;
 import com.matdang.seatdang.reservation.service.ReservationService;
 import com.matdang.seatdang.reservation.service.ReservationSlotCommandService;
 import com.matdang.seatdang.reservation.vo.CustomerInfo;
+import com.matdang.seatdang.reservation.vo.ReservationStatus;
 import com.matdang.seatdang.reservation.vo.ReservationTicket;
 import com.matdang.seatdang.reservation.vo.StoreOwnerInfo;
 import com.matdang.seatdang.store.service.StoreService;
@@ -42,17 +45,18 @@ public class ReservationCustomerController {
     private final ReservationService reservationService;
     private final GeneratedImageUrlRepository generatedImageUrlRepository;
     private final ChatConfig chatConfig;  // ChatConfig를 의존성 주입으로 받음
+    private final ReservationQueryService reservationQueryService;
 //    private final
 
     @GetMapping("/list")
-    public String reservedPage(Model model) {
-
+    public String list(Model model) {
 //         SecurityContext에서 고객 ID를 가져옴
         Long customerId = ((MemberUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         String chatUrl = chatConfig.getServerUrl();
 
         // 예약 목록 가져오기
-        List<ResponseDto> reservations = reservationService.getReservationsByCustomerId(customerId);
+
+        List<ReservationResponseDto> reservations = reservationQueryService.getReservationsByCustomerId(customerId);
 
         // 고객이 생성한 모든 이미지 담기
         List<GeneratedImageUrl> imageList = generatedImageUrlRepository.findAllByCustomerId(customerId);
