@@ -16,6 +16,7 @@ import com.matdang.seatdang.waiting.repository.query.WaitingQueryRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoProjection;
 import com.matdang.seatdang.waiting.service.WaitingCustomerService;
+import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingCustomerFacade;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +40,7 @@ public class WaitingCustomerController {
     private final WaitingRepository waitingRepository;
     private final StoreRepository storeRepository;
     private final AuthService authService;
+    private final RedissonLockWaitingCustomerFacade redissonLockWaitingCustomerFacade;
 
     @GetMapping("/test-store")
     public String showStore(@RequestParam(defaultValue = "2") Long storeId, Model model) {
@@ -77,7 +79,7 @@ public class WaitingCustomerController {
     @PostMapping("/waiting")
     public String createWaiting(@ModelAttribute WaitingRequest waitingRequest, RedirectAttributes redirectAttributes) {
         log.debug("=== create Waiting ===");
-        Long waitingId = waitingCustomerService.createWaiting(waitingRequest.getStoreId(),
+        Long waitingId = redissonLockWaitingCustomerFacade.createWaiting(waitingRequest.getStoreId(),
                 waitingRequest.getPeopleCount());
         redirectAttributes.addAttribute("waitingId", waitingId);
 
@@ -101,12 +103,12 @@ public class WaitingCustomerController {
 
     @PostMapping("/waiting/{waitingId}/awaiting/detail")
     public String cancelWaiting(@PathVariable Long waitingId, RedirectAttributes redirectAttributes) {
-//        int result = waitingCustomerService.cancelWaitingByCustomer(waitingId);
-//        if (result > 0) {
-//            log.info("=== 웨이팅 고객 취소 ===");
-//        } else {
-//            log.error("== 웨이팅 고객 취소 오류 ===");
-//        }
+        int result = redissonLockWaitingCustomerFacade.cancelWaitingByCustomer(waitingId);
+        if (result > 0) {
+            log.info("=== 웨이팅 고객 취소 ===");
+        } else {
+            log.error("== 웨이팅 고객 취소 오류 ===");
+        }
 
         redirectAttributes.addAttribute("waitingId", waitingId);
 

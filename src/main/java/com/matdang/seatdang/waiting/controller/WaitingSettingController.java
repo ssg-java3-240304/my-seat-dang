@@ -4,6 +4,7 @@ import com.matdang.seatdang.auth.service.AuthService;
 import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.store.repository.query.dto.AvailableWaitingTime;
 import com.matdang.seatdang.waiting.service.WaitingSettingService;
+import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingSettingFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ public class WaitingSettingController {
     private final StoreRepository storeRepository;
     private final WaitingSettingService waitingSettingService;
     private final AuthService authService;
+    private final RedissonLockWaitingSettingFacade redissonLockWaitingSettingFacade;
 
     @GetMapping
     public String showSettings(Model model) {
@@ -70,7 +72,7 @@ public class WaitingSettingController {
     @PostMapping("/waiting-status")
     public String changeWaitingStatus(@RequestParam int status) {
         Long storeId = authService.getAuthenticatedStoreId();
-        int result = waitingSettingService.changeWaitingStatus(status, storeId);
+        int result = redissonLockWaitingSettingFacade.changeWaitingStatus(status, storeId);
 
         if (result>=1) {
             log.info("=== Change Waiting Status ===");

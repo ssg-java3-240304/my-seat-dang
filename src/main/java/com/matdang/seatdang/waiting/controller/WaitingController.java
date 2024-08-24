@@ -20,6 +20,7 @@ import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.service.WaitingService;
 import com.matdang.seatdang.waiting.service.WaitingSettingService;
+import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingFacade;
 import jakarta.annotation.PostConstruct;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -52,6 +53,7 @@ public class WaitingController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final StoreRepository storeRepository;
     private final WaitingStorageRepository waitingStorageRepository;
+    private final RedissonLockWaitingFacade redissonLockWaitingFacade;
 
     @GetMapping
     public String showWaiting(@RequestParam(defaultValue = "0") int status,
@@ -76,7 +78,7 @@ public class WaitingController {
 
     @PostMapping
     public String updateStatus(@ModelAttribute UpdateRequest updateRequest, Model model) {
-        int result = waitingService.updateStatus(updateRequest);
+        int result = redissonLockWaitingFacade.updateStatus(updateRequest);
 
         if (result == 0) {
             log.error("=== not update ===");
@@ -109,7 +111,7 @@ public class WaitingController {
     /**
      * test 실행시 주석 필요
      */
-//    @PostConstruct
+    @PostConstruct
     public void initData() throws InterruptedException {
         StoreVo storeVo = new StoreVo(1L, "달콤커피", StoreType.CUSTOM, "서울시강남구");
         storeRepository.save(Store.builder()
