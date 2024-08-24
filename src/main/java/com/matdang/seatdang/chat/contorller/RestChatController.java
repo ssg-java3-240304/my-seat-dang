@@ -1,7 +1,6 @@
 package com.matdang.seatdang.chat.contorller;
 
 import com.matdang.seatdang.chat.entity.Chat;
-import com.matdang.seatdang.chat.repository.ChatRepository;
 import com.matdang.seatdang.chat.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -15,13 +14,16 @@ import reactor.core.scheduler.Schedulers;
 @RequiredArgsConstructor
 @RestController // 데이터 리턴 서버
 public class RestChatController {
-    private final ChatRepository chatRepository;
     private final ChatService chatService;
 
     @CrossOrigin
-    @GetMapping(value = "/chat/roomNum/{roomNum}",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<Chat> findByRoomNum(@PathVariable String roomNum){
-        return chatRepository.FindByRoomNum(roomNum)
+    @GetMapping(value = "/chat/roomNum/{roomNum}/messages", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Flux<Chat> getMessagesWithPagination(
+            @PathVariable String roomNum,
+            @RequestParam("limit") int limit,
+            @RequestParam(value = "beforeId", required = false) String beforeId) {
+
+        return chatService.getMessagesWithPagination(roomNum, limit, beforeId)
                 .subscribeOn(Schedulers.boundedElastic());
     }
     @CrossOrigin(origins = "*")
