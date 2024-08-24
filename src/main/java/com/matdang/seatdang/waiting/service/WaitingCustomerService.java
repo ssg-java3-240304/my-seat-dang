@@ -55,13 +55,9 @@ public class WaitingCustomerService {
      */
     @DoNotUse(message = "이 메서드를 직접 사용하지 마세요.")
     @Transactional
-    public int cancelWaitingByCustomer(Long waitingId) {
-        Optional<Waiting> optionalWaiting = waitingRepository.findById(waitingId);
-        Waiting waiting = optionalWaiting.orElseThrow(
-                () -> new NoSuchElementException("No waiting found with id: " + waitingId));
-
+    public int cancelWaitingByCustomer(Waiting waiting) {
         int result = waitingRepository.updateWaitingOrderByCancel(waiting.getStoreId(), waiting.getWaitingOrder());
-        return waitingRepository.cancelWaitingByCustomer(waitingId) + result;
+        return waitingRepository.cancelWaitingByCustomer(waiting.getId()) + result;
     }
 
 

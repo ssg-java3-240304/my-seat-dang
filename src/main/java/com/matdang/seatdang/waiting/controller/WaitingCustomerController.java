@@ -101,12 +101,12 @@ public class WaitingCustomerController {
 
     @PostMapping("/waiting/{waitingId}/awaiting/detail")
     public String cancelWaiting(@PathVariable Long waitingId, RedirectAttributes redirectAttributes) {
-        int result = waitingCustomerService.cancelWaitingByCustomer(waitingId);
-        if (result > 0) {
-            log.info("=== 웨이팅 고객 취소 ===");
-        } else {
-            log.error("== 웨이팅 고객 취소 오류 ===");
-        }
+//        int result = waitingCustomerService.cancelWaitingByCustomer(waitingId);
+//        if (result > 0) {
+//            log.info("=== 웨이팅 고객 취소 ===");
+//        } else {
+//            log.error("== 웨이팅 고객 취소 오류 ===");
+//        }
 
         redirectAttributes.addAttribute("waitingId", waitingId);
 
