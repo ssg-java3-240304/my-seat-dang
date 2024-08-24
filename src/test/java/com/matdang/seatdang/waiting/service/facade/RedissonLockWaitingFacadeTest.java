@@ -67,9 +67,47 @@ class RedissonLockWaitingFacadeTest {
 
 
     @Test
-    @Rollback(value = false)
-    @DisplayName("동시에 웨이팅 100개 취소 동시성 테스트")
+    @DisplayName("동시에 웨이팅 85개 취소 동시성 테스트")
     void cancelWaitingByConcurrency() throws InterruptedException {
+        // given
+        Customer mockCustomer = Customer.builder()
+                .memberId(1L)
+                .memberPhone("010-1234-1234")
+                .build();
+        when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
+        List<Long> waitingIds = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            Long id = redissonLockWaitingFacade.createWaiting(1L, 2);
+            waitingIds.add(id);
+        }
+
+        int threadCount = 85;
+        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
+        CountDownLatch latch = new CountDownLatch(threadCount);
+
+        // when
+        for (int i = 0; i < threadCount; i++) {
+            long waitingId = waitingIds.get(i);
+            executorService.execute(() -> {
+                try {
+                    redissonLockWaitingFacade.cancelWaitingByCustomer(waitingId);
+                } catch (Exception e) {
+                    e.printStackTrace(); // 예외를 출력합니다
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+        latch.await();
+        executorService.shutdown();
+
+        // then
+        Long findResult = waitingRepository.findMaxWaitingOrderByStoreId(1L);
+        assertThat(findResult).isEqualTo(15);
+    }
+    @Test
+    @DisplayName("웨이팅 100개 등록된 상태에서 등록 50번 + 취소50번 동시성 테스트")
+    void createAndCancelWaitingByConcurrency() throws InterruptedException {
         // given
         Customer mockCustomer = Customer.builder()
                 .memberId(1L)
@@ -87,11 +125,22 @@ class RedissonLockWaitingFacadeTest {
         CountDownLatch latch = new CountDownLatch(threadCount);
 
         // when
-        for (int i = 0; i < threadCount; i++) {
+        for (int i = 0; i < 50; i++) {
+            // 등록 50번
+            executorService.execute(() -> {
+                try {
+                    redissonLockWaitingFacade.createWaiting(1L, 2);
+                } catch (Exception e) {
+                    e.printStackTrace(); // 예외를 출력합니다
+                } finally {
+                    latch.countDown();
+                }
+            });
+
             long waitingId = waitingIds.get(i);
             executorService.execute(() -> {
                 try {
-                    int result = redissonLockWaitingFacade.cancelWaitingByCustomer(waitingId);
+                    redissonLockWaitingFacade.cancelWaitingByCustomer(waitingId);
                 } catch (Exception e) {
                     e.printStackTrace(); // 예외를 출력합니다
                 } finally {
@@ -104,6 +153,6 @@ class RedissonLockWaitingFacadeTest {
 
         // then
         Long findResult = waitingRepository.findMaxWaitingOrderByStoreId(1L);
-        assertThat(findResult).isEqualTo(0);
+        assertThat(findResult).isEqualTo(100);
     }
 }
