@@ -14,6 +14,7 @@ import org.redisson.api.RedissonClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
@@ -27,12 +28,12 @@ public class WaitingCustomerService {
     private final AuthService authService;
     private final RedissonClient redissonClient; // RedissonClient 추가
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Long createWaiting(Long storeId, Integer peopleCount) {
-        RLock lock = redissonClient.getLock("waitingLock:" + storeId); // 락 키 설정
-        lock.lock(); // 락 획득
-
-        try {
+//        RLock lock = redissonClient.getLock("waitingLock:" + storeId); // 락 키 설정
+//        lock.lock(); // 락 획득
+//
+//        try {
         Member customer = authService.getAuthenticatedMember();
 
         Waiting waiting = Waiting.builder()
@@ -49,9 +50,9 @@ public class WaitingCustomerService {
                 .build();
 
         return waitingRepository.save(waiting).getId();
-        } finally {
-            lock.unlock(); // 락 해제
-        }
+//        } finally {
+//            lock.unlock(); // 락 해제
+//        }
     }
 
     @Transactional
