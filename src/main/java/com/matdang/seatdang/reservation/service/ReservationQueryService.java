@@ -18,6 +18,14 @@ import java.util.stream.Collectors;
 public class ReservationQueryService {
     private final ReservationRepository reservationRepository;
 
+    public ReservationResponseDto getReservationById(Long id) {
+        Reservation reservation = reservationRepository.findById(id).orElse(null);
+        if (reservation == null) {
+            return null;
+        }
+        return convertToResponseDto(reservation);
+    }
+
     public List<ReservationResponseDto> getReservationsByCustomerId(Long customerId) {
         MemberUserDetails userDetails = (MemberUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<Reservation> reservations = reservationRepository.findByCustomer_CustomerId(userDetails.getId());

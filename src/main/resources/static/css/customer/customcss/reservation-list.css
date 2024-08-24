@@ -151,7 +151,7 @@ ul.booking_list li strong {
     background-color: #dc3545;
 }
 
-.read, .approved .before_visit {
+.read, .approved, .before_visit {
     background-color: #28a745;
 }
 

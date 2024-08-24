@@ -1,6 +1,10 @@
 package com.matdang.seatdang.reservation.service;
 
 import com.matdang.seatdang.common.exception.ReservationException;
+import com.matdang.seatdang.payment.controller.dto.ApproveSuccessResponse;
+import com.matdang.seatdang.payment.dto.ApproveFail;
+import com.matdang.seatdang.payment.dto.Status;
+import com.matdang.seatdang.payment.entity.PayApprove;
 import com.matdang.seatdang.reservation.dto.ReservationCancelRequestDto;
 import com.matdang.seatdang.reservation.dto.ReservationSaveRequestDto;
 import com.matdang.seatdang.reservation.dto.ReservationSlotReturnDto;
@@ -34,7 +38,7 @@ public class ReservationCommandService {
     }
 
     public void updateStatusCustomReservation(Long reservationId, ReservationStatus reservationStatus) {
-        log.debug("update reservation status to PAYMENT_COMPLETED service: {}", reservationId);
+        log.debug("update reservation status service: {}", reservationId);
         Optional<Reservation> optReservation = reservationRepository.findById(reservationId);
         Reservation reservation = optReservation.orElseThrow( ()-> new ReservationException("예약을 찾을수 없습니다"));
         reservation.updateStatus(reservationStatus);
@@ -52,5 +56,14 @@ public class ReservationCommandService {
                 .date(reservation.getReservedAt().toLocalDate())
                 .time(reservation.getReservedAt().toLocalTime())
                 .build());
+    }
+
+
+    public void updateStatusToBeforeVisit(Long reservationId){
+        updateStatusCustomReservation(reservationId, ReservationStatus.BEFORE_VISIT);
+    }
+
+    public void updateStatusToAwaitingCustomPayment(Long reservationId) {
+        updateStatusCustomReservation(reservationId, ReservationStatus.AWAITING_CUSTOM_PAYMENT);
     }
 }
