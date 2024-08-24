@@ -28,7 +28,6 @@ public class WaitingCustomerService {
     private final AuthService authService;
     private final RedissonClient redissonClient; // RedissonClient 추가
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Long createWaiting(Long storeId, Integer peopleCount) {
 //        RLock lock = redissonClient.getLock("waitingLock:" + storeId); // 락 키 설정
 //        lock.lock(); // 락 획득
