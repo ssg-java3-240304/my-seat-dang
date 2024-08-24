@@ -24,7 +24,7 @@
             <div class="header_box version_2">
                 <h2><i class="fa fa-list"></i>메뉴 등록</h2>
             </div>
-            <form th:action="@{/storeowner/menu/update}" name="menu" method="POST" enctype="multipart/form-data" class="strip_menu_items myDropzone">
+            <form th:action="@{/store-owner/menu/update}" name="menu" method="POST" enctype="multipart/form-data" class="strip_menu_items myDropzone">
                 <div class="row">
                     <div class="col-xl-3">
                         <div id="preview-container">
@@ -73,7 +73,7 @@
                         </div>
                         <div class="">
                             <button type="submit" class="btn_1 medium">수정</button>
-                            <a th:href="@{|/storeowner/menu|}" class="btn_1 medium gray">목록으로</a>
+                            <a th:href="@{|/store-owner/menu|}" class="btn_1 medium gray">목록으로</a>
                         </div>
                     </div><!-- End row -->
                 </div><!-- End strip_menu_items -->
