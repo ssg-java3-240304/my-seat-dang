@@ -2,14 +2,14 @@
 .container-fluid {
     display: flex;
     flex-direction: row;
-    width: 80%;
+    width: 100%;
     height: 100vh; /* 화면 전체 높이를 사용 */
     overflow: hidden; /* 화면 크기를 넘지 않도록 설정 */
 }
 
 /* 왼쪽 섹션: 예약 리스트 */
 .left-section {
-    width: 50%; /* 왼쪽 섹션의 폭 설정 */
+    width: 100%; /* 왼쪽 섹션의 폭 설정 */
     padding: 20px;
     border-right: 1px solid #ddd; /* 오른쪽 경계선 설정 */
     overflow-y: auto; /* 내용이 많을 때 스크롤 가능하게 설정 */
@@ -17,7 +17,7 @@
 
 /* 오른쪽 섹션: 채팅창 */
 .right-section {
-    width: 50%; /* 오른쪽 섹션의 폭 설정 */
+    width: 100%; /* 오른쪽 섹션의 폭 설정 */
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -247,3 +247,21 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+ /* 모달과 모달 배경의 z-index 값을 높게 설정 */
+ .modal {
+     z-index: 2000 !important;
+ }
+
+.modal-backdrop {
+    z-index: 1999 !important;
+}
+
+/* 헤더의 z-index 값을 낮게 조정 */
+.header_in {
+    z-index: 100 !important;
+}
+.right-section {
+    display: none;
+}
+

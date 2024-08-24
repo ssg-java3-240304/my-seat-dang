@@ -4,7 +4,6 @@ import com.matdang.seatdang.common.exception.ReservationException;
 import com.matdang.seatdang.reservation.dto.ReservationCancelRequestDto;
 import com.matdang.seatdang.reservation.dto.ReservationSaveRequestDto;
 import com.matdang.seatdang.reservation.dto.ReservationSlotReturnDto;
-import com.matdang.seatdang.reservation.dto.ReservationTicketRequestDTO;
 import com.matdang.seatdang.reservation.entity.Reservation;
 import com.matdang.seatdang.reservation.repository.ReservationRepository;
 import com.matdang.seatdang.reservation.vo.ReservationStatus;
@@ -26,7 +25,7 @@ public class ReservationCommandService {
 
     public void createCustomMenuReservation(ReservationSaveRequestDto saveRequestDto) {
         log.debug("create empty reservation dto: {}", saveRequestDto);
-        saveRequestDto.setReservationStatus(ReservationStatus.DETAILING);
+        saveRequestDto.setReservationStatus(ReservationStatus.PENDING);
         boolean reservationExists =reservationRepository.findByCustomer_CustomerIdAndReservedAt(saveRequestDto.getCustomer().getCustomerId(), LocalDateTime.of(saveRequestDto.getDate(),saveRequestDto.getTime())).isPresent();
         if (reservationExists) {
             throw new ReservationException("같은 시간에 중복된 예약이 있습니다");
