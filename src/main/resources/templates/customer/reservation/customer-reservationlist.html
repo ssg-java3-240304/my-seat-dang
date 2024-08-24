@@ -97,7 +97,7 @@
                                     <div class="header_box">
                                         <h4 class="d-inline-block">예약 목록</h4>
                                     </div>
-                                    <div class="list_general" th:each="reservation : ${reservations}" th:object="${reservation}"  th:if="${reservation.reservationStatus.toString().equals('PENDING')}">
+                                    <div class="list_general" th:each="reservation : ${reservations}" th:object="${reservation}"  th:if="${reservation.reservationStatus.toString().equals('PENDING')} or ${reservation.reservationStatus.toString().equals('AWAITING_PAYMENT')}">
                                         <ul>
                                             <li>
                                                 <figure><img th:src="*{thumbnail}" alt=""></figure>

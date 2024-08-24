@@ -3,6 +3,7 @@ package com.matdang.seatdang.reservation.vo;
 public enum ReservationStatus {
     PENDING("예약준비"),
     AWAITING_PAYMENT("결제 대기"),
+    AWAITING_CUSTOM_PAYMENT("결제 대기"),
     PAYMENT_COMPLETED("결제 완료"),
     BEFORE_VISIT("방문 전"),
     VISIT_COMPLETED("방문 완료"),
