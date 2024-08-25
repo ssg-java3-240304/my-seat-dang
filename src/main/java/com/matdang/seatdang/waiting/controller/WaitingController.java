@@ -172,53 +172,53 @@ public class WaitingController {
         //when
         memberRepository.save(customer);
 
-        {
-            long i = 1;
-            for (WaitingStatus value : WaitingStatus.values()) {
-                if (value != WaitingStatus.VISITED) {
-                    for (int j = 0; j < 10; j++, i++) {
-                        waitingRepository.save(Waiting.builder()
-                                .waitingNumber(i)
-                                .waitingOrder(i)
-                                .storeId(1L)
-                                .customerInfo(new CustomerInfo(2L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
-                                .waitingStatus(value)
-                                .visitedTime(null)
-                                .build());
-                    }
-                }
-            }
-        }
-
-        for (long i = 1; i <= 10; i++) {
-            waitingRepository.save(Waiting.builder()
-                    .waitingNumber(i)
-                    .waitingOrder(i)
-                    .storeId(2L)
-                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
-                    .waitingStatus(WaitingStatus.WAITING)
-                    .visitedTime(null)
-                    .build());
-        }
-        {
-            long i = 51L;
-            for (WaitingStatus value : WaitingStatus.values()) {
-                if (value != WaitingStatus.WAITING) {
-
-                    for (int j = 0; j < 10; j++, i++) {
-                        waitingStorageRepository.save(WaitingStorage.builder()
-                                .id(i)
-                                .waitingNumber(i)
-                                .waitingOrder(i)
-                                .storeId(2L)
-                                .customerInfo(new CustomerInfo(2L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
-                                .createdDate(LocalDateTime.now())
-                                .waitingStatus(value)
-                                .visitedTime(null)
-                                .build());
-                    }
-                }
-            }
-        }
+//        {
+//            long i = 1;
+//            for (WaitingStatus value : WaitingStatus.values()) {
+//                if (value != WaitingStatus.VISITED) {
+//                    for (int j = 0; j < 10; j++, i++) {
+//                        waitingRepository.save(Waiting.builder()
+//                                .waitingNumber(i)
+//                                .waitingOrder(i)
+//                                .storeId(1L)
+//                                .customerInfo(new CustomerInfo(2L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+//                                .waitingStatus(value)
+//                                .visitedTime(null)
+//                                .build());
+//                    }
+//                }
+//            }
+//        }
+//
+//        for (long i = 1; i <= 10; i++) {
+//            waitingRepository.save(Waiting.builder()
+//                    .waitingNumber(i)
+//                    .waitingOrder(i)
+//                    .storeId(2L)
+//                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+//                    .waitingStatus(WaitingStatus.WAITING)
+//                    .visitedTime(null)
+//                    .build());
+//        }
+//        {
+//            long i = 51L;
+//            for (WaitingStatus value : WaitingStatus.values()) {
+//                if (value != WaitingStatus.WAITING) {
+//
+//                    for (int j = 0; j < 10; j++, i++) {
+//                        waitingStorageRepository.save(WaitingStorage.builder()
+//                                .id(i)
+//                                .waitingNumber(i)
+//                                .waitingOrder(i)
+//                                .storeId(2L)
+//                                .customerInfo(new CustomerInfo(2L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+//                                .createdDate(LocalDateTime.now())
+//                                .waitingStatus(value)
+//                                .visitedTime(null)
+//                                .build());
+//                    }
+//                }
+//            }
+//        }
     }
 }
