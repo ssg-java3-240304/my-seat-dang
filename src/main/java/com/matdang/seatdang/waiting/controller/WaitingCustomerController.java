@@ -42,7 +42,6 @@ public class WaitingCustomerController {
     private final WaitingRepository waitingRepository;
     private final StoreRepository storeRepository;
     private final AuthService authService;
-    private final RedissonLockWaitingCustomerFacade redissonLockWaitingCustomerFacade;
 
     @GetMapping("/test-store")
     public String showStore(@RequestParam(defaultValue = "2") Long storeId, Model model) {
@@ -82,7 +81,7 @@ public class WaitingCustomerController {
     public String createWaiting(@ModelAttribute WaitingRequest waitingRequest, RedirectAttributes redirectAttributes) {
         log.debug("=== create Waiting ===");
         log.debug("=== create Waiting === {}", LocalDateTime.now());
-        WaitingId waitingId = redissonLockWaitingCustomerFacade.createWaiting(waitingRequest.getStoreId(),
+        WaitingId waitingId = waitingCustomerService.createWaiting(waitingRequest.getStoreId(),
                 waitingRequest.getPeopleCount());
         redirectAttributes.addAttribute("waitingNumber", waitingId.getWaitingNumber());
         redirectAttributes.addAttribute("storeId", waitingId.getStoreId());
@@ -109,7 +108,7 @@ public class WaitingCustomerController {
     public String cancelWaiting(@PathVariable Long waitingNumber, @RequestParam Long storeId, RedirectAttributes redirectAttributes) {
         log.debug("=== cancel Waiting === {}", LocalDateTime.now());
 
-        redissonLockWaitingCustomerFacade.cancelWaitingByCustomer(waitingNumber ,storeId);
+        waitingCustomerService.cancelWaitingByCustomer(waitingNumber ,storeId);
         log.info("=== 웨이팅 고객 취소 ===");
 //        if (result > 0) {
 //            log.info("=== 웨이팅 고객 취소 ===");

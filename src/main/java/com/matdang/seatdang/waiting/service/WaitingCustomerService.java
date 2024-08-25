@@ -31,11 +31,6 @@ public class WaitingCustomerService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
 
-    /**
-     * {@link RedissonLockWaitingCustomerFacade#createWaiting(Long, Integer)} 을
-     * 사용하세요.
-     */
-    @DoNotUse(message = "이 메서드를 직접 사용하지 마세요.")
     @Transactional
     public WaitingId createWaiting(Long storeId, Integer peopleCount) {
         Member customer = authService.getAuthenticatedMember();
@@ -134,11 +129,6 @@ public class WaitingCustomerService {
         }
     }
 
-        /**
-         * {@link RedissonLockWaitingCustomerFacade#cancelWaitingByCustomer(Long waitingId, Long storeId)} 을
-         * 사용하세요.
-         */
-    @DoNotUse(message = "이 메서드를 직접 사용하지 마세요.")
     @Transactional
     public void cancelWaitingByCustomer(Long waitingNumber, Long storeId) {
         getPreviousWaitingOrder(storeId);
@@ -156,8 +146,6 @@ public class WaitingCustomerService {
         }
 
         saveWaitingsToRedis(waitings, waiting.getStoreId());
-//        int result = waitingRepository.updateWaitingOrderByCancel(waiting.getStoreId(), waiting.getWaitingOrder());
-//        return waitingRepository.cancelWaitingByCustomer(waiting.getId()) + result;
     }
 
     public void saveWaitingsToRedis(Map<Long, Waiting> waitings, Long storeId)  {

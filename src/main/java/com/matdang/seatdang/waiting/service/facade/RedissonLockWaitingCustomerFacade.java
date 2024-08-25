@@ -12,6 +12,8 @@ import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Component;
 
+
+@Deprecated
 @Component
 @AllArgsConstructor
 public class RedissonLockWaitingCustomerFacade {
