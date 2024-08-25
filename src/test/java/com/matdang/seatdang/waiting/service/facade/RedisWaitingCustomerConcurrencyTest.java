@@ -5,14 +5,10 @@ import static org.mockito.Mockito.when;
 
 import com.matdang.seatdang.auth.service.AuthService;
 import com.matdang.seatdang.member.entity.Customer;
-import com.matdang.seatdang.waiting.dto.WaitingId;
-import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.service.WaitingCustomerService;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -24,7 +20,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.redis.core.RedisTemplate;
 
 @SpringBootTest
-class RedissonLockWaitingCustomerFacadeTest {
+class RedisWaitingCustomerConcurrencyTest {
     @Autowired
     private RedissonLockWaitingCustomerFacade redissonLockWaitingCustomerFacade;
 
@@ -117,54 +113,57 @@ class RedissonLockWaitingCustomerFacadeTest {
         // 싱글 스레드 Redis 사용 - Redisson Lock 사용 X
         // 1577 ms, 1387ms, 1319ms
     }
-//    @Test
-//    @DisplayName("웨이팅 100개 등록된 상태에서 등록 50번 + 취소50번 동시성 테스트")
-//    void createAndCancelWaitingByConcurrency() throws InterruptedException {
-//        // given
-//        Customer mockCustomer = Customer.builder()
-//                .memberId(1L)
-//                .memberPhone("010-1234-1234")
-//                .build();
-//        when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
-//        List<Long> waitingIds = new ArrayList<>();
-//        for (int i = 0; i < 100; i++) {
-//            Long id = redissonLockWaitingCustomerFacade.createWaiting(1L, 2);
-//            waitingIds.add(id);
-//        }
-//
-//        int threadCount = 100;
-//        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
-//        CountDownLatch latch = new CountDownLatch(threadCount);
-//
-//        // when
-//        for (int i = 0; i < 50; i++) {
-//            // 등록 50번
-//            executorService.execute(() -> {
-//                try {
-//                    redissonLockWaitingCustomerFacade.createWaiting(1L, 2);
-//                } catch (Exception e) {
-//                    e.printStackTrace(); // 예외를 출력합니다
-//                } finally {
-//                    latch.countDown();
-//                }
-//            });
-//
-//            long waitingId = waitingIds.get(i);
-//            executorService.execute(() -> {
-//                try {
-//                    redissonLockWaitingCustomerFacade.cancelWaitingByCustomer(waitingId);
-//                } catch (Exception e) {
-//                    e.printStackTrace(); // 예외를 출력합니다
-//                } finally {
-//                    latch.countDown();
-//                }
-//            });
-//        }
-//        latch.await();
-//        executorService.shutdown();
-//
-//        // then
-//        Long findResult = waitingRepository.findMaxWaitingOrderByStoreId(1L);
-//        assertThat(findResult).isEqualTo(100);
-//    }
+    @Test
+    @DisplayName("웨이팅 100개 등록된 상태에서 등록 50번 + 취소50번 Redis 동시성 테스트")
+    void createAndCancelWaitingByConcurrency() throws InterruptedException {
+        // given
+        Customer mockCustomer = Customer.builder()
+                .memberId(1L)
+                .memberPhone("010-1234-1234")
+                .build();
+        when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
+        List<Long> waitingIds = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            Long id = waitingCustomerService.createWaiting(1L, 2).getWaitingNumber();
+            waitingIds.add(id);
+        }
+
+        int threadCount = 100;
+        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
+        CountDownLatch latch = new CountDownLatch(threadCount);
+
+        // when
+        for (int i = 0; i < 50; i++) {
+            // 등록 50번
+            executorService.execute(() -> {
+                try {
+                    waitingCustomerService.createWaiting(1L, 2);
+                } catch (Exception e) {
+                    e.printStackTrace(); // 예외를 출력합니다
+                } finally {
+                    latch.countDown();
+                }
+            });
+
+            long waitingNumber = waitingIds.get(i);
+            executorService.execute(() -> {
+                try {
+                    waitingCustomerService.cancelWaitingByCustomer(waitingNumber, 1L);
+                } catch (Exception e) {
+                    e.printStackTrace(); // 예외를 출력합니다
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+        latch.await();
+        executorService.shutdown();
+
+        // then
+        String max =(String) redisTemplate.opsForValue().get("waitingOrder:1");
+        assertThat(Integer.parseInt(max)).isEqualTo(100);
+
+        // 싱글 스레드 Redis 사용 - Redisson Lock 사용 X
+        // 1409ms, 1360ms, 1336ms
+    }
 }
