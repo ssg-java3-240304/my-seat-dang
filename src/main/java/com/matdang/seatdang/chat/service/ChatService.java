@@ -13,6 +13,7 @@ import com.matdang.seatdang.reservation.service.ReservationCommandService;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
@@ -57,12 +58,14 @@ public class ChatService {
 
 
     public Flux<Chat> getMessagesWithPagination(String roomNum, int limit, String beforeId) {
+        PageRequest pageable = PageRequest.of(0, limit);  // 요청받은 limit 만큼 페이징 설정
+
         if (beforeId == null || beforeId.isEmpty()) {
-            // 처음 20개의 메시지를 불러오는 경우 (최신 메시지부터)
-            return chatRepository.findTopByRoomNumOrderByCreatedAtDesc(roomNum, limit);
+            // 최신 메시지 불러오기
+            return chatRepository.findTopByRoomNumOrderByCreatedAtDesc(roomNum, pageable);
         } else {
-            // 이전 메시지(스크롤 시 더 불러오는 경우)
-            return chatRepository.findBeforeIdByRoomNum(roomNum, beforeId, limit);
+            // 특정 ID 이전의 메시지 불러오기
+            return chatRepository.findBeforeIdByRoomNum(roomNum, beforeId, pageable);
         }
     }
     public void savePaymentSuccess(ChatPaymentInfoSaveRequestDto dto) {
