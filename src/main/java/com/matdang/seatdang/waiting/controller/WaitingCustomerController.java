@@ -19,6 +19,7 @@ import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoProjection;
 import com.matdang.seatdang.waiting.service.WaitingCustomerService;
 import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingCustomerFacade;
 import jakarta.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -80,6 +81,7 @@ public class WaitingCustomerController {
     @PostMapping("/waiting")
     public String createWaiting(@ModelAttribute WaitingRequest waitingRequest, RedirectAttributes redirectAttributes) {
         log.debug("=== create Waiting ===");
+        log.debug("=== create Waiting === {}", LocalDateTime.now());
         WaitingId waitingId = redissonLockWaitingCustomerFacade.createWaiting(waitingRequest.getStoreId(),
                 waitingRequest.getPeopleCount());
         redirectAttributes.addAttribute("waitingNumber", waitingId.getWaitingNumber());
@@ -105,6 +107,8 @@ public class WaitingCustomerController {
 
     @PostMapping("/waiting/{waitingNumber}/awaiting/detail")
     public String cancelWaiting(@PathVariable Long waitingNumber, @RequestParam Long storeId, RedirectAttributes redirectAttributes) {
+        log.debug("=== cancel Waiting === {}", LocalDateTime.now());
+
         redissonLockWaitingCustomerFacade.cancelWaitingByCustomer(waitingNumber ,storeId);
         log.info("=== 웨이팅 고객 취소 ===");
 //        if (result > 0) {
@@ -133,6 +137,9 @@ public class WaitingCustomerController {
 
         Object response = getWaitingDetailResponse(new WaitingId(storeId, waitingNumber), status);
         model.addAttribute("waitingDetailResponse", response);
+
+        log.debug("=== create finish Waiting === {}", LocalDateTime.now());
+        log.debug("=== cancel finish Waiting === {}", LocalDateTime.now());
 
         // 상태에 따라 뷰 이름을 반환
         return getViewName(status);
