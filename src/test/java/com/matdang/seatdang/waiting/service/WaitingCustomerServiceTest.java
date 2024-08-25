@@ -277,21 +277,21 @@ class WaitingCustomerServiceTest {
         assertThat(findResult).isEqualTo(50);
     }
 
-    @Disabled
-    @Test
-    @DisplayName("웨이팅 10개 취소")
-    void cancelWaitingByNotConcurrency() {
-        // given
-        Customer mockCustomer = Customer.builder()
-                .memberId(1L)
-                .memberPhone("010-1234-1234")
-                .build();
-        when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
-        List<Long> waitingIds = new ArrayList<>();
-        for (int i = 0; i < 50; i++) {
-            Long id = waitingCustomerService.createWaiting(1L, 2);
-            waitingIds.add(id);
-        }
+//    @Disabled
+//    @Test
+//    @DisplayName("웨이팅 10개 취소")
+//    void cancelWaitingByNotConcurrency() {
+//        // given
+//        Customer mockCustomer = Customer.builder()
+//                .memberId(1L)
+//                .memberPhone("010-1234-1234")
+//                .build();
+//        when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
+//        List<Long> waitingIds = new ArrayList<>();
+//        for (int i = 0; i < 50; i++) {
+//            Long id = waitingCustomerService.createWaiting(1L, 2);
+//            waitingIds.add(id);
+//        }
 
         // when
 //        for (int i = 0; i < 10; i++) {
@@ -306,4 +306,4 @@ class WaitingCustomerServiceTest {
 
 
 
-}
+//}
