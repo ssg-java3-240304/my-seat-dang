@@ -79,6 +79,13 @@ public class WaitingCustomerService {
         return redisTemplate.opsForValue().increment(waitingOrderKey, 1);
     }
 
+
+    private Long getPreviousWaitingOrder(Long storeId) {
+        String waitingOrderKey = "waitingOrder:" + storeId;
+        // Redis에서 waitingOrder 값을 1씩 감소시키고 반환
+        return redisTemplate.opsForValue().increment(waitingOrderKey, -1);
+    }
+
     private void addWaitingToStore(Long storeId, Waiting waiting) throws JsonProcessingException {
         String storeKey = "store:" + storeId;
         Long waitingNumber = waiting.getWaitingNumber(); // 자동으로 증가된 waitingNumber를 가져옴
@@ -134,6 +141,7 @@ public class WaitingCustomerService {
     @DoNotUse(message = "이 메서드를 직접 사용하지 마세요.")
     @Transactional
     public void cancelWaitingByCustomer(Long waitingNumber, Long storeId) {
+        getPreviousWaitingOrder(storeId);
         Map<Long, Waiting> waitings = getWaitingsForStore(storeId);
         Waiting waiting = findById(new WaitingId(storeId, waitingNumber));
 

@@ -30,13 +30,13 @@ public class RedissonLockWaitingCustomerFacade {
         }
     }
 
-    public void cancelWaitingByCustomer(Long waitingId, Long storeId) {
+    public void cancelWaitingByCustomer(Long waitingNumber, Long storeId) {
 
         RLock lock = redissonClient.getLock("waitingLock:" + storeId); // 락 키 설정
         lock.lock(3, TimeUnit.SECONDS); // 락 획득
 
         try {
-           waitingCustomerService.cancelWaitingByCustomer(waitingId, storeId);
+           waitingCustomerService.cancelWaitingByCustomer(waitingNumber, storeId);
         } finally {
             lock.unlock();
         }
