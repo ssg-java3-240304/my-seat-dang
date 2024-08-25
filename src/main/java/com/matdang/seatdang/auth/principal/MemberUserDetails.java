@@ -1,6 +1,7 @@
 package com.matdang.seatdang.auth.principal;
 
 import com.matdang.seatdang.member.entity.Member;
+import com.matdang.seatdang.member.entity.MemberRole;
 import com.matdang.seatdang.member.entity.MemberStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -45,6 +46,10 @@ public abstract class MemberUserDetails implements UserDetails {
 
     public MemberStatus getMemberStatus() {
         return member.getMemberStatus();
+    }
+
+    public MemberRole getMemberRole() {
+        return member.getMemberRole();
     }
 
     /**
