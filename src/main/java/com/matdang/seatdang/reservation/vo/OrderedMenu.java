@@ -15,4 +15,5 @@ public class OrderedMenu {
     private String imageUrl;
     private MenuType menuType;
     private CustomMenuOpt customMenuOpt;
+    private int quantity;
 }

@@ -82,6 +82,7 @@ public class ReservationCustomerController {
                     private String menuName;
                     private int menuPrice;
                     private String imageUrl;
+                    private int quantity;
                     private CustomMenuOpt customMenuOpt;
                             private String sheet;
                             private String size;
@@ -115,7 +116,7 @@ public class ReservationCustomerController {
         return "redirect:/my-seat-dang/reservation/list";
     }
 
-    @PostMapping("/test")
+    @PostMapping("/create-normal")
     public String test(@ModelAttribute ReservationSaveRequestDto saveRequestDto){
         log.debug("saveRequest Test Dto: {}", saveRequestDto.toString());
         return "redirect:/my-seat-dang/store/detail/6";
