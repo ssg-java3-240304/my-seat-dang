@@ -30,16 +30,13 @@ public class RedissonLockWaitingCustomerFacade {
         }
     }
 
-    public int cancelWaitingByCustomer(Long waitingId) {
-        Optional<Waiting> optionalWaiting = waitingRepository.findById(waitingId);
-        Waiting waiting = optionalWaiting.orElseThrow(
-                () -> new NoSuchElementException("No waiting found with id: " + waitingId));
+    public void cancelWaitingByCustomer(Long waitingId, Long storeId) {
 
-        RLock lock = redissonClient.getLock("waitingLock:" + waiting.getStoreId()); // 락 키 설정
+        RLock lock = redissonClient.getLock("waitingLock:" + storeId); // 락 키 설정
         lock.lock(3, TimeUnit.SECONDS); // 락 획득
 
         try {
-            return waitingCustomerService.cancelWaitingByCustomer(waiting);
+           waitingCustomerService.cancelWaitingByCustomer(waitingId, storeId);
         } finally {
             lock.unlock();
         }

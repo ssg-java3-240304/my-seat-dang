@@ -82,10 +82,10 @@ public class WaitingCustomerController {
         log.debug("=== create Waiting ===");
         WaitingId waitingId = redissonLockWaitingCustomerFacade.createWaiting(waitingRequest.getStoreId(),
                 waitingRequest.getPeopleCount());
-        redirectAttributes.addAttribute("waitingId", waitingId.getWaitingNumber());
+        redirectAttributes.addAttribute("waitingNumber", waitingId.getWaitingNumber());
         redirectAttributes.addAttribute("storeId", waitingId.getStoreId());
 
-        return "redirect:/my-seat-dang/waiting/{waitingId}/awaiting/detail";
+        return "redirect:/my-seat-dang/waiting/{waitingNumber}/awaiting/detail";
     }
 
     @GetMapping("/waiting")
@@ -103,22 +103,24 @@ public class WaitingCustomerController {
 
     // TODO : 취소 후 url에 접속 못하게 막기(if문 상태처리)
 
-    @PostMapping("/waiting/{waitingId}/awaiting/detail")
-    public String cancelWaiting(@PathVariable Long waitingId, RedirectAttributes redirectAttributes) {
-        int result = redissonLockWaitingCustomerFacade.cancelWaitingByCustomer(waitingId);
-        if (result > 0) {
-            log.info("=== 웨이팅 고객 취소 ===");
-        } else {
-            log.error("== 웨이팅 고객 취소 오류 ===");
-        }
+    @PostMapping("/waiting/{waitingNumber}/awaiting/detail")
+    public String cancelWaiting(@PathVariable Long waitingNumber, @RequestParam Long storeId, RedirectAttributes redirectAttributes) {
+        redissonLockWaitingCustomerFacade.cancelWaitingByCustomer(waitingNumber ,storeId);
+        log.info("=== 웨이팅 고객 취소 ===");
+//        if (result > 0) {
+//            log.info("=== 웨이팅 고객 취소 ===");
+//        } else {
+//            log.error("== 웨이팅 고객 취소 오류 ===");
+//        }
 
-        redirectAttributes.addAttribute("waitingId", waitingId);
+        redirectAttributes.addAttribute("waitingNumber", waitingNumber);
+        redirectAttributes.addAttribute("storeId", storeId);
 
-        return "redirect:/my-seat-dang/waiting/{waitingId}/canceled/detail";
+        return "redirect:/my-seat-dang/waiting/{waitingNumber}/canceled/detail";
     }
 
-    @GetMapping("/waiting/{waitingId}/{status}/detail")
-    public String showWaitingDetail(@PathVariable Long waitingId, @RequestParam Long storeId,
+    @GetMapping("/waiting/{waitingNumber}/{status}/detail")
+    public String showWaitingDetail(@PathVariable Long waitingNumber, @RequestParam Long storeId,
                                     @PathVariable String status, Model model,
                                     HttpServletRequest request) {
         // Referer 검증 (awaiting 상태일 때만)
@@ -129,7 +131,7 @@ public class WaitingCustomerController {
             }
         }
 
-        Object response = getWaitingDetailResponse(new WaitingId(storeId, waitingId), status);
+        Object response = getWaitingDetailResponse(new WaitingId(storeId, waitingNumber), status);
         model.addAttribute("waitingDetailResponse", response);
 
         // 상태에 따라 뷰 이름을 반환

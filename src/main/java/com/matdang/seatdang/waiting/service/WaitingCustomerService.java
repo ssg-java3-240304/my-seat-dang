@@ -88,7 +88,7 @@ public class WaitingCustomerService {
         redisTemplate.opsForHash().put(storeKey, waitingNumber.toString(), waitingJson);
     }
 
-    public Map<Long, Waiting> getWaitingsForStore(Long storeId) throws JsonProcessingException {
+    public Map<Long, Waiting> getWaitingsForStore(Long storeId)  {
         String storeKey = "store:" + storeId;
 
         // Redis Hash에서 모든 필드와 값을 가져옴
@@ -99,7 +99,12 @@ public class WaitingCustomerService {
         for (Map.Entry<Object, Object> entry : entries.entrySet()) {
             Long waitingNumber = Long.parseLong((String) entry.getKey());
             String waitingJson = (String) entry.getValue();
-            Waiting waiting = objectMapper.readValue(waitingJson, Waiting.class);
+            Waiting waiting = null;
+            try {
+                waiting = objectMapper.readValue(waitingJson, Waiting.class);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
             result.put(waitingNumber, waiting);
         }
 
@@ -123,14 +128,48 @@ public class WaitingCustomerService {
     }
 
         /**
-         * {@link RedissonLockWaitingCustomerFacade#cancelWaitingByCustomer(Long)} 을
+         * {@link RedissonLockWaitingCustomerFacade#cancelWaitingByCustomer(Long waitingId, Long storeId)} 을
          * 사용하세요.
          */
     @DoNotUse(message = "이 메서드를 직접 사용하지 마세요.")
     @Transactional
-    public int cancelWaitingByCustomer(Waiting waiting) {
-        int result = waitingRepository.updateWaitingOrderByCancel(waiting.getStoreId(), waiting.getWaitingOrder());
-        return waitingRepository.cancelWaitingByCustomer(waiting.getId()) + result;
+    public void cancelWaitingByCustomer(Long waitingNumber, Long storeId) {
+        Map<Long, Waiting> waitings = getWaitingsForStore(storeId);
+        Waiting waiting = findById(new WaitingId(storeId, waitingNumber));
+
+        for (Long l : waitings.keySet()) {
+            if (waitingNumber.equals(waitings.get(l).getWaitingNumber())) {
+                waitings.get(l).setWaitingStatus(WaitingStatus.CUSTOMER_CANCELED);
+            }
+            if (waiting.getWaitingOrder() < waitings.get(l).getWaitingOrder()) {
+                waitings.get(l).setWaitingOrder(waitings.get(l).getWaitingOrder()-1) ;
+            }
+
+        }
+
+        saveWaitingsToRedis(waitings, waiting.getStoreId());
+//        int result = waitingRepository.updateWaitingOrderByCancel(waiting.getStoreId(), waiting.getWaitingOrder());
+//        return waitingRepository.cancelWaitingByCustomer(waiting.getId()) + result;
+    }
+
+    public void saveWaitingsToRedis(Map<Long, Waiting> waitings, Long storeId)  {
+        String storeKey = "store:" + storeId;
+
+        Map<String, String> hashEntries = new HashMap<>();
+        for (Map.Entry<Long, Waiting> entry : waitings.entrySet()) {
+            Long waitingNumber = entry.getKey();
+            Waiting waiting = entry.getValue();
+            String waitingJson = null;
+            try {
+                waitingJson = objectMapper.writeValueAsString(waiting);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            hashEntries.put(waitingNumber.toString(), waitingJson);
+        }
+
+        // Redis Hash에 저장
+        redisTemplate.opsForHash().putAll(storeKey, hashEntries);
     }
 
 
