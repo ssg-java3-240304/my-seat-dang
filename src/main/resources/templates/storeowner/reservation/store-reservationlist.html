@@ -402,6 +402,7 @@
         console.log("Store Owner Name:", storeOwnerName);
         console.log("Chat URL:", chatUrl);
 
+        document.querySelector("#store-name").textContent = storeName;
         await loadRecentMessages(reservationId, chatUrl);
         // SSE 연결하기
         eventSource = new EventSource(`${chatUrl}/chat/roomNum/${reservationId}`);
