@@ -553,6 +553,9 @@
                         if (!loadedMessageIds.has(messageId)) {
                             loadedMessageIds.add(messageId);
                             const messageElement = document.createElement("div");
+                            if (message.itemName && message.quantity && message.totalAmount) {
+                                addPaymentInfoToChat(message);
+                            }
                             if (message.sender === window.customerName) {
                                 messageElement.className = "outgoing_msg";
                                 messageElement.innerHTML = getSendMsgBox(message);
@@ -780,17 +783,5 @@
             }
         });
     </script>
-
-    <!--  <script>-->
-    <!--    // "닫기" 버튼에 이벤트 추가-->
-    <!--    document.querySelector('closebtn').addEventListener('click', function() {-->
-    <!--    $('#aiImageModal').modal('hide');-->
-    <!--    });-->
-
-    <!--    // "선택하기" 버튼에 이벤트 추가 (선택 후 모달 닫기)-->
-    <!--    document.getElementById('selectImageButton').addEventListener('click', function() {-->
-    <!--    $('#aiImageModal').modal('hide');-->
-    <!--    });-->
-    <!--  </script>-->
 </div>
 </html>
