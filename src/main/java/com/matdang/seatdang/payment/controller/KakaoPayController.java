@@ -60,6 +60,7 @@ public class KakaoPayController {
         if (approveResponse instanceof PayApprove) {
             log.info("=== approve success ===");
 
+
             model.addAttribute("response", ApproveSuccessResponse.create((PayApprove) approveResponse));
             return "payment/approve";
         }

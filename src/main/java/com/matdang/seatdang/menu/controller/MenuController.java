@@ -78,7 +78,7 @@ public class MenuController {
         menuRequestDto.setStoreId(userDetails.getStore().getStoreId());
 
         menuCommandService.regist(menuRequestDto.toMenuDto());
-        return "redirect:/storeowner/menu/regist";
+        return "redirect:/store-owner/menu/regist";
     }
 
     //메뉴 수정
@@ -108,7 +108,7 @@ public class MenuController {
         }
         menuCommandService.update(menuRequestDto.toMenuDto());
         log.debug("메뉴 수정 완료");
-        return "redirect:/storeowner/menu";
+        return "redirect:/store-owner/menu";
     }
 
     @PostMapping("/delete")
@@ -118,6 +118,6 @@ public class MenuController {
 
         menuCommandService.delete(menuId);
         log.debug("메뉴 삭제 완료");
-        return "redirect:/storeowner/menu";
+        return "redirect:/store-owner/menu";
     }
 }

@@ -10,6 +10,8 @@ import com.matdang.seatdang.payment.repository.RefundRepository;
 import com.matdang.seatdang.payment.service.dto.ApproveRequest;
 import com.matdang.seatdang.payment.service.dto.ReadyRequest;
 import com.matdang.seatdang.payment.service.dto.RefundRequest;
+import com.matdang.seatdang.reservation.service.ReservationCommandService;
+import com.matdang.seatdang.reservation.service.UpdateReservationPaymentStatusService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +32,7 @@ public class KakaoPayService {
     private final KakaoPayRepository kakaoPayRepository;
     private final PayApproveRepository payApproveRepository;
     private final RefundRepository refundRepository;
+    private final UpdateReservationPaymentStatusService updateReservationService;
 
     @Value("${kakao.secret.key}")
     private String secretKey;
@@ -100,6 +103,7 @@ public class KakaoPayService {
             // save the result of approval
             PayApprove approveResponse = createApproveResult(response, findPayReady);
             payApproveRepository.save(approveResponse);
+            updateReservationService.updateToPayed(approveResponse);
 
             return approveResponse;
         } catch (HttpStatusCodeException ex) {

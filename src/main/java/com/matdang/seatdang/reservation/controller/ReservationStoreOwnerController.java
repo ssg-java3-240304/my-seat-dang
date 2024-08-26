@@ -26,7 +26,7 @@ public class ReservationStoreOwnerController {
     @GetMapping("/list")
     public String storeChatPage(Model model) {
 
-        // SecurityContext에서 고객 ID를 가져옴
+        // SecurityContext에서 상점 ID를 가져옴
         Long storeOwnerId = ((StoreOwnerUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         String chatUrl = chatConfig.getServerUrl();
 
