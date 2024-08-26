@@ -11,32 +11,28 @@ import com.matdang.seatdang.store.vo.StoreSetting;
 import com.matdang.seatdang.store.vo.WaitingTime;
 import com.matdang.seatdang.waiting.controller.dto.WaitingPeople;
 import com.matdang.seatdang.waiting.dto.UpdateRequest;
+import com.matdang.seatdang.waiting.entity.CustomerInfo;
+import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.entity.WaitingStorage;
+import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingDto;
-import com.matdang.seatdang.waiting.entity.CustomerInfo;
-import com.matdang.seatdang.waiting.entity.Waiting;
-import com.matdang.seatdang.waiting.entity.WaitingStatus;
-import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.service.WaitingService;
 import com.matdang.seatdang.waiting.service.WaitingSettingService;
 import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingFacade;
 import jakarta.annotation.PostConstruct;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Slf4j
@@ -200,25 +196,25 @@ public class WaitingController {
 //                    .visitedTime(null)
 //                    .build());
 //        }
-//        {
-//            long i = 51L;
-//            for (WaitingStatus value : WaitingStatus.values()) {
-//                if (value != WaitingStatus.WAITING) {
-//
-//                    for (int j = 0; j < 10; j++, i++) {
-//                        waitingStorageRepository.save(WaitingStorage.builder()
-//                                .id(i)
-//                                .waitingNumber(i)
-//                                .waitingOrder(i)
-//                                .storeId(2L)
-//                                .customerInfo(new CustomerInfo(2L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
-//                                .createdDate(LocalDateTime.now())
-//                                .waitingStatus(value)
-//                                .visitedTime(null)
-//                                .build());
-//                    }
-//                }
-//            }
-//        }
+        {
+            long i = 51L;
+            for (WaitingStatus value : WaitingStatus.values()) {
+                if (value != WaitingStatus.WAITING) {
+
+                    for (int j = 0; j < 10; j++, i++) {
+                        waitingStorageRepository.save(WaitingStorage.builder()
+                                .id(i)
+                                .waitingNumber(i)
+                                .waitingOrder(i)
+                                .storeId(2L)
+                                .customerInfo(new CustomerInfo(2L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+                                .createdDate(LocalDateTime.now())
+                                .waitingStatus(value)
+                                .visitedTime(null)
+                                .build());
+                    }
+                }
+            }
+        }
     }
 }

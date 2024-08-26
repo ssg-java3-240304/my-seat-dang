@@ -3,34 +3,23 @@ package com.matdang.seatdang.waiting.controller;
 import com.matdang.seatdang.auth.service.AuthService;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
-import com.matdang.seatdang.waiting.controller.dto.AwaitingWaitingResponse;
-import com.matdang.seatdang.waiting.controller.dto.CanceledWaitingResponse;
-import com.matdang.seatdang.waiting.controller.dto.ReadyWaitingResponse;
-import com.matdang.seatdang.waiting.controller.dto.VisitedWaitingResponse;
-import com.matdang.seatdang.waiting.controller.dto.WaitingRequest;
+import com.matdang.seatdang.waiting.controller.dto.*;
 import com.matdang.seatdang.waiting.dto.WaitingId;
 import com.matdang.seatdang.waiting.entity.Waiting;
-import com.matdang.seatdang.waiting.entity.WaitingStorage;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
-import com.matdang.seatdang.waiting.repository.query.WaitingQueryRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
-import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoProjection;
 import com.matdang.seatdang.waiting.service.WaitingCustomerService;
-import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingCustomerFacade;
 import jakarta.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.time.LocalDateTime;
 
 @Slf4j
 @Controller
@@ -90,12 +79,20 @@ public class WaitingCustomerController {
     }
 
     @GetMapping("/waiting")
-    public String showWaiting(@RequestParam(defaultValue = "0") int status,
-                              @RequestParam(defaultValue = "0") int page,
-                              Model model) {
-        Page<WaitingInfoDto> waitings = waitingCustomerService.showWaiting(status, page);
+    public String showWaiting(
+            @RequestParam(defaultValue = "today") String when,
+            @RequestParam(defaultValue = "0") int status,
+            @RequestParam(defaultValue = "0") int page,
+            Model model) {
+        Page<WaitingInfoDto> waitings = null;
+        if (when.equals("today")) {
+            waitings = waitingCustomerService.showTodayWaiting(status, page);
+        } else if (when.equals("history")) {
+            waitings = waitingCustomerService.showHistoryWaiting(status, page);
+        }
         System.out.println("waitings = " + waitings.getContent());
         System.out.println("waitings = " + waitings.getTotalElements());
+        model.addAttribute("when", when);
         model.addAttribute("status", status);
         model.addAttribute("waitings", waitings.getContent());
         model.addAttribute("currentPage", waitings.getNumber());

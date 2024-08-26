@@ -10,8 +10,7 @@ import com.matdang.seatdang.waiting.dto.WaitingId;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
-import com.matdang.seatdang.waiting.repository.WaitingRepository;
-import com.matdang.seatdang.waiting.repository.query.WaitingQueryRepository;
+import com.matdang.seatdang.waiting.repository.query.WaitingStorageQueryRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,8 +29,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class WaitingCustomerService {
-    private final WaitingRepository waitingRepository;
-    private final WaitingQueryRepository waitingQueryRepository;
+    private final WaitingStorageQueryRepository waitingStorageQueryRepository;
     private final StoreService storeService;
     private final AuthService authService;
     private final RedisTemplate<String, Object> redisTemplate;
@@ -259,7 +257,21 @@ public class WaitingCustomerService {
 //        return Page.empty();
 //    }
 
-    public Page<WaitingInfoDto> showWaiting(int status, int page) {
+    public Page<WaitingInfoDto> showHistoryWaiting(int status, int page) {
+        PageRequest pageable = PageRequest.of(page, 10);
+        Long customerId = authService.getAuthenticatedMember().getMemberId();
+        if (status <= 1) {
+            return waitingStorageQueryRepository.findAllByCustomerIdAndWaitingStatus(customerId,
+                    WaitingStatus.findWaiting(status), pageable);
+        }
+        if (status == 2) {
+            return waitingStorageQueryRepository.findAllByCustomerIdAndCancelStatus(customerId, pageable);
+        }
+
+        return Page.empty();
+    }
+
+    public Page<WaitingInfoDto> showTodayWaiting(int status, int page) {
         Pageable pageable = PageRequest.of(page, 10);
         Long customerId = authService.getAuthenticatedMember().getMemberId();
 //

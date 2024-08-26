@@ -2,7 +2,6 @@ package com.matdang.seatdang.waiting.service;
 
 import com.matdang.seatdang.auth.service.AuthService;
 import com.matdang.seatdang.member.entity.Customer;
-import com.matdang.seatdang.member.entity.Member;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
@@ -11,30 +10,24 @@ import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.entity.WaitingStorage;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
-import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoProjection;
 import jakarta.persistence.EntityManager;
-import java.util.ArrayList;
+
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -126,7 +119,7 @@ class WaitingCustomerServiceTest {
     @ParameterizedTest
     @CsvSource(value = {"0,20", "1,20", "2,60"})
     @DisplayName("웨이팅 상태별 조회")
-    void showWaiting(int status, int size) {
+    void showTodayWaiting(int status, int size) {
         Store storeA = storeRepository.save(Store.builder()
                 .storeName("마싯당")
                 .build());
@@ -176,7 +169,7 @@ class WaitingCustomerServiceTest {
         when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
 
         // when
-        Page<WaitingInfoProjection> findResult = waitingCustomerService.showWaiting(status, 0);
+        Page<WaitingInfoProjection> findResult = waitingCustomerService.showTodayWaiting(status, 0);
 
         // then
         assertThat(findResult.getTotalElements()).isEqualTo(size);
