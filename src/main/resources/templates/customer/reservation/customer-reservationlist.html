@@ -74,7 +74,7 @@
                                                     <i class="fa fa-fw fa-envelope"></i> 디자인 상담</a>
                                                 </p>
                                                 <ul class="buttons" th:if="!(${reservation.reservationStatus.toString().equals('CANCELED')} or ${reservation.reservationStatus.toString().equals('VISIT_COMPLETED')})">
-                                                    <li><a href="#cancel-modal" class="btn_1 gray delete cancelBtn" data-bs-toggle="modal" th:data-cancel-store-id="*{storeId}"><i class="fa fa-fw fa-times-circle-o"></i> 예약취소</a></li>
+                                                    <li><a href="#cancel-modal" class="btn_1 gray delete cancelBtn" data-bs-toggle="modal" th:data-cancel-reservation-id="*{reservationId}"><i class="fa fa-fw fa-times-circle-o"></i> 예약취소</a></li>
                                                 </ul>
                                             </li>
                                         </ul>
@@ -118,7 +118,7 @@
                                                     <i class="fa fa-fw fa-envelope"></i> 디자인 상담</a>
                                                 </p>
                                                 <ul class="buttons">
-                                                    <li><a href="#cancel-modal" class="btn_1 gray delete cancelBtn" data-bs-toggle="modal" th:data-cancel-store-id="*{storeId}"><i class="fa fa-fw fa-times-circle-o"></i> 예약취소</a></li>
+                                                    <li><a href="#cancel-modal" class="btn_1 gray delete cancelBtn" data-bs-toggle="modal" th:data-cancel-reservation-id="*{reservationId}"><i class="fa fa-fw fa-times-circle-o"></i> 예약취소</a></li>
                                                 </ul>
                                             </li>
                                         </ul>
@@ -163,7 +163,7 @@
                                                     <i class="fa fa-fw fa-envelope"></i> 디자인 상담</a>
                                                 </p>
                                                 <ul class="buttons">
-                                                    <li><a href="#cancel-modal" class="btn_1 gray delete cancelBtn" data-bs-toggle="modal" th:data-cancel-store-id="*{storeId}"><i class="fa fa-fw fa-times-circle-o"></i> 예약취소</a></li>
+                                                    <li><a href="#cancel-modal" class="btn_1 gray delete cancelBtn" data-bs-toggle="modal" th:data-cancel-reservation-id="*{reservationId}"><i class="fa fa-fw fa-times-circle-o"></i> 예약취소</a></li>
                                                 </ul>
                                             </li>
                                         </ul>
@@ -893,8 +893,7 @@
         // 예약 취소 모달 이벤트 처리 시작
         document.querySelectorAll(".cancelBtn").forEach(button =>{
             button.addEventListener('click', function(){
-                const cancelStoreId = this.getAttribute('data-cancel-store-id');
-                document.querySelector("#cancel-reservId").value = cancelStoreId;
+                document.querySelector("#cancel-reservId").value = this.getAttribute('data-cancel-reservation-id');
             })
         });
 
