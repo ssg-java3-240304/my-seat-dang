@@ -93,7 +93,9 @@ public class WaitingCustomerController {
     public String showWaiting(@RequestParam(defaultValue = "0") int status,
                               @RequestParam(defaultValue = "0") int page,
                               Model model) {
-        Page<WaitingInfoProjection> waitings = waitingCustomerService.showWaiting(status, page);
+        Page<WaitingInfoDto> waitings = waitingCustomerService.showWaiting(status, page);
+        System.out.println("waitings = " + waitings.getContent());
+        System.out.println("waitings = " + waitings.getTotalElements());
         model.addAttribute("status", status);
         model.addAttribute("waitings", waitings.getContent());
         model.addAttribute("currentPage", waitings.getNumber());
