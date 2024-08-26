@@ -1,6 +1,5 @@
 INSERT INTO tbl_reservation (
     id,
-    room_num,
     created_at,
     customer_id,
     customer_name,
@@ -14,7 +13,6 @@ INSERT INTO tbl_reservation (
     store_owner_name
 ) VALUES (
              1, -- id (예시 값)
-             'A101', -- room_num (예시 값)
              '2024-08-19 14:30:00', -- created_at (예시 값)
              1, -- customer_id (예시 값)
              '이재용', -- customer_name (예시 값)
