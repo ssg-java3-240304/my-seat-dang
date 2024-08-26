@@ -209,6 +209,7 @@ public class WaitingCustomerService {
         for (Long l : waitings.keySet()) {
             if (waitingNumber.equals(waitings.get(l).getWaitingNumber())) {
                 waitings.get(l).setWaitingStatus(WaitingStatus.CUSTOMER_CANCELED);
+                waitings.get(l).setCanceledTime(LocalDateTime.now());
             }
             if (waiting.getWaitingOrder() < waitings.get(l).getWaitingOrder()) {
                 waitings.get(l).setWaitingOrder(waitings.get(l).getWaitingOrder()-1) ;
