@@ -94,6 +94,11 @@ public class CakeDesignController {
         return ResponseEntity.ok(responseDto);
     }
 
+    @GetMapping("/cake")
+    public String cake(){
+        return "ai/cake";
+    }
+
 
 
 
