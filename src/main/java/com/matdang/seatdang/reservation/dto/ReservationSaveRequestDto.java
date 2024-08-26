@@ -48,7 +48,8 @@ public class ReservationSaveRequestDto {
                         menu.getMenuPrice(),
                         menu.getImageUrl(),
                         menu.getMenuType(),
-                        menu.getCustomMenuOpt()
+                        menu.getCustomMenuOpt(),
+                        menu.getQuantity()
                 ))
                 .collect(Collectors.toList());
     }
