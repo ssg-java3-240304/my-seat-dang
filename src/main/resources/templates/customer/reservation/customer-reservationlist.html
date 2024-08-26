@@ -74,7 +74,7 @@
                                                     <i class="fa fa-fw fa-envelope"></i> 디자인 상담</a>
                                                 </p>
                                                 <ul class="buttons" th:if="!(${reservation.reservationStatus.toString().equals('CANCELED')} or ${reservation.reservationStatus.toString().equals('VISIT_COMPLETED')})">
-                                                    <li><a href="#0" class="btn_1 gray delete"><i class="fa fa-fw fa-times-circle-o"></i> 예약취소</a></li>
+                                                    <li><a href="#cancel-modal" class="btn_1 gray delete cancelBtn" data-bs-toggle="modal" th:data-cancel-store-id="*{storeId}"><i class="fa fa-fw fa-times-circle-o"></i> 예약취소</a></li>
                                                 </ul>
                                             </li>
                                         </ul>
@@ -88,7 +88,7 @@
                             <div class="card-header" role="tab" id="heading-B">
                                 <h5>
                                     <a class="collapsed" data-bs-toggle="collapse" href="#collapse-B" aria-expanded="true" aria-controls="collapse-B">
-                                        결제전
+                                        예약준비
                                     </a>
                                 </h5>
                             </div>
@@ -97,7 +97,7 @@
                                     <div class="header_box">
                                         <h4 class="d-inline-block">예약 목록</h4>
                                     </div>
-                                    <div class="list_general" th:each="reservation : ${reservations}" th:object="${reservation}"  th:if="${reservation.reservationStatus.toString().equals('PENDING')} or ${reservation.reservationStatus.toString().equals('AWAITING_PAYMENT')}">
+                                    <div class="list_general" th:each="reservation : ${reservations}" th:object="${reservation}"  th:if="${reservation.reservationStatus.toString().equals('PENDING')} or ${reservation.reservationStatus.toString().equals('AWAITING_PAYMENT')} or ${reservation.reservationStatus.toString().equals('AWAITING_CUSTOM_PAYMENT')}">
                                         <ul>
                                             <li>
                                                 <figure><img th:src="*{thumbnail}" alt=""></figure>
@@ -118,8 +118,7 @@
                                                     <i class="fa fa-fw fa-envelope"></i> 디자인 상담</a>
                                                 </p>
                                                 <ul class="buttons">
-                                                    <!--                                                    <li><a href="#0" class="btn_1 gray approve"><i class="fa fa-fw fa-check-circle-o"></i> Approve</a></li>-->
-                                                    <li><a href="#0" class="btn_1 gray delete"><i class="fa fa-fw fa-times-circle-o"></i> 예약취소</a></li>
+                                                    <li><a href="#cancel-modal" class="btn_1 gray delete cancelBtn" data-bs-toggle="modal" th:data-cancel-store-id="*{storeId}"><i class="fa fa-fw fa-times-circle-o"></i> 예약취소</a></li>
                                                 </ul>
                                             </li>
                                         </ul>
@@ -164,7 +163,7 @@
                                                     <i class="fa fa-fw fa-envelope"></i> 디자인 상담</a>
                                                 </p>
                                                 <ul class="buttons">
-                                                    <li><a href="#0" class="btn_1 gray delete"><i class="fa fa-fw fa-times-circle-o"></i> 예약취소</a></li>
+                                                    <li><a href="#cancel-modal" class="btn_1 gray delete cancelBtn" data-bs-toggle="modal" th:data-cancel-store-id="*{storeId}"><i class="fa fa-fw fa-times-circle-o"></i> 예약취소</a></li>
                                                 </ul>
                                             </li>
                                         </ul>
@@ -209,7 +208,6 @@
                                                     <i class="fa fa-fw fa-envelope"></i> 디자인 상담</a>
                                                 </p>
                                                 <ul class="buttons">
-                                                    <!--                                                    <li><a href="#0" class="btn_1 gray approve"><i class="fa fa-fw fa-check-circle-o"></i> Approve</a></li>-->
                                                 </ul>
                                             </li>
                                         </ul>
@@ -252,9 +250,6 @@
                                                       th:data-chat-url="${chatAccessUrl}">
                                                     <i class="fa fa-fw fa-envelope"></i> 디자인 상담</a>
                                                 </p>
-                                                <ul class="buttons">
-                                                    <!--                                                    <li><a href="#0" class="btn_1 gray approve"><i class="fa fa-fw fa-check-circle-o"></i> Approve</a></li>-->
-                                                </ul>
                                             </li>
                                         </ul>
                                     </div>
@@ -340,6 +335,55 @@
         </div>
     </div>
     <!--  여기까지 ai 모달-->
+
+    <!--  예약 취소 모달 -->
+<!--    <div id="cancel-modal" class="cancel-modal">-->
+<!--        <div class="modal_header">-->
+<!--            <h3>예약 취소</h3>-->
+<!--        </div>-->
+<!--        <div class="sign-in-wrapper">-->
+<!--            <div class="modal-content">-->
+<!--                <span id="modal-close-btn" class="close">&times;</span>-->
+<!--&lt;!&ndash;                <div class="modal-header">예약 취소</div>&ndash;&gt;-->
+<!--                <div class="modal-body">-->
+<!--                    <p>취소 사유를 적어주세요:</p>-->
+<!--                    <textarea id="cancelReason" placeholder="취소 사유를 입력하세요"></textarea>-->
+<!--                </div>-->
+<!--                <div class="modal-footer">-->
+<!--                    <button id="submitCancel" class="btn">Submit</button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+    <div id="cancel-modal" class="modal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">예약 취소</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="cancelForm" th:action="@{/my-seat-dang/reservation/cancel}" method="POST">
+<!--                        <p th:text=""></p>-->
+                        <input name="reservationId" id="cancel-reservId" hidden="hidden">
+                        <div class="mb-3">
+                            <label for="cancelReason" class="form-label">취소 사유</label>
+                            <textarea class="form-control" id="cancelReason" name="reason" placeholder="취소 사유를 입력하세요"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                            <button type="button" id="submitCancel" class="btn btn-primary">제출</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 여기까지 취소 모달 -->
+
+
 </main>
 </body>
 <div layout:fragment="js">
@@ -355,6 +399,7 @@
     <!-- 이 페이지 전용 스크립트 -->
 <!--    <script th:src="@{/js/customer/specific_detail.js}"></script>-->
     <script th:src="@{/js/customer/sticky_sidebar.min.js}"></script>
+
     <script th:inline="javascript">
         let eventSource = null;
 
@@ -750,17 +795,24 @@
             scrollToBottom();
         });
 
-    </script>
-    <!--  <script>-->
-    <!--    // "닫기" 버튼에 이벤트 추가-->
-    <!--    document.querySelector('closebtn').addEventListener('click', function() {-->
-    <!--    $('#aiImageModal').modal('hide');-->
-    <!--    });-->
 
-    <!--    // "선택하기" 버튼에 이벤트 추가 (선택 후 모달 닫기)-->
-    <!--    document.getElementById('selectImageButton').addEventListener('click', function() {-->
-    <!--    $('#aiImageModal').modal('hide');-->
-    <!--    });-->
-    <!--  </script>-->
+        // 예약 취소 모달 이벤트 처리 시작
+        document.querySelectorAll(".cancelBtn").forEach(button =>{
+            button.addEventListener('click', function(){
+                const cancelStoreId = this.getAttribute('data-cancel-store-id');
+                document.querySelector("#cancel-reservId").value = cancelStoreId;
+            })
+        });
+
+        // 폼 제출
+        document.getElementById("submitCancel").onclick = function() {
+            const reason = document.getElementById("cancelReason").value;
+            if (reason.trim() === "") {
+                alert("취소 사유를 입력해주세요.");
+            } else {
+                document.getElementById("cancelForm").submit();
+            }
+        }
+    </script>
 </div>
 </html>
