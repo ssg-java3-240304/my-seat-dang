@@ -10,6 +10,13 @@
             font-weight: bold;
         }
     </style>
+    <script>
+        window.onload = function() {
+            window.parent.postMessage({
+                status: 'success',
+            }, '*');
+        };
+    </script>
 </head>
 <body>
 
@@ -29,6 +36,6 @@
     </p>
 </div>
 
-<a href="/" target="_parent">메인 페이지로</a>
+<a th:href="@{/my-seat-dang/reservation/list}" target="_parent">예약 페이지로</a>
 </body>
 </html>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{customer/layout/default}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+<!--    <link th:href="@{/css/detail-page-delivery.css}" rel="stylesheet">-->
+    <link th:href="@{/css/customer/detail-page.css}" rel="stylesheet">
+    <link th:href="@{/css/customer/customcss/storeDetail.css}" rel="stylesheet">
+</head>
+<body>
+<main layout:fragment="main" class="bg_gray pattern">
+    <div class="hero_in detail_page background-image" th:style="'background-image: url(' + ${store.thumbnail} + ')'">
+        <div class="wrapper opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)">
+
+            <div class="container">
+                <div class="main_info">
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-5 col-md-6">
+                            <div class="head"><div class="score"><span><em>350 Reviews</em></span><strong>[[${store.starRating}]]</strong></div></div>
+                            <h1>[[${store.storeName}]]</h1>
+                            [[${store.storeAddress}]] - <a href="https://www.google.com/maps/dir//Assistance+%E2%80%93+H%C3%B4pitaux+De+Paris,+3+Avenue+Victoria,+75004+Paris,+Francia/@48.8606548,2.3348734,14z/data=!4m15!1m6!3m5!1s0x47e66e1de36f4147:0xb6615b4092e0351f!2sAssistance+Publique+-+H%C3%B4pitaux+de+Paris+(AP-HP)+-+Si%C3%A8ge!8m2!3d48.8568376!4d2.3504305!4m7!1m0!1m5!1m1!1s0x47e67031f8c20147:0xa6a9af76b1e2d899!2m2!1d2.3504327!2d48.8568361" target="blank">Get directions</a>
+                        </div>
+                        <div class="col-xl-8 col-lg-7 col-md-6 position-relative">
+                            <div class="buttons clearfix" >
+									<span class="magnific-gallery">
+                                        <a th:href="${thumbnail}" class="btn_hero" data-effect="mfp-zoom-in"><i class="icon_image"></i>View photos</a>
+                                        <a th:each="image : ${images}" th:href="${image}" data-effect="mfp-zoom-in"></a>
+                                    </span>
+                                <a href="#0" class="btn_hero wishlist"><i class="icon_heart"></i>Wishlist</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /row -->
+                </div>
+                <!-- /main_info -->
+            </div>
+        </div>
+    </div>
+    <!--/hero_in-->
+
+    <div class="container margin_detail">
+        <div class="row">
+            <div class="col-lg-8">
+
+                <div class="tabs_detail">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a id="tab-A" href="#pane-A" class="nav-link active" data-bs-toggle="tab" role="tab">홈</a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="tab-B" href="#pane-B" class="nav-link" data-bs-toggle="tab" role="tab">리뷰</a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" role="tablist">
+                        <div id="pane-A" class="card tab-pane fade show active" role="tabpanel" aria-labelledby="tab-A">
+                            <div class="card-header" role="tab" id="heading-A">
+                                <h5>
+                                    <a class="collapsed" data-bs-toggle="collapse" href="#collapse-A" aria-expanded="true" aria-controls="collapse-A">
+                                        홈
+                                    </a>
+                                </h5>
+                            </div>
+                            <div id="collapse-A" class="collapse" role="tabpanel" aria-labelledby="heading-A">
+                                <div class="card-body info_content">
+                                    <p>[[${store.description}]]</p>
+                                    <hr>
+                                    <div class="add_bottom_25"></div>
+                                    <!--                                    <h2>Pictures from our users</h2>-->
+                                    <!--                                    <div class="pictures magnific-gallery clearfix">-->
+                                    <!--                                        <figure><a th:href="@{img/customer/detail_gallery/detail_1.jpg}" title="Photo title" data-effect="mfp-zoom-in"><img th:src="@{img/customer/thumb_detail_placeholder.jpg}" data-src="img/thumb_detail_1.jpg" class="lazy" alt=""></a></figure>-->
+                                    <!--                                        <figure><a th:href="@{img/customer/detail_gallery/detail_2.jpg}" title="Photo title" data-effect="mfp-zoom-in"><img th:src="@{img/customer/thumb_detail_placeholder.jpg}" data-src="img/thumb_detail_2.jpg" class="lazy" alt=""></a></figure>-->
+                                    <!--                                        <figure><a th:href="@{img/customer/detail_gallery/detail_3.jpg}" title="Photo title" data-effect="mfp-zoom-in"><img th:src="@{img/customer/thumb_detail_placeholder.jpg}" data-src="img/thumb_detail_3.jpg" class="lazy" alt=""></a></figure>-->
+                                    <!--                                        <figure><a th:href="@{img/customer/detail_gallery/detail_4.jpg}" title="Photo title" data-effect="mfp-zoom-in"><img th:src="@{img/customer/thumb_detail_placeholder.jpg}" data-src="img/thumb_detail_4.jpg" class="lazy" alt=""></a></figure>-->
+                                    <!--                                        <figure><a th:href="@{img/customer/detail_gallery/detail_5.jpg}" title="Photo title" data-effect="mfp-zoom-in"><span class="d-flex align-items-center justify-content-center">+10</span><img th:src="@{img/customer/thumb_detail_placeholder.jpg}" data-src="img/thumb_detail_5.jpg" class="lazy" alt=""></a></figure>-->
+                                    <!--                                    </div>-->
+                                    <!-- /pictures -->
+                                    <h2>Menu</h2>
+                                    <!--                                    <h3>Main Course</h3>-->
+                                    <div class="menu-gallery">
+                                        <div class="menu_item thumbs" th:each="menu, iter : ${menus}" th:if="${iter.index < 5}">
+                                            <figure>
+                                                <a th:href="${menu.image}" title="Photo title" data-effect="mfp-zoom-in">
+                                                    <img th:src="${menu.image}" alt="" class="lazy">
+                                                </a>
+                                            </figure>
+                                            <div>
+                                                <em>￦ [[${#numbers.formatInteger(menu.menuPrice, 3, 'COMMA')}]]</em>
+                                                <h4>[[${menu.menuName}]]</h4>
+                                                <p>[[${menu.menuDesc}]]</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="content_more">
+                                            <div class="menu_item thumbs" th:each="menu, iter : ${menus}" th:if="${iter.index >= 5}">
+                                                <!--                                                th:each="menu, iter : ${menus}" th:if="${iter.index >= 5}"-->
+                                                <figure>
+                                                    <a th:href="${menu.image}" title="Photo title" data-effect="mfp-zoom-in">
+                                                        <img th:src="${menu.image}" alt="" class="lazy">
+                                                    </a>
+                                                </figure>
+                                                <div>
+                                                    <em>[[${#numbers.formatInteger(menu.menuPrice, 3, 'COMMA')}]]</em>
+                                                    <h4>[[${menu.menuName}]]</h4>
+                                                    <p>[[${menu.menuDesc}]]</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /content_more -->
+                                        <a href="#0" class="show_hide" data-content="toggle-text" >더보기</a>
+                                        <!--
+                                        class="read_more", style="display: none;"-->
+                                        <!--                                        <a href="#0" class="read_more_close" data-content="toggle-text" style="display: none;">닫기</a>-->
+                                    </div>
+                                    <!-- /menu-gallery -->
+                                    <br>
+                                    <div class="other_info">
+                                        <h2>Infomation</h2>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <h3>오시는 길</h3>
+                                                <p>[[${store.storeAddress}]]<br><a href="https://www.google.com/maps/dir//Assistance+%E2%80%93+H%C3%B4pitaux+De+Paris,+3+Avenue+Victoria,+75004+Paris,+Francia/@48.8606548,2.3348734,14z/data=!4m15!1m6!3m5!1s0x47e66e1de36f4147:0xb6615b4092e0351f!2sAssistance+Publique+-+H%C3%B4pitaux+de+Paris+(AP-HP)+-+Si%C3%A8ge!8m2!3d48.8568376!4d2.3504305!4m7!1m0!1m5!1m1!1s0x47e67031f8c20147:0xa6a9af76b1e2d899!2m2!1d2.3504327!2d48.8568361" target="blank"><strong>Get directions</strong></a></p>
+                                                <h3>전화번호</h3>
+                                                <p>[[${store.phone}]]</p>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <h3>영업시간</h3>
+                                                <p><strong>OPEN - CLOSE</strong><br> [[${store.openTime}]] - [[${store.closeTime}]]<p>
+                                                <p><strong>Break Time</strong><br> [[${store.startBreakTime}]] - [[${store.endBreakTime}]]</p>
+                                                <p><strong>Last Order</strong><br> [[${store.lastOrder}]]</p>
+                                                <p><span class="loc_closed">정기휴무 [[${store.regularDayOff}]]</span></p>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <h3>공지사항</h3>
+                                                <p>[[${store.notice}]]</p>
+                                            </div>
+                                        </div>
+                                        <!-- /row -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /tab -->
+
+                        <div id="pane-B" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-B">
+                            <div class="card-header" role="tab" id="heading-B">
+                                <h5>
+                                    <a class="collapsed" data-bs-toggle="collapse" href="#collapse-B" aria-expanded="false" aria-controls="collapse-B">
+                                        리뷰
+                                    </a>
+                                </h5>
+                            </div>
+                            <div id="collapse-B" class="collapse" role="tabpanel" aria-labelledby="heading-B">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /tab-content -->
+                </div>
+                <!-- /tabs_detail -->
+            </div>
+            <!-- /col -->
+
+            <div class="col-lg-4" id="sidebar_fixed">
+                <div class="box_booking mobile_fixed">
+                    <form th:action="@{/my-seat-dang/reservation/create-normal}" method="post">
+                        <!-- 기존 코드 유지 -->
+
+                        <div class="head">
+                            <h3>사전 예약</h3>
+                            <!--                        <div class="offer">Up to -40% off</div>-->
+                            <a href="#0" class="close_panel_mobile"><i class="icon_close"></i></a>
+                        </div>
+
+                        <div class="main">
+                            <input type="text" id="datepicker_field" name="date">
+                            <div id="DatePicker"></div>
+                            <div class="dropdown time last-option">
+                                <a href="#" data-bs-toggle="dropdown">Hour <span id="selected_time"></span></a>
+                                <div class="dropdown-menu">
+                                    <div class="dropdown-menu-content">
+                                        <div class="radio_select hour-container add_bottom_15" id="time-list">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /dropdown -->
+
+                            <input name="store.storeId" th:value="${store.storeId}" hidden="hidden">
+                            <input name="store.storeName" th:value="${store.storeName}" hidden="hidden">
+                            <input name="store.storePhone" th:value="${store.phone}" hidden="hidden">
+                            <input name="store.thumbnail" th:value="${store.thumbnail}" hidden="hidden">
+
+                            <div class="input-group mb-3">
+                                <table class="table table-striped cart-list">
+                                    <thead>
+                                    <tr>
+                                        <th>메뉴명</th>
+                                        <th>가격</th>
+                                        <th>수량</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="menu, iterstat : ${menus}" th:object="${menu}">
+                                        <td>
+                                            <div class="flex-md-column mt-2 mb-2">
+                                                <h9 th:text="${iterstat.count} + '. ' + *{menuName}"></h9>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <p class="mt-2 mb-0">
+                                                <strong th:text="*{menuPrice}"></strong>
+                                            </p>
+                                        </td>
+                                        <td class="options">
+                                            <a href="#0" onclick="fnCalCount('m',this);"><i class="icon_minus_alt2"></i></a>
+                                            <input th:name="|menuList[${iterstat.index}].quantity|" type="text" readonly value="0">
+                                            <a href="#0" onclick="fnCalCount('p',this);"><i class="icon_plus_alt2"></i></a>
+                                        </td>
+                                        <td>
+                                            <input th:name="|menuList[${iterstat.index}].menuName|" th:value="*{menuName}" hidden="hidden">
+                                            <input th:name="|menuList[${iterstat.index}].menuType|" th:value="NORMAL" hidden="hidden">
+                                            <input th:name="|menuList[${iterstat.index}].imageUrl|" th:value="*{image}" hidden="hidden">
+                                            <input th:name="|menuList[${iterstat.index}].menuPrice|" th:value="*{menuPrice}" hidden="hidden">
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="btn_1_mobile">
+                                <button type="submit" class="btn_1 full-width mb_5">예약하기</button>
+                                <div class="text-center go-ai-image">
+                                    <span>아직 시안이 없으신가요?</span>
+                                    <a th:href="@{/my-seat-dang}">AI 시안 생성하러 가기</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- /box_booking -->
+                <div class="btn_reserve_fixed"><a href="#0" class="btn_1 full-width">Reserve Now</a></div>
+            </div>
+
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</main>
+<th:block layout:fragment="js">
+    <!-- 이 페이지 전용 스크립트 -->
+    <script th:src="@{/js/customer/sticky_sidebar.min.js}"></script>
+    <script th:src="@{/js/customer/specific_detail.js}"></script>
+    <script th:src="@{/js/customer/datepicker.min.js}"></script>
+    <script th:inline="javascript">
+
+        let selectedDate = new Date();
+        const timeList = document.getElementById('time-list');
+        const selectedTimeSpan = document.getElementById('selected_time');
+        const now = new Date();
+
+        // store.opentime과 store.closetime을 가져옵니다.
+        /* <![CDATA[ */
+        const storeOpenTime = /*[[${store.openTime}]]*/ '';
+        const storeCloseTime = /*[[${store.closeTime}]]*/ '';
+        /* ]]> */
+        console.log(storeOpenTime);
+        console.log(storeCloseTime);
+
+        // 시간 목록을 생성하기 전에 기존 목록을 지웁니다.
+        const clearTimeList = () => {
+            while (timeList.firstChild) {
+                timeList.removeChild(timeList.firstChild);
+            }
+        };
+
+        const generateTimes = () => {
+            let currentTime = new Date();
+            currentTime.setHours(0, 0, 0, 0); // Start at 00:00
+
+            // 매장의 오픈 시간과 클로즈 시간을 Date 객체로 변환합니다.
+            const [openHours, openMinutes] = storeOpenTime.split(':');
+            const [closeHours, closeMinutes] = storeCloseTime.split(':');
+
+            const openTime = new Date();
+            openTime.setHours(openHours, openMinutes, 0, 0);
+
+            const closeTime = new Date();
+            closeTime.setHours(closeHours, closeMinutes, 0, 0);
+
+            for (let i = 0; i < 48; i++) { // 24 hours * 2 (30-minute intervals)
+                const timeStr = currentTime.toTimeString().substring(0, 5);
+                const timeValue = currentTime.toTimeString().substring(0, 5);
+
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                            <input type="radio" id="time-${timeValue}" name="time" value="${timeValue}">
+                            <label for="time-${timeValue}">${timeStr}</label>
+                `;
+                listItem.classList.add("hour-item");
+
+                if (currentTime < openTime || currentTime >= closeTime) {
+                    listItem.style.display = 'none'; // 예약 가능 시간에 벗어난 시간은 숨깁니다.
+                }
+
+                //금일의 지나간 예약시간은 숨깁니다
+                if (((selectedDate.getDate() === now.getDate()) &&(currentTime < now))) {
+                    listItem.classList.add('disabled-label');
+                    const inputElement = listItem.querySelector('input');
+                    inputElement.disabled = true;
+                    // listItem.classList.add('disabled');
+                }
+
+                listItem.addEventListener('click', function(event) {
+                    if (!listItem.classList.contains('disabled-label')) {
+                        selectedTimeSpan.textContent = timeStr;
+                    }
+                });
+
+                timeList.appendChild(listItem);
+                currentTime.setMinutes(currentTime.getMinutes() + 30);
+            }
+        };
+        generateTimes();
+    </script>
+    <script th:src="@{/js/customer/datepicker_func_3.js}"></script>
+    <script>
+        function fnCalCount(type, ths){
+            let $input = $(ths).parents("td").children(1);
+            let tCount = Number($input.val());
+
+            if(type==='p'){
+                $input.val(Number(tCount)+1);
+
+            }else{
+                if(tCount >0) $input.val(Number(tCount)-1);
+            }
+        }
+    </script>
+</th:block>
+</body>
+</html>

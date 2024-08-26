@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{customer/layout/default}">
+<head>
+    <meta charset="UTF-8">
+    <title>예약</title>
+
+    <!-- Icon fonts -->
+    <link th:href="@{/vendor/admin/font-awesome/css/font-awesome.min.css}" rel="stylesheet" type="text/css">
+    <!-- Your custom styles -->
+    <link th:href="@{/css/customer/detail-page.css}" rel="stylesheet">
+    <link th:href="@{/css/admin/custom.css}" rel="stylesheet">
+    <link th:href="@{/css/customer/customcss/reservation-list.css}" rel="stylesheet">
+    <link th:href="@{/css/customer/customcss/chatstyle.css}" rel="stylesheet" type="text/css" >
+
+
+</head>
+<body>
+<main layout:fragment="main" class="bg_gray pattern">
+    <div class="container margin_detail">
+        <div class="row">
+            <div class="col-lg-6">
+
+                <div class="tabs_detail">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a id="tab-A" href="#pane-A" class="nav-link" data-bs-toggle="tab" role="tab">전체예약</a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="tab-B" href="#pane-B" class="nav-link active" data-bs-toggle="tab" role="tab">결제 전</a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="tab-C" href="#pane-C" class="nav-link" data-bs-toggle="tab" role="tab">방문예정</a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="tab-D" href="#pane-D" class="nav-link" data-bs-toggle="tab" role="tab">방문완료</a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="tab-E" href="#pane-E" class="nav-link" data-bs-toggle="tab" role="tab">취소됨</a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" role="tablist">
+                        <div id="pane-A" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-A">
+                            <div class="card-header" role="tab" id="heading-A">
+                                <h5>
+                                    <a class="collapsed" data-bs-toggle="collapse" href="#collapse-A" aria-expanded="true" aria-controls="collapse-A">
+                                        전체예약
+                                    </a>
+                                </h5>
+                            </div>
+                            <div id="collapse-A" class="collapse" role="tabpanel" aria-labelledby="heading-A">
+                                <div class="box_general">
+                                    <div class="header_box">
+                                        <h4 class="d-inline-block">예약 목록</h4>
+                                    </div>
+                                    <div class="list_general" th:each="reservation : ${reservations}" th:object="${reservation}">
+                                        <ul>
+                                            <li>
+                                                <figure><img th:src="*{thumbnail}" alt=""></figure>
+                                                <h4>[[*{storeName}]] <i th:class="*{reservationStatus.toString().toLowerCase()}">[[*{reservationStatus.getDescription()}]]</i></h4>
+                                                <ul class="booking_list">
+                                                    <li><strong>예약일</strong>[[*{reservedAt.toLocalDate()}]]</li>
+                                                    <li><strong>예약시간</strong>[[*{reservedAt.toLocalTime()}]]</li>
+                                                </ul>
+                                                <p><a href="#" class="chat-button btn_1 gray"
+                                                      th:data-reservation-id="*{reservationId}"
+                                                      th:data-store-name="*{storeName}"
+                                                      th:data-customer-name="*{customerName}"
+                                                      th:data-customer-id="*{customerId}"
+                                                      th:data-store-id="*{storeId}"
+                                                      th:data-store-thumbnail="*{thumbnail}"
+                                                      th:data-store-phone="*{storePhoneNumber}"
+                                                      th:data-chat-url="${chatAccessUrl}">
+                                                    <i class="fa fa-fw fa-envelope"></i> 디자인 상담</a>
+                                                </p>
+                                                <ul class="buttons" th:if="!(${reservation.reservationStatus.toString().equals('CANCELED')} or ${reservation.reservationStatus.toString().equals('VISIT_COMPLETED')})">
+                                                    <li><a href="#cancel-modal" class="btn_1 gray delete cancelBtn" data-bs-toggle="modal" th:data-cancel-reservation-id="*{reservationId}"><i class="fa fa-fw fa-times-circle-o"></i> 예약취소</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /tab -->
+
+                        <div id="pane-B" class="card tab-pane fade show active" role="tabpanel" aria-labelledby="tab-B">
+                            <div class="card-header" role="tab" id="heading-B">
+                                <h5>
+                                    <a class="collapsed" data-bs-toggle="collapse" href="#collapse-B" aria-expanded="true" aria-controls="collapse-B">
+                                        예약준비
+                                    </a>
+                                </h5>
+                            </div>
+                            <div id="collapse-B" class="collapse" role="tabpanel" aria-labelledby="heading-B">
+                                <div class="box_general">
+                                    <div class="header_box">
+                                        <h4 class="d-inline-block">예약 목록</h4>
+                                    </div>
+                                    <div class="list_general" th:each="reservation : ${reservations}" th:object="${reservation}"  th:if="${reservation.reservationStatus.toString().equals('PENDING')} or ${reservation.reservationStatus.toString().equals('AWAITING_PAYMENT')} or ${reservation.reservationStatus.toString().equals('AWAITING_CUSTOM_PAYMENT')}">
+                                        <ul>
+                                            <li>
+                                                <figure><img th:src="*{thumbnail}" alt=""></figure>
+                                                <h4>[[*{storeName}]] <i th:class="*{reservationStatus.toString().toLowerCase()}">[[*{reservationStatus.getDescription()}]]</i></h4>
+                                                <ul class="booking_list">
+                                                    <li><strong>예약일</strong>[[*{reservedAt.toLocalDate()}]]</li>
+                                                    <li><strong>예약시간</strong>[[*{reservedAt.toLocalTime()}]]</li>
+                                                </ul>
+                                                <p><a href="#" class="chat-button btn_1 gray"
+                                                      th:data-reservation-id="*{reservationId}"
+                                                      th:data-store-name="*{storeName}"
+                                                      th:data-customer-name="*{customerName}"
+                                                      th:data-customer-id="*{customerId}"
+                                                      th:data-store-id="*{storeId}"
+                                                      th:data-store-thumbnail="*{thumbnail}"
+                                                      th:data-store-phone="*{storePhoneNumber}"
+                                                      th:data-chat-url="${chatAccessUrl}">
+                                                    <i class="fa fa-fw fa-envelope"></i> 디자인 상담</a>
+                                                </p>
+                                                <ul class="buttons">
+                                                    <li><a href="#cancel-modal" class="btn_1 gray delete cancelBtn" data-bs-toggle="modal" th:data-cancel-reservation-id="*{reservationId}"><i class="fa fa-fw fa-times-circle-o"></i> 예약취소</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /tab -->
+                        <!-- /tab2> -->
+
+                        <div id="pane-C" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-C">
+                            <div class="card-header" role="tab" id="heading-C">
+                                <h5>
+                                    <a class="collapsed" data-bs-toggle="collapse" href="#collapse-C" aria-expanded="true" aria-controls="collapse-C">
+                                        방문예정
+                                    </a>
+                                </h5>
+                            </div>
+                            <div id="collapse-C" class="collapse" role="tabpanel" aria-labelledby="heading-C">
+                                <div class="box_general">
+                                    <div class="header_box">
+                                        <h4 class="d-inline-block">예약 목록</h4>
+                                    </div>
+                                    <div class="list_general" th:each="reservation : ${reservations}" th:object="${reservation}" th:if="${reservation.reservationStatus.toString().equals('BEFORE_VISIT')}">
+                                        <ul>
+                                            <li>
+                                                <figure><img th:src="*{thumbnail}" alt=""></figure>
+                                                <h4>[[*{storeName}]] <i th:class="*{reservationStatus.toString().toLowerCase()}">[[*{reservationStatus.getDescription()}]]</i></h4>
+                                                <ul class="booking_list">
+                                                    <li><strong>예약일</strong>[[*{reservedAt.toLocalDate()}]]</li>
+                                                    <li><strong>예약시간</strong>[[*{reservedAt.toLocalTime()}]]</li>
+                                                </ul>
+                                                <p><a href="#" class="chat-button btn_1 gray"
+                                                      th:data-reservation-id="*{reservationId}"
+                                                      th:data-store-name="*{storeName}"
+                                                      th:data-customer-name="*{customerName}"
+                                                      th:data-customer-id="*{customerId}"
+                                                      th:data-store-id="*{storeId}"
+                                                      th:data-store-thumbnail="*{thumbnail}"
+                                                      th:data-store-phone="*{storePhoneNumber}"
+                                                      th:data-chat-url="${chatAccessUrl}">
+                                                    <i class="fa fa-fw fa-envelope"></i> 디자인 상담</a>
+                                                </p>
+                                                <ul class="buttons">
+                                                    <li><a href="#cancel-modal" class="btn_1 gray delete cancelBtn" data-bs-toggle="modal" th:data-cancel-reservation-id="*{reservationId}"><i class="fa fa-fw fa-times-circle-o"></i> 예약취소</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /tab -->
+
+                        <div id="pane-D" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-D">
+                            <div class="card-header" role="tab" id="heading-D">
+                                <h5>
+                                    <a class="collapsed" data-bs-toggle="collapse" href="#collapse-D" aria-expanded="true" aria-controls="collapse-D">
+                                        방문완료
+                                    </a>
+                                </h5>
+                            </div>
+                            <div id="collapse-D" class="collapse" role="tabpanel" aria-labelledby="heading-D">
+                                <div class="box_general">
+                                    <div class="header_box">
+                                        <h4 class="d-inline-block">예약 목록</h4>
+                                    </div>
+                                    <div class="list_general" th:each="reservation : ${reservations}" th:object="${reservation}" th:if="${reservation.reservationStatus.toString().equals('VISIT_COMPLETED')}">
+
+                                        <ul>
+                                            <li>
+                                                <figure><img th:src="*{thumbnail}" alt=""></figure>
+                                                <h4>[[*{storeName}]] <i th:class="*{reservationStatus.toString().toLowerCase()}">[[*{reservationStatus.getDescription()}]]</i></h4>
+                                                <ul class="booking_list">
+                                                    <li><strong>예약일</strong>[[*{reservedAt.toLocalDate()}]]</li>
+                                                    <li><strong>예약시간</strong>[[*{reservedAt.toLocalTime()}]]</li>
+                                                </ul>
+                                                <p><a href="#" class="chat-button btn_1 gray"
+                                                      th:data-reservation-id="*{reservationId}"
+                                                      th:data-store-name="*{storeName}"
+                                                      th:data-customer-name="*{customerName}"
+                                                      th:data-customer-id="*{customerId}"
+                                                      th:data-store-id="*{storeId}"
+                                                      th:data-store-thumbnail="*{thumbnail}"
+                                                      th:data-store-phone="*{storePhoneNumber}"
+                                                      th:data-chat-url="${chatAccessUrl}">
+                                                    <i class="fa fa-fw fa-envelope"></i> 디자인 상담</a>
+                                                </p>
+                                                <ul class="buttons">
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /tab -->
+                        <div id="pane-E" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-E">
+                            <div class="card-header" role="tab" id="heading-E">
+                                <h5>
+                                    <a class="collapsed" data-bs-toggle="collapse" href="#collapse-E" aria-expanded="true" aria-controls="collapse-E">
+                                        취소됨
+                                    </a>
+                                </h5>
+                            </div>
+                            <div id="collapse-E" class="collapse" role="tabpanel" aria-labelledby="heading-E">
+                                <div class="box_general">
+                                    <div class="header_box">
+                                        <h4 class="d-inline-block">예약 목록</h4>
+                                    </div>
+                                    <div class="list_general" th:each="reservation : ${reservations}" th:object="${reservation}" th:if="${reservation.reservationStatus.toString().equals('CANCELED')}">
+
+                                        <ul>
+                                            <li>
+                                                <figure><img th:src="*{thumbnail}" alt=""></figure>
+                                                <h4>[[*{storeName}]] <i th:class="*{reservationStatus.toString().toLowerCase()}">[[*{reservationStatus.getDescription()}]]</i></h4>
+                                                <ul class="booking_list">
+                                                    <li><strong>예약일</strong>[[*{reservedAt.toLocalDate()}]]</li>
+                                                    <li><strong>예약시간</strong>[[*{reservedAt.toLocalTime()}]]</li>
+                                                </ul>
+                                                <p><a href="#" class="chat-button btn_1 gray"
+                                                      th:data-reservation-id="*{reservationId}"
+                                                      th:data-store-name="*{storeName}"
+                                                      th:data-customer-name="*{customerName}"
+                                                      th:data-customer-id="*{customerId}"
+                                                      th:data-store-id="*{storeId}"
+                                                      th:data-store-thumbnail="*{thumbnail}"
+                                                      th:data-store-phone="*{storePhoneNumber}"
+                                                      th:data-chat-url="${chatAccessUrl}">
+                                                    <i class="fa fa-fw fa-envelope"></i> 디자인 상담</a>
+                                                </p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /tab -->
+                    </div>
+                    <!-- /tab-content -->
+                </div>
+                <!-- /tabs_detail -->
+            </div>
+            <!-- /col -->
+
+            <div class="col-lg-6" id="sidebar_fixed">
+<!--                <div class="box_booking">-->
+<!--                    <div class="main">-->
+                        <div class="right-section">
+                            <div id="user_chat_data" class="user_chat_data">
+                                <div class="profile_name">
+                                    <img id="store-thumbnail" class="mr-3 rounded-circle" style="width: 40px">
+                                    <span id="store-name"></span>
+                                    <i class="fa fa-phone ms-4 me-1"></i><span id="store-phone"></span>
+                                </div>
+                                <div class="container-fluid chat_section" id="chat-box"></div>
+                                <div class="type_msg">
+                                    <div class="input_msg_write">
+                                        <button id="chat-attach" class="msg_attach_btn" type="button" style="border: 2px solid #4CAF50;">
+                                            <i class="fa fa-paperclip" aria-hidden="true"></i>
+                                        </button>
+                                        <!--            ai버튼 그냥 아무거나 넣어놨습니다 구별하기위해 빨간색해놨어요 디자인 바꿔주세요..-->
+                                        <button id="chat-ai" class="msg_attach_btn" type="button" style="border: 2px solid #4CAF50;">
+                                            <i class="fa fa-birthday-cake" aria-hidden="true"></i>
+                                        </button>
+                                        <input id="chat-outgoing-msg" type="text" class="write_msg" placeholder="Type a message"/>
+                                        <button id="chat-send" class="msg_send_btn" type="button">
+                                            <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                        </button>
+                                        <input id="chat-file-input" type="file" style="display: none;"/>
+                                    </div>
+                                    <div id="file-preview" class="file-preview"></div>
+                                </div>
+                            </div>
+<!--                        </div>-->
+<!--                    </div>-->
+                </div>
+            </div>
+
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+
+    <!-- AI 이미지 선택 모달 -->
+    <div id="aiImageModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">AI 이미지 선택</h5>
+                    <button type="button" class="close" id="closeBtn" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- 이미지 선택 그리드 -->
+                    <div class="image-selection-grid" style="max-height: 500px; overflow-y: auto;">
+                        <!-- 여기에 max-height로 스크롤 -->
+                        <div th:each="image : ${imageList}"
+                             style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <input type="radio" name="selectedImage" th:value="${image.generatedUrl}"
+                                   class="select-image-radio" style="margin-right: 10px;">
+                            <img th:src="@{${image.generatedUrl}}" th:alt="${image.inputText}" class="selectable-image"
+                                 style="width: 100px; height: 100px; cursor: pointer;">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="closeBtn2" data-dismiss="modal">닫기</button>
+                    <button type="button" class="btn btn-primary" id="selectImageButton">선택하기</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!--  여기까지 ai 모달-->
+
+    <!--  예약 취소 모달 -->
+<!--    <div id="cancel-modal" class="cancel-modal">-->
+<!--        <div class="modal_header">-->
+<!--            <h3>예약 취소</h3>-->
+<!--        </div>-->
+<!--        <div class="sign-in-wrapper">-->
+<!--            <div class="modal-content">-->
+<!--                <span id="modal-close-btn" class="close">&times;</span>-->
+<!--&lt;!&ndash;                <div class="modal-header">예약 취소</div>&ndash;&gt;-->
+<!--                <div class="modal-body">-->
+<!--                    <p>취소 사유를 적어주세요:</p>-->
+<!--                    <textarea id="cancelReason" placeholder="취소 사유를 입력하세요"></textarea>-->
+<!--                </div>-->
+<!--                <div class="modal-footer">-->
+<!--                    <button id="submitCancel" class="btn">Submit</button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+    <div id="cancel-modal" class="modal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">예약 취소</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="cancelForm" th:action="@{/my-seat-dang/reservation/cancel}" method="POST">
+<!--                        <p th:text=""></p>-->
+                        <input name="reservationId" id="cancel-reservId" hidden="hidden">
+                        <div class="mb-3">
+                            <label for="cancelReason" class="form-label">취소 사유</label>
+                            <textarea class="form-control" id="cancelReason" name="reason" placeholder="취소 사유를 입력하세요"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                            <button type="button" id="submitCancel" class="btn btn-primary">제출</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 여기까지 취소 모달 -->
+
+
+</main>
+</body>
+<div layout:fragment="js">
+    <!-- Bootstrap core JavaScript -->
+<!--    <script src="/vendor/admin/jquery/jquery.min.js"></script>-->
+<!--    <script src="/vendor/admin/bootstrap/js/bootstrap.bundle.min.js"></script>-->
+    <!-- Core plugin JavaScript -->
+    <script th:src="@{/vendor/admin/jquery-easing/jquery.easing.min.js}"></script>
+    <!-- Page level plugin JavaScript -->
+    <script th:src="@{/vendor/admin/jquery.magnific-popup.min.js}"></script>
+    <!-- Custom scripts for all pages -->
+<!--    <script src="/js/admin/admin.js"></script>-->
+    <!-- 이 페이지 전용 스크립트 -->
+<!--    <script th:src="@{/js/customer/specific_detail.js}"></script>-->
+    <script th:src="@{/js/customer/sticky_sidebar.min.js}"></script>
+
+    <script th:inline="javascript">
+        let eventSource = null;
+        let loadedMessageIds = new Set();
+        let lastMessageId = null;
+        let isLoading = false; // 중복 요청 방지
+
+        (function ($) {
+            "use strict";
+
+            // Sticky sidebar
+            $('#sidebar_fixed').theiaStickySidebar({
+                minWidth: 991,
+                updateSidebarHeight: true,
+                additionalMarginTop: 25
+            });
+        })(window.jQuery);
+
+        async function handlePayment(button, reservationId, customerId, storeId) {
+            const partnerOrderId = reservationId;
+            const partnerUserId = customerId;
+            const shopId = storeId;
+            console.log(reservationId, customerId, storeId);
+            const paragraphs = button.parentNode.querySelectorAll('p');
+            let itemName = '';
+            let quantity = '';
+            let totalAmount = '';
+
+            paragraphs.forEach(p => {
+                if (p.textContent.includes('상품명:')) {
+                    itemName = p.textContent.replace('상품명:', '').trim();
+                } else if (p.textContent.includes('수량:')) {
+                    quantity = p.textContent.replace('수량:', '').trim();
+                } else if (p.textContent.includes('결제 금액:')) {
+                    totalAmount = p.textContent.replace('결제 금액:', '').trim().replace(/[^0-9]/g, '');
+                }
+            });
+
+            const taxFreeAmount = 0;
+
+            const queryString = `partnerOrderId=${encodeURIComponent(partnerOrderId)}&partnerUserId=${encodeURIComponent(partnerUserId)}&shopId=${encodeURIComponent(shopId)}&itemName=${encodeURIComponent(itemName)}&quantity=${encodeURIComponent(quantity)}&totalAmount=${encodeURIComponent(totalAmount)}&taxFreeAmount=${encodeURIComponent(taxFreeAmount)}`;
+
+            window.location.href = `/payment/request?${queryString}`;
+        }
+
+        function scrollToBottom() {
+            const chatSection = document.querySelector('.chat_section');
+            chatSection.scrollTop = chatSection.scrollHeight;
+        }
+
+        function clearChatBox() {
+            const chatBox = document.querySelector('#chat-box');
+            chatBox.innerHTML = ''; // 이전 채팅 내용을 모두 삭제
+        }
+
+        function removeEventListeners(selector, eventName) {
+            const elements = document.querySelectorAll(selector);
+            elements.forEach(el => {
+                const clone = el.cloneNode(true);
+                el.parentNode.replaceChild(clone, el);
+            });
+        }
+
+        function getSendMsgBox(data) {
+            const date = new Date(data.createdAt);
+            const timeString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+            const imgTag = data.customerImage ? `<img src="${data.customerImage}" alt="image" class="chat-image" style="max-width: 100%; max-height: 200px; cursor: pointer;" />` : '';
+            return `<div>
+        <p style="text-align: right;">${data.sender}</p>
+        <div class="sent_msg">
+            ${imgTag}
+            <p style="text-align: right;">${data.msg}</p>
+            <span class="time_date">${timeString}</span>
+        </div>
+    </div>`;
+        }
+
+        function getReceiveMsgBox(data) {
+            const date = new Date(data.createdAt);
+            const timeString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+            const imgTag = data.customerImage ? `<img src="${data.customerImage}" alt="image" class="chat-image" style="max-width: 100%; max-height: 200px; cursor: pointer;" />` : '';
+            return `<div>
+        <p>${data.sender}</p>
+        <div class="received_withd_msg">
+            ${imgTag}
+            <p>${data.msg}</p>
+            <span class="time_date">${timeString}</span>
+        </div>
+        <div></div>
+    </div>`;
+        }
+
+        function initMyMessage(data) {
+            let chatBox = document.querySelector("#chat-box");
+            let sendBox = document.createElement("div");
+            sendBox.className = "outgoing_msg";
+            sendBox.innerHTML = getSendMsgBox(data);
+            chatBox.append(sendBox);
+            scrollToBottom();
+        }
+
+        function initYourMessage(data) {
+            let chatBox = document.querySelector("#chat-box");
+            let receivedBox = document.createElement("div");
+            receivedBox.className = "received_msg";
+            receivedBox.innerHTML = getReceiveMsgBox(data);
+            chatBox.append(receivedBox);
+            scrollToBottom();
+        }
+
+        function addPaymentInfoToChat(data, reservationId, customerId, storeId) {
+            console.log('Adding payment info:', data); // 데이터 확인
+
+            const chatBox = document.querySelector("#chat-box");
+            const date = new Date(data.createdAt);
+            const timeString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+            const paymentInfoBox = document.createElement("div");
+            paymentInfoBox.className = "payment-box";
+            paymentInfoBox.innerHTML = `
+            <div class="payment-customer">
+                <p><strong>상품명:</strong> ${data.itemName}</p>
+                <p><strong>수량:</strong> ${data.quantity}</p>
+                <p><strong>결제 금액:</strong> ${data.totalAmount}원</p>
+                <button class="btn btn-primary btn-sm payment-btn" onclick="handlePayment(this, '${reservationId}', '${customerId}', '${storeId}')">결제하기</button>
+                <div></div>
+                <span class="time_date">${timeString}</span>
+            </div>`;
+            chatBox.append(paymentInfoBox);
+            scrollToBottom();
+        }
+
+
+
+        async function loadRecentMessages(reservationId, chatUrl) {
+            try {
+                // 최근 20개 메시지를 로드
+                const response = await fetch(`${chatUrl}/chat/roomNum/${reservationId}/messages?limit=20`);
+                const messages = await response.json();
+
+                if (messages.length > 0) {
+                    lastMessageId = messages[messages.length - 1].id; // 가장 오래된 메시지의 ID 저장
+
+                    // 메시지들을 채팅창에 표시하고 ID를 저장
+                    messages.reverse().forEach(message => {
+                        const messageId = message.id || message.createdAt;
+                        loadedMessageIds.add(messageId); // 메시지 ID 저장
+
+                        if (message.itemName && message.quantity && message.totalAmount) {
+                            addPaymentInfoToChat(message);
+                        }
+                        if (message.sender === window.customerName) {
+                            initMyMessage(message);
+                        } else {
+                            initYourMessage(message);
+                        }
+                    });
+
+                    scrollToBottom(); // 초기 로드 시 스크롤을 맨 아래로 이동
+                }
+            } catch (error) {
+                console.error('Error loading recent messages:', error);
+            }
+        }
+
+        async function loadMoreMessages(reservationId, chatUrl) {
+            console.log('loadMoreMessages function called');
+
+            if (isLoading) {
+                console.log('Loading in progress');
+                return;
+            }
+
+            isLoading = true;
+
+            try {
+                console.log("Requesting more messages from server...");
+
+                // 마지막으로 로드한 메시지 ID를 기준으로 이전 메시지를 요청
+                let url = `${chatUrl}/chat/roomNum/${reservationId}/messages?limit=20`;
+                if (lastMessageId) {
+                    url += `&beforeId=${lastMessageId}`;
+                }
+
+                const response = await fetch(url);
+                const messages = await response.json();
+
+                console.log("Messages received:", messages.length); // 서버로부터 받은 메시지 개수 로그
+
+                if (messages.length > 0) {
+                    lastMessageId = messages[messages.length - 1].id;
+                    const chatBox = document.querySelector("#chat-box");
+                    const initialScrollHeight = chatBox.scrollHeight;
+
+                    // 이미 로드된 메시지를 제외하고 새로운 메시지만 처리
+                    messages.forEach(message => {
+                        const messageId = message.id || message.createdAt;
+                        if (!loadedMessageIds.has(messageId)) {
+                            loadedMessageIds.add(messageId);
+                            const messageElement = document.createElement("div");
+                            if (message.sender === window.customerName) {
+                                messageElement.className = "outgoing_msg";
+                                messageElement.innerHTML = getSendMsgBox(message);
+                            } else {
+                                messageElement.className = "received_msg";
+                                messageElement.innerHTML = getReceiveMsgBox(message);
+                            }
+
+                            // 메시지를 채팅창 맨 위에 삽입
+                            chatBox.insertBefore(messageElement, chatBox.firstChild);
+                        }
+                    });
+
+                    // 마지막 메시지 ID 업데이트
+                    // lastMessageId = messages[messages.length - 1].id;
+                    console.log('Updated lastMessageId:', lastMessageId);
+
+                    // 스크롤 위치 유지
+                    chatBox.scrollTop = chatBox.scrollHeight - initialScrollHeight;
+                } else {
+                    console.log('No more messages to load.');
+                }
+            } catch (error) {
+                console.error('Error loading more messages:', error);
+            } finally {
+                isLoading = false;
+            }
+        }
+
+        document.querySelectorAll('.chat-button').forEach(button => {
+            button.addEventListener('click', async function () {
+
+                // 기존 SSE 연결 종료
+                if (eventSource !== null) {
+                    console.log("Closing previous SSE connection");
+                    eventSource.close();
+                    eventSource = null; // 기존 연결 해제
+                }
+
+                clearChatBox(); // 이전 채팅 내용 삭제
+
+                // 여기서 loadedMessageIds와 lastMessageId를 초기화
+                loadedMessageIds.clear();
+                lastMessageId = null;
+
+                // 오른쪽 섹션을 표시
+                document.querySelector('.right-section').style.display = 'block';
+
+                const reservationId = this.getAttribute('data-reservation-id');
+                const storeName = this.getAttribute('data-store-name');
+                const storeThumbnail = this.getAttribute('data-store-thumbnail');
+                const storePhone = this.getAttribute('data-store-phone')
+                const customerName = this.getAttribute('data-customer-name'); // 문제 해결: customerName 변수 정의
+                const customerId = this.getAttribute('data-customer-id');
+                const storeId = this.getAttribute('data-store-id');
+                const chatUrl = this.getAttribute('data-chat-url');
+
+                // 전역 변수 업데이트( ai 업로드에서도 사용해야되서)
+                window.customerName = customerName;
+                window.reservationId = reservationId;
+                window.chatUrl = chatUrl;
+
+                console.log("Reservation ID:", reservationId);
+                console.log("Store Name:", storeName);
+                console.log("Customer Name:", customerName);
+                console.log("Customer ID:", customerId);
+                console.log("Store ID:", storeId);
+                console.log("Chat URL:", chatUrl);
+
+                document.querySelector("#store-phone").textContent = storePhone;
+                document.querySelector("#store-name").textContent = storeName;
+                document.querySelector("#store-thumbnail").src = storeThumbnail;
+
+                // 최근 메시지 20개 불러오기
+                await loadRecentMessages(reservationId, chatUrl);
+
+                // SSE 연결하기
+                eventSource = new EventSource(`${chatUrl}/chat/roomNum/${reservationId}`);
+                eventSource.onmessage = (event) => {
+                    const data = JSON.parse(event.data);
+                    const messageId = data.id || data.createdAt; // 유니크한 메시지 식별자
+
+                    // 중복 메시지 체크 - loadedMessageIds에 없으면 추가
+                    if (!loadedMessageIds.has(messageId)) {
+                        loadedMessageIds.add(messageId); // 메시지 ID 추가
+
+                        console.log("Received data:", data);
+
+                        // 결제 정보가 포함된 메시지인 경우 처리
+                        if (data.itemName && data.quantity && data.totalAmount) {
+                            addPaymentInfoToChat(data);
+                        }
+
+                        // 메시지 발신자에 따른 메시지 처리
+                        if (data.sender === customerName) {
+                            initMyMessage(data);
+                        } else {
+                            initYourMessage(data);
+                        }
+                    } else {
+                        console.log("Duplicate message ignored:", data);
+                    }
+                };
+
+                eventSource.onerror = function () {
+                    console.error("EventSource failed, closing connection.");
+                    eventSource.close();
+                    eventSource = null; // 오류 발생 시 연결 해제
+                };
+
+                // 스크롤 이벤트 리스너 추가 (스크롤이 상단에 도달하면 이전 메시지 로드)
+                document.querySelector('.chat_section').addEventListener('scroll', function() {
+                    if (this.scrollTop === 0 && !isLoading) {
+                        console.log('Top of chat reached, loading more messages...');
+                        loadMoreMessages(reservationId, chatUrl);
+                    }
+                });
+                // 기존에 등록된 이벤트 리스너 제거
+                removeEventListeners('#chat-send', 'click');
+                removeEventListeners('#chat-outgoing-msg', 'keydown');
+                removeEventListeners('#chat-attach', 'click');
+                removeEventListeners('#chat-file-input', 'change');
+
+                document.querySelector("#chat-send").addEventListener('click', () => addMessage(customerName, reservationId, chatUrl));
+                document.querySelector("#chat-outgoing-msg").addEventListener('keydown', (e) => {
+                    if (e.keyCode === 13) {
+                        e.preventDefault();
+                        addMessage(customerName, reservationId, chatUrl);
+                    }
+                });
+
+                document.querySelector("#chat-attach").addEventListener("click", () => {
+                    document.querySelector("#chat-file-input").click();
+                });
+
+                document.querySelector("#chat-file-input").addEventListener("change", () => {
+                    const fileInput = document.querySelector("#chat-file-input");
+                    const filePreview = document.querySelector("#file-preview");
+                    filePreview.innerHTML = ''; // Clear previous preview
+
+                    if (fileInput.files.length > 0) {
+                        const file = fileInput.files[0];
+                        const reader = new FileReader();
+
+                        const previewContainer = document.createElement('div');
+                        previewContainer.className = 'file-preview-item';
+
+                        if (file.type.startsWith('image/')) {
+                            reader.onload = function (e) {
+                                const img = document.createElement('img');
+                                img.src = e.target.result;
+                                previewContainer.appendChild(img);
+                            };
+                            reader.readAsDataURL(file);
+                        } else {
+                            // Non-image file
+                            const fileName = document.createElement('span');
+                            fileName.textContent = file.name;
+                            previewContainer.appendChild(fileName);
+                        }
+                        filePreview.appendChild(previewContainer);
+                    }
+                    scrollToBottom();
+                });
+            });
+
+            async function addMessage(customerName, reservationId, chatUrl) {
+                let msgInput = document.querySelector("#chat-outgoing-msg");
+                let fileInput = document.querySelector("#chat-file-input");
+                let filePreview = document.querySelector("#file-preview");
+                let message = msgInput.value.trim();
+
+                // 파일이 첨부되었거나 메시지가 비어있지 않을 경우에만 전송
+                if (message === "" && !fileInput.files.length) {
+                    return;
+                }
+
+                let formData = new FormData();
+
+                // 메시지가 비어있지 않거나 파일이 첨부된 경우 메시지 추가
+                if (message !== "" || fileInput.files.length > 0) {
+                    formData.append("chat", new Blob([JSON.stringify({
+                        sender: customerName,
+                        roomNum: reservationId,
+                        msg: message
+                    })], {type: "application/json"}));
+                }
+
+                // 파일이 있는 경우 파일 추가
+                if (fileInput.files.length > 0) {
+                    formData.append("customerImage", fileInput.files[0]);
+                }
+
+                await fetch(`${chatUrl}/chat`, {
+                    method: "post",
+                    body: formData
+                });
+
+                // 입력 필드와 파일 필드 초기화
+                msgInput.value = "";
+                fileInput.value = "";
+                filePreview.innerHTML = ""; // 파일 미리보기 영역 초기화
+                scrollToBottom();
+            }
+
+            window.addEventListener('message', function (event) {
+                if (event.origin !== "https://your-trusted-domain.com") {
+                    return;
+                }
+
+                const data = event.data;
+
+                if (data.status === 'success') {
+                    alert('결제가 성공적으로 완료되었습니다!');
+                    updatePaymentStatusUI(event.target);
+                } else if (data.status === 'failure') {
+                    alert('결제에 실패했습니다. 다시 시도해 주세요.');
+                }
+            });
+
+            function updatePaymentStatusUI(button) {
+                const paymentInfoBox = button.parentNode;
+                paymentInfoBox.innerHTML += '<p><strong>결제 상태:</strong> 완료</p>';
+                button.disabled = true;
+            }
+        });  
+
+        // "선택하기" 버튼 클릭 시 이미지 전송
+        document.querySelector("#selectImageButton").addEventListener("click", () => {
+            if (selectedImageUrl) {
+                let formData = new FormData();
+                formData.append("chat", new Blob([JSON.stringify({
+                    sender: window.customerName,
+                    roomNum: window.reservationId,
+                    msg: "", // 메시지 내용 비워두기 (이미지만 전송)
+                    customerImage: selectedImageUrl
+                })], { type: "application/json" }));
+
+                $.ajax({
+                    url: `${window.chatUrl}/chat`,
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        $('#aiImageModal').modal('hide');
+                        selectedImageUrl = null;
+                    },
+                    error: function (error) {
+                        console.error('Error sending image:', error);
+                    }
+                });
+            } else {
+                alert("이미지를 선택하세요.");
+            }
+        });
+
+        // 파일 업로드 처리
+        document.querySelector("#chat-attach").addEventListener("click", () => {
+            document.querySelector("#chat-file-input").click();
+        });
+
+        document.querySelector("#chat-file-input").addEventListener("change", () => {
+            const fileInput = document.querySelector("#chat-file-input");
+            const filePreview = document.querySelector("#file-preview");
+            filePreview.innerHTML = ''; // 이전 미리보기 초기화
+
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+
+                const previewContainer = document.createElement('div');
+                previewContainer.className = 'file-preview-item';
+
+                if (file.type.startsWith('image/')) {
+                    reader.onload = function (e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        previewContainer.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    const fileName = document.createElement('span');
+                    fileName.textContent = file.name;
+                    previewContainer.appendChild(fileName);
+                }
+                filePreview.appendChild(previewContainer);
+            }
+            scrollToBottom();
+        });
+
+
+        // 예약 취소 모달 이벤트 처리 시작
+        document.querySelectorAll(".cancelBtn").forEach(button =>{
+            button.addEventListener('click', function(){
+                document.querySelector("#cancel-reservId").value = this.getAttribute('data-cancel-reservation-id');
+            })
+        });
+
+        // 폼 제출
+        document.getElementById("submitCancel").onclick = function() {
+            const reason = document.getElementById("cancelReason").value;
+            if (reason.trim() === "") {
+                alert("취소 사유를 입력해주세요.");
+            } else {
+                document.getElementById("cancelForm").submit();
+            }
+        }
+    </script>
+
+</div>
+</html>

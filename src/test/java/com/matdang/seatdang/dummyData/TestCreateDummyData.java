@@ -47,15 +47,15 @@ public class TestCreateDummyData {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @CsvSource({
-            "customer@test.com, '이재용'",
-            "customer2@test.com, '카리나'",
-            "customer3@test.com, '서강준'",
-            "customer4@test.com, '차은우'",
-            "customer5@test.com, '윈터'"
+            "customer@test.com, '이재용', 'https://kr.object.ncloudstorage.com/myseatdang-bucket/member/fa6265015dbc9466b5047f11cabe160b_res.jpeg'",
+            "customer2@test.com, '카리나', 'https://kr.object.ncloudstorage.com/myseatdang-bucket/member/c150140d8344c1d3e3bc9f6ae3f293e8_res.jpeg'",
+            "customer3@test.com, '서강준', 'profile.jpg'",
+            "customer4@test.com, '차은우', 'profile.jpg'",
+            "customer5@test.com, '윈터', 'profile.jpg'"
     })
     @DisplayName("일반 회원 더미 데이터 세팅")
     @ParameterizedTest
-    public void Test1(String email, String memberName) {
+    public void Test1(String email, String memberName, String profileImage) {
         //given
         Customer customer = Customer.builder()
                 .memberEmail(email)
@@ -69,7 +69,7 @@ public class TestCreateDummyData {
                 .customerGender(Gender.MALE)
                 .customerBirthday(LocalDate.of(1990, 1, 1))
                 .customerNickName("미식가"+memberName)
-                .customerProfileImage("profile.jpg")
+                .customerProfileImage(profileImage)
                 .build();
         //when
         Customer savedCustomer = (Customer) memberRepository.save(customer);
@@ -138,7 +138,7 @@ public class TestCreateDummyData {
                             .lastOrder(LocalTime.of(21, 30))
                             .closeTime(LocalTime.of(22, 0))
                             .regularDayOff("목요일")
-                            .thumbnail("https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/0a2e250f-1a1a-4805-bf17-559d7c4105cf.png")
+                            .thumbnail("https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/99397_60912_2445.jpg")
                             .description("현장 웨이팅이 가능한 매장입니다.")
                             .notice("Closed on public holidays.")
                             .phone("555-1234-567")
@@ -149,10 +149,12 @@ public class TestCreateDummyData {
                                     .reservationStatus(Status.OFF)
                                     .waitingTime(new WaitingTime(LocalTime.of(10,0), LocalTime.of(20,0), LocalTime.of(0,10) ))
                                     .waitingStatus(WaitingStatus.OPEN)
+                                    .maxReservationInDay(1000)
+                                    .maxReservationInTime(5)
                                     .build()
                             )
                             .build();
-                }else if(2<storeTypeFixer && storeTypeFixer<=4){
+                }else if(2 <= storeTypeFixer && storeTypeFixer<4){
                     store = Store.builder()
                             .storeName(name)
                             .storeAddress(addr)
@@ -175,6 +177,8 @@ public class TestCreateDummyData {
                                     .reservationStatus(Status.ON)
                                     .waitingTime(new WaitingTime(LocalTime.of(10,0), LocalTime.of(20,0), LocalTime.of(0,10) ))
                                     .waitingStatus(WaitingStatus.UNAVAILABLE)
+                                    .maxReservationInDay(1000)
+                                    .maxReservationInTime(5)
                                     .build()
                             )
                             .build();
@@ -201,6 +205,8 @@ public class TestCreateDummyData {
                                     .reservationStatus(Status.ON)
                                     .waitingTime(new WaitingTime(LocalTime.of(10,0), LocalTime.of(20,0), LocalTime.of(0,10) ))
                                     .waitingStatus(WaitingStatus.UNAVAILABLE)
+                                    .maxReservationInDay(1000)
+                                    .maxReservationInTime(5)
                                     .build()
                             )
                             .build();

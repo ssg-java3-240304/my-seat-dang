@@ -1,5 +1,6 @@
 package com.matdang.seatdang.chat.entity;
 
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -7,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 @Document(collection = "chat") // 컬렉션 chat으로 지정
 public class Chat {
     @Id
@@ -23,4 +25,7 @@ public class Chat {
     private String itemName; // 상품명
     private Integer quantity; // 수량
     private Integer totalAmount; // 결제금액
+
+//    private Boolean isRead; // 읽음 상태 (새로운 필드)
+    private LocalDateTime timestamp; // 메세지를 찾기위한 필드
 }

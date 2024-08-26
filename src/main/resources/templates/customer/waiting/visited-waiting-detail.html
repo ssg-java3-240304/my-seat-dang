@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Visited Waiting Detail</title>
+</head>
+<body>
+<h1>Visited Waiting Detail</h1>
+<p><strong>Waiting Number:</strong> <span th:text="${waitingDetailResponse.waitingNumber}"></span></p>
+<p><strong>Waiting Status:</strong> <span th:text="${waitingDetailResponse.waitingStatus}"></span></p>
+<p><strong>Created Date:</strong> <span th:text="${{waitingDetailResponse.createdDate}}"></span></p>
+<p><strong>Visited Time:</strong> <span th:text="${{waitingDetailResponse.visitedTime}}"></span></p>
+<p><strong>People Count:</strong> <span th:text="${waitingDetailResponse.peopleCount}"></span></p>
+<p><strong>Store Name:</strong> <span th:text="${waitingDetailResponse.storeName}"></span></p>
+
+<a th:href="@{|/my-seat-dang/waiting?status=1|}" class="btn btn-secondary">Back to Waiting List</a>
+
+</body>
+</html>

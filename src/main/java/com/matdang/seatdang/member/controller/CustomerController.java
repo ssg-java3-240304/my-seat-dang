@@ -11,10 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 
 /**
@@ -26,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
+@RequestMapping("my-seat-dang")
 public class CustomerController {
 
     private final AuthService authService;
@@ -39,7 +37,8 @@ public class CustomerController {
         this.fileService = fileService;
     }
 
-    @GetMapping("/mainmypage")
+    // 회원수정 페이지 Edit Profile로 변경
+    @GetMapping("/mypage/edit-profile")
     public String mainMyPage(Model model) {
         Member member = authService.getAuthenticatedMember();
 
@@ -51,11 +50,11 @@ public class CustomerController {
         } else {
             return "redirect:/login";
         }
-        return "customer/mypage/mainmypage";
+        return "customer/mypage/edit-profile";
     }
 
-    @PostMapping("/mainmypage/update")
-    public String updateCustomer(@ModelAttribute CustomerUpdateDto customerUpdateDto, Model model) {
+    @PostMapping("/mypage/update")
+    public String updateCustomer(@ModelAttribute CustomerUpdateDto customerUpdateDto) {
         Member member = authService.getAuthenticatedMember();
 
         if (member != null) {
@@ -87,14 +86,14 @@ public class CustomerController {
 
 
 
-            return "redirect:/mainmypage"; // 업데이트 후 메인 마이페이지로 리다이렉트
+            return "redirect:/my-seat-dang/mypage/edit-profile"; // 업데이트 후 메인 마이페이지로 리다이렉트 // @이름변경 edit-profile로 이름
         } else {
             return "redirect:/login";
         }
     }
 
 
-    @PostMapping("/mainmypage/change-password")
+    @PostMapping("/mypage/edit-profile/change-password")
     public String changePassword(@RequestParam("newPassword") String newPassword,
                                  @RequestParam("confirmPassword") String confirmPassword,
                                  Model model, HttpServletRequest request) {
@@ -104,7 +103,7 @@ public class CustomerController {
             // 새 비밀번호와 확인 비밀번호가 일치하는지 확인
             if (!newPassword.equals(confirmPassword)) {
                 model.addAttribute("error", "새 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
-                return "customer/mypage/mainmypage"; // 비밀번호가 일치하지 않을 경우 오류 메시지 표시
+                return "customer/mypage/edit-profile"; // 비밀번호가 일치하지 않을 경우 오류 메시지 표시
             }
 
             // 비밀번호 변경
@@ -117,7 +116,7 @@ public class CustomerController {
             model.addAttribute("success", "비밀번호가 성공적으로 변경되었습니다.");
             return "redirect:/login?passwordChanged=true"; // 비밀번호 변경 후 성공모달창으로 리다이렉트
         } else {
-            return "redirect:/mainmypage";
+            return "redirect:/my-seat-dang/mypage/edit-profile";
         }
     }
 

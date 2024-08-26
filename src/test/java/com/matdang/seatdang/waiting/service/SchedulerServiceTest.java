@@ -67,7 +67,7 @@ class SchedulerServiceTest {
                             .waitingNumber(i)
                             .waitingOrder(i)
                             .storeId(storeA.getStoreId())
-                            .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
+                            .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
                             .waitingStatus(value)
                             .visitedTime(null)
                             .build());
@@ -80,7 +80,7 @@ class SchedulerServiceTest {
                     .waitingNumber(i)
                     .waitingOrder(i)
                     .storeId(storeB.getStoreId())
-                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
+                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
                     .waitingStatus(WaitingStatus.VISITED)
                     .visitedTime(null)
                     .build());
@@ -91,7 +91,7 @@ class SchedulerServiceTest {
                     .waitingNumber(i)
                     .waitingOrder(i)
                     .storeId(storeC.getStoreId())
-                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((long) (Math.random() * 3 + 1))))
+                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
                     .waitingStatus(WaitingStatus.VISITED)
                     .visitedTime(null)
                     .build());
