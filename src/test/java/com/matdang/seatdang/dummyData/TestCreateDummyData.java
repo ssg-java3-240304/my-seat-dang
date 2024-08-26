@@ -138,7 +138,7 @@ public class TestCreateDummyData {
                             .lastOrder(LocalTime.of(21, 30))
                             .closeTime(LocalTime.of(22, 0))
                             .regularDayOff("Sunday")
-                            .thumbnail("https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/0a2e250f-1a1a-4805-bf17-559d7c4105cf.png")
+                            .thumbnail("https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/99397_60912_2445.jpg")
                             .description("현장 웨이팅이 가능한 매장입니다.")
                             .notice("Closed on public holidays.")
                             .phone("555-1234-567")
@@ -177,6 +177,8 @@ public class TestCreateDummyData {
                                     .reservationStatus(Status.ON)
                                     .waitingTime(new WaitingTime(LocalTime.of(10,0), LocalTime.of(20,0), LocalTime.of(0,10) ))
                                     .waitingStatus(WaitingStatus.UNAVAILABLE)
+                                    .maxReservationInDay(1000)
+                                    .maxReservationInTime(5)
                                     .build()
                             )
                             .build();
@@ -203,6 +205,8 @@ public class TestCreateDummyData {
                                     .reservationStatus(Status.ON)
                                     .waitingTime(new WaitingTime(LocalTime.of(10,0), LocalTime.of(20,0), LocalTime.of(0,10) ))
                                     .waitingStatus(WaitingStatus.UNAVAILABLE)
+                                    .maxReservationInDay(1000)
+                                    .maxReservationInTime(5)
                                     .build()
                             )
                             .build();

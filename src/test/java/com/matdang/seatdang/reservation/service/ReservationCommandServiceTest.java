@@ -54,7 +54,7 @@ class ReservationCommandServiceTest {
                 .build();
 
         ReservationSaveRequestDto saveRequestDto = ReservationSaveRequestDto.builder()
-                .store(new StoreInfo(store.getStoreId(), store.getStoreName(), "02-1234-1234"))
+                .store(new StoreInfo(store.getStoreId(), store.getStoreName(), "02-1234-1234", null))
                 .storeOwner(new StoreOwnerInfo(storeOwner.getMemberId(), storeOwner.getMemberName()))
                 .customer(new CustomerInfo(1L, "이재용", "02-1234-1234"))
                 .date(LocalDate.of(2024,8,20))

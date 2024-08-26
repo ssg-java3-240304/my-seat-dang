@@ -15,4 +15,5 @@ public class StoreInfo {
     private Long storeId;
     private String storeName;
     private String storePhone;
+    private String thumbnail;
 }

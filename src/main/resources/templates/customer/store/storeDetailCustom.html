@@ -332,10 +332,12 @@ class="read_more", style="display: none;"-->
                             <input name="store.storeId" th:value="${store.storeId}" hidden="hidden">
                             <input name="store.storeName" th:value="${store.storeName}" hidden="hidden">
                             <input name="store.storePhone" th:value="${store.phone}" hidden="hidden">
+                            <input name="store.thumbnail" th:value="${store.thumbnail}" hidden="hidden">
                             <input name="menuList[0].menuName" th:value="${menus.get(0).menuName}" hidden="hidden">
                             <input name="menuList[0].menuType" th:value="ORDER_MADE" hidden="hidden">
                             <input name="menuList[0].imageUrl" th:value="${menus.get(0).image}" hidden="hidden">
                             <input name="menuList[0].menuPrice" th:value="0" hidden="hidden">
+                            <input name="menuList[0].quantity" th:value="1" hidden="hidden">
                             <div class="input-group mb-3">
                                 <label class="input-group-text d-flex w-auto" for="option_sheet">1. 케이크 맛</label>
                                 <select class="form-select" id="option_sheet" name="menuList[0].customMenuOpt.sheet" required>
