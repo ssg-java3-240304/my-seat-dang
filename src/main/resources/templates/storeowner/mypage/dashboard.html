@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{storeowner/layout/default}" xmlns="http://www.w3.org/1999/html">
+
+    <div layout:fragment="content" >
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="#">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">My Dashboard</li>
+        </ol>
+        <!-- Icon Cards-->
+<!--        <div class="row">-->
+<!--            <div class="col-xl-3 col-sm-6 mb-3">-->
+<!--                <div class="card dashboard text-white bg-primary o-hidden h-100">-->
+<!--                    <div class="card-body">-->
+<!--                        <div class="card-body-icon">-->
+<!--                            <i class="fa fa-fw fa-envelope-open"></i>-->
+<!--                        </div>-->
+<!--                        <div class="mr-5">-->
+<!--                            <h5>26 New Messages!</h5>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <a class="card-footer text-white clearfix small z-1" href="messages.html">-->
+<!--                        <span class="float-left">View Details</span>-->
+<!--                        <span class="float-right">-->
+<!--                                <i class="fa fa-angle-right"></i>-->
+<!--                            </span>-->
+<!--                    </a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-xl-3 col-sm-6 mb-3">-->
+<!--                <div class="card dashboard text-white bg-warning o-hidden h-100">-->
+<!--                    <div class="card-body">-->
+<!--                        <div class="card-body-icon">-->
+<!--                            <i class="fa fa-fw fa-star"></i>-->
+<!--                        </div>-->
+<!--                        <div class="mr-5">-->
+<!--                            <h5>11 New Reviews!</h5>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <a class="card-footer text-white clearfix small z-1" href="reviews.html">-->
+<!--                        <span class="float-left">View Details</span>-->
+<!--                        <span class="float-right">-->
+<!--                                <i class="fa fa-angle-right"></i>-->
+<!--                            </span>-->
+<!--                    </a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-xl-3 col-sm-6 mb-3">-->
+<!--                <div class="card dashboard text-white bg-success o-hidden h-100">-->
+<!--                    <div class="card-body">-->
+<!--                        <div class="card-body-icon">-->
+<!--                            <i class="fa fa-fw fa-calendar-check-o"></i>-->
+<!--                        </div>-->
+<!--                        <div class="mr-5">-->
+<!--                            <h5>10 New Bookings!</h5>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <a class="card-footer text-white clearfix small z-1" href="bookings.html">-->
+<!--                        <span class="float-left">View Details</span>-->
+<!--                        <span class="float-right">-->
+<!--                                <i class="fa fa-angle-right"></i>-->
+<!--                            </span>-->
+<!--                    </a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-xl-3 col-sm-6 mb-3">-->
+<!--                <div class="card dashboard text-white bg-danger o-hidden h-100">-->
+<!--                    <div class="card-body">-->
+<!--                        <div class="card-body-icon">-->
+<!--                            <i class="fa fa-fw fa-heart"></i>-->
+<!--                        </div>-->
+<!--                        <div class="mr-5">-->
+<!--                            <h5>10 New Bookmarks!</h5>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <a class="card-footer text-white clearfix small z-1" href="bookmarks.html">-->
+<!--                        <span class="float-left">View Details</span>-->
+<!--                        <span class="float-right">-->
+<!--                                <i class="fa fa-angle-right"></i>-->
+<!--                            </span>-->
+<!--                    </a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+        <!-- /cards -->
+        <h2></h2>
+        <div class="card mb-3">
+            <div class="card-header">
+                <i class="fa fa-area-chart"></i> 최근 웨이팅 건수</div>
+            <div class="card-body">
+                <canvas id="myAreaChart" width="100%" height="30"></canvas>
+            </div>
+            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Example Bar Chart Card-->
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <i class="fa fa-bar-chart"></i> 기간별 예약건수</div>
+                    <div class="card-body">
+                        <canvas id="myBarChart" width="100" height="50"></canvas>
+                    </div>
+                    <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <!-- Example Pie Chart Card-->
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <i class="fa fa-pie-chart"></i> TOP4 메뉴</div>
+                    <div class="card-body">
+                        <canvas id="myPieChart" width="100%" height="100"></canvas>
+                    </div>
+                    <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div layout:fragment="script">
+<!-- Custom scripts for this page-->
+<!--<script th:src="@{/js/admin/admin-charts.js}"></script>-->
+<!--<script th:src="@{/js/admin/admin-charts-all.js}"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0/dist/chartjs-plugin-datalabels.min.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            getGraph();
+        });
+
+        function getGraph() {
+            $.ajax({
+                url: '/storeowner/mypage/dashboard',  // API 엔드포인트
+                method: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    let timeList = [];
+                    let cnt = [];
+
+                    // 서버에서 받은 데이터를 처리
+                    for (let key in data) {
+                        if (data.hasOwnProperty(key)) {
+                            timeList.push(key);  // 날짜 문자열
+                            cnt.push(data[key]);  // 개수
+                        }
+                    }
+
+                    // 차트를 생성합니다.
+                    createChart(timeList, cnt);
+                },
+                error: function(error) {
+                    console.error('Error fetching data:', error);
+                }
+            });
+        }
+
+        function createChart(labels, data) {
+            var ctx = document.getElementById("myAreaChart").getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels, // x축 레이블 (날짜 문자열)
+                    datasets: [{
+                        label: "웨이팅 건수",
+                        lineTension: 0.3,
+                        backgroundColor: "rgba(2,117,216,0.2)",
+                        borderColor: "rgba(2,117,216,1)",
+                        pointRadius: 5,
+                        pointBackgroundColor: "rgba(2,117,216,1)",
+                        pointBorderColor: "rgba(255,255,255,0.8)",
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: "rgba(2,117,216,1)",
+                        pointHitRadius: 20,
+                        pointBorderWidth: 2,
+                        data: data, // y축 데이터 값
+                    }],
+                },
+                options: {
+                    scales: {
+                        xAxes: [{
+                            time: {
+                                unit: 'date'
+                            },
+                            gridLines: {
+                                display: false
+                            },
+                            ticks: {
+                                maxTicksLimit: 7
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                min: 0,
+                                max: Math.max(...data),
+                                maxTicksLimit: Math.max(...data)/5
+                            },
+                            gridLines: {
+                                color: "rgba(0, 0, 0, .125)",
+                            }
+                        }],
+                    },
+                    legend: {
+                        display: false
+                    }
+                }
+            });
+        }
+    </script>
+
+
+<!--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.0/dist/chartjs-adapter-moment.min.js"></script>-->
+<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min/js"></script>-->
+<!--<script>-->
+<!--    $(document).ready(function (){-->
+<!--        getGraph();-->
+<!--    });-->
+
+<!--    function getGraph(){-->
+<!--        let timeList = [];-->
+<!--        let cnt = [];-->
+
+<!--        $.ajax({-->
+<!--            url: '/storeowner/mypage/dashboard',  // 데이터가 반환될 API 엔드포인트-->
+<!--            // '[[@{/storeowner/mypage/dashboard}]]'-->
+<!--            method: 'GET',-->
+<!--            dataType: 'json',-->
+<!--            success: function(data) {-->
+<!--                console.log(data);-->
+<!--                for (const key in data) {-->
+<!--                    if (data.hasOwnProperty(key)) {-->
+<!--                        timeList.push(key);  // 날짜 문자열-->
+<!--                        cnt.push(data[key]);  // 개수-->
+<!--                    }-->
+<!--                    console.log(timeList);-->
+<!--                    console.log(cnt);-->
+<!--                }-->
+
+<!--                new Chart(ctx, {-->
+<!--                    type: 'line',-->
+<!--                    data: {-->
+<!--                        labels: data.weeklyW, // x축 레이블 (날짜 문자열)-->
+<!--                        datasets: [{-->
+<!--                            label: "웨이팅 건수",-->
+<!--                            lineTension: 0.3,-->
+<!--                            backgroundColor: "rgba(2,117,216,0.2)",-->
+<!--                            borderColor: "rgba(2,117,216,1)",-->
+<!--                            pointRadius: 5,-->
+<!--                            pointBackgroundColor: "rgba(2,117,216,1)",-->
+<!--                            pointBorderColor: "rgba(255,255,255,0.8)",-->
+<!--                            pointHoverRadius: 5,-->
+<!--                            pointHoverBackgroundColor: "rgba(2,117,216,1)",-->
+<!--                            pointHitRadius: 20,-->
+<!--                            pointBorderWidth: 2,-->
+<!--                            data: cnt, // y축 데이터 값-->
+<!--                        }],-->
+<!--                    },-->
+<!--                    options: {-->
+<!--                        scales: {-->
+<!--                            x: {-->
+<!--                                type: 'category',  // x축 타입을 category로 변경-->
+<!--                                labels: labels,   // x축 레이블을 직접 설정-->
+<!--                                grid: {-->
+<!--                                    display: false-->
+<!--                                },-->
+<!--                                ticks: {-->
+<!--                                    autoSkip: false,  // 모든 레이블 표시-->
+<!--                                    maxRotation: 45,  // 레이블 회전-->
+<!--                                    minRotation: 45-->
+<!--                                }-->
+<!--                            },-->
+<!--                            y: {-->
+<!--                                beginAtZero: true,-->
+<!--                                ticks: {-->
+<!--                                    maxTicksLimit: 5-->
+<!--                                },-->
+<!--                                grid: {-->
+<!--                                    color: "rgba(0, 0, 0, .125)",-->
+<!--                                }-->
+<!--                            },-->
+<!--                        },-->
+<!--                        plugins: {-->
+<!--                            legend: {-->
+<!--                                display: false-->
+<!--                            }-->
+<!--                        }-->
+<!--                    }-->
+<!--                });-->
+<!--                // 서버로부터 받은 데이터를 처리합니다.-->
+<!--                // var weeklyWaitingCnt = response;  // 예를 들어 { '2024-08-19': 5, '2024-08-20': 7, ... }-->
+<!--                //-->
+<!--                // // 날짜와 데이터를 배열로 변환-->
+<!--                // var labels = Object.keys(weeklyWaitingCnt);-->
+<!--                // var data = Object.values(weeklyWaitingCnt);-->
+<!--                //-->
+<!--                // console.log('weeklyWaitingCnt:', weeklyWaitingCnt);-->
+<!--                // console.log('Labels:', labels);-->
+<!--                // console.log('Data:', data);-->
+<!--                //-->
+<!--                // // 차트를 생성합니다.-->
+<!--                // createChart(labels, data);-->
+<!--            },-->
+<!--            error: function(error) {-->
+<!--                console.error('Error fetching data:', error);-->
+<!--            }-->
+<!--        });-->
+<!--    }-->
+
+<!--    // function createChart(labels, data) {-->
+<!--    //     var ctx = document.getElementById("myAreaChart").getContext('2d');-->
+<!--    //     var myLineChart = new Chart(ctx, {-->
+<!--    //         type: 'line',-->
+<!--    //         data: {-->
+<!--    //             labels: labels, // x축 레이블 (날짜 문자열)-->
+<!--    //             datasets: [{-->
+<!--    //                 label: "웨이팅 건수",-->
+<!--    //                 lineTension: 0.3,-->
+<!--    //                 backgroundColor: "rgba(2,117,216,0.2)",-->
+<!--    //                 borderColor: "rgba(2,117,216,1)",-->
+<!--    //                 pointRadius: 5,-->
+<!--    //                 pointBackgroundColor: "rgba(2,117,216,1)",-->
+<!--    //                 pointBorderColor: "rgba(255,255,255,0.8)",-->
+<!--    //                 pointHoverRadius: 5,-->
+<!--    //                 pointHoverBackgroundColor: "rgba(2,117,216,1)",-->
+<!--    //                 pointHitRadius: 20,-->
+<!--    //                 pointBorderWidth: 2,-->
+<!--    //                 data: data, // y축 데이터 값-->
+<!--    //             }],-->
+<!--    //         },-->
+<!--    //         options: {-->
+<!--    //             scales: {-->
+<!--    //                 x: {-->
+<!--    //                     type: 'category',  // x축 타입을 category로 변경-->
+<!--    //                     labels: labels,   // x축 레이블을 직접 설정-->
+<!--    //                     grid: {-->
+<!--    //                         display: false-->
+<!--    //                     },-->
+<!--    //                     ticks: {-->
+<!--    //                         autoSkip: false,  // 모든 레이블 표시-->
+<!--    //                         maxRotation: 45,  // 레이블 회전-->
+<!--    //                         minRotation: 45-->
+<!--    //                     }-->
+<!--    //                 },-->
+<!--    //                 y: {-->
+<!--    //                     beginAtZero: true,-->
+<!--    //                     ticks: {-->
+<!--    //                         maxTicksLimit: 5-->
+<!--    //                     },-->
+<!--    //                     grid: {-->
+<!--    //                         color: "rgba(0, 0, 0, .125)",-->
+<!--    //                     }-->
+<!--    //                 },-->
+<!--    //             },-->
+<!--    //             plugins: {-->
+<!--    //                 legend: {-->
+<!--    //                     display: false-->
+<!--    //                 }-->
+<!--    //             }-->
+<!--    //         }-->
+<!--    //     });-->
+<!--    // }-->
+<!--</script>-->
+</div>
+</html>

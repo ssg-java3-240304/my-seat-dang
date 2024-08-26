@@ -1,5 +1,6 @@
 package com.matdang.seatdang.waiting.repository;
 
+import com.matdang.seatdang.dashboard.dto.WaitingDashboardResponseDto;
 import com.matdang.seatdang.waiting.repository.query.WaitingQueryRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingDto;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -91,6 +93,37 @@ class WaitingRepositoryTest {
         assertThat(waitingRepository.findById(findWaiting.get(index).getId()).get().getWaitingStatus()).isEqualTo(
                 WaitingStatus.valueOf(status));
     }
+
+//    @Test
+//    @DisplayName("dashboard Test")
+//    void test1(){
+//        LocalDateTime startDay = LocalDateTime.now().minusWeeks(1);
+//        LocalDateTime endDay = LocalDateTime.now();
+//
+//        List<WaitingDashboardResponseDto> result = waitingRepository.findVisitedWithinCertainPeriod(
+//                1L,
+//                startDay,
+//                endDay,
+//                WaitingStatus.VISITED
+//        );
+//
+//        result.forEach(System.out::println);
+//    }
+
+//    @Test
+//    @DisplayName("dashboard Test")
+//    void test1(){
+//        LocalDateTime startDay = LocalDateTime.now().minusWeeks(1);
+//        LocalDateTime endDay = LocalDateTime.now();
+//
+//        List<WaitingDashboardResponseDto> result = waitingRepository.findVisitedWithinCertainPeriod2(
+//                1L,
+//                startDay,
+//                WaitingStatus.VISITED
+//        );
+//
+//        result.forEach(System.out::println);
+//    }
 
     @Test
     @DisplayName("상점 id로 웨이팅 중인 모든 웨이팅 번호 1 감소")

@@ -25,7 +25,7 @@ import static com.matdang.seatdang.common.storeEnum.StoreType.CUSTOM;
 import static com.matdang.seatdang.common.storeEnum.StoreType.GENERAL_RESERVATION;
 
 @Controller
-@RequestMapping("/customer")
+@RequestMapping("/myseatdang")
 @RequiredArgsConstructor
 @Slf4j
 public class StoreController {
