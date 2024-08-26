@@ -73,7 +73,8 @@
                 <a th:with="urlPath=${'/my-seat-dang/waiting/' + waiting.waitingNumber +
                   (status == 0 ? '/awaiting/detail' :
                   (status == 1 ? '/visited/detail' :
-                  (status == 2 ? '/canceled/detail' : '')))}+ '?storeId=' + ${waiting.storeId}"
+                  (status == 2 ? '/canceled/detail' : '')))}+ '?storeId=' + ${waiting.storeId}
+                   + '&when=' + ${when}"
                    th:href="${urlPath}" class="btn btn-info">상세</a>
             </td>
         </tr>

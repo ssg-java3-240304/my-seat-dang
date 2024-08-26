@@ -13,7 +13,6 @@
 <p><strong>People Count:</strong> <span th:text="${waitingDetailResponse.peopleCount}"></span></p>
 <p><strong>Store Name:</strong> <span th:text="${waitingDetailResponse.storeName}"></span></p>
 
-<a th:href="@{|/my-seat-dang/waiting?status=2|}" class="btn btn-secondary">Back to Waiting List</a>
-
+<a th:href="@{|/my-seat-dang/waiting?status=2&when=${when}|}" class="btn btn-secondary">Back to Waiting List</a>
 </body>
 </html>
