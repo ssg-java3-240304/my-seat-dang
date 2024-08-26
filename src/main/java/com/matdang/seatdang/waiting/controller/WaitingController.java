@@ -203,7 +203,6 @@ public class WaitingController {
 
                     for (int j = 0; j < 10; j++, i++) {
                         waitingStorageRepository.save(WaitingStorage.builder()
-                                .id(i)
                                 .waitingNumber(i)
                                 .waitingOrder(i)
                                 .storeId(2L)
