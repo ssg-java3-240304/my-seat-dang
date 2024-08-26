@@ -5,7 +5,6 @@ import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.waiting.controller.dto.*;
 import com.matdang.seatdang.waiting.dto.WaitingId;
-import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
@@ -104,7 +103,8 @@ public class WaitingCustomerController {
     // TODO : 취소 후 url에 접속 못하게 막기(if문 상태처리)
 
     @PostMapping("/waiting/{waitingNumber}/awaiting/detail")
-    public String cancelWaiting(@PathVariable Long waitingNumber, @RequestParam Long storeId, RedirectAttributes redirectAttributes) {
+    public String cancelWaiting(
+            @PathVariable Long waitingNumber, @RequestParam Long storeId, RedirectAttributes redirectAttributes) {
         log.debug("=== cancel Waiting === {}", LocalDateTime.now());
 
         waitingCustomerService.cancelWaitingByCustomer(waitingNumber ,storeId);
@@ -122,8 +122,11 @@ public class WaitingCustomerController {
     }
 
     @GetMapping("/waiting/{waitingNumber}/{status}/detail")
-    public String showWaitingDetail(@PathVariable Long waitingNumber, @RequestParam Long storeId,
-                                    @PathVariable String status, Model model,
+    public String showWaitingDetail(@PathVariable Long waitingNumber,
+                                    @PathVariable String status,
+                                    @RequestParam Long storeId,
+                                    @RequestParam String when,
+                                    Model model,
                                     HttpServletRequest request) {
         // Referer 검증 (awaiting 상태일 때만)
         if ("awaiting".equals(status)) {
@@ -133,8 +136,9 @@ public class WaitingCustomerController {
             }
         }
 
-        Object response = getWaitingDetailResponse(new WaitingId(storeId, waitingNumber), status);
+        Object response = getWaitingDetailResponse(new WaitingId(storeId, waitingNumber), status, when);
         model.addAttribute("waitingDetailResponse", response);
+        model.addAttribute("when", when);
 
         log.debug("=== create finish Waiting === {}", LocalDateTime.now());
         log.debug("=== cancel finish Waiting === {}", LocalDateTime.now());
@@ -143,8 +147,8 @@ public class WaitingCustomerController {
         return getViewName(status);
     }
 
-    private Object getWaitingDetailResponse(WaitingId waitingId, String status) {
-        Object waiting = findWaitingEntity(waitingId);
+    private Object getWaitingDetailResponse(WaitingId waitingId, String status, String when) {
+        Object waiting = findWaitingEntity(waitingId, when);
         Store store = storeRepository.findByStoreId(waitingId.getStoreId());
 
         switch (status) {
@@ -159,15 +163,14 @@ public class WaitingCustomerController {
         }
     }
 
-    private Object findWaitingEntity(WaitingId waitingId) {
-        Waiting waiting = waitingCustomerService.findById(waitingId);
+    private Object findWaitingEntity(WaitingId waitingId, String when) {
+        if (when.equals("today")) {
+            return waitingCustomerService.findById(waitingId);
+        } else if (when.equals("history")) {
+            return waitingStorageRepository.findByStoreIdAndWaitingNumber(waitingId.getStoreId(), waitingId.getWaitingNumber());
+        }
 
-        System.out.println("!!!!waiting = " + waiting);
-
-        return waiting;
-        // TODO : 작성 필요
-//        Optional<WaitingStorage> waitingStorage = waitingStorageRepository.findById(waitingId);
-//        return waitingStorage.orElse(null);
+        return null;
     }
 
 
