@@ -60,6 +60,7 @@ public class WaitingController {
         log.info("===  showWaiting  ===");
 
         Page<WaitingDto> waitings = waitingService.showWaiting(storeId, status, page);
+        System.out.println("waitings.getContent() = " + waitings.getContent());
         createEstimatedWaitingTime(status, model, waitings.getContent(), storeId);
 
         model.addAttribute("waitingStatus", waitingSettingService.findWaitingStatus(storeId));
@@ -109,7 +110,7 @@ public class WaitingController {
      */
     @PostConstruct
     public void initData() throws InterruptedException {
-        StoreVo storeVo = new StoreVo(1L, "달콤커피", StoreType.CUSTOM, "서울시강남구");
+        StoreVo storeVo = new StoreVo(2L, "달콤커피", StoreType.CUSTOM, "서울시강남구");
         storeRepository.save(Store.builder()
                 .storeName("마싯당")
                 .storeSetting(StoreSetting.builder()
