@@ -12,6 +12,46 @@
     <link th:href="@{/css/customer/customcss/reservation-list.css}" rel="stylesheet">
     <link th:href="@{/css/customer/customcss/chatstyle.css}" rel="stylesheet" type="text/css" >
 
+    <style>
+        #progress-bar {
+            width: 0;
+            height: 5px;
+            background-color: #4CAF50;
+            display: none;
+            margin-top: 10px;
+        }
+
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            margin-left: 20px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            bottom: 30px;
+            left: 20px;
+            font-size: 14px;
+        }
+
+        #toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @keyframes fadein {
+            from {bottom: 0; opacity: 0;}
+            to {bottom: 30px; opacity: 1;}
+        }
+
+        @keyframes fadeout {
+            from {bottom: 30px; opacity: 1;}
+            to {bottom: 0; opacity: 0;}
+        }
+    </style>
 
 </head>
 <body>
@@ -273,6 +313,7 @@
                                     <img id="store-thumbnail" class="mr-3 rounded-circle" style="width: 40px">
                                     <span id="store-name"></span>
                                     <i class="fa fa-phone ms-4 me-1"></i><span id="store-phone"></span>
+                                    <button id="ai-generate-button" class="btn btn-success ms-3">AI로 시안을 만들어 보세요</button>
                                 </div>
                                 <div class="container-fluid chat_section" id="chat-box"></div>
                                 <div class="type_msg">
@@ -280,7 +321,6 @@
                                         <button id="chat-attach" class="msg_attach_btn" type="button" style="border: 2px solid #4CAF50;">
                                             <i class="fa fa-paperclip" aria-hidden="true"></i>
                                         </button>
-                                        <!--            ai버튼 그냥 아무거나 넣어놨습니다 구별하기위해 빨간색해놨어요 디자인 바꿔주세요..-->
                                         <button id="chat-ai" class="msg_attach_btn" type="button" style="border: 2px solid #4CAF50;">
                                             <i class="fa fa-birthday-cake" aria-hidden="true"></i>
                                         </button>
@@ -309,9 +349,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">AI 이미지 선택</h5>
-                    <button type="button" class="close" id="closeBtn" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+<!--                    <button type="button" class="close" id="closeBtn" data-dismiss="modal" aria-label="Close">-->
+<!--                        <span aria-hidden="true">&times;</span>-->
+<!--                    </button>-->
                 </div>
                 <div class="modal-body">
                     <!-- 이미지 선택 그리드 -->
@@ -382,6 +422,12 @@
     </div>
 
     <!-- 여기까지 취소 모달 -->
+
+    <!-- Progress Bar -->
+    <div id="progress-bar"></div>
+    <!-- Toast 메시지 -->
+    <div id="toast">생성이 완료되었습니다! 채팅창 왼쪽에 케이크 모양을 클릭하세요!</div>
+    </div>
 
 
 </main>
@@ -823,7 +869,30 @@
                 paymentInfoBox.innerHTML += '<p><strong>결제 상태:</strong> 완료</p>';
                 button.disabled = true;
             }
-        });  
+        });
+
+
+        // AI 이미지 선택 모달 열기
+        document.querySelector("#chat-ai").addEventListener("click", () => {
+            $('#aiImageModal').modal('show');
+        });
+
+        // document.querySelector("#closeBtn").addEventListener("click", () => {
+        //     $('#aiImageModal').modal('hide');
+        // });
+
+        document.querySelector("#closeBtn2").addEventListener("click", () => {
+            $('#aiImageModal').modal('hide');
+        });
+
+        // 라디오 버튼 클릭 시 선택된 이미지 URL 업데이트
+        document.querySelectorAll('.select-image-radio').forEach(radio => {
+            radio.addEventListener('change', function () {
+                selectedImageUrl = this.value;
+                document.querySelectorAll('.selectable-image').forEach(img => img.style.border = 'none');
+                this.nextElementSibling.style.border = '2px solid blue';
+            });
+        });
 
         // "선택하기" 버튼 클릭 시 이미지 전송
         document.querySelector("#selectImageButton").addEventListener("click", () => {
@@ -906,7 +975,67 @@
                 document.getElementById("cancelForm").submit();
             }
         }
-    </script>
 
+        // ai 생성 및 확인
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('ai-generate-button').addEventListener('click', async function() {
+                console.log("AI 버튼이 클릭되었습니다."); // 버튼 클릭 확인용 로그
+                let cakeDescription = prompt('원하는 시안에 대해 설명해주세요:');
+                if (cakeDescription) {
+                    // Progress Bar 표시
+                    let progressBar = document.getElementById('progress-bar');
+                    progressBar.style.display = 'block';
+
+                    try {
+                        // 비동기 요청 처리
+                        let response = await fetch('/ai/generate', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: new URLSearchParams({
+                                'cakeDescription': cakeDescription
+                            })
+                        });
+
+                        if (response.ok) {
+                            let result = await response.json();
+
+                            // 서버에서 응답받은 데이터 처리 (예: 생성된 이미지 URL 사용)
+                            console.log("생성된 이미지 URL:", result.generatedUrl);
+                            // 여기서 result.generatedUrl, result.inputText 등을 활용해 UI에 이미지를 표시하거나 추가 기능을 구현할 수 있습니다.
+
+                            // Progress Bar 완료 처리
+                            progressBar.style.width = '100%';
+                            setTimeout(function() {
+                                progressBar.style.display = 'none'; // 완료 후 Progress Bar 숨기기
+                                showToast(); // Toast 메시지 표시
+                            }, 500);
+                        } else {
+                            // 오류 처리
+                            let errorResponse = await response.json();
+                            alert('오류: ' + errorResponse.message || '요청 중 오류가 발생했습니다.');
+                        }
+                    } catch (error) {
+                        alert('요청 중 오류가 발생했습니다. 다시 시도해주세요.');
+                    }
+                } else {
+                    alert('아무 내용도 입력하지 않으셨습니다.');
+                }
+            });
+
+            function showToast() {
+                let toast = document.getElementById('toast');
+                toast.className = 'show';
+                setTimeout(function() {
+                    toast.className = toast.className.replace('show', '');
+                }, 3000);
+            }
+        });
+
+
+
+    </script>
 </div>
 </html>
