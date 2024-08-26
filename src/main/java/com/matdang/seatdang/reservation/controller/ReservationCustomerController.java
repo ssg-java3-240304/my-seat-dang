@@ -7,6 +7,11 @@ import com.matdang.seatdang.auth.service.AuthService;
 import com.matdang.seatdang.chat.chatconfig.ChatConfig;
 import com.matdang.seatdang.member.dto.StoreOwnerResponseDto;
 import com.matdang.seatdang.member.entity.Member;
+
+import com.matdang.seatdang.member.service.StoreOwnerMemberService;
+import com.matdang.seatdang.reservation.dto.ReservationResponseDto;
+import com.matdang.seatdang.reservation.dto.ReservationSaveRequestDto;
+import com.matdang.seatdang.reservation.dto.ReservationTicketRequestDTO;
 import com.matdang.seatdang.member.entity.MemberRole;
 import com.matdang.seatdang.member.service.CustomerService;
 import com.matdang.seatdang.member.service.StoreOwnerMemberService;
@@ -14,10 +19,8 @@ import com.matdang.seatdang.payment.dto.PayDetail;
 import com.matdang.seatdang.reservation.dto.*;
 import com.matdang.seatdang.reservation.service.ReservationCommandService;
 import com.matdang.seatdang.reservation.service.ReservationQueryService;
-import com.matdang.seatdang.reservation.service.ReservationService;
 import com.matdang.seatdang.reservation.service.ReservationSlotCommandService;
 import com.matdang.seatdang.reservation.vo.CustomerInfo;
-import com.matdang.seatdang.reservation.vo.ReservationStatus;
 import com.matdang.seatdang.reservation.vo.ReservationTicket;
 import com.matdang.seatdang.reservation.vo.StoreOwnerInfo;
 import com.matdang.seatdang.store.service.StoreService;
@@ -40,10 +43,8 @@ public class ReservationCustomerController {
     private final ReservationCommandService reservationCommandService;
     private final ReservationSlotCommandService reservationSlotCommandService;
     private final StoreService storeService;
-    private final CustomerService customerService;
     private final StoreOwnerMemberService storeOwnerMemberService;
     private final AuthService authService;
-    private final ReservationService reservationService;
     private final GeneratedImageUrlRepository generatedImageUrlRepository;
     private final ChatConfig chatConfig;  // ChatConfig를 의존성 주입으로 받음
     private final ReservationQueryService reservationQueryService;
