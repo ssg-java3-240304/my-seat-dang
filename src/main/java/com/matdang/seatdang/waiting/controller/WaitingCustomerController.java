@@ -125,7 +125,7 @@ public class WaitingCustomerController {
     public String showWaitingDetail(@PathVariable Long waitingNumber,
                                     @PathVariable String status,
                                     @RequestParam Long storeId,
-                                    @RequestParam String when,
+                                    @RequestParam(defaultValue = "today") String when,
                                     Model model,
                                     HttpServletRequest request) {
         // Referer 검증 (awaiting 상태일 때만)
