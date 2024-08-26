@@ -10,7 +10,6 @@ import com.matdang.seatdang.object_storage.service.FileService;
 import com.theokanning.openai.service.OpenAiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +27,7 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class AIService {
+public class CakeDesignService {
 
     private final OpenAiService openAiService;
     private final GeneratedImageUrlRepository generatedImageUrlRepository;
@@ -51,7 +50,7 @@ public class AIService {
 
         // 한국어로 된 케이크 관련 프롬프트로 변환 (어떤 입력값이던 케이크만 나오게)
         String cakeSpecificPrompt = String.format(
-                "이 이미지는 오직 케이크 디자인을 나타냅니다. 그리고 단순한 케이크 이미지로, 다른 물체, 사람, 배경은 포함하지 마세요. 오직 케이크만 강조해주세요. %s.",
+                "이 이미지는 오직 케이크 디자인을 나타냅니다. %s.",
                 prompt
         );
 
@@ -140,6 +139,28 @@ public class AIService {
                         image.getInputText()))
                 .toList();
     }
+
+//    // 속도 체크 메소드
+//    public void testExecutionTimeWithAverage() throws IOException, InterruptedException {
+//        int iterations = 10;
+//        long totalTime = 0;
+//
+//        for (int i = 0; i < iterations; i++) {
+//            long startTime = System.nanoTime();
+//
+//            // 실행할 코드 (예: API 호출)
+//            createAndSaveGeneratedImage(1L,"말티즈 케이크");
+//
+//            long endTime = System.nanoTime();
+//            long duration = (endTime - startTime) / 1_000_000; // 밀리초로 변환
+//            totalTime += duration;
+//            System.out.println("Iteration " + (i + 1) + " 실행 시간: " + duration + "ms");
+//        }
+//
+//        long averageTime = totalTime / iterations;
+//        System.out.println("평균 실행 시간: " + averageTime + "ms");
+//    }
+
 
 
 
