@@ -464,6 +464,28 @@
             scrollToBottom();
         }
 
+        function addPaymentInfoToChat(data, reservationId, customerId, storeId) {
+            console.log('Adding payment info:', data); // 데이터 확인
+
+            const chatBox = document.querySelector("#chat-box");
+            const date = new Date(data.createdAt);
+            const timeString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+            const paymentInfoBox = document.createElement("div");
+            paymentInfoBox.className = "payment-box";
+            paymentInfoBox.innerHTML = `
+            <div class="payment-customer">
+                <p><strong>상품명:</strong> ${data.itemName}</p>
+                <p><strong>수량:</strong> ${data.quantity}</p>
+                <p><strong>결제 금액:</strong> ${data.totalAmount}원</p>
+                <button class="btn btn-primary btn-sm payment-btn" onclick="handlePayment(this, '${reservationId}', '${customerId}', '${storeId}')">결제하기</button>
+                <div></div>
+                <span class="time_date">${timeString}</span>
+            </div>`;
+            chatBox.append(paymentInfoBox);
+            scrollToBottom();
+        }
+
+
 
         async function loadRecentMessages(reservationId, chatUrl) {
             try {
@@ -479,6 +501,9 @@
                         const messageId = message.id || message.createdAt;
                         loadedMessageIds.add(messageId); // 메시지 ID 저장
 
+                        if (message.itemName && message.quantity && message.totalAmount) {
+                            addPaymentInfoToChat(message);
+                        }
                         if (message.sender === window.customerName) {
                             initMyMessage(message);
                         } else {
@@ -693,27 +718,6 @@
                     scrollToBottom();
                 });
             });
-
-            function addPaymentInfoToChat(data, reservationId, customerId, storeId) {
-                console.log('Adding payment info:', data); // 데이터 확인
-
-                const chatBox = document.querySelector("#chat-box");
-                const date = new Date(data.createdAt);
-                const timeString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
-                const paymentInfoBox = document.createElement("div");
-                paymentInfoBox.className = "payment-box";
-                paymentInfoBox.innerHTML = `
-            <div class="payment-customer">
-                <p><strong>상품명:</strong> ${data.itemName}</p>
-                <p><strong>수량:</strong> ${data.quantity}</p>
-                <p><strong>결제 금액:</strong> ${data.totalAmount}원</p>
-                <button class="btn btn-primary btn-sm payment-btn" onclick="handlePayment(this, '${reservationId}', '${customerId}', '${storeId}')">결제하기</button>
-                <div></div>
-                <span class="time_date">${timeString}</span>
-            </div>`;
-                chatBox.append(paymentInfoBox);
-                scrollToBottom();
-            }
 
             async function addMessage(customerName, reservationId, chatUrl) {
                 let msgInput = document.querySelector("#chat-outgoing-msg");
