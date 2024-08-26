@@ -218,10 +218,10 @@
                                             <a href="#0" onclick="fnCalCount('p',this);"><i class="icon_plus_alt2"></i></a>
                                         </td>
                                         <td>
-                                            <input th:name="|menuList[${iterstat.index}].menuName|" th:value="*{menuName}">
-                                            <input th:name="|menuList[${iterstat.index}].menuType|" th:value="NORMAL" >
-                                            <input th:name="|menuList[${iterstat.index}].imageUrl|" th:value="*{image}">
-                                            <input th:name="|menuList[${iterstat.index}].menuPrice|" th:value="*{menuPrice}">
+                                            <input th:name="|menuList[${iterstat.index}].menuName|" th:value="*{menuName}" hidden="hidden">
+                                            <input th:name="|menuList[${iterstat.index}].menuType|" th:value="NORMAL" hidden="hidden">
+                                            <input th:name="|menuList[${iterstat.index}].imageUrl|" th:value="*{image}" hidden="hidden">
+                                            <input th:name="|menuList[${iterstat.index}].menuPrice|" th:value="*{menuPrice}" hidden="hidden">
                                         </td>
                                     </tr>
                                     </tbody>
