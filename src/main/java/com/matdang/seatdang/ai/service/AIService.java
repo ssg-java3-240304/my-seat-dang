@@ -37,13 +37,28 @@ public class AIService {
     @Value("${openai.api.key}")
     private String openaiApiKey;
 
+
+    /**
+     *
+     * 이미지생성 메서드
+     * @param prompt
+     * @return
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public String generatePictureV2(String prompt) throws IOException, InterruptedException {
         String url = "https://api.openai.com/v1/images/generations";
+
+        // 한국어로 된 케이크 관련 프롬프트로 변환 (어떤 입력값이던 케이크만 나오게)
+        String cakeSpecificPrompt = String.format(
+                "이 이미지는 오직 케이크 디자인을 나타냅니다. 그리고 단순한 케이크 이미지로, 다른 물체, 사람, 배경은 포함하지 마세요. 오직 케이크만 강조해주세요. %s.",
+                prompt
+        );
 
         // JSON 문자열 생성
         String requestBody = String.format(
                 "{\"model\":\"dall-e-3\",\"prompt\":\"%s\",\"n\":1,\"size\":\"1024x1024\"}",
-                prompt);
+                cakeSpecificPrompt);
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
