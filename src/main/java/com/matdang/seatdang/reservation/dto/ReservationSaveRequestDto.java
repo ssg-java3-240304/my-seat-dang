@@ -53,4 +53,15 @@ public class ReservationSaveRequestDto {
                 ))
                 .collect(Collectors.toList());
     }
+
+    public int getTotalAmount() {
+        int totalAmount = 0;
+
+        for (ReservationRequestMenu menu : menuList) {
+            totalAmount += menu.getMenuPrice() * menu.getQuantity();
+        }
+
+        return totalAmount;
+    }
+
 }

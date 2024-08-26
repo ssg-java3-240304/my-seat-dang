@@ -74,7 +74,7 @@
                                                     <i class="fa fa-fw fa-envelope"></i> 디자인 상담</a>
                                                 </p>
                                                 <ul class="buttons" th:if="!(${reservation.reservationStatus.toString().equals('CANCELED')} or ${reservation.reservationStatus.toString().equals('VISIT_COMPLETED')})">
-                                                    <li><a href="#cancel-modal" class="btn_1 gray delete cancelBtn" data-bs-toggle="modal" th:data-cancel-store-id="*{storeId}"><i class="fa fa-fw fa-times-circle-o"></i> 예약취소</a></li>
+                                                    <li><a href="#cancel-modal" class="btn_1 gray delete cancelBtn" data-bs-toggle="modal" th:data-cancel-reservation-id="*{reservationId}"><i class="fa fa-fw fa-times-circle-o"></i> 예약취소</a></li>
                                                 </ul>
                                             </li>
                                         </ul>
@@ -118,7 +118,7 @@
                                                     <i class="fa fa-fw fa-envelope"></i> 디자인 상담</a>
                                                 </p>
                                                 <ul class="buttons">
-                                                    <li><a href="#cancel-modal" class="btn_1 gray delete cancelBtn" data-bs-toggle="modal" th:data-cancel-store-id="*{storeId}"><i class="fa fa-fw fa-times-circle-o"></i> 예약취소</a></li>
+                                                    <li><a href="#cancel-modal" class="btn_1 gray delete cancelBtn" data-bs-toggle="modal" th:data-cancel-reservation-id="*{reservationId}"><i class="fa fa-fw fa-times-circle-o"></i> 예약취소</a></li>
                                                 </ul>
                                             </li>
                                         </ul>
@@ -163,7 +163,7 @@
                                                     <i class="fa fa-fw fa-envelope"></i> 디자인 상담</a>
                                                 </p>
                                                 <ul class="buttons">
-                                                    <li><a href="#cancel-modal" class="btn_1 gray delete cancelBtn" data-bs-toggle="modal" th:data-cancel-store-id="*{storeId}"><i class="fa fa-fw fa-times-circle-o"></i> 예약취소</a></li>
+                                                    <li><a href="#cancel-modal" class="btn_1 gray delete cancelBtn" data-bs-toggle="modal" th:data-cancel-reservation-id="*{reservationId}"><i class="fa fa-fw fa-times-circle-o"></i> 예약취소</a></li>
                                                 </ul>
                                             </li>
                                         </ul>
@@ -402,18 +402,47 @@
 
     <script th:inline="javascript">
         let eventSource = null;
+        let loadedMessageIds = new Set();
+        let lastMessageId = null;
+        let isLoading = false; // 중복 요청 방지
 
         (function ($) {
-
             "use strict";
 
-        // Sticky sidebar
+            // Sticky sidebar
             $('#sidebar_fixed').theiaStickySidebar({
                 minWidth: 991,
                 updateSidebarHeight: true,
                 additionalMarginTop: 25
             });
         })(window.jQuery);
+
+        async function handlePayment(button, reservationId, customerId, storeId) {
+            const partnerOrderId = reservationId;
+            const partnerUserId = customerId;
+            const shopId = storeId;
+            console.log(reservationId, customerId, storeId);
+            const paragraphs = button.parentNode.querySelectorAll('p');
+            let itemName = '';
+            let quantity = '';
+            let totalAmount = '';
+
+            paragraphs.forEach(p => {
+                if (p.textContent.includes('상품명:')) {
+                    itemName = p.textContent.replace('상품명:', '').trim();
+                } else if (p.textContent.includes('수량:')) {
+                    quantity = p.textContent.replace('수량:', '').trim();
+                } else if (p.textContent.includes('결제 금액:')) {
+                    totalAmount = p.textContent.replace('결제 금액:', '').trim().replace(/[^0-9]/g, '');
+                }
+            });
+
+            const taxFreeAmount = 0;
+
+            const queryString = `partnerOrderId=${encodeURIComponent(partnerOrderId)}&partnerUserId=${encodeURIComponent(partnerUserId)}&shopId=${encodeURIComponent(shopId)}&itemName=${encodeURIComponent(itemName)}&quantity=${encodeURIComponent(quantity)}&totalAmount=${encodeURIComponent(totalAmount)}&taxFreeAmount=${encodeURIComponent(taxFreeAmount)}`;
+
+            window.location.href = `/payment/request?${queryString}`;
+        }
 
         function scrollToBottom() {
             const chatSection = document.querySelector('.chat_section');
@@ -433,8 +462,173 @@
             });
         }
 
+        function getSendMsgBox(data) {
+            const date = new Date(data.createdAt);
+            const timeString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+            const imgTag = data.customerImage ? `<img src="${data.customerImage}" alt="image" class="chat-image" style="max-width: 100%; max-height: 200px; cursor: pointer;" />` : '';
+            return `<div>
+        <p style="text-align: right;">${data.sender}</p>
+        <div class="sent_msg">
+            ${imgTag}
+            <p style="text-align: right;">${data.msg}</p>
+            <span class="time_date">${timeString}</span>
+        </div>
+    </div>`;
+        }
+
+        function getReceiveMsgBox(data) {
+            const date = new Date(data.createdAt);
+            const timeString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+            const imgTag = data.customerImage ? `<img src="${data.customerImage}" alt="image" class="chat-image" style="max-width: 100%; max-height: 200px; cursor: pointer;" />` : '';
+            return `<div>
+        <p>${data.sender}</p>
+        <div class="received_withd_msg">
+            ${imgTag}
+            <p>${data.msg}</p>
+            <span class="time_date">${timeString}</span>
+        </div>
+        <div></div>
+    </div>`;
+        }
+
+        function initMyMessage(data) {
+            let chatBox = document.querySelector("#chat-box");
+            let sendBox = document.createElement("div");
+            sendBox.className = "outgoing_msg";
+            sendBox.innerHTML = getSendMsgBox(data);
+            chatBox.append(sendBox);
+            scrollToBottom();
+        }
+
+        function initYourMessage(data) {
+            let chatBox = document.querySelector("#chat-box");
+            let receivedBox = document.createElement("div");
+            receivedBox.className = "received_msg";
+            receivedBox.innerHTML = getReceiveMsgBox(data);
+            chatBox.append(receivedBox);
+            scrollToBottom();
+        }
+
+        function addPaymentInfoToChat(data, reservationId, customerId, storeId) {
+            console.log('Adding payment info:', data); // 데이터 확인
+
+            const chatBox = document.querySelector("#chat-box");
+            const date = new Date(data.createdAt);
+            const timeString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+            const paymentInfoBox = document.createElement("div");
+            paymentInfoBox.className = "payment-box";
+            paymentInfoBox.innerHTML = `
+            <div class="payment-customer">
+                <p><strong>상품명:</strong> ${data.itemName}</p>
+                <p><strong>수량:</strong> ${data.quantity}</p>
+                <p><strong>결제 금액:</strong> ${data.totalAmount}원</p>
+                <button class="btn btn-primary btn-sm payment-btn" onclick="handlePayment(this, '${reservationId}', '${customerId}', '${storeId}')">결제하기</button>
+                <div></div>
+                <span class="time_date">${timeString}</span>
+            </div>`;
+            chatBox.append(paymentInfoBox);
+            scrollToBottom();
+        }
+
+
+
+        async function loadRecentMessages(reservationId, chatUrl) {
+            try {
+                // 최근 20개 메시지를 로드
+                const response = await fetch(`${chatUrl}/chat/roomNum/${reservationId}/messages?limit=20`);
+                const messages = await response.json();
+
+                if (messages.length > 0) {
+                    lastMessageId = messages[messages.length - 1].id; // 가장 오래된 메시지의 ID 저장
+
+                    // 메시지들을 채팅창에 표시하고 ID를 저장
+                    messages.reverse().forEach(message => {
+                        const messageId = message.id || message.createdAt;
+                        loadedMessageIds.add(messageId); // 메시지 ID 저장
+
+                        if (message.itemName && message.quantity && message.totalAmount) {
+                            addPaymentInfoToChat(message);
+                        }
+                        if (message.sender === window.customerName) {
+                            initMyMessage(message);
+                        } else {
+                            initYourMessage(message);
+                        }
+                    });
+
+                    scrollToBottom(); // 초기 로드 시 스크롤을 맨 아래로 이동
+                }
+            } catch (error) {
+                console.error('Error loading recent messages:', error);
+            }
+        }
+
+        async function loadMoreMessages(reservationId, chatUrl) {
+            console.log('loadMoreMessages function called');
+
+            if (isLoading) {
+                console.log('Loading in progress');
+                return;
+            }
+
+            isLoading = true;
+
+            try {
+                console.log("Requesting more messages from server...");
+
+                // 마지막으로 로드한 메시지 ID를 기준으로 이전 메시지를 요청
+                let url = `${chatUrl}/chat/roomNum/${reservationId}/messages?limit=20`;
+                if (lastMessageId) {
+                    url += `&beforeId=${lastMessageId}`;
+                }
+
+                const response = await fetch(url);
+                const messages = await response.json();
+
+                console.log("Messages received:", messages.length); // 서버로부터 받은 메시지 개수 로그
+
+                if (messages.length > 0) {
+                    lastMessageId = messages[messages.length - 1].id;
+                    const chatBox = document.querySelector("#chat-box");
+                    const initialScrollHeight = chatBox.scrollHeight;
+
+                    // 이미 로드된 메시지를 제외하고 새로운 메시지만 처리
+                    messages.forEach(message => {
+                        const messageId = message.id || message.createdAt;
+                        if (!loadedMessageIds.has(messageId)) {
+                            loadedMessageIds.add(messageId);
+                            const messageElement = document.createElement("div");
+                            if (message.sender === window.customerName) {
+                                messageElement.className = "outgoing_msg";
+                                messageElement.innerHTML = getSendMsgBox(message);
+                            } else {
+                                messageElement.className = "received_msg";
+                                messageElement.innerHTML = getReceiveMsgBox(message);
+                            }
+
+                            // 메시지를 채팅창 맨 위에 삽입
+                            chatBox.insertBefore(messageElement, chatBox.firstChild);
+                        }
+                    });
+
+                    // 마지막 메시지 ID 업데이트
+                    // lastMessageId = messages[messages.length - 1].id;
+                    console.log('Updated lastMessageId:', lastMessageId);
+
+                    // 스크롤 위치 유지
+                    chatBox.scrollTop = chatBox.scrollHeight - initialScrollHeight;
+                } else {
+                    console.log('No more messages to load.');
+                }
+            } catch (error) {
+                console.error('Error loading more messages:', error);
+            } finally {
+                isLoading = false;
+            }
+        }
+
         document.querySelectorAll('.chat-button').forEach(button => {
-            button.addEventListener('click', function () {
+            button.addEventListener('click', async function () {
 
                 // 기존 SSE 연결 종료
                 if (eventSource !== null) {
@@ -444,6 +638,10 @@
                 }
 
                 clearChatBox(); // 이전 채팅 내용 삭제
+
+                // 여기서 loadedMessageIds와 lastMessageId를 초기화
+                loadedMessageIds.clear();
+                lastMessageId = null;
 
                 // 오른쪽 섹션을 표시
                 document.querySelector('.right-section').style.display = 'block';
@@ -456,8 +654,6 @@
                 const customerId = this.getAttribute('data-customer-id');
                 const storeId = this.getAttribute('data-store-id');
                 const chatUrl = this.getAttribute('data-chat-url');
-
-
 
                 // 전역 변수 업데이트( ai 업로드에서도 사용해야되서)
                 window.customerName = customerName;
@@ -475,21 +671,34 @@
                 document.querySelector("#store-name").textContent = storeName;
                 document.querySelector("#store-thumbnail").src = storeThumbnail;
 
+                // 최근 메시지 20개 불러오기
+                await loadRecentMessages(reservationId, chatUrl);
+
                 // SSE 연결하기
                 eventSource = new EventSource(`${chatUrl}/chat/roomNum/${reservationId}`);
                 eventSource.onmessage = (event) => {
                     const data = JSON.parse(event.data);
-                    console.log("Received data:", data);
+                    const messageId = data.id || data.createdAt; // 유니크한 메시지 식별자
 
-                    // 결제 정보가 포함된 메시지인 경우 처리
-                    if (data.itemName && data.quantity && data.totalAmount) {
-                        addPaymentInfoToChat(data, reservationId, customerId, storeId);
-                    }
+                    // 중복 메시지 체크 - loadedMessageIds에 없으면 추가
+                    if (!loadedMessageIds.has(messageId)) {
+                        loadedMessageIds.add(messageId); // 메시지 ID 추가
 
-                    if (data.sender === customerName) {
-                        initMyMessage(data);
+                        console.log("Received data:", data);
+
+                        // 결제 정보가 포함된 메시지인 경우 처리
+                        if (data.itemName && data.quantity && data.totalAmount) {
+                            addPaymentInfoToChat(data);
+                        }
+
+                        // 메시지 발신자에 따른 메시지 처리
+                        if (data.sender === customerName) {
+                            initMyMessage(data);
+                        } else {
+                            initYourMessage(data);
+                        }
                     } else {
-                        initYourMessage(data);
+                        console.log("Duplicate message ignored:", data);
                     }
                 };
 
@@ -499,6 +708,13 @@
                     eventSource = null; // 오류 발생 시 연결 해제
                 };
 
+                // 스크롤 이벤트 리스너 추가 (스크롤이 상단에 도달하면 이전 메시지 로드)
+                document.querySelector('.chat_section').addEventListener('scroll', function() {
+                    if (this.scrollTop === 0 && !isLoading) {
+                        console.log('Top of chat reached, loading more messages...');
+                        loadMoreMessages(reservationId, chatUrl);
+                    }
+                });
                 // 기존에 등록된 이벤트 리스너 제거
                 removeEventListeners('#chat-send', 'click');
                 removeEventListeners('#chat-outgoing-msg', 'keydown');
@@ -530,7 +746,6 @@
                         previewContainer.className = 'file-preview-item';
 
                         if (file.type.startsWith('image/')) {
-                            // Image file
                             reader.onload = function (e) {
                                 const img = document.createElement('img');
                                 img.src = e.target.result;
@@ -549,187 +764,66 @@
                 });
             });
 
-            function getSendMsgBox(data) {
-                const date = new Date(data.createdAt);
-                const timeString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
-                const imgTag = data.customerImage ? `<img src="${data.customerImage}" alt="image" class="chat-image" style="max-width: 100%; max-height: 200px; cursor: pointer;" />` : '';
-                return `<div>
-      <p style="text-align: right;">${data.sender}</p>
-      <div class="sent_msg">
-          ${imgTag}
-          <p style="text-align: right;">${data.msg}</p>
-          <span class="time_date">${timeString}</span>
-      </div>
-    </div>`;
-            }
+            async function addMessage(customerName, reservationId, chatUrl) {
+                let msgInput = document.querySelector("#chat-outgoing-msg");
+                let fileInput = document.querySelector("#chat-file-input");
+                let filePreview = document.querySelector("#file-preview");
+                let message = msgInput.value.trim();
 
-            function getReceiveMsgBox(data) {
-                const date = new Date(data.createdAt);
-                const timeString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
-                const imgTag = data.customerImage ? `<img src="${data.customerImage}" alt="image" class="chat-image" style="max-width: 100%; max-height: 200px; cursor: pointer;" />` : '';
-                return `<div>
-      <p>${data.sender}</p>
-      <div class="received_withd_msg">
-          ${imgTag}
-          <p>${data.msg}</p>
-          <span class="time_date">${timeString}</span>
-      </div>
-      <div></div>
-    </div>`;
-            }
+                // 파일이 첨부되었거나 메시지가 비어있지 않을 경우에만 전송
+                if (message === "" && !fileInput.files.length) {
+                    return;
+                }
 
-            function initMyMessage(data) {
-                let chatBox = document.querySelector("#chat-box");
-                let sendBox = document.createElement("div");
-                sendBox.className = "outgoing_msg";
-                sendBox.innerHTML = getSendMsgBox(data);
-                chatBox.append(sendBox);
+                let formData = new FormData();
+
+                // 메시지가 비어있지 않거나 파일이 첨부된 경우 메시지 추가
+                if (message !== "" || fileInput.files.length > 0) {
+                    formData.append("chat", new Blob([JSON.stringify({
+                        sender: customerName,
+                        roomNum: reservationId,
+                        msg: message
+                    })], {type: "application/json"}));
+                }
+
+                // 파일이 있는 경우 파일 추가
+                if (fileInput.files.length > 0) {
+                    formData.append("customerImage", fileInput.files[0]);
+                }
+
+                await fetch(`${chatUrl}/chat`, {
+                    method: "post",
+                    body: formData
+                });
+
+                // 입력 필드와 파일 필드 초기화
+                msgInput.value = "";
+                fileInput.value = "";
+                filePreview.innerHTML = ""; // 파일 미리보기 영역 초기화
                 scrollToBottom();
             }
 
-            function initYourMessage(data) {
-                let chatBox = document.querySelector("#chat-box");
-                let receivedBox = document.createElement("div");
-                receivedBox.className = "received_msg";
-                receivedBox.innerHTML = getReceiveMsgBox(data);
-                chatBox.append(receivedBox);
-                scrollToBottom();
-            }
+            window.addEventListener('message', function (event) {
+                if (event.origin !== "https://your-trusted-domain.com") {
+                    return;
+                }
 
+                const data = event.data;
 
-      function addPaymentInfoToChat(data, reservationId, customerId, storeId) {
-        console.log('Adding payment info:', data); // 데이터 확인
-
-        const chatBox = document.querySelector("#chat-box");
-        const date = new Date();
-        const timeString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
-        const paymentInfoBox = document.createElement("div");
-        paymentInfoBox.className = "payment-box";
-        paymentInfoBox.innerHTML = `
-      <div class="payment-customer">
-        <p><strong>상품명:</strong> ${data.itemName}</p>
-        <p><strong>수량:</strong> ${data.quantity}</p>
-        <p><strong>결제 금액:</strong> ${data.totalAmount}원</p>
-        <button class="btn btn-primary btn-sm payment-btn" onclick="handlePayment(this, '${reservationId}', '${customerId}', '${storeId}')">결제하기</button>
-        <div></div>
-        <span class="time_date">${timeString}</span>
-      </div>`;
-                chatBox.append(paymentInfoBox);
-                scrollToBottom();
-            }
-        });
-
-        async function addMessage(customerName, reservationId, chatUrl) {
-            let msgInput = document.querySelector("#chat-outgoing-msg");
-            let fileInput = document.querySelector("#chat-file-input");
-            let filePreview = document.querySelector("#file-preview");
-            let message = msgInput.value.trim();
-
-            // 파일이 첨부되었거나 메시지가 비어있지 않을 경우에만 전송
-            if (message === "" && !fileInput.files.length) {
-                return;
-            }
-
-            let formData = new FormData();
-
-            // 메시지가 비어있지 않거나 파일이 첨부된 경우 메시지 추가
-            if (message !== "" || fileInput.files.length > 0) {
-                formData.append("chat", new Blob([JSON.stringify({
-                    sender: customerName,
-                    roomNum: reservationId,
-                    msg: message
-                })], {type: "application/json"}));
-            }
-
-            // 파일이 있는 경우 파일 추가
-            if (fileInput.files.length > 0) {
-                formData.append("customerImage", fileInput.files[0]);
-            }
-
-            await fetch(`${chatUrl}/chat`, {
-                method: "post",
-                body: formData
-            });
-
-            // 입력 필드와 파일 필드 초기화
-            msgInput.value = "";
-            fileInput.value = "";
-            filePreview.innerHTML = ""; // 파일 미리보기 영역 초기화
-            scrollToBottom();
-        }
-
-        async function handlePayment(button, reservationId, customerId, storeId) {
-            const partnerOrderId = reservationId;
-            const partnerUserId = customerId;
-            const shopId = storeId;
-            console.log(reservationId, customerId, storeId);
-            const paragraphs = button.parentNode.querySelectorAll('p');
-            let itemName = '';
-            let quantity = '';
-            let totalAmount = '';
-
-            paragraphs.forEach(p => {
-                if (p.textContent.includes('상품명:')) {
-                    itemName = p.textContent.replace('상품명:', '').trim();
-                } else if (p.textContent.includes('수량:')) {
-                    quantity = p.textContent.replace('수량:', '').trim();
-                } else if (p.textContent.includes('결제 금액:')) {
-                    totalAmount = p.textContent.replace('결제 금액:', '').trim().replace(/[^0-9]/g, '');
+                if (data.status === 'success') {
+                    alert('결제가 성공적으로 완료되었습니다!');
+                    updatePaymentStatusUI(event.target);
+                } else if (data.status === 'failure') {
+                    alert('결제에 실패했습니다. 다시 시도해 주세요.');
                 }
             });
 
-            const taxFreeAmount = 0;
-
-            const queryString = `partnerOrderId=${encodeURIComponent(partnerOrderId)}&partnerUserId=${encodeURIComponent(partnerUserId)}&shopId=${encodeURIComponent(shopId)}&itemName=${encodeURIComponent(itemName)}&quantity=${encodeURIComponent(quantity)}&totalAmount=${encodeURIComponent(totalAmount)}&taxFreeAmount=${encodeURIComponent(taxFreeAmount)}`;
-
-            window.location.href = `/payment/request?${queryString}`;
-        }
-        window.addEventListener('message', function(event) {
-            if (event.origin !== "https://your-trusted-domain.com") {
-                return;
+            function updatePaymentStatusUI(button) {
+                const paymentInfoBox = button.parentNode;
+                paymentInfoBox.innerHTML += '<p><strong>결제 상태:</strong> 완료</p>';
+                button.disabled = true;
             }
-
-            const data = event.data;
-
-            if (data.status === 'success') {
-                alert('결제가 성공적으로 완료되었습니다!');
-                updatePaymentStatusUI(event.target);
-            } else if (data.status === 'failure') {
-                alert('결제에 실패했습니다. 다시 시도해 주세요.');
-            }
-        });
-
-        function updatePaymentStatusUI(button) {
-            const paymentInfoBox = button.parentNode;
-            paymentInfoBox.innerHTML += '<p><strong>결제 상태:</strong> 완료</p>';
-            button.disabled = true;
-        }
-
-    </script>
-    <script>
-        let selectedImageUrl = null;
-
-        document.querySelector("#closeBtn").addEventListener("click", () => {
-            $('#aiImageModal').modal('hide');
-        });
-
-        document.querySelector("#closeBtn2").addEventListener("click", () => {
-            $('#aiImageModal').modal('hide');
-        });
-
-        // AI 이미지 선택 모달 열기
-        document.querySelector("#chat-ai").addEventListener("click", () => {
-            $('#aiImageModal').modal('show');
-        });
-
-        // 라디오 버튼 클릭 시 선택된 이미지 URL 업데이트
-        document.querySelectorAll('.select-image-radio').forEach(radio => {
-            radio.addEventListener('change', function () {
-                selectedImageUrl = this.value;
-                document.querySelectorAll('.selectable-image').forEach(img => img.style.border = 'none');
-                this.nextElementSibling.style.border = '2px solid blue';
-            });
-        });
+        });  
 
         // "선택하기" 버튼 클릭 시 이미지 전송
         document.querySelector("#selectImageButton").addEventListener("click", () => {
@@ -799,8 +893,7 @@
         // 예약 취소 모달 이벤트 처리 시작
         document.querySelectorAll(".cancelBtn").forEach(button =>{
             button.addEventListener('click', function(){
-                const cancelStoreId = this.getAttribute('data-cancel-store-id');
-                document.querySelector("#cancel-reservId").value = cancelStoreId;
+                document.querySelector("#cancel-reservId").value = this.getAttribute('data-cancel-reservation-id');
             })
         });
 
@@ -814,5 +907,6 @@
             }
         }
     </script>
+
 </div>
 </html>
