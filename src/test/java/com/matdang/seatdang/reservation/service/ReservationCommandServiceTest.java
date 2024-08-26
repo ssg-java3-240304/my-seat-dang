@@ -59,7 +59,7 @@ class ReservationCommandServiceTest {
                 .customer(new CustomerInfo(1L, "이재용", "02-1234-1234"))
                 .date(LocalDate.of(2024,8,20))
                 .time(LocalTime.of(15,30))
-                .menuList(List.of(new ReservationRequestMenu("떡케이크", 30000, "imageurl",null, null)))
+                .menuList(List.of(new ReservationRequestMenu("떡케이크", 30000, "imageurl",null, null,1)))
                 .build();
 
         //when
