@@ -130,7 +130,7 @@ ul.booking_list li strong {
     }
 }
 
-.unread, .read, .pending, .cancel, .approved, .awaiting_payment, .before_visit, .visit_complete, .canceled {
+.unread, .read, .pending, .cancel, .approved, .awaiting_payment, .before_visit, .visit_complete, .canceled, .awaiting_custom_payment {
     background-color: #dc3545;
     -webkit-border-radius: 50px;
     -moz-border-radius: 50px;
@@ -159,7 +159,7 @@ ul.booking_list li strong {
     background-color: #fd7e14;
 }
 
-.awaiting_payment {
+.awaiting_payment, .awaiting_custom_payment {
     background-color: #ddc02f;
 }
 
@@ -226,4 +226,8 @@ a.btn_1:hover,
 .btn-primary:hover {
     background-color: #0054a6;
     border-color: #0054a6;
+}
+
+.modal-body .form-control{
+    height: 100px;
 }

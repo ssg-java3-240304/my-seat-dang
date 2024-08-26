@@ -7,10 +7,15 @@ import com.matdang.seatdang.auth.service.AuthService;
 import com.matdang.seatdang.chat.chatconfig.ChatConfig;
 import com.matdang.seatdang.member.dto.StoreOwnerResponseDto;
 import com.matdang.seatdang.member.entity.Member;
+
 import com.matdang.seatdang.member.service.StoreOwnerMemberService;
 import com.matdang.seatdang.reservation.dto.ReservationResponseDto;
 import com.matdang.seatdang.reservation.dto.ReservationSaveRequestDto;
 import com.matdang.seatdang.reservation.dto.ReservationTicketRequestDTO;
+import com.matdang.seatdang.member.entity.MemberRole;
+import com.matdang.seatdang.member.service.CustomerService;
+import com.matdang.seatdang.member.service.StoreOwnerMemberService;
+import com.matdang.seatdang.reservation.dto.*;
 import com.matdang.seatdang.reservation.service.ReservationCommandService;
 import com.matdang.seatdang.reservation.service.ReservationQueryService;
 import com.matdang.seatdang.reservation.service.ReservationSlotCommandService;
@@ -25,6 +30,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -77,6 +83,7 @@ public class ReservationCustomerController {
                     private String menuName;
                     private int menuPrice;
                     private String imageUrl;
+                    private int quantity;
                     private CustomMenuOpt customMenuOpt;
                             private String sheet;
                             private String size;
@@ -110,9 +117,19 @@ public class ReservationCustomerController {
         return "redirect:/my-seat-dang/reservation/list";
     }
 
-    @PostMapping("/test")
+    @PostMapping("/create-normal")
     public String test(@ModelAttribute ReservationSaveRequestDto saveRequestDto){
         log.debug("saveRequest Test Dto: {}", saveRequestDto.toString());
         return "redirect:/my-seat-dang/store/detail/6";
+    }
+
+    @PostMapping("/cancel")
+    public String cancel(@ModelAttribute ReservationCancelRequestDto cancelRequestDto){
+        log.debug("cancelRequest Test Dto: {}", cancelRequestDto.toString());
+        MemberRole role = ((MemberUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMemberRole();
+        cancelRequestDto.setCancelledAt(LocalDateTime.now());
+        cancelRequestDto.setCancelledBy(role);
+        reservationCommandService.cancelReservation(cancelRequestDto);
+        return "redirect:/my-seat-dang/reservation/list";
     }
 }
