@@ -9,6 +9,7 @@ import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
 import com.matdang.seatdang.waiting.service.WaitingCustomerService;
+import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingCustomerFacade;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,7 @@ import java.time.LocalDateTime;
 @RequestMapping("/my-seat-dang")
 @RequiredArgsConstructor
 public class WaitingCustomerController {
+    private final RedissonLockWaitingCustomerFacade redissonLockWaitingCustomerFacade;
     private final WaitingCustomerService waitingCustomerService;
     private final WaitingStorageRepository waitingStorageRepository;
     private final WaitingRepository waitingRepository;
@@ -69,7 +71,7 @@ public class WaitingCustomerController {
     public String createWaiting(@ModelAttribute WaitingRequest waitingRequest, RedirectAttributes redirectAttributes) {
         log.debug("=== create Waiting ===");
         log.debug("=== create Waiting === {}", LocalDateTime.now());
-        WaitingId waitingId = waitingCustomerService.createWaiting(waitingRequest.getStoreId(),
+        WaitingId waitingId = redissonLockWaitingCustomerFacade.createWaiting(waitingRequest.getStoreId(),
                 waitingRequest.getPeopleCount());
         redirectAttributes.addAttribute("waitingNumber", waitingId.getWaitingNumber());
         redirectAttributes.addAttribute("storeId", waitingId.getStoreId());
@@ -107,7 +109,7 @@ public class WaitingCustomerController {
             @PathVariable Long waitingNumber, @RequestParam Long storeId, RedirectAttributes redirectAttributes) {
         log.debug("=== cancel Waiting === {}", LocalDateTime.now());
 
-        waitingCustomerService.cancelWaitingByCustomer(waitingNumber ,storeId);
+        redissonLockWaitingCustomerFacade.cancelWaitingByCustomer(waitingNumber ,storeId);
         log.info("=== 웨이팅 고객 취소 ===");
 //        if (result > 0) {
 //            log.info("=== 웨이팅 고객 취소 ===");
