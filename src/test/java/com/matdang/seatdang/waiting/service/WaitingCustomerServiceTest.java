@@ -342,6 +342,52 @@ class WaitingCustomerServiceTest {
         assertThat(isIncorrectWaiting).isEqualTo(result);
     }
 
+
+    @Test
+    @DisplayName("웨이팅 일때, false 반환")
+    void isNotAwaitingByWaiting() {
+        // given
+        Customer mockCustomer = Customer.builder()
+                .memberId(1L)
+                .memberPhone("010-1234-1234")
+                .build();
+        when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
+        WaitingId waiting = waitingCustomerService.createWaiting(1L, 1);
+
+        // when
+        boolean isIncorrectWaiting = waitingCustomerService.isNotAwaiting(1L, waiting.getWaitingNumber());
+
+        // then
+        assertThat(isIncorrectWaiting).isFalse();
+    }
+
+    @Test
+    @DisplayName("웨이팅이 취소 상태 일때, true 반환")
+    void isNotAwaitingByCanceled() {
+        // given
+        Customer mockCustomer = Customer.builder()
+                .memberId(1L)
+                .memberPhone("010-1234-1234")
+                .build();
+        when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
+        WaitingId waiting = waitingCustomerService.createWaiting(1L, 1);
+
+
+        UpdateRequest updateRequest = new UpdateRequest();
+        updateRequest.setChangeStatus(2);
+        updateRequest.setStoreId(1L);
+        updateRequest.setWaitingNumber(waiting.getWaitingNumber());
+        updateRequest.setWaitingOrder(1L);
+
+        waitingService.updateStatus(updateRequest);
+
+        // when
+        boolean isIncorrectWaiting = waitingCustomerService.isNotAwaiting(1L, waiting.getWaitingNumber());
+
+        // then
+        assertThat(isIncorrectWaiting).isTrue();
+    }
+
 //    @Disabled
 //    @Test
 //    @DisplayName("웨이팅 10개 취소")
