@@ -19,6 +19,7 @@ public class SearchStoreResponseDto {
     private String thumbnail;
     private double starRating;
     private StoreType storeType;
+    private boolean opened;
 
     public static SearchStoreResponseDto fromStore(Store store){
         return new SearchStoreResponseDto(
@@ -27,7 +28,8 @@ public class SearchStoreResponseDto {
                 store.getStoreAddress(),
                 store.getThumbnail(),
                 store.getStarRating(),
-                store.getStoreType()
+                store.getStoreType(),
+                store.isOpenNow()
         );
     }
 }
