@@ -37,6 +37,25 @@ public class WaitingCustomerService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
 
+    public boolean isWaitingExists(Long storeId) {
+        String key = "store:" + storeId;
+        Member customer = authService.getAuthenticatedMember();
+
+       return redisTemplate.opsForHash().values(key).stream()
+                .map(this::convertStringToWaiting)
+                .anyMatch(waiting -> waiting.getCustomerInfo().getCustomerId().equals(customer.getMemberId())
+                        && waiting.getWaitingStatus() == WaitingStatus.WAITING);
+    }
+
+    public Waiting convertStringToWaiting(Object jsonString) {
+        try {
+            // JSON 문자열을 Waiting 객체로 역직렬화
+            return objectMapper.readValue((String) jsonString, Waiting.class);
+        } catch (Exception e) {
+            e.printStackTrace(); // 예외 처리: 로그 기록
+            return null;
+        }
+    }
 
     /**
      * {@link RedissonLockWaitingCustomerFacade#createWaiting(Long, Integer)} 을 사용하세요.
