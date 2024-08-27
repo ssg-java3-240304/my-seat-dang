@@ -112,7 +112,7 @@ public class WaitingCustomerController {
 
     // TODO : 취소 후 url에 접속 못하게 막기(if문 상태처리)
 
-    @PostMapping("/waiting/{waitingNumber}/awaiting/detail")
+    @PostMapping("/waiting/{waitingNumber}")
     public String cancelWaiting(
             @PathVariable Long waitingNumber, @RequestParam Long storeId, RedirectAttributes redirectAttributes) {
         log.debug("=== cancel Waiting === {}", LocalDateTime.now());

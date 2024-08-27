@@ -72,6 +72,7 @@
                 <th>People Count</th>
                 <th>Status</th>
                 <th>Detail</th>
+                <th th:if="${status == 0}">Cancel</th>
             </tr>
             </thead>
             <tbody>
@@ -89,6 +90,11 @@
                   (status == 2 ? '/canceled/detail' : '')))}+ '?storeId=' + ${waiting.storeId}
                    + '&when=' + ${when}"
                        th:href="${urlPath}" class="btn btn-info">상세</a>
+                </td>
+                <td th:if="${status == 0}">
+                    <form th:action="@{|/my-seat-dang/waiting/${waiting.waitingNumber}?storeId=${waiting.storeId}|}" method="post">
+                        <button type="submit" class="btn btn-danger">취소</button>
+                    </form>
                 </td>
             </tr>
             </tbody>
