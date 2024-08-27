@@ -313,7 +313,34 @@ class WaitingCustomerServiceTest {
         assertThat(isIncorrectWaiting).isEqualTo(result);
     }
 
+    @ParameterizedTest
+    @CsvSource(value = {"1,visited,false", "2,visited,true", "1,canceled,true", "2,canceled,false"})
+    @DisplayName("웨이팅 입장,취소 상태일 때 URL과 비교")
+    void isIncorrectWaitingStatusByVisitedAndCanceled(int waitingStatus, String checkStatus, boolean result) {
 
+        // given
+        Customer mockCustomer = Customer.builder()
+                .memberId(1L)
+                .memberPhone("010-1234-1234")
+                .build();
+        when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
+
+        WaitingId waiting = waitingCustomerService.createWaiting(1L, 1);
+
+        UpdateRequest updateRequest = new UpdateRequest();
+        updateRequest.setChangeStatus(waitingStatus);
+        updateRequest.setStoreId(1L);
+        updateRequest.setWaitingNumber(waiting.getWaitingNumber());
+        updateRequest.setWaitingOrder(1L);
+
+        waitingService.updateStatus(updateRequest);
+        // when
+        boolean isIncorrectWaiting = waitingCustomerService.isIncorrectWaitingStatus(1L, waiting.getWaitingNumber(),
+                checkStatus);
+
+        // then
+        assertThat(isIncorrectWaiting).isEqualTo(result);
+    }
 
 //    @Disabled
 //    @Test
