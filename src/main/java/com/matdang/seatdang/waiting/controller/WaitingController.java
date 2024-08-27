@@ -40,7 +40,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/store-owner/waiting")
 public class WaitingController {
-    private final WaitingRepository waitingRepository;
     private final WaitingService waitingService;
     private final WaitingSettingService waitingSettingService;
     private final AuthService authService;
@@ -75,7 +74,7 @@ public class WaitingController {
 
     @PostMapping
     public String updateStatus(@ModelAttribute UpdateRequest updateRequest, Model model) {
-      waitingService.updateStatus(updateRequest);
+        redissonLockWaitingFacade.updateStatus(updateRequest);
 
 //        if (result == 0) {
 //            log.error("=== not update ===");
