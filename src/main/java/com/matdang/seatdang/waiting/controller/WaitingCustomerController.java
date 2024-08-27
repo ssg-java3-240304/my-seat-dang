@@ -39,6 +39,7 @@ public class WaitingCustomerController {
         Long memberId = authService.getAuthenticatedMember().getMemberId();
         boolean isWaitingExists = waitingCustomerService.isWaitingExists(storeId);
 
+        model.addAttribute("storeStatus", storeRepository.findByStoreId(storeId).getStoreSetting().getWaitingStatus().toString());
         model.addAttribute("storeId", storeId);
         model.addAttribute("isWaitingExists", isWaitingExists);
 

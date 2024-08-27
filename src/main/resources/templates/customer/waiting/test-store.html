@@ -3,19 +3,40 @@
 <head>
     <title>Test Store</title>
     <script>
-        window.onload = function() {
+        window.onload = function () {
+            const storeId = [[${storeId}]];
             const isWaitingExists = [[${isWaitingExists}]];
-            const status = [[${status}]];
+            const storeStatus = '[[${storeStatus}]]';
+            const status = [[${status != null ? status : 'false'}]];
 
+            console.log(storeStatus);
 
             // 버튼 클릭 이벤트 리스너 추가
-            document.getElementById('goWaitingPage').addEventListener('click', function(event) {
+            document.getElementById('goWaitingButton').addEventListener('click', function (event) {
+                let message = '';
+
+                // storeStatus에 따라 알림창 표시
+                if (storeStatus === 'CLOSE') {
+                    message = '웨이팅 마감';
+                } else if (storeStatus === 'UNAVAILABLE') {
+                    message = '웨이팅 이용불가';
+                }
+
+                if (message) {
+                    console.log("hi");
+                    alert(message);
+                    event.preventDefault(); // storeStatus에 따른 메시지가 있는 경우 링크 클릭을 막습니다.
+                    return; // 이후 코드를 실행하지 않도록 합니다.
+                }
+
                 if (isWaitingExists) {
                     // 웨이팅이 등록된 경우 알림창 표시하고 링크 이동 방지
                     alert('이미 웨이팅이 등록되었습니다.');
                     event.preventDefault(); // 링크 클릭을 막습니다.
+                } else {
+                    // 링크를 직접 이동시키기
+                    window.location.href = '/my-seat-dang/waiting/' + storeId;
                 }
-                // isRegistered가 false인 경우에는 이동을 허용함
             });
 
             if (status) {
@@ -30,8 +51,6 @@
 <h1>Store Test Page</h1>
 <p>Store ID: <span th:text="${storeId}"></span></p>
 
-<a id="goWaitingPage" th:href="@{|/my-seat-dang/waiting/${storeId}|}">
-    <button type="button">Go to Waiting Page</button>
-</a>
+<button id="goWaitingButton" type="button">Go to Waiting Page</button>
 </body>
 </html>
