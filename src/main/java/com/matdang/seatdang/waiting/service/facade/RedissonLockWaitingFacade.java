@@ -14,12 +14,13 @@ public class RedissonLockWaitingFacade {
     private final RedissonClient redissonClient; // RedissonClient 추가
     private final WaitingService waitingService;
 
-    public int updateStatus(UpdateRequest updateRequest) {
+
+    public void updateStatus(UpdateRequest updateRequest) {
         RLock lock = redissonClient.getLock("waitingLock:" + updateRequest.getStoreId());
         lock.lock(3, TimeUnit.SECONDS);
 
         try {
-            return waitingService.updateStatus(updateRequest);
+            waitingService.updateStatus(updateRequest);
         } finally {
             lock.unlock(); // 락 해제
         }
