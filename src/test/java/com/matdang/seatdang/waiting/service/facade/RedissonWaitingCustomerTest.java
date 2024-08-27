@@ -21,7 +21,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.redis.core.RedisTemplate;
 
 @SpringBootTest
-class RedissonWaitingCustomerConcurrencyTest {
+class RedissonWaitingCustomerTest {
     @Autowired
     private RedissonLockWaitingCustomerFacade redissonLockWaitingCustomerFacade;
     @Autowired
