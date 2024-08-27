@@ -76,7 +76,7 @@
                 <thead>
                 <tr>
                     <th>Waiting Number</th>
-                    <th>Waiting Order</th>
+                    <th th:if="${status != 1}">Waiting Order</th>
                     <th>Customer Phone Number</th>
                     <th>People Count</th>
                     <th>Waiting Status</th>
@@ -89,7 +89,7 @@
                 <tbody>
                 <tr th:each="waiting : ${waitings}">
                     <td th:text="${waiting.waitingNumber}"></td>
-                    <td th:text="${waiting.waitingOrder}"></td>
+                    <td th:if="${status != 1}" th:text="${waiting.waitingOrder}"></td>
                     <td th:text="${waiting.customerPhone}"></td>
                     <td th:text="${waiting.peopleCount}"></td>
                     <td th:text="${waiting.waitingStatus}"></td>
