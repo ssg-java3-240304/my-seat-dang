@@ -41,10 +41,30 @@ public class WaitingCustomerService {
         String key = "store:" + storeId;
         Member customer = authService.getAuthenticatedMember();
 
-       return redisTemplate.opsForHash().values(key).stream()
+        return redisTemplate.opsForHash().values(key).stream()
                 .map(this::convertStringToWaiting)
                 .anyMatch(waiting -> waiting.getCustomerInfo().getCustomerId().equals(customer.getMemberId())
                         && waiting.getWaitingStatus() == WaitingStatus.WAITING);
+    }
+
+    public Boolean isIncorrectWaitingStatus(Long storeId, Long waitingNumber, String status) {
+        String key = "store:" + storeId;
+        WaitingStatus waitingStatus = convertStringToWaiting(
+                redisTemplate.opsForHash().get(key, waitingNumber.toString())).getWaitingStatus();
+
+        if (status.equals("awaiting")) {
+            return waitingStatus != WaitingStatus.WAITING;
+        }
+        if (status.equals("visited")) {
+            return waitingStatus != WaitingStatus.VISITED;
+        }
+        if (status.equals("canceled")) {
+            return (waitingStatus != WaitingStatus.SHOP_CANCELED) &&
+                    (waitingStatus != WaitingStatus.CUSTOMER_CANCELED) &&
+                    (waitingStatus != WaitingStatus.NO_SHOW);
+        }
+
+        return null;
     }
 
     public Waiting convertStringToWaiting(Object jsonString) {
