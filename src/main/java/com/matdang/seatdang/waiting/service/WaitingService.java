@@ -122,52 +122,92 @@ public class WaitingService {
 
     @Transactional
     public void updateStatus(UpdateRequest updateRequest) {
-        if (updateRequest.getChangeStatus() != null) {
-            if (updateRequest.getChangeStatus() == 1) {
-                String key = "store:" + updateRequest.getStoreId();
-                List<Waiting> waitingList = redisTemplate.opsForHash().values(key).stream()
-                        .map(this::convertStringToWaiting) // JSON 문자열을 Waiting 객체로 변환
-                        .filter(waiting -> waiting.getWaitingStatus() == WaitingStatus.WAITING)
-                        .toList();
+        String key = "store:" + updateRequest.getStoreId();
 
-                Map<String, String> updatedWaitings = new HashMap<>();
-                for (Waiting waiting : waitingList) {
-                    waiting.setWaitingOrder(waiting.getWaitingOrder() - 1);
-                    try {
-                        updatedWaitings.put(waiting.getWaitingNumber().toString(),
-                                objectMapper.writeValueAsString(waiting));
-                    } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
-                    }
+        if (updateRequest.getChangeStatus() == 1) {
+            List<Waiting> waitingList = redisTemplate.opsForHash().values(key).stream()
+                    .map(this::convertStringToWaiting) // JSON 문자열을 Waiting 객체로 변환
+                    .filter(waiting -> waiting.getWaitingStatus() == WaitingStatus.WAITING)
+                    .toList();
 
-                }
-                redisTemplate.opsForHash().putAll(key, updatedWaitings);
-
-                Waiting waitingToUpdate = null;
+            Map<String, String> updatedWaitings = new HashMap<>();
+            for (Waiting waiting : waitingList) {
+                waiting.setWaitingOrder(waiting.getWaitingOrder() - 1);
                 try {
-                    waitingToUpdate = objectMapper.readValue(
-                            (String) redisTemplate.opsForHash()
-                                    .get(key, updateRequest.getWaitingNumber().toString()), Waiting.class);
-                } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
-                }
-
-                waitingToUpdate.setVisitedTime(LocalDateTime.now());
-                waitingToUpdate.setWaitingStatus(WaitingStatus.VISITED);
-                try {
-                    redisTemplate.opsForHash().put(key, waitingToUpdate.getWaitingNumber().toString(),
-                            objectMapper.writeValueAsString(waitingToUpdate));
+                    updatedWaitings.put(waiting.getWaitingNumber().toString(),
+                            objectMapper.writeValueAsString(waiting));
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException(e);
                 }
 
             }
-//            if (updateRequest.getChangeStatus() == 2) {
-//                int canceled = waitingRepository.updateWaitingOrderByCancel(updateRequest.getStoreId(),
-//                        updateRequest.getWaitingOrder());
-//                return waitingRepository.updateStatusByShopCancel(updateRequest.getWaitingNumber()) + canceled;
-//            }
+            redisTemplate.opsForHash().putAll(key, updatedWaitings);
+            decreaseWaitingOrder(updateRequest.getStoreId());
+
+            Waiting waitingToUpdate = null;
+            try {
+                waitingToUpdate = objectMapper.readValue(
+                        (String) redisTemplate.opsForHash()
+                                .get(key, updateRequest.getWaitingNumber().toString()), Waiting.class);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+
+            waitingToUpdate.setVisitedTime(LocalDateTime.now());
+            waitingToUpdate.setWaitingStatus(WaitingStatus.VISITED);
+            try {
+                redisTemplate.opsForHash().put(key, waitingToUpdate.getWaitingNumber().toString(),
+                        objectMapper.writeValueAsString(waitingToUpdate));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+
         }
 
+        if (updateRequest.getChangeStatus() == 2) {
+            // 상태가 WAITING인 Waiting 객체들을 가져와서 waitingOrder가 현재 주문보다 큰 경우만 필터링
+            List<Waiting> waitingList = redisTemplate.opsForHash().values(key).stream()
+                    .map(this::convertStringToWaiting) // JSON 문자열을 Waiting 객체로 변환
+                    .filter(waiting -> (waiting.getWaitingStatus() == WaitingStatus.WAITING) &&
+                            (waiting.getWaitingOrder() > updateRequest.getWaitingOrder())) // 주문보다 큰 것만 필터링
+                    .toList();
+
+            Map<String, String> updatedWaitings = new HashMap<>();
+            for (Waiting waiting : waitingList) {
+                waiting.setWaitingOrder(waiting.getWaitingOrder() - 1);
+                try {
+                    updatedWaitings.put(waiting.getWaitingNumber().toString(),
+                            objectMapper.writeValueAsString(waiting));
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            redisTemplate.opsForHash().putAll(key, updatedWaitings);
+            decreaseWaitingOrder(updateRequest.getStoreId());
+
+            Waiting waitingToUpdate = null;
+            try {
+                waitingToUpdate = objectMapper.readValue(
+                        (String) redisTemplate.opsForHash()
+                                .get(key, updateRequest.getWaitingNumber().toString()), Waiting.class);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            waitingToUpdate.setCanceledTime(LocalDateTime.now()); // canceledTime 업데이트
+            waitingToUpdate.setWaitingStatus(WaitingStatus.SHOP_CANCELED); // 상태를 CANCELED로 변경
+            try {
+                redisTemplate.opsForHash().put(key, waitingToUpdate.getWaitingNumber().toString(),
+                        objectMapper.writeValueAsString(waitingToUpdate));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
+
+    private Long decreaseWaitingOrder(Long storeId) {
+        String waitingOrderKey = "waitingOrder:" + storeId;
+        // Redis에서 waitingOrder 값을 1씩 감소시키고 반환
+        return redisTemplate.opsForValue().increment(waitingOrderKey, -1);
+    }
+
 }
