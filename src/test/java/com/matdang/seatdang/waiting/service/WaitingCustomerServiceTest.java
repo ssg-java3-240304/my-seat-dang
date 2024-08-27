@@ -4,6 +4,8 @@ import com.matdang.seatdang.auth.service.AuthService;
 import com.matdang.seatdang.member.entity.Customer;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
+import com.matdang.seatdang.waiting.dto.UpdateRequest;
+import com.matdang.seatdang.waiting.dto.WaitingId;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
@@ -48,6 +50,8 @@ class WaitingCustomerServiceTest {
     private WaitingRepository waitingRepository;
     @Autowired
     private WaitingStorageRepository waitingStorageRepository;
+    @Autowired
+    private WaitingService waitingService;
     @Autowired
     private EntityManager em;
     @MockBean
@@ -271,7 +275,7 @@ class WaitingCustomerServiceTest {
     }
 
     @ParameterizedTest
-    @CsvSource(value =  {"1,true","2,false"})
+    @CsvSource(value = {"1,true", "2,false"})
     @DisplayName("해당 상점에 웨이팅이 존재 유무 확인")
     void isWaitingExists(Long storeId, boolean result) {
         // given
@@ -288,6 +292,28 @@ class WaitingCustomerServiceTest {
         // then
         assertThat(waitingExists).isEqualTo(result);
     }
+
+    @ParameterizedTest
+    @CsvSource(value = {"awaiting,false", "visited,true", "canceled,true"})
+    @DisplayName("웨이팅일 때, 웨이팅 URL과 비교")
+    void isIncorrectWaitingStatusByAwaiting(String status, boolean result) {
+        // given
+        Customer mockCustomer = Customer.builder()
+                .memberId(1L)
+                .memberPhone("010-1234-1234")
+                .build();
+        when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
+
+        waitingCustomerService.createWaiting(1L, 1);
+
+        // when
+        boolean isIncorrectWaiting = waitingCustomerService.isIncorrectWaitingStatus(1L, 1L, status);
+
+        // then
+        assertThat(isIncorrectWaiting).isEqualTo(result);
+    }
+
+
 
 //    @Disabled
 //    @Test
@@ -315,7 +341,5 @@ class WaitingCustomerServiceTest {
 //
 //        assertThat(findResult).isEqualTo(40);
 }
-
-
 
 //}
