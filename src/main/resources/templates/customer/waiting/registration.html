@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{customer/layout/default}">
 <head>
     <meta charset="UTF-8">
     <title>Create Waiting</title>
     <script>
         // 페이지가 로드된 후 실행되는 스크립트
-        window.onload = function() {
+        window.onload = function () {
             // 폼 요소를 가져옵니다.
             const form = document.getElementById('waitingForm');
 
             // 폼의 submit 이벤트 리스너 추가
-            form.addEventListener('submit', function(event) {
+            form.addEventListener('submit', function (event) {
                 // 확인 창을 표시하여 사용자의 선택을 요청합니다.
                 const confirmed = confirm('정말 등록하시겠습니까?');
                 if (!confirmed) {
@@ -21,27 +22,30 @@
             });
         };
     </script>
+    <link th:href="@{/css/customer/home.css}" rel="stylesheet">
 </head>
 <body>
-<h1>Create Waiting</h1>
-
-<div>
-    <p>Do you want to register for waiting at <span th:text="${readyWaitingResponse.storeName}"></span>?</p>
-    <p>Current Waiting Teams: <span th:text="${waitingTeam}"></span></p>
-</div>
-<form id="waitingForm" action="/my-seat-dang/waiting" method="post">
-    <!-- Hidden field for storeId -->
-    <input type="hidden" name="storeId" th:value="${readyWaitingResponse.storeId}"/>
-
+<main layout:fragment="main">
     <div>
-        <label for="peopleCount">People Count:</label>
-        <input type="number" id="peopleCount" name="peopleCount" min="1"
-               th:max="${readyWaitingResponse.waitingPeopleCount}" value="2" required/>
-    </div>
-    <button type="submit">Create</button>
-</form>
+        <h1>Create Waiting</h1>
 
-<!-- Optional: Add a link to go back to the home page or other pages -->
-<a href="/my-seat-dang">Back to Home</a>
+        <div>
+            <p>Do you want to register for waiting at <span th:text="${readyWaitingResponse.storeName}"></span>?</p>
+            <p>Current Waiting Teams: <span th:text="${waitingTeam}"></span></p>
+        </div>
+        <form id="waitingForm" action="/my-seat-dang/waiting" method="post">
+            <input type="hidden" name="storeId" th:value="${readyWaitingResponse.storeId}"/>
+            <div>
+                <label for="peopleCount">People Count:</label>
+                <input type="number" id="peopleCount" name="peopleCount" min="1"
+                       th:max="${readyWaitingResponse.waitingPeopleCount}" value="2" required/>
+            </div>
+            <button type="submit">Create</button>
+        </form>
+        <a href="/my-seat-dang">Back to Home</a>
+    </div>
+</main>
+
 </body>
 </html>
+
