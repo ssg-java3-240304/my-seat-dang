@@ -63,7 +63,7 @@ public class WaitingCustomerController {
 
         String referer = request.getHeader("Referer");
         // 유효한 referer URL인지 확인 (예: "https://example.com/somepage")
-        if (referer == null || !referer.startsWith("http://localhost:8080/my-seat-dang/store/detail/"+storeId)) {
+        if (referer == null || !referer.startsWith("http://localhost:8080/my-seat-dang/store/detail/" + storeId)) {
             return "error/403";
         }
 
@@ -99,6 +99,7 @@ public class WaitingCustomerController {
         } else if (when.equals("history")) {
             waitings = waitingCustomerService.showHistoryWaiting(status, page);
         }
+        System.out.println("isNotAwaiting = "+model.getAttribute("isNotAwaiting"));
         System.out.println("waitings = " + waitings.getContent());
         System.out.println("waitings = " + waitings.getTotalElements());
         model.addAttribute("when", when);
@@ -113,8 +114,14 @@ public class WaitingCustomerController {
     // TODO : 취소 후 url에 접속 못하게 막기(if문 상태처리)
 
     @PostMapping("/waiting/{waitingNumber}")
-    public String cancelWaiting(
-            @PathVariable Long waitingNumber, @RequestParam Long storeId, RedirectAttributes redirectAttributes) {
+    public String cancelWaiting(@PathVariable Long waitingNumber,
+                                @RequestParam Long storeId,
+                                RedirectAttributes redirectAttributes) {
+        if (waitingCustomerService.isNotAwaiting(storeId, waitingNumber)) {
+            redirectAttributes.addFlashAttribute("isNotAwaiting", true);
+            System.out.println("hihi = ");
+            return "redirect:/my-seat-dang/waiting";
+        }
         log.debug("=== cancel Waiting === {}", LocalDateTime.now());
 
         redissonLockWaitingCustomerFacade.cancelWaitingByCustomer(waitingNumber, storeId);
@@ -142,12 +149,9 @@ public class WaitingCustomerController {
         // Referer 검증 (awaiting 상태일 때만)
         if (waitingCustomerService.isIncorrectWaitingStatus(storeId, waitingNumber, status)) {
             redirectAttributes.addFlashAttribute("isIncorrectWaitingStatus", true);
-            System.out.println("= fail =");
 
             return "redirect:/my-seat-dang/waiting";
         }
-
-        System.out.println("= pass =");
 
         if ("awaiting".equals(status)) {
             String referer = request.getHeader("Referer");

@@ -20,11 +20,17 @@
 
     </style>
     <script>
-        window.onload = function() {
-            const isIncorrectWaitingStatus = [[${isIncorrectWaitingStatus}]];
+        window.onload = function () {
+            const isIncorrectWaitingStatus = [[${isIncorrectWaitingStatus != null ? isIncorrectWaitingStatus : 'false'}]];
+            const isNotAwaiting = [[${isNotAwaiting != null ? isNotAwaiting : 'false'}]];
 
             if (isIncorrectWaitingStatus) {
                 alert('존재하지 않는 페이지입니다.');
+                return;
+            }
+            if (isNotAwaiting) {
+                alert('이미 처리된 웨이팅 입니다.');
+
             }
         };
     </script>
@@ -92,7 +98,8 @@
                        th:href="${urlPath}" class="btn btn-info">상세</a>
                 </td>
                 <td th:if="${status == 0}">
-                    <form th:action="@{|/my-seat-dang/waiting/${waiting.waitingNumber}?storeId=${waiting.storeId}|}" method="post">
+                    <form th:action="@{|/my-seat-dang/waiting/${waiting.waitingNumber}?storeId=${waiting.storeId}|}"
+                          method="post">
                         <button type="submit" class="btn btn-danger">취소</button>
                     </form>
                 </td>
