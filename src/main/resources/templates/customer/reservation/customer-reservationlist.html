@@ -1023,7 +1023,98 @@
         document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('ai-generate-button').addEventListener('click', async function () {
 
+            //     let cakeDescription = prompt('원하는 케이크에 대해 설명해주세요:');
+            //
+            //
+            //
+            //     if (cakeDescription) {
+            //         // 버튼 텍스트 변경
+            //         let buttonText = document.getElementById('ai-generate-button');
+            //         let progressBarContainer = document.getElementById('progress-bar-container');
+            //         let progressBar = document.getElementById('progress-bar');
+            //
+            //         buttonText.textContent = '진행 중...';
+            //         progressBarContainer.style.display = 'block'; // 프로그레스 바 표시
+            //         progressBar.style.width = '0%'; // 초기 너비 설정
+            //
+            //         let progress = 0;
+            //
+            //         // 80% 까지 채우기
+            //         let progressInterval = setInterval(() => {
+            //             if (progress < 80) {
+            //                 progress += 1;
+            //                 progressBar.style.width = `${progress}%`;
+            //             } else {
+            //                 clearInterval(progressInterval);
+            //             }
+            //         }, 150); // 150ms 간격으로 업데이트
+            //
+            //
+            //         try {
+            //             // 비동기 요청 처리
+            //             let response = await fetch('/ai/generate', {
+            //                 method: 'POST',
+            //                 headers: {
+            //                     'Content-Type': 'application/x-www-form-urlencoded'
+            //                 },
+            //                 body: new URLSearchParams({
+            //                     'cakeDescription': cakeDescription
+            //                 })
+            //             });
+            //
+            //             if (response.ok) {
+            //                 let result = await response.json();
+            //
+            //                 // 서버에서 응답받은 데이터 처리 (예: 생성된 이미지 URL 사용)
+            //                 console.log("생성된 이미지 URL:", result.generatedUrl);
+            //
+            //                 // 프로그레스 바 완료 처리
+            //                 progressBar.style.width = '100%';
+            //                 setTimeout(function() {
+            //                     progressBarContainer.style.display = 'none'; // 완료 후 프로그레스 바 숨기기
+            //                     buttonText.textContent = 'AI로 케이크시안을 만들어 보세요';
+            //                     showToast(); // Toast 메시지 표시
+            //                 }, 500);
+            //             } else {
+            //                 // 오류 처리
+            //                 let errorResponse = await response.json();
+            //                 alert('오류: ' + (errorResponse.message || '요청 중 오류가 발생했습니다.'));
+            //                 clearInterval(progressInterval);
+            //                 progressBarContainer.style.display = 'none';
+            //                 buttonText.textContent = 'AI로 케이크시안을 만들어 보세요';
+            //             }
+            //         } catch (error) {
+            //             alert('요청 중 오류가 발생했습니다. 다시 시도해주세요.');
+            //             clearInterval(progressInterval);
+            //             progressBarContainer.style.display = 'none';
+            //             buttonText.textContent = 'AI로 케이크시안을 만들어 보세요';
+            //         }
+            //     } else {
+            //         alert('취소하셨습니다.');
+            //     }
+            // });
+
+
                 let cakeDescription = prompt('원하는 케이크에 대해 설명해주세요:');
+
+                // 취소 버튼을 누른 경우
+                if (cakeDescription === null) {
+                    alert('취소하셨습니다.');
+                    return;
+                }
+
+                // 입력이 빈 문자열인 경우 입력을 반복적으로 요청
+                while (!cakeDescription.trim()) {
+                    alert('케이크 설명을 입력해주세요!');
+                    cakeDescription = prompt('원하는 케이크에 대해 설명해주세요:');
+
+                    // 취소 버튼을 누른 경우
+                    if (cakeDescription === null) {
+                        alert('취소하셨습니다.');
+                        return;
+                    }
+                }
+
                 if (cakeDescription) {
                     // 버튼 텍스트 변경
                     let buttonText = document.getElementById('ai-generate-button');
@@ -1034,18 +1125,17 @@
                     progressBarContainer.style.display = 'block'; // 프로그레스 바 표시
                     progressBar.style.width = '0%'; // 초기 너비 설정
 
-                    
+                    let progress = 0;
 
-
+                    // 80%까지 프로그레스 바 채우기
                     let progressInterval = setInterval(() => {
-                        let currentWidth = parseInt(progressBar.style.width.replace('%', ''));
-                        if (currentWidth < 100) {
-                            progressBar.style.width = (currentWidth + 1) + '%'; // 너비를 1%씩 증가시킴
+                        if (progress < 80) {
+                            progress += 1;
+                            progressBar.style.width = `${progress}%`;
                         } else {
                             clearInterval(progressInterval);
                         }
-                    }, 100); // 100ms 간격으로 업데이트
-
+                    }, 150); // 150ms 간격으로 업데이트
 
                     try {
                         // 비동기 요청 처리
@@ -1067,7 +1157,7 @@
 
                             // 프로그레스 바 완료 처리
                             progressBar.style.width = '100%';
-                            setTimeout(function() {
+                            setTimeout(function () {
                                 progressBarContainer.style.display = 'none'; // 완료 후 프로그레스 바 숨기기
                                 buttonText.textContent = 'AI로 케이크시안을 만들어 보세요';
                                 showToast(); // Toast 메시지 표시
@@ -1086,8 +1176,6 @@
                         progressBarContainer.style.display = 'none';
                         buttonText.textContent = 'AI로 케이크시안을 만들어 보세요';
                     }
-                } else {
-                    alert('아무 내용도 입력하지 않으셨습니다.');
                 }
             });
 
