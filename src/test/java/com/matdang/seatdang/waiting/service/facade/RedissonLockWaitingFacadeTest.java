@@ -115,6 +115,7 @@ class RedissonLockWaitingFacadeTest {
                 .toList();
         int waitingCount = 0;
         int visitedCount = 0;
+        int canceledCount =0;
         for (Waiting waiting : waitingList) {
             if (waiting.getWaitingStatus() == WaitingStatus.WAITING) {
                 waitingCount++;
@@ -122,92 +123,106 @@ class RedissonLockWaitingFacadeTest {
             if (waiting.getWaitingStatus() == WaitingStatus.VISITED) {
                 visitedCount++;
             }
+            if (waiting.getWaitingStatus() == WaitingStatus.CUSTOMER_CANCELED) {
+                canceledCount++;
+            }
         }
         assertThat(waitingCount).isEqualTo(100);
         assertThat(visitedCount).isEqualTo(50);
+        assertThat(canceledCount).isEqualTo(50);
     }
 
-//    @Test
-//    @DisplayName("기존 웨이팅 150개 (등록50 + 취소50 + 점주 취소처리 50) 동시성 테스트")
-//    void updateStatusByCanceled() throws InterruptedException {
-//        // given
-//        Customer mockCustomer = Customer.builder()
-//                .memberId(1L)
-//                .memberPhone("010-1234-1234")
-//                .build();
-//        when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
-//        List<Long> waitingIds = new ArrayList<>();
-//        for (int i = 0; i < 150; i++) {
-//            Long id = redissonLockWaitingCustomerFacade.createWaiting(1L, 2);
-//            waitingIds.add(id);
-//        }
-//
-//        List<UpdateRequest> updateRequests = new ArrayList<>();
-//        for (int i = 0; i < 50; i++) {
-//            UpdateRequest updateRequest = new UpdateRequest();
-//            updateRequest.setChangeStatus(2);
-//            updateRequest.setStoreId(1L);
-//            updateRequest.setId(waitingIds.get(i + 50));
-//            updateRequest.setWaitingOrder(waitingIds.get(i + 50));
-//
-//            updateRequests.add(updateRequest);
-//        }
-//
-//        int threadCount = 150;
-//        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
-//        CountDownLatch latch = new CountDownLatch(threadCount);
-//
-//        // when
-//        for (int i = 0; i < 50; i++) {
-//            // 등록 50번
-//            executorService.execute(() -> {
-//                try {
-//                    redissonLockWaitingCustomerFacade.createWaiting(1L, 2);
-//                } catch (Exception e) {
-//                    e.printStackTrace(); // 예외를 출력합니다
-//                } finally {
-//                    latch.countDown();
-//                }
-//            });
-//
-//            long waitingId = waitingIds.get(i);
-//            executorService.execute(() -> {
-//                try {
-//                    redissonLockWaitingCustomerFacade.cancelWaitingByCustomer(waitingId);
-//                } catch (Exception e) {
-//                    e.printStackTrace(); // 예외를 출력합니다
-//                } finally {
-//                    latch.countDown();
-//                }
-//            });
-//
-//            UpdateRequest updateRequest = updateRequests.get(i);
-//            executorService.execute(() -> {
-//                try {
-//                    redissonLockWaitingFacade.updateStatus(updateRequest);
-//                } catch (Exception e) {
-//                    e.printStackTrace(); // 예외를 출력합니다
-//                } finally {
-//                    latch.countDown();
-//                }
-//            });
-//        }
-//        latch.await();
-//        executorService.shutdown();
-//
-//        // then
-//        Long findResult = waitingRepository.findMaxWaitingOrderByStoreId(1L);
-//        assertThat(findResult).isEqualTo(100);
-//
-//        assertThat(waitingRepository.countWaitingByStoreIdAndWaitingStatus(1L)).isEqualTo(100);
-//        List<Waiting> waitings = waitingRepository.findAllByStoreId(1L);
-//        int count =0;
-//        for (Waiting waiting : waitings) {
-//            if (waiting.getWaitingStatus() == WaitingStatus.SHOP_CANCELED) {
-//                count++;
-//            }
-//        }
-//        assertThat(count).isEqualTo(50);
-//
-//    }
+    @Test
+    @DisplayName("기존 웨이팅 150개 (등록50 + 취소50 + 점주 취소처리 50) 동시성 테스트")
+    void updateStatusByCanceled() throws InterruptedException {
+        // given
+        Customer mockCustomer = Customer.builder()
+                .memberId(1L)
+                .memberPhone("010-1234-1234")
+                .build();
+        when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
+        List<Long> waitingIds = new ArrayList<>();
+        for (int i = 0; i < 150; i++) {
+            Long id = redissonLockWaitingCustomerFacade.createWaiting(1L, 2).getWaitingNumber();
+            waitingIds.add(id);
+        }
+
+        List<UpdateRequest> updateRequests = new ArrayList<>();
+        for (int i = 0; i < 50; i++) {
+            UpdateRequest updateRequest = new UpdateRequest();
+            updateRequest.setChangeStatus(2);
+            updateRequest.setStoreId(1L);
+            updateRequest.setWaitingNumber(waitingIds.get(i + 50));
+            updateRequest.setWaitingOrder(waitingIds.get(i + 50));
+
+            updateRequests.add(updateRequest);
+        }
+
+        int threadCount = 150;
+        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
+        CountDownLatch latch = new CountDownLatch(threadCount);
+
+        // when
+        for (int i = 0; i < 50; i++) {
+            // 등록 50번
+            executorService.execute(() -> {
+                try {
+                    redissonLockWaitingCustomerFacade.createWaiting(1L, 2);
+                } catch (Exception e) {
+                    e.printStackTrace(); // 예외를 출력합니다
+                } finally {
+                    latch.countDown();
+                }
+            });
+
+            long waitingId = waitingIds.get(i);
+            executorService.execute(() -> {
+                try {
+                    redissonLockWaitingCustomerFacade.cancelWaitingByCustomer(waitingId,1L);
+                } catch (Exception e) {
+                    e.printStackTrace(); // 예외를 출력합니다
+                } finally {
+                    latch.countDown();
+                }
+            });
+
+            UpdateRequest updateRequest = updateRequests.get(i);
+            executorService.execute(() -> {
+                try {
+                    redissonLockWaitingFacade.updateStatus(updateRequest);
+                } catch (Exception e) {
+                    e.printStackTrace(); // 예외를 출력합니다
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+        latch.await();
+        executorService.shutdown();
+
+        // then
+        String max = (String) redisTemplate.opsForValue().get("waitingOrder:1");
+        assertThat(Integer.parseInt(max)).isEqualTo(100);
+
+        List<Waiting> waitingList = redisTemplate.opsForHash().values("store:1").stream()
+                .map(waiting -> waitingService.convertStringToWaiting(waiting))
+                .toList();
+        int waitingCount = 0;
+        int customerCanceledCount =0;
+        int shopCanceledCount = 0;
+        for (Waiting waiting : waitingList) {
+            if (waiting.getWaitingStatus() == WaitingStatus.WAITING) {
+                waitingCount++;
+            }
+            if (waiting.getWaitingStatus() == WaitingStatus.SHOP_CANCELED) {
+                shopCanceledCount++;
+            }
+            if (waiting.getWaitingStatus() == WaitingStatus.CUSTOMER_CANCELED) {
+                customerCanceledCount++;
+            }
+        }
+        assertThat(waitingCount).isEqualTo(100);
+        assertThat(shopCanceledCount).isEqualTo(50);
+        assertThat(customerCanceledCount).isEqualTo(50);
+    }
 }
