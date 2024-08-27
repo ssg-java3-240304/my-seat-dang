@@ -80,6 +80,7 @@ public class SearchController {
         }
         model.addAttribute("pageCriteria", new PageCriteria(page, limit, totalCount, url));
         log.debug("page url = {} page = {}", url, storePageResponse.getNumber() );
+
         return "customer/search/search";
     }
 }
