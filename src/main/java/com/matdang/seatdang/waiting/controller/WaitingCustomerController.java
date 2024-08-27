@@ -136,8 +136,18 @@ public class WaitingCustomerController {
                                     @RequestParam Long storeId,
                                     @RequestParam(defaultValue = "today") String when,
                                     Model model,
-                                    HttpServletRequest request) {
+                                    HttpServletRequest request,
+                                    RedirectAttributes redirectAttributes) {
         // Referer 검증 (awaiting 상태일 때만)
+        if (waitingCustomerService.isIncorrectWaitingStatus(storeId, waitingNumber, status)) {
+            redirectAttributes.addFlashAttribute("isIncorrectWaitingStatus", true);
+            System.out.println("= fail =");
+
+            return "redirect:/my-seat-dang/waiting";
+        }
+
+        System.out.println("= pass =");
+
         if ("awaiting".equals(status)) {
             String referer = request.getHeader("Referer");
             if (referer == null || !referer.startsWith("http://localhost:8080/my-seat-dang/waiting")) {
