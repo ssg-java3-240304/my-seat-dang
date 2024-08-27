@@ -14,13 +14,10 @@
 
     <style>
         #progress-bar {
-            width: 0;
-            height: 5px;
             background-color: #4CAF50;
-            display: none;
-            margin-top: 10px;
+            height: 100%;
+            transition: width 0.1s ease; /* 애니메이션이 더 부드럽게 진행되도록 설정 */
         }
-
         #toast {
             visibility: hidden;
             min-width: 250px;
@@ -314,7 +311,7 @@
                                     <img id="store-thumbnail" class="mr-3 rounded-circle" style="width: 40px">
                                     <span id="store-name"></span>
                                     <i class="fa fa-phone ms-4 me-1"></i><span id="store-phone"></span>
-                                    <button id="ai-generate-button" class="btn btn-success ms-3">AI로 시안을 만들어 보세요</button>
+                                    <button id="ai-generate-button" class="btn btn-success ms-3">AI로 케이크시안을 만들어 보세요</button>
                                     <div id="progress-bar-container" style="width: 100%; height: 5px; background-color: #f0f0f0; margin-top: 10px; display: none;">
                                         <div id="progress-bar" style="width: 0%; height: 100%; background-color: #4CAF50;"></div>
                                     </div>
@@ -1026,7 +1023,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('ai-generate-button').addEventListener('click', async function () {
 
-                let cakeDescription = prompt('원하는 시안에 대해 설명해주세요:');
+                let cakeDescription = prompt('원하는 케이크에 대해 설명해주세요:');
                 if (cakeDescription) {
                     // 버튼 텍스트 변경
                     let buttonText = document.getElementById('ai-generate-button');
@@ -1037,14 +1034,18 @@
                     progressBarContainer.style.display = 'block'; // 프로그레스 바 표시
                     progressBar.style.width = '0%'; // 초기 너비 설정
 
+                    
+
+
                     let progressInterval = setInterval(() => {
-                        let currentWidth = parseInt(progressBar.style.width);
-                        if (currentWidth < 90) {
-                            progressBar.style.width = (currentWidth + 10) + '%';
+                        let currentWidth = parseInt(progressBar.style.width.replace('%', ''));
+                        if (currentWidth < 100) {
+                            progressBar.style.width = (currentWidth + 1) + '%'; // 너비를 1%씩 증가시킴
                         } else {
                             clearInterval(progressInterval);
                         }
-                    }, 500); // 500ms마다 진행 상황 업데이트
+                    }, 100); // 100ms 간격으로 업데이트
+
 
                     try {
                         // 비동기 요청 처리
@@ -1068,7 +1069,7 @@
                             progressBar.style.width = '100%';
                             setTimeout(function() {
                                 progressBarContainer.style.display = 'none'; // 완료 후 프로그레스 바 숨기기
-                                buttonText.textContent = 'AI로 시안을 만들어 보세요';
+                                buttonText.textContent = 'AI로 케이크시안을 만들어 보세요';
                                 showToast(); // Toast 메시지 표시
                             }, 500);
                         } else {
@@ -1077,13 +1078,13 @@
                             alert('오류: ' + (errorResponse.message || '요청 중 오류가 발생했습니다.'));
                             clearInterval(progressInterval);
                             progressBarContainer.style.display = 'none';
-                            buttonText.textContent = 'AI로 시안을 만들어 보세요';
+                            buttonText.textContent = 'AI로 케이크시안을 만들어 보세요';
                         }
                     } catch (error) {
                         alert('요청 중 오류가 발생했습니다. 다시 시도해주세요.');
                         clearInterval(progressInterval);
                         progressBarContainer.style.display = 'none';
-                        buttonText.textContent = 'AI로 시안을 만들어 보세요';
+                        buttonText.textContent = 'AI로 케이크시안을 만들어 보세요';
                     }
                 } else {
                     alert('아무 내용도 입력하지 않으셨습니다.');
