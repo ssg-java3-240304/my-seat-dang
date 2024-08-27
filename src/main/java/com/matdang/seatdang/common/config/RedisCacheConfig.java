@@ -26,7 +26,7 @@ public class RedisCacheConfig {
                 // Redis에 Value를 저장할 때 Json으로 직렬화(변환)해서 저장
                 .serializeValuesWith(
                         RedisSerializationContext.SerializationPair.fromSerializer(
-                                new Jackson2JsonRedisSerializer<Object>(Object.class)
+                                new Jackson2JsonRedisSerializer<>(Object.class)
                         )
                 )
                 // 데이터의 만료기간(TTL) 설정
