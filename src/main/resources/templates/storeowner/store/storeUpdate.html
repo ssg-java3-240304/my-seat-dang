@@ -187,7 +187,7 @@
             <!-- /row-->
         </div>
         <!-- /box_general-->
-        <button type="submit" id="submitBtn" class="btn_1 medium">등록</button>
+        <button type="submit" id="submitBtn" class="btn_1 medium">수정</button>
     </form>
 </div>
 
@@ -282,6 +282,7 @@
             // 현재 매장명과 새로 입력한 매장명이 같은 경우
             if (newStoreName === currentStoreName) {
                 alert("현재 매장명과 동일합니다.");
+                isClicked = 1;
                 return;
             }
 
@@ -297,7 +298,6 @@
                         isClicked = 1;
                     } else {
                         alert("이미 사용 중인 매장명입니다.");
-                        isClicked = 1;
                     }
                     console.log(data);
                 },
@@ -334,12 +334,12 @@
 
             // 기존 이미지가 있는 경우 미리보기 표시
             if (originalImages) {
-                const imageUrls = originalImages.split(','); // 서버에서 오는 이미지를 ','로 구분
+                const imageUrls = originalImages.replace(/[\[\]']+/g, '').split(',').map(url => url.trim()); // 서버에서 오는 이미지를 ','로 구분
                 imageUrls.forEach(url => {
                     if (url.trim()) {
                         const img = document.createElement('img');
                         img.src = url;
-                        img.classList.add('img-preview');
+                        img.classList.add('imagePreviews');
                         img.style.width = '200px';
                         img.style.height = '200px';
                         img.style.marginRight = '10px'; // 이미지 간격 조정
@@ -366,6 +366,7 @@
                             img.style.height = '200px';
                             img.style.marginRight = '10px'; // 이미지 간격 조정
                             imagePreviews.appendChild(img);
+                            console.log(img.src);
                         };
                         reader.readAsDataURL(files[i]);
                     }
@@ -501,11 +502,16 @@
             if (newThumbnail) {
                 formData.append('thumbnail', newThumbnail);
             } else {
-                formData.append('thumbnail', originalThumbnail);
+                formData.append('originalThumbnail', originalThumbnail);
             }
 
             const extraFiles = document.getElementById('images').files;
-            const originalImages = document.querySelector('#originalImages').value.split(',').filter(Boolean);
+            let originalImages = document.querySelector('#originalImages').value;
+
+            // 대괄호 제거 및 원본 이미지 URL 문자열 처리
+            if (originalImages) {
+                originalImages = originalImages.replace(/[\[\]']+/g, '').split(',').map(url => url.trim());
+            }
 
             if (extraFiles.length > 0) {
                 for (let i = 0; i < extraFiles.length; i++) {
@@ -513,7 +519,8 @@
                 }
             } else {
                 originalImages.forEach(img => {
-                    formData.append('images', img);
+                    formData.append('originalImages', img);
+                    console.log(img);
                 });
             }
 

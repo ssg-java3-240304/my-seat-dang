@@ -72,8 +72,12 @@ public class StoreOwnerController {
 
     @PostMapping("/storeUpdate")
     public String storeUpdate(
-            @ModelAttribute StoreUpdateRequestDto dto){
-        storeAdminService.update(dto);
+            @ModelAttribute StoreUpdateRequestDto dto,
+            @RequestParam(value = "originalThumbnail", required = false) String originalThumbnail,
+            @RequestParam(value = "originalImages", required = false) List<String> originalImages){
+        log.debug("originalThumbnail = {}", originalThumbnail);
+        log.debug("originalImages = {}", originalImages);
+        storeAdminService.update(dto, originalThumbnail, originalImages);
         return "redirect:/storeowner/store/storeUpdate";
     }
 }
