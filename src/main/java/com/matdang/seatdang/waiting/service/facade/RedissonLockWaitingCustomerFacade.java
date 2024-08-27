@@ -13,13 +13,11 @@ import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Component;
 
 
-@Deprecated
 @Component
 @AllArgsConstructor
 public class RedissonLockWaitingCustomerFacade {
     private final RedissonClient redissonClient; // RedissonClient 추가
     private final WaitingCustomerService waitingCustomerService;
-    private final WaitingRepository waitingRepository;
 
     public WaitingId createWaiting(Long storeId, Integer peopleCount) {
         RLock lock = redissonClient.getLock("waitingLock:" + storeId); // 락 키 설정
