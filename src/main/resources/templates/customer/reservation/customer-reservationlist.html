@@ -24,21 +24,22 @@
         #toast {
             visibility: hidden;
             min-width: 250px;
-            margin-left: 20px;
+            margin-left: -125px; /* 화면 가운데 정렬을 위한 margin-left 수정 */
             background-color: #333;
             color: #fff;
             text-align: center;
             border-radius: 5px;
             padding: 16px;
             position: fixed;
-            z-index: 1;
+            z-index: 1000; /* z-index 값을 높여 다른 요소 위에 표시되도록 설정 */
             bottom: 30px;
-            left: 20px;
+            left: 50%;
+            transform: translateX(-50%); /* 화면 가운데 정렬 */
             font-size: 14px;
         }
 
         #toast.show {
-            visibility: visible;
+            visibility: visible !important;
             animation: fadein 0.5s, fadeout 0.5s 2.5s;
         }
 
@@ -314,7 +315,9 @@
                                     <span id="store-name"></span>
                                     <i class="fa fa-phone ms-4 me-1"></i><span id="store-phone"></span>
                                     <button id="ai-generate-button" class="btn btn-success ms-3">AI로 시안을 만들어 보세요</button>
-                                    <div id="progress-bar" style="display: none; position: absolute; left: 0; top: 0; width: 0%; height: 100%; background-color: rgba(0, 255, 0, 0.5); transition: width 0.4s;"></div>
+                                    <div id="progress-bar-container" style="width: 100%; height: 5px; background-color: #f0f0f0; margin-top: 10px; display: none;">
+                                        <div id="progress-bar" style="width: 0%; height: 100%; background-color: #4CAF50;"></div>
+                                    </div>
                                 </div>
                                 <div class="container-fluid chat_section" id="chat-box"></div>
                                 <div class="type_msg">
@@ -881,13 +884,6 @@
             }
         });
 
-        // 현재 모달창이 실시간으로 안불러옴 그 id로 찾는방법 낼 해볼 예정
-        // AI 이미지 선택 모달 열기
-        // document.querySelector("#chat-ai").addEventListener("click", () => {
-        //     $('#aiImageModal').modal('show');
-        // });
-
-
         document.querySelector("#chat-ai").addEventListener("click", async () => {
             // 모달 열기 전에 데이터를 서버에서 동적으로 가져오기
             try {
@@ -929,35 +925,6 @@
                 alert('모달을 열 수 없습니다. 데이터를 불러오는 데 실패했습니다.');
             }
         });
-
-
-
-        // document.querySelector("#chat-ai").addEventListener("click", async () => {
-        //     // 모달 열기 전에 데이터를 가져오기
-        //     try {
-        //         const response = await fetch('/my-seat-dang/reservation/create-custom'); // 이게뭐지
-        //         if (!response.ok) {
-        //             throw new Error('데이터를 불러오지 못했습니다.');
-        //         }
-        //         const data = await response.json();
-        //
-        //         // 데이터를 기반으로 모달 내용을 업데이트
-        //         document.querySelector("#modal-content").innerHTML = `<p>${data.someInfo}</p>`;
-        //
-        //         // 모달 표시
-        //         $('#aiImageModal').modal('show');
-        //     } catch (error) {
-        //         console.error('모달 데이터를 가져오는 중 오류 발생:', error);
-        //         alert('모달을 열 수 없습니다. 데이터를 불러오는 데 실패했습니다.');
-        //     }
-        // });
-
-
-
-
-        // document.querySelector("#closeBtn").addEventListener("click", () => {
-        //     $('#aiImageModal').modal('hide');
-        // });
 
         document.querySelector("#closeBtn2").addEventListener("click", () => {
             $('#aiImageModal').modal('hide');
@@ -1057,16 +1024,27 @@
         // ai 생성 및 확인
 
         document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('ai-generate-button').addEventListener('click', async function() {
-                console.log("AI 버튼이 클릭되었습니다."); // 버튼 클릭 확인용 로그
+            document.getElementById('ai-generate-button').addEventListener('click', async function () {
+
                 let cakeDescription = prompt('원하는 시안에 대해 설명해주세요:');
                 if (cakeDescription) {
-                    // Progress Bar 표시
-                    let progressBar = document.getElementById('progress-bar');
+                    // 버튼 텍스트 변경
                     let buttonText = document.getElementById('ai-generate-button');
-                    progressBar.style.display = 'block';
-                    progressBar.style.width = '0%';
+                    let progressBarContainer = document.getElementById('progress-bar-container');
+                    let progressBar = document.getElementById('progress-bar');
+
                     buttonText.textContent = '진행 중...';
+                    progressBarContainer.style.display = 'block'; // 프로그레스 바 표시
+                    progressBar.style.width = '0%'; // 초기 너비 설정
+
+                    let progressInterval = setInterval(() => {
+                        let currentWidth = parseInt(progressBar.style.width);
+                        if (currentWidth < 90) {
+                            progressBar.style.width = (currentWidth + 10) + '%';
+                        } else {
+                            clearInterval(progressInterval);
+                        }
+                    }, 500); // 500ms마다 진행 상황 업데이트
 
                     try {
                         // 비동기 요청 처리
@@ -1085,25 +1063,26 @@
 
                             // 서버에서 응답받은 데이터 처리 (예: 생성된 이미지 URL 사용)
                             console.log("생성된 이미지 URL:", result.generatedUrl);
-                            // 여기서 result.generatedUrl, result.inputText 등을 활용해 UI에 이미지를 표시하거나 추가 기능을 구현할 수 있습니다.
 
-                            // Progress Bar 완료 처리
+                            // 프로그레스 바 완료 처리
                             progressBar.style.width = '100%';
                             setTimeout(function() {
-                                progressBar.style.display = 'none'; // 완료 후 Progress Bar 숨기기
+                                progressBarContainer.style.display = 'none'; // 완료 후 프로그레스 바 숨기기
                                 buttonText.textContent = 'AI로 시안을 만들어 보세요';
                                 showToast(); // Toast 메시지 표시
                             }, 500);
                         } else {
                             // 오류 처리
                             let errorResponse = await response.json();
-                            alert('오류: ' + errorResponse.message || '요청 중 오류가 발생했습니다.');
-                            progressBar.style.display = 'none';
+                            alert('오류: ' + (errorResponse.message || '요청 중 오류가 발생했습니다.'));
+                            clearInterval(progressInterval);
+                            progressBarContainer.style.display = 'none';
                             buttonText.textContent = 'AI로 시안을 만들어 보세요';
                         }
                     } catch (error) {
                         alert('요청 중 오류가 발생했습니다. 다시 시도해주세요.');
-                        progressBar.style.display = 'none';
+                        clearInterval(progressInterval);
+                        progressBarContainer.style.display = 'none';
                         buttonText.textContent = 'AI로 시안을 만들어 보세요';
                     }
                 } else {
@@ -1113,15 +1092,12 @@
 
             function showToast() {
                 let toast = document.getElementById('toast');
-                toast.className = 'show';
+                toast.classList.add('show'); // 클래스 추가 방식 변경
                 setTimeout(function() {
-                    toast.className = toast.className.replace('show', '');
+                    toast.classList.remove('show'); // 클래스 제거
                 }, 3000);
             }
         });
-
-
-
     </script>
 </div>
 </html>
