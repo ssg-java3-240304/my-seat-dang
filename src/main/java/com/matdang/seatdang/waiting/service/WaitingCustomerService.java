@@ -50,6 +50,13 @@ public class WaitingCustomerService {
                         && waiting.getWaitingStatus() == WaitingStatus.WAITING);
     }
 
+    public boolean isNotAwaiting(Long storeId, Long waitingNumber) {
+        String key = "store:" + storeId;
+
+        return convertStringToWaiting(redisTemplate.opsForHash().get(key, waitingNumber.toString()))
+                .getWaitingStatus() != WaitingStatus.WAITING;
+    }
+
     public Boolean isIncorrectWaitingStatus(Long storeId, Long waitingNumber, String status) {
         String key = "store:" + storeId;
         WaitingStatus waitingStatus = convertStringToWaiting(
