@@ -219,7 +219,7 @@ class WaitingCustomerServiceTest {
 
     @Test
     @DisplayName(" 웨이팅 100개 등록")
-    void createWaitingByNotConcurrency(){
+    void createWaitingByNotConcurrency() {
         // given
         Customer mockCustomer = Customer.builder()
                 .memberId(1L)
@@ -270,6 +270,25 @@ class WaitingCustomerServiceTest {
         assertThat(findResult).isEqualTo(50);
     }
 
+    @ParameterizedTest
+    @CsvSource(value =  {"1,true","2,false"})
+    @DisplayName("해당 상점에 웨이팅이 존재 유무 확인")
+    void isWaitingExists(Long storeId, boolean result) {
+        // given
+        Customer mockCustomer = Customer.builder()
+                .memberId(1L)
+                .memberPhone("010-1234-1234")
+                .build();
+        when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
+
+        waitingCustomerService.createWaiting(1L, 1);
+        // when
+        boolean waitingExists = waitingCustomerService.isWaitingExists(storeId);
+
+        // then
+        assertThat(waitingExists).isEqualTo(result);
+    }
+
 //    @Disabled
 //    @Test
 //    @DisplayName("웨이팅 10개 취소")
@@ -286,7 +305,7 @@ class WaitingCustomerServiceTest {
 //            waitingIds.add(id);
 //        }
 
-        // when
+    // when
 //        for (int i = 0; i < 10; i++) {
 //            waitingCustomerService.cancelWaitingByCustomer(waitingIds.get(i));
 //        }
@@ -295,7 +314,7 @@ class WaitingCustomerServiceTest {
 //        Long findResult = waitingRepository.findMaxWaitingOrderByStoreId(1L);
 //
 //        assertThat(findResult).isEqualTo(40);
-    }
+}
 
 
 
