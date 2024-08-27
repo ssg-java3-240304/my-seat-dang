@@ -105,4 +105,11 @@ public class Store {
             this.phone = dto.getPhone();
         }
     }
+
+    public boolean isOpenNow() {
+        LocalTime now = LocalTime.now();
+
+        return now.isAfter(openTime) && now.isBefore(closeTime);
+    }
+
 }
