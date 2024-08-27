@@ -307,7 +307,7 @@ class WaitingCustomerServiceTest {
         waitingCustomerService.createWaiting(1L, 1);
 
         // when
-        boolean isIncorrectWaiting = waitingCustomerService.isIncorrectWaitingStatus(1L, 1L, status);
+        boolean isIncorrectWaiting = waitingCustomerService.isIncorrectWaitingStatus(1L, 1L, status,"today");
 
         // then
         assertThat(isIncorrectWaiting).isEqualTo(result);
@@ -336,7 +336,7 @@ class WaitingCustomerServiceTest {
         waitingService.updateStatus(updateRequest);
         // when
         boolean isIncorrectWaiting = waitingCustomerService.isIncorrectWaitingStatus(1L, waiting.getWaitingNumber(),
-                checkStatus);
+                checkStatus, "today");
 
         // then
         assertThat(isIncorrectWaiting).isEqualTo(result);

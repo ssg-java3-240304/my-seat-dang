@@ -147,7 +147,7 @@ public class WaitingCustomerController {
                                     HttpServletRequest request,
                                     RedirectAttributes redirectAttributes) {
         // Referer 검증 (awaiting 상태일 때만)
-        if (waitingCustomerService.isIncorrectWaitingStatus(storeId, waitingNumber, status)) {
+        if (waitingCustomerService.isIncorrectWaitingStatus(storeId, waitingNumber, status, when)) {
             redirectAttributes.addFlashAttribute("isIncorrectWaitingStatus", true);
 
             return "redirect:/my-seat-dang/waiting";

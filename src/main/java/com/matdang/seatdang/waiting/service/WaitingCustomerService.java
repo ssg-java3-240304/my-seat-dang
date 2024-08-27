@@ -10,6 +10,8 @@ import com.matdang.seatdang.store.service.StoreService;
 import com.matdang.seatdang.waiting.dto.WaitingId;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.entity.Waiting;
+import com.matdang.seatdang.waiting.entity.WaitingStorage;
+import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
 import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingCustomerFacade;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.repository.query.WaitingStorageQueryRepository;
@@ -36,6 +38,7 @@ public class WaitingCustomerService {
     private final AuthService authService;
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
+    private final WaitingStorageRepository waitingStorageRepository;
 
     public boolean isWaitingExists(Long storeId) {
         String key = "store:" + storeId;
@@ -57,10 +60,17 @@ public class WaitingCustomerService {
                 .getWaitingStatus() != WaitingStatus.WAITING;
     }
 
-    public Boolean isIncorrectWaitingStatus(Long storeId, Long waitingNumber, String status) {
-        String key = "store:" + storeId;
-        WaitingStatus waitingStatus = convertStringToWaiting(
-                redisTemplate.opsForHash().get(key, waitingNumber.toString())).getWaitingStatus();
+    public Boolean isIncorrectWaitingStatus(Long storeId, Long waitingNumber, String status, String when) {
+        WaitingStatus waitingStatus = null;
+        if (when.equals("today")) {
+            String key = "store:" + storeId;
+            waitingStatus = convertStringToWaiting(
+                    redisTemplate.opsForHash().get(key, waitingNumber.toString())).getWaitingStatus();
+        }
+        if (when.equals("history")) {
+            waitingStatus = waitingStorageRepository.findByStoreIdAndWaitingNumber(storeId,
+                    waitingNumber).getWaitingStatus();
+        }
 
         if (status.equals("awaiting")) {
             return waitingStatus != WaitingStatus.WAITING;
