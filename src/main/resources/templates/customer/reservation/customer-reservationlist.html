@@ -12,6 +12,70 @@
     <link th:href="@{/css/customer/customcss/reservation-list.css}" rel="stylesheet">
     <link th:href="@{/css/customer/customcss/chatstyle.css}" rel="stylesheet" type="text/css" >
 
+    <style>
+        #progress-bar {
+            background-color: #4CAF50;
+            height: 100%;
+            transition: width 0.1s ease; /* 애니메이션이 더 부드럽게 진행되도록 설정 */
+        }
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            margin-left: -125px; /* 화면 가운데 정렬을 위한 margin-left 수정 */
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1000; /* z-index 값을 높여 다른 요소 위에 표시되도록 설정 */
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%); /* 화면 가운데 정렬 */
+            font-size: 14px;
+        }
+
+        #toast.show {
+            visibility: visible !important;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @keyframes fadein {
+            from {bottom: 0; opacity: 0;}
+            to {bottom: 30px; opacity: 1;}
+        }
+
+        @keyframes fadeout {
+            from {bottom: 30px; opacity: 1;}
+            to {bottom: 0; opacity: 0;}
+        }
+    </style>
+    <style>
+        /* 사용자 정의 모달 스타일 */
+        .custom-modal .modal-header {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .custom-modal .modal-body {
+            padding: 20px;
+            font-size: 16px;
+        }
+
+        .custom-modal .modal-footer {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .custom-modal input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 14px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+    </style>
 
 </head>
 <body>
@@ -273,6 +337,10 @@
                                     <img id="store-thumbnail" class="mr-3 rounded-circle" style="width: 40px">
                                     <span id="store-name"></span>
                                     <i class="fa fa-phone ms-4 me-1"></i><span id="store-phone"></span>
+<!--                                    <button id="ai-generate-button" class="btn btn-success ms-3">AI로 케이크시안을 만들어 보세요</button>-->
+<!--                                    <div id="progress-bar-container" style="width: 100%; height: 5px; background-color: #f0f0f0; margin-top: 10px; display: none;">-->
+<!--                                        <div id="progress-bar" style="width: 0%; height: 100%; background-color: #4CAF50;"></div>-->
+<!--                                    </div>-->
                                 </div>
                                 <div class="container-fluid chat_section" id="chat-box"></div>
                                 <div class="type_msg">
@@ -280,7 +348,6 @@
                                         <button id="chat-attach" class="msg_attach_btn" type="button" style="border: 2px solid #4CAF50;">
                                             <i class="fa fa-paperclip" aria-hidden="true"></i>
                                         </button>
-                                        <!--            ai버튼 그냥 아무거나 넣어놨습니다 구별하기위해 빨간색해놨어요 디자인 바꿔주세요..-->
                                         <button id="chat-ai" class="msg_attach_btn" type="button" style="border: 2px solid #4CAF50;">
                                             <i class="fa fa-birthday-cake" aria-hidden="true"></i>
                                         </button>
@@ -290,6 +357,13 @@
                                         </button>
                                         <input id="chat-file-input" type="file" style="display: none;"/>
                                     </div>
+                                    <div style="margin-top: 10px;">
+                                        <button id="ai-generate-button" class="btn btn-success" style="width: 100%;">AI로 케이크시안을 만들어 보세요</button>
+                                        <div id="progress-bar-container" style="width: 100%; height: 5px; background-color: #f0f0f0; margin-top: 10px; display: none;">
+                                            <div id="progress-bar" style="width: 0%; height: 100%; background-color: #4CAF50;"></div>
+                                        </div>
+                                    </div>
+                                </div>
                                     <div id="file-preview" class="file-preview"></div>
                                 </div>
                             </div>
@@ -309,9 +383,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">AI 이미지 선택</h5>
-                    <button type="button" class="close" id="closeBtn" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+<!--                    <button type="button" class="close" id="closeBtn" data-dismiss="modal" aria-label="Close">-->
+<!--                        <span aria-hidden="true">&times;</span>-->
+<!--                    </button>-->
                 </div>
                 <div class="modal-body">
                     <!-- 이미지 선택 그리드 -->
@@ -383,6 +457,40 @@
 
     <!-- 여기까지 취소 모달 -->
 
+    <!-- 사용자 정의 모달 -->
+    <div class="modal fade custom-modal" id="customPromptModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">케이크 시안을 만들어 드릴게요</h5>
+<!--                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                        <span aria-hidden="true">&times;</span>-->
+<!--                    </button>-->
+                </div>
+                <div class="modal-body">
+                    원하는 케이크에 대해 설명해주세요:
+                    <input type="text" id="cakeDescriptionInput" placeholder="예: 올라프 케이크, 귀여운 디자인 등">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelBtn2" data-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary" id="confirmCakeDescription">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- Progress Bar -->
+    <!-- Toast 메시지 -->
+    <div id="toast" style="visibility: hidden; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background-color: #4CAF50; color: #ffffff; padding: 16px; border-radius: 5px; z-index: 1000;">생성이 완료되었습니다! 채팅창 왼쪽에 케이크 모양을 클릭하세요!</div>
+    </div>
+
+
+
+
+
 
 </main>
 </body>
@@ -401,6 +509,16 @@
     <script th:src="@{/js/customer/sticky_sidebar.min.js}"></script>
 
     <script th:inline="javascript">
+
+        let selectedImageUrl = null; // selectedImageUrl 변수를 초기화합니다.
+
+        // 모달이 열릴 때마다 이미지 선택 상태 초기화
+        $('#aiImageModal').on('show.bs.modal', function () {
+            // 선택된 이미지 상태 초기화
+            document.querySelectorAll('.selectable-image').forEach(img => img.style.border = 'none');
+            document.querySelectorAll('.select-image-radio').forEach(radio => radio.checked = false);
+        });
+
         let eventSource = null;
         let loadedMessageIds = new Set();
         let lastMessageId = null;
@@ -848,7 +966,62 @@
                 paymentInfoBox.innerHTML += '<p><strong>결제 상태:</strong> 완료</p>';
                 button.disabled = true;
             }
-        });  
+        });
+
+        document.querySelector("#chat-ai").addEventListener("click", async () => {
+            // 모달 열기 전에 데이터를 서버에서 동적으로 가져오기
+            try {
+                const response = await fetch('/my-seat-dang/reservation/images'); // 서버에서 이미지를 가져오는 API 엔드포인트
+                if (!response.ok) {
+                    throw new Error('데이터를 불러오지 못했습니다.');
+                }
+                const imageList = await response.json();
+
+                // 기존의 이미지를 초기화하고 새로 가져온 이미지 데이터로 갱신
+                const imageSelectionGrid = document.querySelector('.image-selection-grid');
+                imageSelectionGrid.innerHTML = ''; // 기존 이미지 초기화
+
+                imageList.forEach(image => {
+                    const imageContainer = document.createElement('div');
+                    imageContainer.style.display = 'flex';
+                    imageContainer.style.alignItems = 'center';
+                    imageContainer.style.marginBottom = '10px';
+                    imageContainer.innerHTML = `
+                <input type="radio" name="selectedImage" value="${image.generatedUrl}" class="select-image-radio" style="margin-right: 10px;">
+                <img src="${image.generatedUrl}" alt="${image.inputText}" class="selectable-image" style="width: 100px; height: 100px; cursor: pointer;">
+            `;
+                    imageSelectionGrid.appendChild(imageContainer);
+                });
+
+                // 라디오 버튼 클릭 시 선택된 이미지 URL 업데이트 (이벤트 위임 사용)
+                document.querySelector('.image-selection-grid').addEventListener('change', function (e) {
+                    if (e.target && e.target.classList.contains('select-image-radio')) {
+                        selectedImageUrl = e.target.value;
+                        document.querySelectorAll('.selectable-image').forEach(img => img.style.border = 'none');
+                        e.target.nextElementSibling.style.border = '2px solid blue';
+                    }
+                });
+
+                // 모달 표시
+                $('#aiImageModal').modal('show');
+            } catch (error) {
+                console.error('모달 데이터를 가져오는 중 오류 발생:', error);
+                alert('모달을 열 수 없습니다. 데이터를 불러오는 데 실패했습니다.');
+            }
+        });
+
+        document.querySelector("#closeBtn2").addEventListener("click", () => {
+            $('#aiImageModal').modal('hide');
+        });
+
+        // 라디오 버튼 클릭 시 선택된 이미지 URL 업데이트
+        document.querySelectorAll('.select-image-radio').forEach(radio => {
+            radio.addEventListener('change', function () {
+                selectedImageUrl = this.value;
+                document.querySelectorAll('.selectable-image').forEach(img => img.style.border = 'none');
+                this.nextElementSibling.style.border = '2px solid blue';
+            });
+        });
 
         // "선택하기" 버튼 클릭 시 이미지 전송
         document.querySelector("#selectImageButton").addEventListener("click", () => {
@@ -931,7 +1104,199 @@
                 document.getElementById("cancelForm").submit();
             }
         }
-    </script>
 
+        // ai 생성 및 확인
+
+        // document.addEventListener('DOMContentLoaded', function () {
+        //     document.getElementById('ai-generate-button').addEventListener('click', async function () {
+        //
+        //         let cakeDescription = prompt('원하는 케이크에 대해 설명해주세요:');
+        //
+        //         // 취소 버튼을 누른 경우
+        //         if (cakeDescription === null) {
+        //             alert('취소하셨습니다.');
+        //             return;
+        //         }
+        //
+        //         // 입력이 빈 문자열인 경우 입력을 반복적으로 요청
+        //         while (!cakeDescription.trim()) {
+        //             alert('케이크 설명을 입력해주세요!');
+        //             cakeDescription = prompt('원하는 케이크에 대해 설명해주세요:');
+        //
+        //             // 취소 버튼을 누른 경우
+        //             if (cakeDescription === null) {
+        //                 alert('취소하셨습니다.');
+        //                 return;
+        //             }
+        //         }
+        //
+        //         if (cakeDescription) {
+        //             // 버튼 텍스트 변경
+        //             let buttonText = document.getElementById('ai-generate-button');
+        //             let progressBarContainer = document.getElementById('progress-bar-container');
+        //             let progressBar = document.getElementById('progress-bar');
+        //
+        //             buttonText.textContent = '진행 중...';
+        //             progressBarContainer.style.display = 'block'; // 프로그레스 바 표시
+        //             progressBar.style.width = '0%'; // 초기 너비 설정
+        //
+        //             let progress = 0;
+        //
+        //             // 80%까지 프로그레스 바 채우기
+        //             let progressInterval = setInterval(() => {
+        //                 if (progress < 80) {
+        //                     progress += 1;
+        //                     progressBar.style.width = `${progress}%`;
+        //                 } else {
+        //                     clearInterval(progressInterval); // 80%까지 채운 후에는 더 이상 증가하지 않음
+        //                 }
+        //             }, 200); // 200ms 간격으로 업데이트
+        //
+        //             try {
+        //                 // 비동기 요청 처리
+        //                 let response = await fetch('/ai/generate', {
+        //                     method: 'POST',
+        //                     headers: {
+        //                         'Content-Type': 'application/x-www-form-urlencoded'
+        //                     },
+        //                     body: new URLSearchParams({
+        //                         'cakeDescription': cakeDescription
+        //                     })
+        //                 });
+        //
+        //                 if (response.ok) {
+        //                     let result = await response.json();
+        //
+        //                     // 서버에서 응답받은 데이터 처리 (예: 생성된 이미지 URL 사용)
+        //                     console.log("생성된 이미지 URL:", result.generatedUrl);
+        //
+        //                     // 프로그레스 바 완료 처리
+        //                     clearInterval(progressInterval); // 80% 채우기 중단
+        //                     progressBar.style.width = '100%'; // 응답을 받은 후 100%로 설정
+        //                     setTimeout(function () {
+        //                         progressBarContainer.style.display = 'none'; // 완료 후 프로그레스 바 숨기기
+        //                         buttonText.textContent = 'AI로 케이크시안을 만들어 보세요';
+        //                         showToast(); // Toast 메시지 표시
+        //                     }, 500);
+        //                 } else {
+        //                     // 오류 처리
+        //                     let errorResponse = await response.json();
+        //                     alert('오류: ' + (errorResponse.message || '요청 중 오류가 발생했습니다.'));
+        //                     clearInterval(progressInterval);
+        //                     progressBarContainer.style.display = 'none';
+        //                     buttonText.textContent = 'AI로 케이크시안을 만들어 보세요';
+        //                 }
+        //             } catch (error) {
+        //                 alert('요청 중 오류가 발생했습니다. 다시 시도해주세요.');
+        //                 clearInterval(progressInterval);
+        //                 progressBarContainer.style.display = 'none';
+        //                 buttonText.textContent = 'AI로 케이크시안을 만들어 보세요';
+        //             }
+        //         }
+        //     });
+        //
+        //     function showToast() {
+        //         let toast = document.getElementById('toast');
+        //         toast.classList.add('show'); // 클래스 추가 방식 변경
+        //         setTimeout(function() {
+        //             toast.classList.remove('show'); // 클래스 제거
+        //         }, 3000);
+        //     }
+        // });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('ai-generate-button').addEventListener('click', async function () {
+
+                // 사용자 정의 모달 열기
+                $('#customPromptModal').modal('show');
+
+                document.querySelector("#cancelBtn2").addEventListener("click", () => {
+                    $('#customPromptModal').modal('hide');
+                });
+
+
+                $('#customPromptModal').on('show.bs.modal', function () {
+                    // 입력 필드 초기화
+                    document.getElementById('cakeDescriptionInput').value = '';
+                });
+
+
+                document.getElementById('confirmCakeDescription').addEventListener('click', function () {
+                    let cakeDescription = document.getElementById('cakeDescriptionInput').value.trim();
+
+                    if (cakeDescription === "") {
+                        alert('케이크 설명을 입력해주세요!');
+                    } else {
+                        $('#customPromptModal').modal('hide');
+                        // 이후 요청 처리 로직
+                        startCakeGeneration(cakeDescription);
+                    }
+                });
+            });
+
+            function startCakeGeneration(cakeDescription) {
+                let buttonText = document.getElementById('ai-generate-button');
+                let progressBarContainer = document.getElementById('progress-bar-container');
+                let progressBar = document.getElementById('progress-bar');
+
+                buttonText.textContent = '진행 중...';
+                progressBarContainer.style.display = 'block';
+                progressBar.style.width = '0%';
+
+                let progress = 0;
+
+                let progressInterval = setInterval(() => {
+                    if (progress < 80) {
+                        progress += 1;
+                        progressBar.style.width = `${progress}%`;
+                    } else {
+                        clearInterval(progressInterval);
+                    }
+                }, 200);
+
+                // 비동기 요청 처리
+                fetch('/ai/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        'cakeDescription': cakeDescription
+                    })
+                }).then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('요청 실패');
+                    }
+                }).then(result => {
+                    progressBar.style.width = '100%';
+                    setTimeout(() => {
+                        progressBarContainer.style.display = 'none';
+                        buttonText.textContent = 'AI로 케이크시안을 만들어 보세요';
+                        showToast();
+                    }, 500);
+                }).catch(error => {
+                    alert('오류 발생: ' + error.message);
+                    clearInterval(progressInterval);
+                    progressBarContainer.style.display = 'none';
+                    buttonText.textContent = 'AI로 케이크시안을 만들어 보세요';
+                });
+            }
+
+            function showToast() {
+                let toast = document.getElementById('toast');
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+        });
+
+
+
+
+
+    </script>
 </div>
 </html>
