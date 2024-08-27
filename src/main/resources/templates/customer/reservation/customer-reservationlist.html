@@ -311,10 +311,10 @@
                                     <img id="store-thumbnail" class="mr-3 rounded-circle" style="width: 40px">
                                     <span id="store-name"></span>
                                     <i class="fa fa-phone ms-4 me-1"></i><span id="store-phone"></span>
-                                    <button id="ai-generate-button" class="btn btn-success ms-3">AI로 케이크시안을 만들어 보세요</button>
-                                    <div id="progress-bar-container" style="width: 100%; height: 5px; background-color: #f0f0f0; margin-top: 10px; display: none;">
-                                        <div id="progress-bar" style="width: 0%; height: 100%; background-color: #4CAF50;"></div>
-                                    </div>
+<!--                                    <button id="ai-generate-button" class="btn btn-success ms-3">AI로 케이크시안을 만들어 보세요</button>-->
+<!--                                    <div id="progress-bar-container" style="width: 100%; height: 5px; background-color: #f0f0f0; margin-top: 10px; display: none;">-->
+<!--                                        <div id="progress-bar" style="width: 0%; height: 100%; background-color: #4CAF50;"></div>-->
+<!--                                    </div>-->
                                 </div>
                                 <div class="container-fluid chat_section" id="chat-box"></div>
                                 <div class="type_msg">
@@ -331,6 +331,13 @@
                                         </button>
                                         <input id="chat-file-input" type="file" style="display: none;"/>
                                     </div>
+                                    <div style="margin-top: 10px;">
+                                        <button id="ai-generate-button" class="btn btn-success" style="width: 100%;">AI로 케이크시안을 만들어 보세요</button>
+                                        <div id="progress-bar-container" style="width: 100%; height: 5px; background-color: #f0f0f0; margin-top: 10px; display: none;">
+                                            <div id="progress-bar" style="width: 0%; height: 100%; background-color: #4CAF50;"></div>
+                                        </div>
+                                    </div>
+                                </div>
                                     <div id="file-preview" class="file-preview"></div>
                                 </div>
                             </div>
@@ -426,7 +433,7 @@
 
     <!-- Progress Bar -->
     <!-- Toast 메시지 -->
-    <div id="toast" style="visibility: hidden; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background-color: #85ff00; color: #000000; padding: 16px; border-radius: 5px; z-index: 1000;">생성이 완료되었습니다! 채팅창 왼쪽에 케이크 모양을 클릭하세요!</div>
+    <div id="toast" style="visibility: hidden; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background-color: #4CAF50; color: #ffffff; padding: 16px; border-radius: 5px; z-index: 1000;">생성이 완료되었습니다! 채팅창 왼쪽에 케이크 모양을 클릭하세요!</div>
     </div>
 
 
@@ -1023,78 +1030,6 @@
         document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('ai-generate-button').addEventListener('click', async function () {
 
-            //     let cakeDescription = prompt('원하는 케이크에 대해 설명해주세요:');
-            //
-            //
-            //
-            //     if (cakeDescription) {
-            //         // 버튼 텍스트 변경
-            //         let buttonText = document.getElementById('ai-generate-button');
-            //         let progressBarContainer = document.getElementById('progress-bar-container');
-            //         let progressBar = document.getElementById('progress-bar');
-            //
-            //         buttonText.textContent = '진행 중...';
-            //         progressBarContainer.style.display = 'block'; // 프로그레스 바 표시
-            //         progressBar.style.width = '0%'; // 초기 너비 설정
-            //
-            //         let progress = 0;
-            //
-            //         // 80% 까지 채우기
-            //         let progressInterval = setInterval(() => {
-            //             if (progress < 80) {
-            //                 progress += 1;
-            //                 progressBar.style.width = `${progress}%`;
-            //             } else {
-            //                 clearInterval(progressInterval);
-            //             }
-            //         }, 150); // 150ms 간격으로 업데이트
-            //
-            //
-            //         try {
-            //             // 비동기 요청 처리
-            //             let response = await fetch('/ai/generate', {
-            //                 method: 'POST',
-            //                 headers: {
-            //                     'Content-Type': 'application/x-www-form-urlencoded'
-            //                 },
-            //                 body: new URLSearchParams({
-            //                     'cakeDescription': cakeDescription
-            //                 })
-            //             });
-            //
-            //             if (response.ok) {
-            //                 let result = await response.json();
-            //
-            //                 // 서버에서 응답받은 데이터 처리 (예: 생성된 이미지 URL 사용)
-            //                 console.log("생성된 이미지 URL:", result.generatedUrl);
-            //
-            //                 // 프로그레스 바 완료 처리
-            //                 progressBar.style.width = '100%';
-            //                 setTimeout(function() {
-            //                     progressBarContainer.style.display = 'none'; // 완료 후 프로그레스 바 숨기기
-            //                     buttonText.textContent = 'AI로 케이크시안을 만들어 보세요';
-            //                     showToast(); // Toast 메시지 표시
-            //                 }, 500);
-            //             } else {
-            //                 // 오류 처리
-            //                 let errorResponse = await response.json();
-            //                 alert('오류: ' + (errorResponse.message || '요청 중 오류가 발생했습니다.'));
-            //                 clearInterval(progressInterval);
-            //                 progressBarContainer.style.display = 'none';
-            //                 buttonText.textContent = 'AI로 케이크시안을 만들어 보세요';
-            //             }
-            //         } catch (error) {
-            //             alert('요청 중 오류가 발생했습니다. 다시 시도해주세요.');
-            //             clearInterval(progressInterval);
-            //             progressBarContainer.style.display = 'none';
-            //             buttonText.textContent = 'AI로 케이크시안을 만들어 보세요';
-            //         }
-            //     } else {
-            //         alert('취소하셨습니다.');
-            //     }
-            // });
-
-
                 let cakeDescription = prompt('원하는 케이크에 대해 설명해주세요:');
 
                 // 취소 버튼을 누른 경우
@@ -1133,9 +1068,9 @@
                             progress += 1;
                             progressBar.style.width = `${progress}%`;
                         } else {
-                            clearInterval(progressInterval);
+                            clearInterval(progressInterval); // 80%까지 채운 후에는 더 이상 증가하지 않음
                         }
-                    }, 150); // 150ms 간격으로 업데이트
+                    }, 200); // 200ms 간격으로 업데이트
 
                     try {
                         // 비동기 요청 처리
@@ -1156,7 +1091,8 @@
                             console.log("생성된 이미지 URL:", result.generatedUrl);
 
                             // 프로그레스 바 완료 처리
-                            progressBar.style.width = '100%';
+                            clearInterval(progressInterval); // 80% 채우기 중단
+                            progressBar.style.width = '100%'; // 응답을 받은 후 100%로 설정
                             setTimeout(function () {
                                 progressBarContainer.style.display = 'none'; // 완료 후 프로그레스 바 숨기기
                                 buttonText.textContent = 'AI로 케이크시안을 만들어 보세요';

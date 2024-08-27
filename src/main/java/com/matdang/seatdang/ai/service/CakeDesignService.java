@@ -50,7 +50,7 @@ public class CakeDesignService {
 
         // 한국어로 된 케이크 관련 프롬프트로 변환 (어떤 입력값이던 케이크만 나오게)
         String cakeSpecificPrompt = String.format(
-                "이 이미지는 오직 케이크 디자인을 나타냅니다. %s.",
+                "이 이미지는 오직 케이크 디자인을 나타냅니다. %s. 케이크",
                 prompt
         );
 
