@@ -72,6 +72,17 @@ public class ReservationCustomerController {
         return "customer/reservation/customer-reservationlist";
     }
 
+    // 이미지만 반환하는 엔드포인트 추가 (실시간으로 불러오기 위해)
+    @GetMapping("/images")
+    @ResponseBody
+    public List<GeneratedImageUrl> getImages() {
+        Long customerId = ((MemberUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        return generatedImageUrlRepository.findAllByCustomerId(customerId);
+    }
+
+
+
+
     @PostMapping("create-custom")
     public String custom(@ModelAttribute("custom_reservation") ReservationSaveRequestDto saveDto, Model model) {
         //예약 한도 조회 Dto 세팅
