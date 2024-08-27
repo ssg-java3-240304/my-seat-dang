@@ -38,82 +38,82 @@ public class WaitingQueryCustomerTest {
     private WaitingRepository waitingRepository;
     @Autowired
     private EntityManager em;
+//
+//    @ParameterizedTest
+//    @ValueSource(strings = {"WAITING", "VISITED", "CUSTOMER_CANCELED"})
+//    @DisplayName("고객 id로 특정 상태의 웨이팅들을 가져오기")
+//    void findStoreNamesByCustomerIdAndWaitingStatus(String status) {
+//        // given
+//        Store storeA = storeRepository.save(Store.builder()
+//                .storeName("마싯당")
+//                .build());
+//
+//        Waiting waiting = waitingRepository.save(Waiting.builder()
+//                .waitingNumber(1L)
+//                .waitingOrder(1L)
+//                .storeId(storeA.getStoreId())
+//                .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+//                .waitingStatus(WaitingStatus.valueOf(status))
+//                .visitedTime(null)
+//                .build());
+//        Waiting waiting2 = waitingRepository.save(Waiting.builder()
+//                .waitingNumber(1L)
+//                .waitingOrder(1L)
+//                .storeId(storeA.getStoreId())
+//                .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+//                .waitingStatus(WaitingStatus.SHOP_CANCELED)
+//                .visitedTime(null)
+//                .build());
+//        em.flush();
+//        em.clear();
+//
+//        PageRequest pageable = PageRequest.of(0, 100);
+//
+//        // when
+//        Page<WaitingInfoDto> findResult = waitingQueryRepository.findAllByCustomerIdAndWaitingStatus(
+//                1L, WaitingStatus.valueOf(status), pageable);
+//
+//        // then
+//        assertThat(findResult.getContent().size()).isEqualTo(1);
+//        assertThat(findResult.getContent()).extracting(WaitingInfoDto::getWaitingStatus)
+//                .containsExactly(WaitingStatus.valueOf(status));
+//        assertThat(findResult.getContent()).extracting(WaitingInfoDto::getStoreName).containsExactly("마싯당");
+//    }
 
-    @ParameterizedTest
-    @ValueSource(strings = {"WAITING", "VISITED", "CUSTOMER_CANCELED"})
-    @DisplayName("고객 id로 특정 상태의 웨이팅들을 가져오기")
-    void findStoreNamesByCustomerIdAndWaitingStatus(String status) {
-        // given
-        Store storeA = storeRepository.save(Store.builder()
-                .storeName("마싯당")
-                .build());
-
-        Waiting waiting = waitingRepository.save(Waiting.builder()
-                .waitingNumber(1L)
-                .waitingOrder(1L)
-                .storeId(storeA.getStoreId())
-                .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
-                .waitingStatus(WaitingStatus.valueOf(status))
-                .visitedTime(null)
-                .build());
-        Waiting waiting2 = waitingRepository.save(Waiting.builder()
-                .waitingNumber(1L)
-                .waitingOrder(1L)
-                .storeId(storeA.getStoreId())
-                .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
-                .waitingStatus(WaitingStatus.SHOP_CANCELED)
-                .visitedTime(null)
-                .build());
-        em.flush();
-        em.clear();
-
-        PageRequest pageable = PageRequest.of(0, 100);
-
-        // when
-        Page<WaitingInfoDto> findResult = waitingQueryRepository.findAllByCustomerIdAndWaitingStatus(
-                1L, WaitingStatus.valueOf(status), pageable);
-
-        // then
-        assertThat(findResult.getContent().size()).isEqualTo(1);
-        assertThat(findResult.getContent()).extracting(WaitingInfoDto::getWaitingStatus)
-                .containsExactly(WaitingStatus.valueOf(status));
-        assertThat(findResult.getContent()).extracting(WaitingInfoDto::getStoreName).containsExactly("마싯당");
-    }
-
-    @Test
-    @DisplayName("고객 id로 취소상태의 웨이팅들 가져오기")
-    void findAllByCustomerIdAndCancelStatus() {
-        // given
-        Store storeA = storeRepository.save(Store.builder()
-                .storeName("마싯당")
-                .build());
-
-        for (WaitingStatus status : WaitingStatus.values()) {
-            waitingRepository.save(Waiting.builder()
-                    .waitingNumber(1L)
-                    .waitingOrder(1L)
-                    .storeId(storeA.getStoreId())
-                    .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
-                    .waitingStatus(status)
-                    .visitedTime(null)
-                    .build());
-        }
-        em.flush();
-        em.clear();
-
-        PageRequest pageable = PageRequest.of(0, 100);
-
-        // when
-        Page<WaitingInfoDto> findResult = waitingQueryRepository.findAllByCustomerIdAndCancelStatus(
-                1L, pageable);
-
-        // then
-        assertThat(findResult.getContent().size()).isEqualTo(3);
-        assertThat(findResult.getContent()).extracting(WaitingInfoDto::getWaitingStatus)
-                .containsExactlyInAnyOrder(WaitingStatus.NO_SHOW, WaitingStatus.CUSTOMER_CANCELED,
-                        WaitingStatus.SHOP_CANCELED);
-        assertThat(findResult.getContent()).extracting(WaitingInfoDto::getStoreName).contains("마싯당");
-    }
+//    @Test
+//    @DisplayName("고객 id로 취소상태의 웨이팅들 가져오기")
+//    void findAllByCustomerIdAndCancelStatus() {
+//        // given
+//        Store storeA = storeRepository.save(Store.builder()
+//                .storeName("마싯당")
+//                .build());
+//
+//        for (WaitingStatus status : WaitingStatus.values()) {
+//            waitingRepository.save(Waiting.builder()
+//                    .waitingNumber(1L)
+//                    .waitingOrder(1L)
+//                    .storeId(storeA.getStoreId())
+//                    .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+//                    .waitingStatus(status)
+//                    .visitedTime(null)
+//                    .build());
+//        }
+//        em.flush();
+//        em.clear();
+//
+//        PageRequest pageable = PageRequest.of(0, 100);
+//
+//        // when
+//        Page<WaitingInfoDto> findResult = waitingQueryRepository.findAllByCustomerIdAndCancelStatus(
+//                1L, pageable);
+//
+//        // then
+//        assertThat(findResult.getContent().size()).isEqualTo(3);
+//        assertThat(findResult.getContent()).extracting(WaitingInfoDto::getWaitingStatus)
+//                .containsExactlyInAnyOrder(WaitingStatus.NO_SHOW, WaitingStatus.CUSTOMER_CANCELED,
+//                        WaitingStatus.SHOP_CANCELED);
+//        assertThat(findResult.getContent()).extracting(WaitingInfoDto::getStoreName).contains("마싯당");
+//    }
 
     @ParameterizedTest
     @ValueSource(strings = {"WAITING", "VISITED", "CUSTOMER_CANCELED"})

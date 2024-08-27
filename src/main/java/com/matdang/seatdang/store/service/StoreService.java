@@ -9,6 +9,7 @@ import com.matdang.seatdang.store.repository.StoreRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -52,4 +53,11 @@ public class StoreService {
             return 0;
         }
     }
+
+    @Cacheable(value = "storeNames", key = "#storeId")
+    public String findStoreNameByStoreId(Long storeId) {
+        Store store = storeRepository.findByStoreId(storeId);
+        return store.getStoreName();
+    }
+
 }
