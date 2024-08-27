@@ -29,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class WaitingService {
-    private final WaitingRepository waitingRepository;
     private final ObjectMapper objectMapper;
     private final RedisTemplate<String, Object> redisTemplate;
 
@@ -93,7 +92,7 @@ public class WaitingService {
                 filteredWaitings.size());
     }
 
-    private Waiting convertStringToWaiting(Object jsonString) {
+    public Waiting convertStringToWaiting(Object jsonString) {
         try {
             // JSON 문자열을 Waiting 객체로 역직렬화
             return objectMapper.readValue((String) jsonString, Waiting.class);
@@ -120,6 +119,10 @@ public class WaitingService {
 //        return 0;
 //    }
 
+    /**
+     * {@link RedissonLockWaitingFacade#updateStatus(UpdateRequest)} 을 사용하세요.
+     */
+    @DoNotUse(message = "이 메서드를 직접 사용하지 마세요.")
     @Transactional
     public void updateStatus(UpdateRequest updateRequest) {
         String key = "store:" + updateRequest.getStoreId();
