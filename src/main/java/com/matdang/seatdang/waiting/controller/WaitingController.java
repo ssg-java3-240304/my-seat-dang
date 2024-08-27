@@ -60,8 +60,9 @@ public class WaitingController {
 
         Page<WaitingDto> waitings = waitingService.showWaiting(storeId, status, page);
         System.out.println("waitings.getContent() = " + waitings.getContent());
-        createEstimatedWaitingTime(status, model, waitings.getContent(), storeId);
 
+        model.addAttribute("estimatedTime",
+                createEstimatedWaitingTime(status, (int) waitings.getTotalElements(), waitings.getContent(), storeId));
         model.addAttribute("waitingStatus", waitingSettingService.findWaitingStatus(storeId));
         model.addAttribute("waitingPeople", WaitingPeople.create(waitings.getContent()));
         model.addAttribute("waitings", waitings);
@@ -86,7 +87,7 @@ public class WaitingController {
         return "redirect:/store-owner/waiting";
     }
 
-    private void createEstimatedWaitingTime(int status, Model model, List<WaitingDto> waitings, Long storeId) {
+    private LocalTime createEstimatedWaitingTime(int status, int size, List<WaitingDto> waitings, Long storeId) {
         if (status == 0 && !waitings.isEmpty()) {
             int diff = 0;
             long elapsedTime = Duration.between(waitings.get(0).getCreatedDate(), LocalDateTime.now()).toMinutes();
@@ -96,12 +97,14 @@ public class WaitingController {
                 diff = estimatedTime - (int) elapsedTime;
             }
 
-            int totalMinutes = (waitings.size() - 1) * estimatedTime + diff;
+            int totalMinutes = (size - 1) * estimatedTime + diff;
             int hours = totalMinutes / 60;
             int minutes = totalMinutes % 60;
 
-            model.addAttribute("estimatedTime", LocalTime.of(hours, minutes));
+            return LocalTime.of(hours, minutes);
         }
+
+        return null;
     }
 
     /**
