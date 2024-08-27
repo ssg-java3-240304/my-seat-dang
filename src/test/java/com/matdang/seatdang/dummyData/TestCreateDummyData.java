@@ -218,7 +218,7 @@ public class TestCreateDummyData {
                                     .waitingStatus(WaitingStatus.OPEN)
                                     .waitingTime(WaitingTime.builder()
                                             .waitingOpenTime(LocalTime.of(9, 0))
-                                            .waitingCloseTime(LocalTime.of(24, 0))
+                                            .waitingCloseTime(LocalTime.of(23, 0))
                                             .estimatedWaitingTime(LocalTime.of(0, 10))
                                             .build())
                                     .maxReservationInDay(1000)
