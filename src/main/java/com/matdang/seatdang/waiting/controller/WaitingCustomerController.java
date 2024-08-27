@@ -34,12 +34,13 @@ public class WaitingCustomerController {
     private final AuthService authService;
 
     @GetMapping("/test-store")
-    public String showStore(@RequestParam(defaultValue = "2") Long storeId, Model model) {
+    public String showStore(@RequestParam(defaultValue = "2") Long storeId,
+                            Model model) {
         Long memberId = authService.getAuthenticatedMember().getMemberId();
-        boolean isRegistered = waitingRepository.isRegisteredWaiting(storeId, memberId);
+        boolean isWaitingExists = waitingCustomerService.isWaitingExists(storeId);
 
         model.addAttribute("storeId", storeId);
-        model.addAttribute("isRegistered", isRegistered);
+        model.addAttribute("isWaitingExists", isWaitingExists);
 
         return "customer/waiting/test-store";
     }
@@ -52,7 +53,13 @@ public class WaitingCustomerController {
      */
     // TODO : URL 직접 접근 막기 - 개선필요
     @GetMapping("/waiting/{storeId}")
-    public String readyWaiting(@PathVariable Long storeId, Model model, HttpServletRequest request) {
+    public String readyWaiting(@PathVariable Long storeId, Model model, HttpServletRequest request,
+                               RedirectAttributes redirectAttributes) {
+        if (waitingCustomerService.isWaitingExists(storeId)) {
+            redirectAttributes.addFlashAttribute("status", true);
+            return "redirect:/my-seat-dang/test-store";
+        }
+
         String referer = request.getHeader("Referer");
         // 유효한 referer URL인지 확인 (예: "https://example.com/somepage")
         if (referer == null || !referer.startsWith("http://localhost:8080/my-seat-dang/test-store")) {
@@ -109,7 +116,7 @@ public class WaitingCustomerController {
             @PathVariable Long waitingNumber, @RequestParam Long storeId, RedirectAttributes redirectAttributes) {
         log.debug("=== cancel Waiting === {}", LocalDateTime.now());
 
-        redissonLockWaitingCustomerFacade.cancelWaitingByCustomer(waitingNumber ,storeId);
+        redissonLockWaitingCustomerFacade.cancelWaitingByCustomer(waitingNumber, storeId);
         log.info("=== 웨이팅 고객 취소 ===");
 //        if (result > 0) {
 //            log.info("=== 웨이팅 고객 취소 ===");
@@ -169,7 +176,8 @@ public class WaitingCustomerController {
         if (when.equals("today")) {
             return waitingCustomerService.findById(waitingId);
         } else if (when.equals("history")) {
-            return waitingStorageRepository.findByStoreIdAndWaitingNumber(waitingId.getStoreId(), waitingId.getWaitingNumber());
+            return waitingStorageRepository.findByStoreIdAndWaitingNumber(waitingId.getStoreId(),
+                    waitingId.getWaitingNumber());
         }
 
         return null;
