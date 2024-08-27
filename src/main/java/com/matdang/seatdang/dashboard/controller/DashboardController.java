@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
-@RequestMapping("/storeowner/mypage")
+@RequestMapping("/store-owner/mypage")
 @RequiredArgsConstructor
 public class DashboardController {
     private final DashboardService dashboardService;

@@ -18,39 +18,39 @@ import java.io.IOException;
 import java.util.List;
 
 @Controller
-@RequestMapping("/storeowner")
+@RequestMapping("/storeowner/store")
 @RequiredArgsConstructor
 @Slf4j
 public class StoreOwnerController {
     private final FileService fileService;
     private final StoreAdminService storeAdminService;
 
-    @GetMapping("/store/main")
+    @GetMapping("/main")
     public String main() {
 
-        return "store/main";
+        return "storeowner/main";
     }
 
-    @GetMapping("/store/storeDetail")
+    @GetMapping("/storeDetail")
     public void storeDetail(@RequestParam("storeId") Long storeId, Model model){
         StoreDetailDto store = storeAdminService.findByStoreId(storeId);
         log.debug("store = {}", store);
         model.addAttribute("store", store);
     }
 
-    @GetMapping("/store/storeRegist")
+    @GetMapping("/storeRegist")
     public void storeRegist(){
         log.info("GET /store/storeRegist");
     }
 
-    @GetMapping(path = "/store/storeNameCheck", produces = "application/json; charset=utf-8")
+    @GetMapping(path = "/storeNameCheck", produces = "application/json; charset=utf-8")
     @ResponseBody
     public int storeNameCheck(@RequestParam String storeName){
         log.info("GET /store/storeNameCheck");
         return storeAdminService.findByStoreName(storeName);
     }
 
-    @PostMapping("/store/storeRegist")
+    @PostMapping("/storeRegist")
     public String storeRegist(
             @ModelAttribute StoreRegistRequestDto dto,
             @RequestParam("thumbnail") MultipartFile thumbnail, @RequestParam("images") List<MultipartFile> images) throws IOException {
@@ -60,7 +60,7 @@ public class StoreOwnerController {
         return "redirect:/storeowner/store/storeRegist";
     }
 
-    @GetMapping(path = "/store/storeUpdate")
+    @GetMapping(path = "/storeUpdate")
     public void storeUpdate(Model model){
         StoreOwnerUserDetails userDetails = (StoreOwnerUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long storeId = userDetails.getStore().getStoreId();
@@ -70,7 +70,7 @@ public class StoreOwnerController {
         model.addAttribute("store", dto);
     }
 
-    @PostMapping("/store/storeUpdate")
+    @PostMapping("/storeUpdate")
     public String storeUpdate(
             @ModelAttribute StoreUpdateRequestDto dto){
         storeAdminService.update(dto);

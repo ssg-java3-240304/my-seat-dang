@@ -14,7 +14,7 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
                 <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
-                    <a class="nav-link" th:href="@{/storeowner/mypage/dashboard}">
+                    <a class="nav-link" th:href="@{/store-owner/mypage/dashboard}">
                         <i class="fa fa-fw fa-dashboard"></i>
                         <span class="nav-link-text">대시보드</span>
                     </a>
@@ -24,6 +24,20 @@
                         <i class="fa fa-fw fa-dashboard"></i>
                         <span class="nav-link-text">웨이팅 현황</span>
                     </a>
+                </li>
+                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="My Store">
+                    <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseStoreListings">
+                        <i class="fa fa-fw fa-list"></i>
+                        <span class="nav-link-text">매장 관리</span>
+                    </a>
+                    <ul class="sidenav-second-level" id="collapseStoreListings">
+                        <li>
+                            <a th:href="@{/storeowner/store/storeRegist}">매장 등록</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/storeowner/store/storeUpdate}">매장 수정</a>
+                        </li>
+                    </ul>
                 </li>
 
                 <!--                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Messages">-->
@@ -68,7 +82,7 @@
                 <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Settings">
                     <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#settings">
                         <i class="fa fa-fw fa-list"></i>
-                        <span class="nav-link-text">Settings</span>
+                        <span class="nav-link-text">설정</span>
                     </a>
                     <ul class="sidenav-second-level collapse" id="settings">
                         <li>
@@ -93,12 +107,16 @@
                 <!--                        </li>-->
                 <!--                    </ul>-->
                 <!--                </li>-->
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Reviews">
-                    <a class="nav-link" th:href="@{/admin/reviews.html}">
-                        <i class="fa fa-fw fa-star"></i>
-                        <span class="nav-link-text">Reviews</span>
-                    </a>
-                </li>
+
+
+<!--                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Reviews">-->
+<!--                    <a class="nav-link" th:href="@{/admin/reviews.html}">-->
+<!--                        <i class="fa fa-fw fa-star"></i>-->
+<!--                        <span class="nav-link-text">Reviews</span>-->
+<!--                    </a>-->
+<!--                </li>-->
+
+
                 <!--                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Bookmarks">-->
                 <!--                    <a class="nav-link" th:href="@{/admin/bookmarks.html}">-->
                 <!--                        <i class="fa fa-fw fa-heart"></i>-->

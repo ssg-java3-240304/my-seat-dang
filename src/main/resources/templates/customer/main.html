@@ -14,19 +14,19 @@
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-xl-9 col-lg-10 col-md-8">
-                        <h1>마 싯 당</h1>
-                        <p>제과점 웨이팅부터 예약까지 한번에</p>
+                        <h1>My Seat Dang</h1><br>
+                        <h5>당신의 달콤한 순간을 간편하게 예약 – 베이커리 웨이팅과 맞춤형 케이크까지 여기가 마싯당</h5><br>
                         <form method="get" th:action="@{/my-seat-dang/search}">
                             <div class="row g-0 custom-search-input">
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <input name="store_name" class="form-control" type="text" placeholder="매장명...">
+                                        <input name="store_name" class="form-control" type="text" placeholder="매장명을 입력하세요.">
                                         <i class="icon_search"></i>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <input name="store_address" class="form-control no_border_r" type="text" placeholder="주소, 지역...">
+                                        <input name="store_address" class="form-control no_border_r" type="text" placeholder="주소 또는 지역을 입력하세요.">
                                         <i class="icon_pin_alt"></i>
                                     </div>
                                 </div>
@@ -43,6 +43,63 @@
         </div>
     </div>
     <!-- /Background YouTube Parallax -->
+
+    <div class="bg_gray">
+        <div class="container margin_60_40">
+            <div class="main_title center">
+                <span><em></em></span>
+                <h2>카테고리</h2>
+                <p>원하는 카테고리를 선택하세요!</p>
+            </div>
+            <!-- /main_title -->
+            <div class="owl-carousel owl-theme categories_carousel">
+                <div class="item">
+                    <a href="#0">
+                        <span>98</span>
+                        <i class="icon-food_icon_chinese"></i>
+                        <h3>웨이팅</h3>
+                        <small>집에서 웨이팅 하기!</small>
+                    </a>
+                </div>
+                <div class="item">
+                    <a href="#0">
+                        <span>87</span>
+                        <i class="icon-food_icon_cake_2"></i>
+                        <h3>커스텀 케이크 예약</h3>
+                        <small>나만의 특별한 선물 예약하기!</small>
+                    </a>
+                </div>
+                <div class="item">
+                    <a href="#0">
+                        <span>96</span>
+                        <i class="icon-food_icon_burrito"></i>
+                        <h3>일반 베이커리 예약</h3>
+                        <small>빵순이들 모여라!</small>
+                    </a>
+                </div>
+            </div>
+            <!-- /carousel -->
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- /bg_gray -->
+
+    <div class="container margin_60_40">
+        <div class="banner lazy" data-jarallax-video="https://www.youtube.com/watch?v=hhmStBpyqwM">
+<!--            data-bg="url(img/banner_bg_desktop.jpg)"-->
+            <div class="wrapper d-flex align-items-center opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.2)">
+                <div>
+                    <small>AI 이미지 생성</small>
+                    <h3>커스텀 케이크 시안 간단하게 생성하기</h3>
+                    <p>완성된 시안으로 바로 예약까지!</p>
+                    <a href="grid-listing-filterscol.html" class="btn_1">AI 시안 생성</a>
+                </div>
+            </div>
+            <!-- /wrapper -->
+        </div>
+        <!-- /banner -->
+    </div>
+
 </main>
 <div layout:fragment="js">
     <!-- 이 페이지 전용 스크립트 -->
