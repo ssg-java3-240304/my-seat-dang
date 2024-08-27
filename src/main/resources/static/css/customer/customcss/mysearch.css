@@ -1,0 +1,76 @@
+div#map{
+    border: solid;
+    border-width: 1px;
+    border-color:green;
+}
+
+.my-figure{
+    height: 260px !important;
+}
+
+.my_loc_open,.my_loc_closed {
+    position: absolute;
+    display: inline-block;
+    top: 12px;
+    right: 15px;
+    padding: 7px 8px 4px 8px;
+    font-size: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 7px 8px 4px 8px;
+    line-height: 1;
+    @include border-radius(3px);
+    min-width: 40px;
+    z-index: 9;
+}
+
+.my_loc_open {
+    color: white;
+    border: 1px solid #32a067;
+    background-color: #32a067;
+}
+.my_loc_closed {
+    color: white;
+    border: 1px solid #eb5c65;
+    background-color: #eb5c65;
+}
+
+.tab_info{
+    display: block;
+    font-size: 22px;
+    color: #589442;
+    margin: 0;
+    padding: 0;
+}
+
+.strip figure .item_title h3 {
+    font-size: 1.5rem !important;
+    margin-bottom: 10px !important;
+}
+
+.strip figure .item_title small {
+    font-size: 1rem !important;
+}
+
+.strip figure a.strip_info > small{
+    font-size: 1rem !important;
+    background-color: brown;
+}
+
+.nav-tabs .nav-link.active,
+.nav-tabs .nav-item.show .nav-link {
+    font-size: 1.6rem !important;
+    height: 38px !important;
+}
+
+.nav-tabs .nav-item .nav-link{
+    font-size: 1.5rem;
+    margin-bottom: 3px;
+    height: 25px;
+    margin-right: 10px;
+}
+
+.nav-tabs .nav-item{
+    display: flex;
+    align-items: center;
+}
