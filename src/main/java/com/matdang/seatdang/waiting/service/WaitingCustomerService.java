@@ -4,11 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.matdang.seatdang.auth.service.AuthService;
+import com.matdang.seatdang.common.annotation.DoNotUse;
 import com.matdang.seatdang.member.entity.Member;
 import com.matdang.seatdang.store.service.StoreService;
 import com.matdang.seatdang.waiting.dto.WaitingId;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.entity.Waiting;
+import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingCustomerFacade;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.repository.query.WaitingStorageQueryRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
@@ -35,6 +37,11 @@ public class WaitingCustomerService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
 
+
+    /**
+     * {@link RedissonLockWaitingCustomerFacade#createWaiting(Long, Integer)} 을 사용하세요.
+     */
+    @DoNotUse(message = "이 메서드를 직접 사용하지 마세요.")
     @Transactional
     public WaitingId createWaiting(Long storeId, Integer peopleCount) {
         Member customer = authService.getAuthenticatedMember();
@@ -121,8 +128,9 @@ public class WaitingCustomerService {
             Map<Long, List<Long>> result = new HashMap<>();
             for (Map.Entry<Object, Object> entry : entries.entrySet()) {
                 Long storeId = Long.valueOf(entry.getKey().toString());
-                List<Long> waitingNumbers = objectMapper.readValue(entry.getValue().toString(), new TypeReference<List<Long>>() {
-                });
+                List<Long> waitingNumbers = objectMapper.readValue(entry.getValue().toString(),
+                        new TypeReference<List<Long>>() {
+                        });
                 result.put(storeId, waitingNumbers);
             }
             return result;
@@ -161,7 +169,7 @@ public class WaitingCustomerService {
         redisTemplate.opsForHash().put(storeKey, waitingNumber.toString(), waitingJson);
     }
 
-    public Map<Long, Waiting> getWaitingsForStore(Long storeId)  {
+    public Map<Long, Waiting> getWaitingsForStore(Long storeId) {
         String storeKey = "store:" + storeId;
 
         // Redis Hash에서 모든 필드와 값을 가져옴
@@ -200,6 +208,10 @@ public class WaitingCustomerService {
         }
     }
 
+    /**
+     * {@link RedissonLockWaitingCustomerFacade#cancelWaitingByCustomer(Long, Long)} 을 사용하세요.
+     */
+    @DoNotUse(message = "이 메서드를 직접 사용하지 마세요.")
     @Transactional
     public void cancelWaitingByCustomer(Long waitingNumber, Long storeId) {
         getPreviousWaitingOrder(storeId);
@@ -212,7 +224,7 @@ public class WaitingCustomerService {
                 waitings.get(l).setCanceledTime(LocalDateTime.now());
             }
             if (waiting.getWaitingOrder() < waitings.get(l).getWaitingOrder()) {
-                waitings.get(l).setWaitingOrder(waitings.get(l).getWaitingOrder()-1) ;
+                waitings.get(l).setWaitingOrder(waitings.get(l).getWaitingOrder() - 1);
             }
 
         }
@@ -220,7 +232,7 @@ public class WaitingCustomerService {
         saveWaitingsToRedis(waitings, waiting.getStoreId());
     }
 
-    public void saveWaitingsToRedis(Map<Long, Waiting> waitings, Long storeId)  {
+    public void saveWaitingsToRedis(Map<Long, Waiting> waitings, Long storeId) {
         String storeKey = "store:" + storeId;
 
         Map<String, String> hashEntries = new HashMap<>();
@@ -239,7 +251,6 @@ public class WaitingCustomerService {
         // Redis Hash에 저장
         redisTemplate.opsForHash().putAll(storeKey, hashEntries);
     }
-
 
 //    @Transactional(readOnly = true)
 //    public Page<WaitingInfoProjection> showWaiting(int status, int page) {
