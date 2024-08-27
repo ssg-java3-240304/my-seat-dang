@@ -107,7 +107,7 @@ public class WaitingController {
     /**
      * test 실행시 주석 필요
      */
-    @PostConstruct
+//    @PostConstruct
     public void initData() throws InterruptedException {
         StoreVo storeVo = new StoreVo(2L, "달콤커피", StoreType.CUSTOM, "서울시강남구");
         storeRepository.save(Store.builder()

@@ -41,6 +41,9 @@ public class WaitingCustomerService {
         String key = "store:" + storeId;
         Member customer = authService.getAuthenticatedMember();
 
+        if (customer == null) {
+            return false;
+        }
         return redisTemplate.opsForHash().values(key).stream()
                 .map(this::convertStringToWaiting)
                 .anyMatch(waiting -> waiting.getCustomerInfo().getCustomerId().equals(customer.getMemberId())

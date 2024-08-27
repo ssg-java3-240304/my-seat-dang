@@ -139,7 +139,7 @@ public class TestCreateDummyData {
                             .closeTime(LocalTime.of(22, 0))
                             .regularDayOff("Sunday")
                             .thumbnail("https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/0a2e250f-1a1a-4805-bf17-559d7c4105cf.png")
-                            .description("현장 웨이팅이 가능한 매장입니다.")
+                            .storeSetting(new StoreSetting())
                             .notice("Closed on public holidays.")
                             .phone("555-1234-567")
                             .starRating(4.5)

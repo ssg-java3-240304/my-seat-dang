@@ -33,18 +33,18 @@ public class WaitingCustomerController {
     private final StoreRepository storeRepository;
     private final AuthService authService;
 
-    @GetMapping("/test-store")
-    public String showStore(@RequestParam(defaultValue = "2") Long storeId,
-                            Model model) {
-        Long memberId = authService.getAuthenticatedMember().getMemberId();
-        boolean isWaitingExists = waitingCustomerService.isWaitingExists(storeId);
-
-        model.addAttribute("storeStatus", storeRepository.findByStoreId(storeId).getStoreSetting().getWaitingStatus().toString());
-        model.addAttribute("storeId", storeId);
-        model.addAttribute("isWaitingExists", isWaitingExists);
-
-        return "customer/waiting/test-store";
-    }
+//    @GetMapping("/test-store")
+//    public String showStore(@RequestParam(defaultValue = "2") Long storeId,
+//                            Model model) {
+//        Long memberId = authService.getAuthenticatedMember().getMemberId();
+//        boolean isWaitingExists = waitingCustomerService.isWaitingExists(storeId);
+//
+//        model.addAttribute("storeStatus", storeRepository.findByStoreId(storeId).getStoreSetting().getWaitingStatus().toString());
+//        model.addAttribute("storeId", storeId);
+//        model.addAttribute("isWaitingExists", isWaitingExists);
+//
+//        return "customer/waiting/test-store";
+//    }
 
     /**
      * TODO : 삭제 필요
@@ -58,12 +58,12 @@ public class WaitingCustomerController {
                                RedirectAttributes redirectAttributes) {
         if (waitingCustomerService.isWaitingExists(storeId)) {
             redirectAttributes.addFlashAttribute("status", true);
-            return "redirect:/my-seat-dang/test-store";
+            return "redirect:/my-seat-dang/store/detail/" + storeId;
         }
 
         String referer = request.getHeader("Referer");
         // 유효한 referer URL인지 확인 (예: "https://example.com/somepage")
-        if (referer == null || !referer.startsWith("http://localhost:8080/my-seat-dang/test-store")) {
+        if (referer == null || !referer.startsWith("http://localhost:8080/my-seat-dang/store/detail/"+storeId)) {
             return "error/403";
         }
 
