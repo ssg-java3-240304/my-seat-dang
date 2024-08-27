@@ -75,14 +75,14 @@ public class WaitingController {
 
     @PostMapping
     public String updateStatus(@ModelAttribute UpdateRequest updateRequest, Model model) {
-        int result = redissonLockWaitingFacade.updateStatus(updateRequest);
+      waitingService.updateStatus(updateRequest);
 
-        if (result == 0) {
-            log.error("=== not update ===");
-        } else {
-            log.info("===  update Waiting Status  ===");
-            log.info("storeId = {},  total update = {}", updateRequest.getStoreId(), result);
-        }
+//        if (result == 0) {
+//            log.error("=== not update ===");
+//        } else {
+//            log.info("===  update Waiting Status  ===");
+//            log.info("storeId = {},  total update = {}", updateRequest.getStoreId(), result);
+//        }
 
         return "redirect:/store-owner/waiting";
     }

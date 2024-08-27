@@ -1,5 +1,6 @@
 package com.matdang.seatdang.waiting.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.matdang.seatdang.common.annotation.DoNotUse;
 import com.matdang.seatdang.waiting.dto.UpdateRequest;
@@ -9,9 +10,13 @@ import com.matdang.seatdang.waiting.repository.query.dto.WaitingDto;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingFacade;
+import java.time.LocalDateTime;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -98,24 +103,71 @@ public class WaitingService {
         }
     }
 
-    /**
-     * {@link RedissonLockWaitingFacade#updateStatus(UpdateRequest)} 을 사용하세요.
-     */
-    @DoNotUse(message = "이 메서드를 직접 사용하지 마세요.")
+//    @Transactional
+//    public int updateStatus(UpdateRequest updateRequest) {
+//        if (updateRequest.getChangeStatus() != null) {
+//            if (updateRequest.getChangeStatus() == 1) {
+//                int visited = waitingRepository.updateAllWaitingOrderByVisit(updateRequest.getStoreId());
+//                return waitingRepository.updateStatusByVisit(updateRequest.getWaitingNumber()) + visited;
+//            }
+//            if (updateRequest.getChangeStatus() == 2) {
+//                int canceled = waitingRepository.updateWaitingOrderByCancel(updateRequest.getStoreId(),
+//                        updateRequest.getWaitingOrder());
+//                return waitingRepository.updateStatusByShopCancel(updateRequest.getWaitingNumber()) + canceled;
+//            }
+//        }
+//
+//        return 0;
+//    }
+
     @Transactional
-    public int updateStatus(UpdateRequest updateRequest) {
+    public void updateStatus(UpdateRequest updateRequest) {
         if (updateRequest.getChangeStatus() != null) {
             if (updateRequest.getChangeStatus() == 1) {
-                int visited = waitingRepository.updateAllWaitingOrderByVisit(updateRequest.getStoreId());
-                return waitingRepository.updateStatusByVisit(updateRequest.getWaitingNumber()) + visited;
+                String key = "store:" + updateRequest.getStoreId();
+                List<Waiting> waitingList = redisTemplate.opsForHash().values(key).stream()
+                        .map(this::convertStringToWaiting) // JSON 문자열을 Waiting 객체로 변환
+                        .filter(waiting -> waiting.getWaitingStatus() == WaitingStatus.WAITING)
+                        .toList();
+
+                Map<String, String> updatedWaitings = new HashMap<>();
+                for (Waiting waiting : waitingList) {
+                    waiting.setWaitingOrder(waiting.getWaitingOrder() - 1);
+                    try {
+                        updatedWaitings.put(waiting.getWaitingNumber().toString(),
+                                objectMapper.writeValueAsString(waiting));
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }
+                redisTemplate.opsForHash().putAll(key, updatedWaitings);
+
+                Waiting waitingToUpdate = null;
+                try {
+                    waitingToUpdate = objectMapper.readValue(
+                            (String) redisTemplate.opsForHash()
+                                    .get(key, updateRequest.getWaitingNumber().toString()), Waiting.class);
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+
+                waitingToUpdate.setVisitedTime(LocalDateTime.now());
+                waitingToUpdate.setWaitingStatus(WaitingStatus.VISITED);
+                try {
+                    redisTemplate.opsForHash().put(key, waitingToUpdate.getWaitingNumber().toString(),
+                            objectMapper.writeValueAsString(waitingToUpdate));
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+
             }
-            if (updateRequest.getChangeStatus() == 2) {
-                int canceled = waitingRepository.updateWaitingOrderByCancel(updateRequest.getStoreId(),
-                        updateRequest.getWaitingOrder());
-                return waitingRepository.updateStatusByShopCancel(updateRequest.getWaitingNumber()) + canceled;
-            }
+//            if (updateRequest.getChangeStatus() == 2) {
+//                int canceled = waitingRepository.updateWaitingOrderByCancel(updateRequest.getStoreId(),
+//                        updateRequest.getWaitingOrder());
+//                return waitingRepository.updateStatusByShopCancel(updateRequest.getWaitingNumber()) + canceled;
+//            }
         }
 
-        return 0;
     }
 }
