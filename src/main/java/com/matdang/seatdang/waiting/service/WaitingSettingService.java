@@ -84,13 +84,15 @@ public class WaitingSettingService {
      */
     @DoNotUse(message = "이 메서드를 직접 사용하지 마세요.")
     @Transactional
-    public int changeWaitingStatus(int status, Long storeId) {
+    public void changeWaitingStatus(int status, Long storeId) {
         String key = "store:" + storeId;
         if (status == 1) {
-            return storeRepository.updateWaitingStatus(WaitingStatus.OPEN, storeId);
+             storeRepository.updateWaitingStatus(WaitingStatus.OPEN, storeId);
+            return;
         }
         if (status == 2) {
-            return storeRepository.updateWaitingStatus(WaitingStatus.CLOSE, storeId);
+            storeRepository.updateWaitingStatus(WaitingStatus.CLOSE, storeId);
+            return;
         }
         if (status == 3) {
             int result = storeRepository.updateWaitingStatus(WaitingStatus.UNAVAILABLE, storeId);
@@ -106,10 +108,8 @@ public class WaitingSettingService {
 
             saveWaitingsToRedis(updatedWaitings, storeId);
 
-            return waitingRepository.cancelAllWaiting(storeId) + result;
         }
 
-        return 0;
     }
 
     private Long decreaseWaitingOrder(Long storeId) {
