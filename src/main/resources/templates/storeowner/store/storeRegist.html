@@ -309,7 +309,7 @@
         let isclicked = 0;
         document.querySelector("#checkStoreNameBtn").onclick = () => {
             $.ajax({
-                url: '[[@{/storeowner/store/storeNameCheck}]]',
+                url: '[[@{/store/storeNameCheck}]]',
                 method: 'get',
                 data: {storeName: $('#storeName').val()},
                 dataType: 'json',
@@ -375,7 +375,7 @@
             formData.append('regularDayOff', $('#regularDayOff').val());
 
             $.ajax({
-                url: '[[@{/storeowner/store/storeRegist}]]',
+                url: '[[@{/store/storeRegist}]]',
                 method: 'post',
                 contentType: false,
                 processData: false,

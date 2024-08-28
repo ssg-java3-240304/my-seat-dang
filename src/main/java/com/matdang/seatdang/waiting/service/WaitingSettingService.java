@@ -1,12 +1,11 @@
 package com.matdang.seatdang.waiting.service;
 
-import com.matdang.seatdang.common.annotation.DoNotUse;
 import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.store.repository.query.dto.AvailableWaitingTime;
 import com.matdang.seatdang.store.repository.query.dto.StoreQueryRepository;
+import com.matdang.seatdang.store.vo.Status;
 import com.matdang.seatdang.store.vo.WaitingStatus;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
-import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingSettingFacade;
 import java.time.LocalTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,11 +37,6 @@ public class WaitingSettingService {
         return findResult;
     }
 
-
-    /**
-     * {@link RedissonLockWaitingSettingFacade#changeWaitingStatus(int, Long)}을 사용하세요.
-     */
-    @DoNotUse(message = "이 메서드를 직접 사용하지 마세요.")
     @Transactional
     public int changeWaitingStatus(int status, Long storeId) {
         if (status == 1) {

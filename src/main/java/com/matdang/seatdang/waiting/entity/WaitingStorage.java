@@ -1,8 +1,13 @@
 package com.matdang.seatdang.waiting.entity;
 
 import com.matdang.seatdang.payment.entity.BaseEntity;
-import jakarta.persistence.*;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -22,7 +27,7 @@ import org.springframework.data.domain.Persistable;
 @AllArgsConstructor
 public class WaitingStorage extends StorageBaseEntity implements Persistable<Long> {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private Long id;
 
     private Long waitingNumber;

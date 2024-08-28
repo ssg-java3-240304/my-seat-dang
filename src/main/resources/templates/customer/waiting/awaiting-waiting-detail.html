@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{customer/layout/default}">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Awaiting Waiting Detail</title>
@@ -22,23 +20,19 @@
             });
         };
     </script>
-    <!--    main page only css-->
-    <link th:href="@{/css/customer/home.css}" rel="stylesheet">
 </head>
 <body>
-<main layout:fragment="main">
-    <h1>Awaiting Waiting Detail</h1>
-    <p><strong>Waiting Number:</strong> <span th:text="${waitingDetailResponse.waitingNumber}"></span></p>
-    <p><strong>Waiting Order:</strong> <span th:text="${waitingDetailResponse.waitingOrder}"></span></p>
-    <p><strong>Waiting Status:</strong> <span th:text="${waitingDetailResponse.waitingStatus}"></span></p>
-    <p><strong>Created Date:</strong> <span th:text="${{waitingDetailResponse.createdDate}}"></span></p>
-    <p><strong>People Count:</strong> <span th:text="${waitingDetailResponse.peopleCount}"></span></p>
-    <p><strong>Store Name:</strong> <span th:text="${waitingDetailResponse.storeName}"></span></p>
-    <form id="cancelWaitingForm"  th:action="@{|/my-seat-dang/waiting/${waitingDetailResponse.waitingNumber}?storeId=${waitingDetailResponse.storeId}|}" method="post">
-        <button type="submit">Cancel Waiting</button>
-    </form>
+<h1>Awaiting Waiting Detail</h1>
+<p><strong>Waiting Number:</strong> <span th:text="${waitingDetailResponse.waitingNumber}"></span></p>
+<p><strong>Waiting Order:</strong> <span th:text="${waitingDetailResponse.waitingOrder}"></span></p>
+<p><strong>Waiting Status:</strong> <span th:text="${waitingDetailResponse.waitingStatus}"></span></p>
+<p><strong>Created Date:</strong> <span th:text="${{waitingDetailResponse.createdDate}}"></span></p>
+<p><strong>People Count:</strong> <span th:text="${waitingDetailResponse.peopleCount}"></span></p>
+<p><strong>Store Name:</strong> <span th:text="${waitingDetailResponse.storeName}"></span></p>
+<form id="cancelWaitingForm"  th:action="@{|/my-seat-dang/waiting/${waitingDetailResponse.waitingId}/awaiting/detail|}" method="post">
+    <button type="submit">Cancel Waiting</button>
+</form>
 
-    <a th:href="@{|/my-seat-dang/waiting?status=0&when=${when}|}" class="btn btn-secondary">Back to Waiting List</a>
-</main>
+<a th:href="@{|/my-seat-dang/waiting?status=0|}" class="btn btn-secondary">Back to Waiting List</a>
 </body>
 </html>

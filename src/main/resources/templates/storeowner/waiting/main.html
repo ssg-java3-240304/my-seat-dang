@@ -76,7 +76,7 @@
                 <thead>
                 <tr>
                     <th>Waiting Number</th>
-                    <th th:if="${status != 1}">Waiting Order</th>
+                    <th>Waiting Order</th>
                     <th>Customer Phone Number</th>
                     <th>People Count</th>
                     <th>Waiting Status</th>
@@ -89,7 +89,7 @@
                 <tbody>
                 <tr th:each="waiting : ${waitings}">
                     <td th:text="${waiting.waitingNumber}"></td>
-                    <td th:if="${status != 1}" th:text="${waiting.waitingOrder}"></td>
+                    <td th:text="${waiting.waitingOrder}"></td>
                     <td th:text="${waiting.customerPhone}"></td>
                     <td th:text="${waiting.peopleCount}"></td>
                     <td th:text="${waiting.waitingStatus}"></td>
@@ -100,13 +100,13 @@
                         <div class="row-buttons">
                             <form th:if="${waiting.waitingOrder == 1}" th:action="@{/store-owner/waiting}"
                                   method="post">
-                                <input type="hidden" name="waitingNumber" th:value="${waiting.waitingNumber}"/>
+                                <input type="hidden" name="id" th:value="${waiting.id}"/>
                                 <input type="hidden" name="storeId" th:value="${storeId}"/>
                                 <input type="hidden" name="changeStatus" value="1"/>
                                 <button type="submit" class="btn btn-primary">입장</button>
                             </form>
                             <form th:action="@{/store-owner/waiting}" method="post">
-                                <input type="hidden" name="waitingNumber" th:value="${waiting.waitingNumber}"/>
+                                <input type="hidden" name="id" th:value="${waiting.id}"/>
                                 <input type="hidden" name="storeId" th:value="${storeId}"/>
                                 <input type="hidden" name="waitingOrder" th:value="${waiting.waitingOrder}"/>
                                 <input type="hidden" name="changeStatus" value="2"/>
@@ -121,7 +121,7 @@
 
         <!-- Pagination Controls -->
         <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center" th:if="${totalPages >= 1}" >
+            <ul class="pagination justify-content-center">
                 <!-- Previous Button (Always Visible but Disabled if on First Page) -->
                 <li class="page-item">
                     <a class="page-link" th:href="${currentPage == 0} ? '#' : @{/store-owner/waiting(status=${status}, page=${currentPage - 1})}"

@@ -39,6 +39,7 @@ public class RestChatController {
                 .subscribeOn(Schedulers.boundedElastic())
                 .switchIfEmpty(Flux.empty()); // Flux가 비어 있을 경우 빈 Flux 반환
     }
+
     @CrossOrigin(origins = "*")
     @PostMapping("/chat")
     public Mono<Chat> setMsg(@RequestPart(value = "chat") Chat chat,

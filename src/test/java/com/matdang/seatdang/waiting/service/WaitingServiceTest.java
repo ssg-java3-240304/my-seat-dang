@@ -14,8 +14,10 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -87,7 +89,7 @@ class WaitingServiceTest {
         UpdateRequest updateRequest = new UpdateRequest();
         updateRequest.setChangeStatus(status);
         updateRequest.setStoreId(shopId);
-        updateRequest.setWaitingNumber(findWaitings.get(0).getId());
+        updateRequest.setId(findWaitings.get(0).getId());
         updateRequest.setWaitingOrder(1L);
 
         // when

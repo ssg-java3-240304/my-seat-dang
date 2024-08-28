@@ -67,45 +67,4 @@ class WaitingStorageRepositoryTest {
         assertThat(findWaitings.size()).isEqualTo(size);
     }
 
-    @Test
-    @DisplayName("상점id와 웨이팅 번호로 웨이팅 찾기")
-    void findByStoreIdAndWaitingNumber() {
-        // given
-        {
-            long i = 0;
-            for (WaitingStatus value : WaitingStatus.values()) {
-                for (int j = 0; j < 10; j++, i++) {
-                    waitingStorageRepository.save(WaitingStorage.builder()
-                            .waitingNumber(i)
-                            .waitingOrder(i)
-                            .storeId(1L)
-                            .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
-                            .waitingStatus(value)
-                            .visitedTime(null)
-                            .build());
-                }
-            }
-        }
-
-        for (long i = 0; i < 10; i++) {
-            waitingStorageRepository.save(WaitingStorage.builder()
-                    .waitingNumber(i)
-                    .waitingOrder(i)
-                    .storeId(2L)
-                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
-                    .waitingStatus(WaitingStatus.WAITING)
-                    .visitedTime(null)
-                    .build());
-        }
-        // when
-        em.flush();
-        em.clear();
-
-        WaitingStorage findResult = waitingStorageRepository.findByStoreIdAndWaitingNumber(2L, 0L);
-
-        // then
-        assertThat(findResult.getWaitingStatus()).isEqualTo(WaitingStatus.WAITING);
-
-    }
-
 }
