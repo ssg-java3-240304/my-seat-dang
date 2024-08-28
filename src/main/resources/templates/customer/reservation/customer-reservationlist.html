@@ -83,7 +83,6 @@
     <div class="container margin_detail">
         <div class="row">
             <div class="col-lg-6">
-
                 <div class="tabs_detail">
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
@@ -126,7 +125,7 @@
                                                     <li><strong>예약일</strong>[[*{reservedAt.toLocalDate()}]]</li>
                                                     <li><strong>예약시간</strong>[[*{reservedAt.toLocalTime()}]]</li>
                                                 </ul>
-                                                <p><a href="#" class="chat-button btn_1 gray"
+                                                <p th:if><a href="#" class="chat-button btn_1 gray"
                                                       th:data-reservation-id="*{reservationId}"
                                                       th:data-store-name="*{storeName}"
                                                       th:data-customer-name="*{customerName}"

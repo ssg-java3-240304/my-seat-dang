@@ -14,34 +14,90 @@
   <div class="container-my">
     <!-- Left Section: Reservations -->
     <div class="left-section">
-      <div class="box_general">
-        <div class="header_box">
-          <div class="filter">
+      <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="pills-A-tab" data-toggle="pill" data-target="#pills-A" type="button" role="tab" aria-controls="pills-A" aria-selected="true">전체예약</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="pills-B-tab" data-toggle="pill" data-target="#pills-B" type="button" role="tab" aria-controls="pills-B" aria-selected="false">결제 전</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="pills-C-tab" data-toggle="pill" data-target="#pills-C" type="button" role="tab" aria-controls="pills-C" aria-selected="false">예약확정</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="pills-D-tab" data-toggle="pill" data-target="#pills-D" type="button" role="tab" aria-controls="pills-D" aria-selected="false">방문완료</button>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-A" role="tabpanel" aria-labelledby="pills-A-tab" tabindex="0">
+          <div class="box_general">
+            <div class="header_box">
+              <div class="filter">
+              </div>
+            </div>
+            <div class="list_general">
+              <ul>
+                <li th:each="reservation : ${reservations}" th:object="${reservation}">
+                  <figure><img src="/img/admin/item_1.jpg" alt=""></figure>
+                  <h4 th:text="*{customerName}"></h4>
+                  <ul class="booking_list">
+                    <li><strong>예약일</strong>[[*{reservedAt.toLocalDate()}]]</li>
+                    <li><strong>예약시간</strong>[[*{reservedAt.toLocalTime()}]]</li>
+                  </ul>
+                  <p th:if><a href="#" class="chat-button btn_1 gray"
+                            th:data-reservation-id="*{reservationId}"
+                            th:data-store-name="*{storeName}"
+                            th:data-storeowner-name="*{storeOwnerName}"
+                            th:data-chat-url="${chatAccessUrl}">
+                    <i class="fa fa-fw fa-envelope"></i> 디자인 상담</a>
+                  </p>
+                  <ul class="buttons" th:if="!(${reservation.reservationStatus.toString().equals('CANCELED')} or ${reservation.reservationStatus.toString().equals('VISIT_COMPLETED')})">
+<!--                    <li><a href="#cancel-modal" class="btn_1 gray delete cancelBtn" data-bs-toggle="modal" th:data-cancel-reservation-id="*{reservationId}"><i class="fa fa-fw fa-times-circle-o"></i> 예약취소</a></li>-->
+                    <li><a href="#" class="btn_1 gray delete cancelBtn" data-bs-toggle="modal" th:data-cancel-reservation-id="*{reservationId}"><i class="fa fa-fw fa-times-circle-o"></i> 예약취소</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-        <div class="list_general">
-          <ul>
-            <li th:each="reservation : ${reservations}" th:object="${reservation}">
-              <figure><img src="/img/admin/item_1.jpg" alt=""></figure>
-              <h4 th:text="*{storeName}">Store Name</h4>
-              <ul class="booking_list">
-                <li><strong>Booking date</strong>Date</li>
-                <li><strong>Booking details</strong>Details</li>
-                <li><strong>Client</strong> <span th:text="*{storeOwnerName}"></span></li>
+        <div class="tab-pane fade" id="pills-B" role="tabpanel" aria-labelledby="pills-B-tab" tabindex="1">
+          <div class="box_general">
+            <div class="header_box">
+              <div class="filter">
+              </div>
+            </div>
+            <div class="list_general">
+              <ul>
+                <li th:each="reservation : ${reservations}" th:object="${reservation}">
+                  <figure><img src="/img/admin/item_1.jpg" alt=""></figure>
+                  <h4 th:text="*{storeName}">Store Name</h4>
+                  <ul class="booking_list">
+                    <li><strong>Booking date</strong>Date</li>
+                    <li><strong>Booking details</strong>Details</li>
+                    <li><strong>Client</strong> <span th:text="*{storeOwnerName}"></span></li>
+                  </ul>
+                  <p>
+                    <button class="chat-button btn btn-primary"
+                            th:data-reservation-id="*{reservationId}"
+                            th:data-store-name="*{storeName}"
+                            th:data-storeowner-name="*{storeOwnerName}"
+                            th:data-chat-url="${chatAccessUrl}">
+                      채팅하기
+                    </button>
+                  </p>
+                </li>
               </ul>
-              <p>
-                <button class="chat-button btn btn-primary"
-                        th:data-reservation-id="*{reservationId}"
-                        th:data-store-name="*{storeName}"
-                        th:data-storeowner-name="*{storeOwnerName}"
-                        th:data-chat-url="${chatAccessUrl}">
-                  채팅하기
-                </button>
-              </p>
-            </li>
-          </ul>
+            </div>
+          </div>
         </div>
+
+        <div class="tab-pane fade" id="pills-C" role="tabpanel" aria-labelledby="pills-C-tab" tabindex="2">...</div>
+        <div class="tab-pane fade" id="pills-D" role="tabpanel" aria-labelledby="pills-D-tab" tabindex="3">...</div>
       </div>
+
+
+
     </div>
 
     <!-- Right Section: Chat -->
@@ -513,9 +569,9 @@
       });
 
       // 결제 정보 모달 열기 버튼 이벤트 리스너 등록
-      document.querySelector("#open-payment-modal").addEventListener('click', () => {
-        $('#payment-info-modal').modal('show');
-      });
+      // document.querySelector("#open-payment-modal").addEventListener('click', () => {
+      //   $('#payment-info-modal').modal('show');
+      // });
     });
 
     async function addMessage(senderName, reservationId, chatUrl) {

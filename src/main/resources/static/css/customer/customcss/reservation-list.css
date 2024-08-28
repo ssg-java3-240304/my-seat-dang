@@ -231,3 +231,7 @@ a.btn_1:hover,
 .modal-body .form-control{
     height: 100px;
 }
+
+#chat-box{
+    height: 670px;
+}
