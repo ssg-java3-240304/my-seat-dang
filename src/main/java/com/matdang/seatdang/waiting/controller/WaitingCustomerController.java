@@ -13,6 +13,7 @@ import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingCustomerFa
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +33,9 @@ public class WaitingCustomerController {
     private final WaitingRepository waitingRepository;
     private final StoreRepository storeRepository;
     private final AuthService authService;
+
+    @Value("${spring.data.redis.host}")
+    private String host;
 
 //    @GetMapping("/test-store")
 //    public String showStore(@RequestParam(defaultValue = "2") Long storeId,
@@ -63,7 +67,8 @@ public class WaitingCustomerController {
 
         String referer = request.getHeader("Referer");
         // 유효한 referer URL인지 확인 (예: "https://example.com/somepage")
-        if (referer == null || !referer.startsWith("http://localhost:8080/my-seat-dang/store/detail/" + storeId)) {
+        if (referer == null || (!referer.startsWith("http://localhost:8080/my-seat-dang/store/detail/" + storeId)
+                && !referer.startsWith("http://" + host + ":8080/my-seat-dang/store/detail/" + storeId))) {
             return "error/403";
         }
 
@@ -155,7 +160,8 @@ public class WaitingCustomerController {
 
         if ("awaiting".equals(status)) {
             String referer = request.getHeader("Referer");
-            if (referer == null || !referer.startsWith("http://localhost:8080/my-seat-dang/waiting")) {
+            if (referer == null || (!referer.startsWith("http://localhost:8080/my-seat-dang/waiting")
+                    && !referer.startsWith("http://" + host + ":8080/my-seat-dang/waiting"))){
                 return "error/403";
             }
         }
