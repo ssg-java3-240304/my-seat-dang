@@ -359,6 +359,20 @@
             }
         }
 
+        document.addEventListener('DOMContentLoaded', function() {
+            // 쿼리 파라미터에서 탭 활성화 정보 읽기
+            const urlParams = new URLSearchParams(window.location.search);
+            const tabId = urlParams.get('tab');
+
+            if (tabId) {
+                const tabElement = document.querySelector(`a[href="#${tabId}"]`);
+                if (tabElement) {
+                    const tab = new bootstrap.Tab(tabElement);
+                    tab.show();
+                }
+            }
+        });
+
     </script>
 </div>
 </body>
