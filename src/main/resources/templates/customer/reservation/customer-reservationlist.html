@@ -600,7 +600,9 @@
         }
 
 
-        async function loadRecentMessages(reservationId, chatUrl) {
+        async function loadRecentMessages() {
+            let reservationId = window.reservationId;
+            let chatUrl = window.chatUrl;
             try {
                 // 최근 20개 메시지를 로드
                 const response = await fetch(`${chatUrl}/chat/roomNum/${reservationId}/messages?limit=20`);
@@ -631,9 +633,10 @@
             }
         }
 
-        async function loadMoreMessages(reservationId, chatUrl) {
+        async function loadMoreMessages() {
             console.log('loadMoreMessages function called');
-
+            let reservationId = window.reservationId;
+            let chatUrl = window.chatUrl;
             if (isLoading) {
                 console.log('Loading in progress');
                 return;
@@ -718,16 +721,13 @@
         <span class="time_date">${timeString}</span>
     </div>`;
 
-            // Append the payment info box to the chat box
             chatBox.append(paymentInfoBox);
 
-            // Get the newly created button and set the data attributes
             const paymentButton = paymentInfoBox.querySelector(".payment-btn");
             paymentButton.setAttribute("data-reservation-id", window.reservationId);
             paymentButton.setAttribute("data-customer-id", window.customerId);
             paymentButton.setAttribute("data-store-id", window.storeId);
 
-            // Attach the event listener for the payment button
             paymentButton.onclick = function() {
                 handlePayment(this);
             };
