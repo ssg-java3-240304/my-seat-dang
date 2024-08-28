@@ -125,7 +125,7 @@
                                                     <li><strong>예약일</strong>[[*{reservedAt.toLocalDate()}]]</li>
                                                     <li><strong>예약시간</strong>[[*{reservedAt.toLocalTime()}]]</li>
                                                 </ul>
-                                                <p th:if><a href="#" class="chat-button btn_1 gray"
+                                                <p><a href="#" class="chat-button btn_1 gray"
                                                       th:data-reservation-id="*{reservationId}"
                                                       th:data-store-name="*{storeName}"
                                                       th:data-customer-name="*{customerName}"
@@ -410,24 +410,6 @@
     <!--  여기까지 ai 모달-->
 
     <!--  예약 취소 모달 -->
-<!--    <div id="cancel-modal" class="cancel-modal">-->
-<!--        <div class="modal_header">-->
-<!--            <h3>예약 취소</h3>-->
-<!--        </div>-->
-<!--        <div class="sign-in-wrapper">-->
-<!--            <div class="modal-content">-->
-<!--                <span id="modal-close-btn" class="close">&times;</span>-->
-<!--&lt;!&ndash;                <div class="modal-header">예약 취소</div>&ndash;&gt;-->
-<!--                <div class="modal-body">-->
-<!--                    <p>취소 사유를 적어주세요:</p>-->
-<!--                    <textarea id="cancelReason" placeholder="취소 사유를 입력하세요"></textarea>-->
-<!--                </div>-->
-<!--                <div class="modal-footer">-->
-<!--                    <button id="submitCancel" class="btn">Submit</button>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
     <div id="cancel-modal" class="modal">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -437,7 +419,6 @@
                 </div>
                 <div class="modal-body">
                     <form id="cancelForm" th:action="@{/my-seat-dang/reservation/cancel}" method="POST">
-<!--                        <p th:text=""></p>-->
                         <input name="reservationId" id="cancel-reservId" hidden="hidden">
                         <div class="mb-3">
                             <label for="cancelReason" class="form-label">취소 사유</label>
@@ -453,7 +434,6 @@
             </div>
         </div>
     </div>
-
     <!-- 여기까지 취소 모달 -->
 
     <!-- 사용자 정의 모달 -->
@@ -1094,7 +1074,7 @@
             })
         });
 
-        // 폼 제출
+        // 예약 취소 폼 제출
         document.getElementById("submitCancel").onclick = function() {
             const reason = document.getElementById("cancelReason").value;
             if (reason.trim() === "") {

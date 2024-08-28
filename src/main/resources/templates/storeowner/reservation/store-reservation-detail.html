@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{storeowner/layout/default}"><head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- Your custom styles -->
+    <link th:href="@{/css/admin/custom.css}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/storeowner/storechatstyle.css}">
+    <link th:href="@{/css/admin/reservation-list.css}" rel="stylesheet">
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h3>예약 상세</h3>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">예약 정보</h5>
+                <table class="table table-bordered">
+                    <tbody>
+                    <tr>
+                        <th scope="row">예약번호</th>
+                        <td th:text="${reservation.reservationId}"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">예약자 이름</th>
+                        <td th:text="${reservation.customerName}"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">예약 시간</th>
+                        <td th:text="${reservation.reservedAt}"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">생성 시각</th>
+                        <td th:text="${reservation.createdAt}"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">예약 상태</th>
+                        <td th:text="${reservation.reservationStatus}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <h5 class="mt-4">예약한 메뉴</h5>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>메뉴명</th>
+                        <th>수량</th>
+                        <th>가격</th>
+                        <th>시트</th>
+                        <th>크기</th>
+                        <th>레터링</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="menu : ${reservation.orderedMenuList}">
+                        <td th:text="${menu.menuName}"></td>
+                        <td th:text="${menu.quantity}"></td>
+                        <td th:text="${menu.menuPrice}"></td>
+                        <td th:text="${menu.customMenuOpt.sheet}"></td>
+                        <td th:text="${menu.customMenuOpt.size}"></td>
+                        <td th:text="${menu.customMenuOpt.lettering}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer text-right">
+                <a th:href="@{/store-owner/reservation/list}" class="btn btn-primary">예약목록으로 돌아가기</a>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+<th:block layout:fragment="script">
+
+</th:block>
+</html>

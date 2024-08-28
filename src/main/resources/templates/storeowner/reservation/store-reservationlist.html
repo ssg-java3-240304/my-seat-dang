@@ -8,6 +8,7 @@
   <!-- Your custom styles -->
   <link th:href="@{/css/admin/custom.css}" rel="stylesheet">
   <link rel="stylesheet" type="text/css" th:href="@{/css/storeowner/storechatstyle.css}">
+  <link th:href="@{/css/admin/reservation-list.css}" rel="stylesheet">
 </head>
 <body>
 <main layout:fragment="content">
@@ -29,75 +30,144 @@
         </li>
       </ul>
 
+<!--      전체예약 시작-->
       <div class="tab-content" id="pills-tabContent">
         <div class="tab-pane fade show active" id="pills-A" role="tabpanel" aria-labelledby="pills-A-tab" tabindex="0">
           <div class="box_general">
-            <div class="header_box">
-              <div class="filter">
-              </div>
-            </div>
-            <div class="list_general">
+            <div class="list_general" th:each="reservation : ${reservations}" th:object="${reservation}">
               <ul>
-                <li th:each="reservation : ${reservations}" th:object="${reservation}">
-                  <figure><img src="/img/admin/item_1.jpg" alt=""></figure>
-                  <h4 th:text="*{customerName}"></h4>
+                <li>
+                  <h4>[[*{customerName}]]<i th:class="*{reservationStatus.toString().toLowerCase()}">[[*{reservationStatus.getDescription()}]]</i></h4>
                   <ul class="booking_list">
                     <li><strong>예약일</strong>[[*{reservedAt.toLocalDate()}]]</li>
                     <li><strong>예약시간</strong>[[*{reservedAt.toLocalTime()}]]</li>
                   </ul>
-                  <p th:if><a href="#" class="chat-button btn_1 gray"
+                  <p><a href="#" class="chat-button btn_1 gray" th:if="${storeType.toString().equals('CUSTOM')}"
                             th:data-reservation-id="*{reservationId}"
                             th:data-store-name="*{storeName}"
                             th:data-storeowner-name="*{storeOwnerName}"
                             th:data-chat-url="${chatAccessUrl}">
-                    <i class="fa fa-fw fa-envelope"></i> 디자인 상담</a>
+                  <i class="fa fa-fw fa-envelope"></i> 디자인 상담</a>
+                    <br th:if="!${reservation.reservationStatus.toString().equals('CUSTOM')}"></br>
                   </p>
-                  <ul class="buttons" th:if="!(${reservation.reservationStatus.toString().equals('CANCELED')} or ${reservation.reservationStatus.toString().equals('VISIT_COMPLETED')})">
-<!--                    <li><a href="#cancel-modal" class="btn_1 gray delete cancelBtn" data-bs-toggle="modal" th:data-cancel-reservation-id="*{reservationId}"><i class="fa fa-fw fa-times-circle-o"></i> 예약취소</a></li>-->
-                    <li><a href="#" class="btn_1 gray delete cancelBtn" data-bs-toggle="modal" th:data-cancel-reservation-id="*{reservationId}"><i class="fa fa-fw fa-times-circle-o"></i> 예약취소</a></li>
+                  <ul class="buttons my_detail">
+                    <li><a href="#detail" class="btn_1 gray" onclick="submitDetailForm(this)" th:data-detail-reservation-id="*{reservationId}"><i class="fa fa-fw fa-times-circle-o"></i> 예약상세</a></li>
                   </ul>
+                  <th:block th:if="!(${reservation.reservationStatus.toString().equals('CANCELED')} or ${reservation.reservationStatus.toString().equals('VISIT_COMPLETED')})">
+                    <ul class="buttons my_confirm">
+                      <li><a href="#complete" class="btn_1 gray" onclick="submitCompleteForm(this)" th:data-complete-reservation-id="*{reservationId}"><i class="fa fa-fw fa-times-circle-o"></i> 방문완료</a></li>
+                    </ul>
+                    <ul class="buttons my_cancel">
+                      <li><a href="#cancel-modal" class="btn_1 gray delete cancelBtn" data-toggle="modal" th:data-cancel-reservation-id="*{reservationId}"><i class="fa fa-fw fa-times-circle-o"></i> 예약취소</a></li>
+                    </ul>
+                  </th:block>
                 </li>
               </ul>
             </div>
           </div>
         </div>
+<!--        전체예약 끝-->
+
+<!--        에약준비 시작-->
         <div class="tab-pane fade" id="pills-B" role="tabpanel" aria-labelledby="pills-B-tab" tabindex="1">
           <div class="box_general">
             <div class="header_box">
-              <div class="filter">
-              </div>
             </div>
-            <div class="list_general">
+            <div class="list_general" th:each="reservation : ${reservations}" th:object="${reservation}" th:if="${reservation.reservationStatus.toString().equals('PENDING')} or ${reservation.reservationStatus.toString().equals('AWAITING_PAYMENT')} or ${reservation.reservationStatus.toString().equals('AWAITING_CUSTOM_PAYMENT')}">
               <ul>
-                <li th:each="reservation : ${reservations}" th:object="${reservation}">
-                  <figure><img src="/img/admin/item_1.jpg" alt=""></figure>
-                  <h4 th:text="*{storeName}">Store Name</h4>
+                <li>
+                  <h4>[[*{customerName}]]<i th:class="*{reservationStatus.toString().toLowerCase()}">[[*{reservationStatus.getDescription()}]]</i></h4>
                   <ul class="booking_list">
-                    <li><strong>Booking date</strong>Date</li>
-                    <li><strong>Booking details</strong>Details</li>
-                    <li><strong>Client</strong> <span th:text="*{storeOwnerName}"></span></li>
+                    <li><strong>예약일</strong>[[*{reservedAt.toLocalDate()}]]</li>
+                    <li><strong>예약시간</strong>[[*{reservedAt.toLocalTime()}]]</li>
                   </ul>
-                  <p>
-                    <button class="chat-button btn btn-primary"
-                            th:data-reservation-id="*{reservationId}"
-                            th:data-store-name="*{storeName}"
-                            th:data-storeowner-name="*{storeOwnerName}"
-                            th:data-chat-url="${chatAccessUrl}">
-                      채팅하기
-                    </button>
+                  <p><a href="#" class="chat-button btn_1 gray" th:if="${storeType.toString().equals('CUSTOM')}"
+                        th:data-reservation-id="*{reservationId}"
+                        th:data-store-name="*{storeName}"
+                        th:data-storeowner-name="*{storeOwnerName}"
+                        th:data-chat-url="${chatAccessUrl}">
+                    <i class="fa fa-fw fa-envelope"></i> 디자인 상담</a>
+                    <br th:if="!${reservation.reservationStatus.toString().equals('CUSTOM')}"></br>
+                  </p>
+                  <th:block th:if="!(${reservation.reservationStatus.toString().equals('CANCELED')} or ${reservation.reservationStatus.toString().equals('VISIT_COMPLETED')})">
+                    <ul class="buttons my_confirm">
+                      <li><a href="#complete" class="btn_1 gray" onclick="submitCompleteForm(this)" th:data-complete-reservation-id="*{reservationId}"><i class="fa fa-fw fa-times-circle-o"></i> 방문완료</a></li>
+                    </ul>
+                    <ul class="buttons my_cancel">
+                      <li><a href="#cancel-modal" class="btn_1 gray delete cancelBtn" data-toggle="modal" th:data-cancel-reservation-id="*{reservationId}"><i class="fa fa-fw fa-times-circle-o"></i> 예약취소</a></li>
+                    </ul>
+                  </th:block>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+<!--        결제 준비 끝-->
+
+<!--        예약확정 시작-->
+        <div class="tab-pane fade" id="pills-C" role="tabpanel" aria-labelledby="pills-C-tab" tabindex="2">
+          <div class="box_general">
+            <div class="list_general" th:each="reservation : ${reservations}" th:object="${reservation}"  th:if="${reservation.reservationStatus.toString().equals('BEFORE_VISIT')}">
+              <ul>
+                <li>
+                  <h4>[[*{customerName}]]<i th:class="*{reservationStatus.toString().toLowerCase()}">[[*{reservationStatus.getDescription()}]]</i></h4>
+                  <ul class="booking_list">
+                    <li><strong>예약일</strong>[[*{reservedAt.toLocalDate()}]]</li>
+                    <li><strong>예약시간</strong>[[*{reservedAt.toLocalTime()}]]</li>
+                  </ul>
+                  <p><a class="chat-button btn_1 gray" th:if="${storeType.toString().equals('CUSTOM')}"
+                        th:data-reservation-id="*{reservationId}"
+                        th:data-store-name="*{storeName}"
+                        th:data-storeowner-name="*{storeOwnerName}"
+                        th:data-chat-url="${chatAccessUrl}">
+                    <i class="fa fa-fw fa-envelope"></i> 디자인 상담</a>
+                    <br th:if="!${reservation.reservationStatus.toString().equals('CUSTOM')}"></br>
+                  </p>
+                  <th:block th:if="!(${reservation.reservationStatus.toString().equals('CANCELED')} or ${reservation.reservationStatus.toString().equals('VISIT_COMPLETED')})">
+                    <ul class="buttons my_confirm">
+                      <li><a href="#complete" class="btn_1 gray" onclick="submitCompleteForm(this)" th:data-complete-reservation-id="*{reservationId}"><i class="fa fa-fw fa-times-circle-o"></i> 방문완료</a></li>
+                    </ul>
+                    <ul class="buttons my_cancel">
+                      <li><a href="#cancel-modal" class="btn_1 gray delete cancelBtn" data-toggle="modal" th:data-cancel-reservation-id="*{reservationId}"><i class="fa fa-fw fa-times-circle-o"></i> 예약취소</a></li>
+                    </ul>
+                  </th:block>
+                    <ul class="buttons my_detail">
+                      <li><a href="#detail" class="btn_1 gray" data-toggle="modal" th:data-detail-reservation-id="*{reservationId}"><i class="fa fa-fw fa-times-circle-o"></i> 상세보기</a></li>
+                    </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+<!--        예약확정 끝-->
+
+<!--        방문완료 시작-->
+        <div class="tab-pane fade" id="pills-D" role="tabpanel" aria-labelledby="pills-D-tab" tabindex="3">
+          <div class="box_general">
+            <div class="list_general" th:each="reservation : ${reservations}" th:object="${reservation}"  th:if="${reservation.reservationStatus.toString().equals('VISIT_COMPLETED')}">
+              <ul>
+                <li>
+                  <h4>[[*{customerName}]]<i th:class="*{reservationStatus.toString().toLowerCase()}">[[*{reservationStatus.getDescription()}]]</i></h4>
+                  <ul class="booking_list">
+                    <li><strong>예약일</strong>[[*{reservedAt.toLocalDate()}]]</li>
+                    <li><strong>예약시간</strong>[[*{reservedAt.toLocalTime()}]]</li>
+                  </ul>
+                  <p><a class="chat-button btn_1 gray" th:if="${storeType.toString().equals('CUSTOM')}"
+                        th:data-reservation-id="*{reservationId}"
+                        th:data-store-name="*{storeName}"
+                        th:data-storeowner-name="*{storeOwnerName}"
+                        th:data-chat-url="${chatAccessUrl}">
+                    <i class="fa fa-fw fa-envelope"></i> 디자인 상담</a>
+                    <br th:if="!${reservation.reservationStatus.toString().equals('CUSTOM')}"></br>
                   </p>
                 </li>
               </ul>
             </div>
           </div>
         </div>
+<!--        방문완료 끝-->
 
-        <div class="tab-pane fade" id="pills-C" role="tabpanel" aria-labelledby="pills-C-tab" tabindex="2">...</div>
-        <div class="tab-pane fade" id="pills-D" role="tabpanel" aria-labelledby="pills-D-tab" tabindex="3">...</div>
       </div>
-
-
-
     </div>
 
     <!-- Right Section: Chat -->
@@ -157,6 +227,44 @@
       </div>
     </div>
   </div>
+
+  <!--  예약 취소 모달 -->
+  <div id="cancel-modal" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">예약 취소</h4>
+          <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="cancelForm" th:action="@{/store-owner/reservation/cancel}" method="POST">
+            <input name="reservationId" id="cancel-reservId" hidden="hidden">
+            <div class="mb-3">
+              <label for="cancelReason" class="form-label">취소 사유</label>
+              <textarea class="form-control" id="cancelReason" name="reason" placeholder="취소 사유를 입력하세요"></textarea>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+              <button type="submit" id="submitCancel" class="btn btn-primary">제출</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 여기까지 취소 모달 -->
+
+<!--  예약완료 히든 인풋-->
+  <form id="completeForm" method="post" th:action="@{/store-owner/reservation/complete}">
+    <input type="hidden" name="reservationId" id="comp_reservationId">
+  </form>
+<!--  예약완료 인풋 끝-->
+
+<!--  예약상세 히든 인풋-->
+<form id="detailForm" method="get" th:action="@{/store-owner/reservation/detail}">
+  <input type="hidden" name="reservationId" id="detail_reservationId">
+</form>
+<!--  예약상세 인풋 끝-->
 
 </main>
 </body>
@@ -612,6 +720,45 @@
       filePreview.innerHTML = ""; // 파일 미리보기 영역 초기화
       scrollToBottom();
     }
+
+    // 예약 취소 모달 이벤트 처리 시작
+    document.querySelectorAll(".cancelBtn").forEach(button =>{
+      button.addEventListener('click', function(){
+        document.querySelector("#cancel-reservId").value = this.getAttribute('data-cancel-reservation-id');
+      })
+    });
+
+    // 예약취소 폼 제출
+    document.getElementById("submitCancel").onclick = function() {
+      const reason = document.getElementById("cancelReason").value;
+      if (reason.trim() === "") {
+        alert("취소 사유를 입력해주세요.");
+      } else {
+        document.getElementById("cancelForm").submit();
+      }
+    }
+
+    //예약완료 폼 제출
+    function submitCompleteForm(element) {
+      // 예약 ID를 추출하여 hidden input 필드에 설정
+      const complete_id = element.getAttribute('data-complete-reservation-id');
+      document.getElementById('comp_reservationId').value = complete_id;
+
+      // 폼을 제출
+      document.getElementById('completeForm').submit();
+    }
+
+    //예약상세 폼 제출
+    function submitDetailForm(element) {
+      // 예약 ID를 추출하여 hidden input 필드에 설정
+      const detail_id = element.getAttribute('data-detail-reservation-id');
+      document.getElementById('detail_reservationId').value = detail_id;
+
+      // 폼을 제출
+      document.getElementById('detailForm').submit();
+    }
+
+
   </script>
 </div>
 </html>

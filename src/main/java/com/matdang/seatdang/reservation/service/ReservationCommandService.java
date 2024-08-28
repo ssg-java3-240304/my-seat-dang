@@ -80,4 +80,7 @@ public class ReservationCommandService {
     }
 
 
+    public void updateStatusToCompleted(Long reservationId) {
+        updateStatusCustomReservation(reservationId, ReservationStatus.VISIT_COMPLETED);
+    }
 }
