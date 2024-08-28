@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -40,16 +41,22 @@ public class WaitingCustomerController {
     private final StoreRepository storeRepository;
     private final AuthService authService;
 
-    @GetMapping("/test-store")
-    public String showStore(@RequestParam(defaultValue = "2") Long storeId, Model model) {
-        Long memberId = authService.getAuthenticatedMember().getMemberId();
-        boolean isRegistered = waitingRepository.isRegisteredWaiting(storeId, memberId);
 
-        model.addAttribute("storeId", storeId);
-        model.addAttribute("isRegistered", isRegistered);
+    @Value("${spring.data.redis.host}")
+    private String host;
 
-        return "customer/waiting/test-store";
-    }
+//    @GetMapping("/test-store")
+//    public String showStore(@RequestParam(defaultValue = "2") Long storeId,
+//                            Model model) {
+//        Long memberId = authService.getAuthenticatedMember().getMemberId();
+//        boolean isWaitingExists = waitingCustomerService.isWaitingExists(storeId);
+//
+//        model.addAttribute("storeStatus", storeRepository.findByStoreId(storeId).getStoreSetting().getWaitingStatus().toString());
+//        model.addAttribute("storeId", storeId);
+//        model.addAttribute("isWaitingExists", isWaitingExists);
+//
+//        return "customer/waiting/test-store";
+//    }
 
     /**
      * TODO : 삭제 필요
@@ -62,7 +69,9 @@ public class WaitingCustomerController {
     public String readyWaiting(@PathVariable Long storeId, Model model, HttpServletRequest request) {
         String referer = request.getHeader("Referer");
         // 유효한 referer URL인지 확인 (예: "https://example.com/somepage")
-        if (referer == null || !referer.startsWith("http://localhost:8080/my-seat-dang/test-store")) {
+
+        if (referer == null || (!referer.startsWith("http://localhost:8080/my-seat-dang/store/detail/" + storeId)
+                && !referer.startsWith("http://" + host + ":8080/my-seat-dang/store/detail/" + storeId))) {
             return "error/403";
         }
 
@@ -119,7 +128,8 @@ public class WaitingCustomerController {
         // Referer 검증 (awaiting 상태일 때만)
         if ("awaiting".equals(status)) {
             String referer = request.getHeader("Referer");
-            if (referer == null || !referer.startsWith("http://localhost:8080/my-seat-dang/waiting")) {
+            if (referer == null || (!referer.startsWith("http://localhost:8080/my-seat-dang/waiting")
+                    && !referer.startsWith("http://" + host + ":8080/my-seat-dang/waiting"))){
                 return "error/403";
             }
         }
