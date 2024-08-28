@@ -11,24 +11,26 @@ import org.springframework.data.repository.query.Param;
 
 public interface WaitingStorageQueryRepository extends JpaRepository<WaitingStorage, Long> {
     @Query("select new com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto("
-            + " w.id, s.storeName, w.waitingNumber, w.customerInfo.peopleCount, w.waitingStatus)"
+            + " w.waitingNumber, s.storeId, s.storeName, w.customerInfo.peopleCount, w.waitingStatus)"
             + " from WaitingStorage w"
             + " join Store s on w.storeId = s.storeId"
             + " where w.customerInfo.customerId = :customerId"
-            + " and w.waitingStatus = :waitingStatus")
+            + " and w.waitingStatus = :waitingStatus"
+            + " order by w.createdDate desc")
     Page<WaitingInfoDto> findAllByCustomerIdAndWaitingStatus(@Param("customerId") Long customerId,
                                                              @Param("waitingStatus") WaitingStatus waitingStatus,
                                                              Pageable pageable);
 
     @Query("select new com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto("
-            + " w.id, s.storeName, w.waitingNumber, w.customerInfo.peopleCount, w.waitingStatus)"
+            + " w.waitingNumber, s.storeId, s.storeName, w.customerInfo.peopleCount, w.waitingStatus)"
             + " from WaitingStorage w"
             + " join Store s on w.storeId = s.storeId"
             + " where w.customerInfo.customerId = :customerId"
             + " and w.waitingStatus in ("
             + " com.matdang.seatdang.waiting.entity.WaitingStatus.SHOP_CANCELED,"
             + " com.matdang.seatdang.waiting.entity.WaitingStatus.NO_SHOW,"
-            + " com.matdang.seatdang.waiting.entity.WaitingStatus.CUSTOMER_CANCELED)")
+            + " com.matdang.seatdang.waiting.entity.WaitingStatus.CUSTOMER_CANCELED)"
+            + " order by w.createdDate desc")
     Page<WaitingInfoDto> findAllByCustomerIdAndCancelStatus(@Param("customerId") Long customerId,
                                                             Pageable pageable);
 

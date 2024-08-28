@@ -83,6 +83,7 @@
     <div class="container margin_detail">
         <div class="row">
             <div class="col-lg-6">
+
                 <div class="tabs_detail">
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
@@ -419,6 +420,7 @@
                 </div>
                 <div class="modal-body">
                     <form id="cancelForm" th:action="@{/my-seat-dang/reservation/cancel}" method="POST">
+                        <!--                        <p th:text=""></p>-->
                         <input name="reservationId" id="cancel-reservId" hidden="hidden">
                         <div class="mb-3">
                             <label for="cancelReason" class="form-label">취소 사유</label>
@@ -442,9 +444,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">케이크 시안을 만들어 드릴게요</h5>
-<!--                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-<!--                        <span aria-hidden="true">&times;</span>-->
-<!--                    </button>-->
+                    <!--                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+                    <!--                        <span aria-hidden="true">&times;</span>-->
+                    <!--                    </button>-->
                 </div>
                 <div class="modal-body">
                     원하는 케이크에 대해 설명해주세요:
@@ -475,16 +477,16 @@
 </body>
 <div layout:fragment="js">
     <!-- Bootstrap core JavaScript -->
-<!--    <script src="/vendor/admin/jquery/jquery.min.js"></script>-->
-<!--    <script src="/vendor/admin/bootstrap/js/bootstrap.bundle.min.js"></script>-->
+    <!--    <script src="/vendor/admin/jquery/jquery.min.js"></script>-->
+    <!--    <script src="/vendor/admin/bootstrap/js/bootstrap.bundle.min.js"></script>-->
     <!-- Core plugin JavaScript -->
     <script th:src="@{/vendor/admin/jquery-easing/jquery.easing.min.js}"></script>
     <!-- Page level plugin JavaScript -->
     <script th:src="@{/vendor/admin/jquery.magnific-popup.min.js}"></script>
     <!-- Custom scripts for all pages -->
-<!--    <script src="/js/admin/admin.js"></script>-->
+    <!--    <script src="/js/admin/admin.js"></script>-->
     <!-- 이 페이지 전용 스크립트 -->
-<!--    <script th:src="@{/js/customer/specific_detail.js}"></script>-->
+    <!--    <script th:src="@{/js/customer/specific_detail.js}"></script>-->
     <script th:src="@{/js/customer/sticky_sidebar.min.js}"></script>
 
     <script th:inline="javascript">
@@ -579,7 +581,9 @@
         }
 
 
-        async function loadRecentMessages(reservationId, chatUrl) {
+        async function loadRecentMessages() {
+            let reservationId = window.reservationId;
+            let chatUrl = window.chatUrl;
             try {
                 // 최근 20개 메시지를 로드
                 const response = await fetch(`${chatUrl}/chat/roomNum/${reservationId}/messages?limit=20`);
@@ -610,9 +614,10 @@
             }
         }
 
-        async function loadMoreMessages(reservationId, chatUrl) {
+        async function loadMoreMessages() {
             console.log('loadMoreMessages function called');
-
+            let reservationId = window.reservationId;
+            let chatUrl = window.chatUrl;
             if (isLoading) {
                 console.log('Loading in progress');
                 return;
@@ -697,16 +702,13 @@
         <span class="time_date">${timeString}</span>
     </div>`;
 
-            // Append the payment info box to the chat box
             chatBox.append(paymentInfoBox);
 
-            // Get the newly created button and set the data attributes
             const paymentButton = paymentInfoBox.querySelector(".payment-btn");
             paymentButton.setAttribute("data-reservation-id", window.reservationId);
             paymentButton.setAttribute("data-customer-id", window.customerId);
             paymentButton.setAttribute("data-store-id", window.storeId);
 
-            // Attach the event listener for the payment button
             paymentButton.onclick = function() {
                 handlePayment(this);
             };
@@ -1271,11 +1273,6 @@
                 }, 3000);
             }
         });
-
-
-
-
-
     </script>
 </div>
 </html>

@@ -4,6 +4,9 @@ spring:
   data:
     mongodb:
       uri: ${MONGO_DB_URI}
+    redis:
+      host: ${HOST}
+      port: 6379
   servlet:
     multipart:
       max-file-size: 10MB
@@ -13,7 +16,7 @@ spring:
 # profile관리
   profiles:
     default: test
-  #    active: prod
+  #    active: prodmyseatdangdb
 
 #  # ai api 추가
   openai:
