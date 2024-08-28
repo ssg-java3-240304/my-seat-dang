@@ -12,12 +12,12 @@ $('.custom_select select').niceSelect();
 
 // Carousel categories home page
 	$('.categories_carousel').owlCarousel({
-		center: false,
-		items: 2,
+		center: false, // 원래 false였음
+		items: 3, // 변경함
 		loop: false,
 		margin: 20,
 		dots:false,
-		nav: true,
+		nav: false, // 원래 false였음
 		lazyLoad:true,
         navText: ["<i class='arrow_carrot-left'></i>","<i class='arrow_carrot-right'></i>"],
 		responsive: {
@@ -39,12 +39,12 @@ $('.custom_select select').niceSelect();
 			1025: {
 				nav: false,
 				dots:true,
-				items: 4
+				items: 3 // 변경함
 			},
 			1340: {
 				nav: true,
 				dots:false,
-				items: 5
+				items: 3 // 변경함
 			}
 		}
 	});

@@ -85,8 +85,9 @@
                     <div class="form-group">
                         <label>추가 매장 이미지 (최대 3개)</label>
                         <form enctype="multipart/form-data">
-                            <div id="previewContainer">
-                                <div id="preview2"></div> <!-- 이미지 미리보기 컨테이너 -->
+                            <!-- 이미지 미리보기 영역 -->
+                            <div id="imagePreviews" class="d-flex">
+                                <!-- 기존 이미지 미리보기 영역은 JavaScript에서 동적으로 채워짐 -->
                             </div>
                             <input type="file" id="images" multiple>
                             <input type="hidden" id="originalImages" th:value="${store.images}">
@@ -186,7 +187,7 @@
             <!-- /row-->
         </div>
         <!-- /box_general-->
-        <button type="submit" id="submitBtn" class="btn_1 medium">등록</button>
+        <button type="submit" id="submitBtn" class="btn_1 medium">수정</button>
     </form>
 </div>
 
@@ -281,12 +282,13 @@
             // 현재 매장명과 새로 입력한 매장명이 같은 경우
             if (newStoreName === currentStoreName) {
                 alert("현재 매장명과 동일합니다.");
+                isClicked = 1;
                 return;
             }
 
             // 매장명이 다를 경우 중복 체크 수행
             $.ajax({
-                url: '[[@{/store/storeNameCheck}]]',
+                url: '[[@{/storeowner/store/storeNameCheck}]]',
                 method: 'get',
                 data: {storeName: newStoreName},
                 dataType: 'json',
@@ -326,52 +328,97 @@
                 }
             });
 
-            const preview2 = document.getElementById('preview2');
-            const imagesInput = document.getElementById('images');
-            const originalImagesInput = document.getElementById('originalImages');
+            const imageInput = document.getElementById('images');
+            const imagePreviews = document.getElementById('imagePreviews');
+            const originalImages = document.getElementById('originalImages').value;
 
-            // 원래 이미지 URL 리스트 가져오기
-            const originalImages = JSON.parse(originalImagesInput.value || '[]');
-
-            // 기존 이미지 미리보기 생성
-            function createImagePreview(url) {
-                if (url) {
-                    const img = document.createElement('img');
-                    img.src = url;
-                    img.className = 'photo-preview';
-                    img.style.width = '200px'; // 미리보기 크기 설정
-                    img.style.height = '200px'; // 미리보기 크기 설정
-                    preview2.appendChild(img);
-                }
+            // 기존 이미지가 있는 경우 미리보기 표시
+            if (originalImages) {
+                const imageUrls = originalImages.replace(/[\[\]']+/g, '').split(',').map(url => url.trim()); // 서버에서 오는 이미지를 ','로 구분
+                imageUrls.forEach(url => {
+                    if (url.trim()) {
+                        const img = document.createElement('img');
+                        img.src = url;
+                        img.classList.add('imagePreviews');
+                        img.style.width = '200px';
+                        img.style.height = '200px';
+                        img.style.marginRight = '10px'; // 이미지 간격 조정
+                        imagePreviews.appendChild(img);
+                    }
+                });
             }
 
-            // 페이지 로드 시 기존 이미지 미리보기 생성
-            originalImages.forEach(createImagePreview);
+            imageInput.addEventListener('change', () => {
+                const files = imageInput.files;
 
-            // 파일 선택 시 미리보기 업데이트
-            imagesInput.addEventListener('change', function(event) {
-                const files = event.target.files;
+                // 기존 미리보기 이미지를 지운다
+                imagePreviews.innerHTML = '';
 
-                // 기존 미리보기 이미지 제거
-                preview2.innerHTML = '';
-
-                // 새로 선택된 이미지 미리보기 생성
+                // 새로운 이미지 파일을 미리보기로 추가한다
                 for (let i = 0; i < files.length; i++) {
-                    const file = files[i];
-                    if (file) {
+                    if (files[i] && files[i].type.startsWith('image/')) {
                         const reader = new FileReader();
-                        reader.onload = function(e) {
+                        reader.onload = (event) => {
                             const img = document.createElement('img');
-                            img.src = e.target.result;
-                            img.className = 'photo-preview';
-                            img.style.width = '200px'; // 미리보기 크기 설정
-                            img.style.height = '200px'; // 미리보기 크기 설정
-                            preview2.appendChild(img);
+                            img.src = event.target.result;
+                            img.classList.add('img-preview');
+                            img.style.width = '200px';
+                            img.style.height = '200px';
+                            img.style.marginRight = '10px'; // 이미지 간격 조정
+                            imagePreviews.appendChild(img);
+                            console.log(img.src);
                         };
-                        reader.readAsDataURL(file);
+                        reader.readAsDataURL(files[i]);
                     }
                 }
             });
+
+            // const preview2 = document.getElementById('preview2');
+            // const imagesInput = document.getElementById('images');
+            // const originalImagesInput = document.getElementById('originalImages');
+            //
+            // // 원래 이미지 URL 리스트 가져오기
+            // const originalImages = JSON.parse(originalImagesInput.value || '[]');
+            //
+            // // 기존 이미지 미리보기 생성
+            // function createImagePreview(url) {
+            //     if (url) {
+            //         const img = document.createElement('img');
+            //         img.src = url;
+            //         img.className = 'photo-preview';
+            //         img.style.width = '200px'; // 미리보기 크기 설정
+            //         img.style.height = '200px'; // 미리보기 크기 설정
+            //         preview2.appendChild(img);
+            //     }
+            // }
+            //
+            // // 페이지 로드 시 기존 이미지 미리보기 생성
+            // originalImages.forEach(createImagePreview);
+            //
+            // // 파일 선택 시 미리보기 업데이트
+            // imagesInput.addEventListener('change', function(event) {
+            //     const files = event.target.files;
+            //
+            //     // 기존 미리보기 이미지 제거
+            //     preview2.innerHTML = '';
+            //
+            //     // 새로 선택된 이미지 미리보기 생성
+            //     for (let i = 0; i < files.length; i++) {
+            //         const file = files[i];
+            //         if (file) {
+            //             const reader = new FileReader();
+            //             reader.onload = function(e) {
+            //                 const img = document.createElement('img');
+            //                 img.src = e.target.result;
+            //                 img.className = 'photo-preview';
+            //                 img.style.width = '200px'; // 미리보기 크기 설정
+            //                 img.style.height = '200px'; // 미리보기 크기 설정
+            //                 preview2.appendChild(img);
+            //             };
+            //             reader.readAsDataURL(file);
+            //         }
+            //     }
+            // });
         });
 
         // 주소 구분자로 나눠서 디폴드값으로 보여주기
@@ -421,7 +468,7 @@
         document.querySelector("#submitBtn").onclick = (e) => {
             e.preventDefault();
 
-            if (isclicked !== 1){
+            if (isClicked !== 1){
                 alert("매장명 중복체크를 해주세요.");
                 return;
             }
@@ -455,18 +502,27 @@
             if (newThumbnail) {
                 formData.append('thumbnail', newThumbnail);
             } else {
-                formData.append('thumbnail', originalThumbnail); // 기존 파일명 전송
+                formData.append('originalThumbnail', originalThumbnail);
             }
 
             const extraFiles = document.getElementById('images').files;
-            const originalImages = document.querySelector('#originalImages').value.split(',').filter(Boolean);
+            let originalImages = document.querySelector('#originalImages').value;
 
-            for (let i = 0; i < extraFiles.length; i++) {
-                formData.append('images', extraFiles[i]);
+            // 대괄호 제거 및 원본 이미지 URL 문자열 처리
+            if (originalImages) {
+                originalImages = originalImages.replace(/[\[\]']+/g, '').split(',').map(url => url.trim());
             }
-            originalImages.forEach(img => {
-                formData.append('images', img);
-            });
+
+            if (extraFiles.length > 0) {
+                for (let i = 0; i < extraFiles.length; i++) {
+                    formData.append('images', extraFiles[i]);
+                }
+            } else {
+                originalImages.forEach(img => {
+                    formData.append('originalImages', img);
+                    console.log(img);
+                });
+            }
 
             formData.append('storeAddress', fullAddress);
             formData.append('openTime', $('#openTime').val());
@@ -477,7 +533,7 @@
             formData.append('regularDayOff', $('#regularDayOff').val());
 
             $.ajax({
-                url: '[[@{/store/storeUpdate}]]',
+                url: '[[@{/storeowner/store/storeUpdate}]]',
                 method: 'post',
                 contentType: false,
                 processData: false,

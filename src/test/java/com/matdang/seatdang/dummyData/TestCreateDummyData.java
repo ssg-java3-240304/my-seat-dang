@@ -3,8 +3,8 @@ package com.matdang.seatdang.dummyData;
 import com.matdang.seatdang.auth.service.AuthService;
 import com.matdang.seatdang.common.storeEnum.StoreType;
 import com.matdang.seatdang.member.entity.*;
-import com.matdang.seatdang.member.vo.StoreVo;
 import com.matdang.seatdang.member.repository.MemberRepository;
+import com.matdang.seatdang.member.vo.StoreVo;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.store.vo.Status;
@@ -17,14 +17,11 @@ import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
 import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingCustomerFacade;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -36,12 +33,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
-import java.util.Set;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -202,7 +197,7 @@ public class TestCreateDummyData {
                             .endBreakTime(LocalTime.of(16, 0))
                             .lastOrder(LocalTime.of(21, 30))
                             .closeTime(LocalTime.of(22, 0))
-                            .regularDayOff("Sunday")
+                            .regularDayOff("목요일")
                             .thumbnail("https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/99397_60912_2445.jpg")
                             .storeSetting(new StoreSetting())
                             .notice("Closed on public holidays.")
@@ -236,7 +231,7 @@ public class TestCreateDummyData {
                             .endBreakTime(LocalTime.of(16, 0))
                             .lastOrder(LocalTime.of(21, 30))
                             .closeTime(LocalTime.of(22, 0))
-                            .regularDayOff("Sunday")
+                            .regularDayOff("금요일")
                             .thumbnail("https://cdn.foodnews.co.kr/news/photo/202010/75572_32980_2446.jpg")
                             .description("사전 주문 케이크만 판매 합니다. 예약 후 방문 해주세요")
                             .notice("Closed on public holidays.")
@@ -403,8 +398,7 @@ public class TestCreateDummyData {
                             .lastOrder(LocalTime.of(21, 30))
                             .closeTime(LocalTime.of(22, 0))
                             .regularDayOff("Sunday")
-                            .thumbnail(
-                                    "https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/0a2e250f-1a1a-4805-bf17-559d7c4105cf.png")
+                            .thumbnail("https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/0a2e250f-1a1a-4805-bf17-559d7c4105cf.png")
                             .description("A cozy place to enjoy specialty coffee and pastries.")
                             .notice("Closed on public holidays.")
                             .phone("555-1234-567")
@@ -413,8 +407,7 @@ public class TestCreateDummyData {
                                     .reservationOpenTime(LocalTime.of(10, 0))
                                     .reservationCloseTime(LocalTime.of(20, 0))
                                     .reservationStatus(Status.OFF)
-                                    .waitingTime(new WaitingTime(LocalTime.of(10, 0), LocalTime.of(20, 0),
-                                            LocalTime.of(0, 10)))
+                                    .waitingTime(new WaitingTime(LocalTime.of(10, 0), LocalTime.of(20, 0), LocalTime.of(0, 10)))
                                     .waitingStatus(WaitingStatus.OPEN)
                                     .build()
                             )
@@ -431,8 +424,7 @@ public class TestCreateDummyData {
                             .lastOrder(LocalTime.of(21, 30))
                             .closeTime(LocalTime.of(22, 0))
                             .regularDayOff("Sunday")
-                            .thumbnail(
-                                    "https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/0a2e250f-1a1a-4805-bf17-559d7c4105cf.png")
+                            .thumbnail("https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/0a2e250f-1a1a-4805-bf17-559d7c4105cf.png")
                             .description("A cozy place to enjoy specialty coffee and pastries.")
                             .notice("Closed on public holidays.")
                             .phone("555-1234-567")
@@ -441,8 +433,7 @@ public class TestCreateDummyData {
                                     .reservationOpenTime(LocalTime.of(10, 0))
                                     .reservationCloseTime(LocalTime.of(20, 0))
                                     .reservationStatus(Status.ON)
-                                    .waitingTime(new WaitingTime(LocalTime.of(10, 0), LocalTime.of(20, 0),
-                                            LocalTime.of(0, 10)))
+                                    .waitingTime(new WaitingTime(LocalTime.of(10, 0), LocalTime.of(20, 0), LocalTime.of(0, 10)))
                                     .waitingStatus(WaitingStatus.UNAVAILABLE)
                                     .build()
                             )
@@ -458,9 +449,8 @@ public class TestCreateDummyData {
                             .endBreakTime(LocalTime.of(16, 0))
                             .lastOrder(LocalTime.of(21, 30))
                             .closeTime(LocalTime.of(22, 0))
-                            .regularDayOff("Sunday")
-                            .thumbnail(
-                                    "https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/0a2e250f-1a1a-4805-bf17-559d7c4105cf.png")
+                            .regularDayOff("일요일")
+                            .thumbnail("https://kr.object.ncloudstorage.com/myseatdang-bucket/sample-folder/0a2e250f-1a1a-4805-bf17-559d7c4105cf.png")
                             .description("A cozy place to enjoy specialty coffee and pastries.")
                             .notice("Closed on public holidays.")
                             .phone("555-1234-567")
@@ -469,13 +459,11 @@ public class TestCreateDummyData {
                                     .reservationOpenTime(LocalTime.of(10, 0))
                                     .reservationCloseTime(LocalTime.of(20, 0))
                                     .reservationStatus(Status.ON)
-                                    .waitingTime(new WaitingTime(LocalTime.of(10, 0), LocalTime.of(20, 0),
-                                            LocalTime.of(0, 10)))
+                                    .waitingTime(new WaitingTime(LocalTime.of(10, 0), LocalTime.of(20, 0), LocalTime.of(0, 10)))
                                     .waitingStatus(WaitingStatus.UNAVAILABLE)
                                     .build()
                             )
                             .build();
-
                 }
                 //when
                 store = storeRepository.save(store);
