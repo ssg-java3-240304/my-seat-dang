@@ -534,34 +534,6 @@
                 additionalMarginTop: 25
             });
         })(window.jQuery);
-
-        async function handlePayment(button, reservationId, customerId, storeId) {
-            const partnerOrderId = reservationId;
-            const partnerUserId = customerId;
-            const shopId = storeId;
-            console.log(reservationId, customerId, storeId);
-            const paragraphs = button.parentNode.querySelectorAll('p');
-            let itemName = '';
-            let quantity = '';
-            let totalAmount = '';
-
-            paragraphs.forEach(p => {
-                if (p.textContent.includes('상품명:')) {
-                    itemName = p.textContent.replace('상품명:', '').trim();
-                } else if (p.textContent.includes('수량:')) {
-                    quantity = p.textContent.replace('수량:', '').trim();
-                } else if (p.textContent.includes('결제 금액:')) {
-                    totalAmount = p.textContent.replace('결제 금액:', '').trim().replace(/[^0-9]/g, '');
-                }
-            });
-
-            const taxFreeAmount = 0;
-
-            const queryString = `partnerOrderId=${encodeURIComponent(partnerOrderId)}&partnerUserId=${encodeURIComponent(partnerUserId)}&shopId=${encodeURIComponent(shopId)}&itemName=${encodeURIComponent(itemName)}&quantity=${encodeURIComponent(quantity)}&totalAmount=${encodeURIComponent(totalAmount)}&taxFreeAmount=${encodeURIComponent(taxFreeAmount)}`;
-
-            window.location.href = `/payment/request?${queryString}`;
-        }
-
         function scrollToBottom() {
             const chatSection = document.querySelector('.chat_section');
             chatSection.scrollTop = chatSection.scrollHeight;
@@ -626,28 +598,6 @@
             chatBox.append(receivedBox);
             scrollToBottom();
         }
-
-        function addPaymentInfoToChat(data, reservationId, customerId, storeId) {
-            console.log('Adding payment info:', data); // 데이터 확인
-
-            const chatBox = document.querySelector("#chat-box");
-            const date = new Date(data.createdAt);
-            const timeString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
-            const paymentInfoBox = document.createElement("div");
-            paymentInfoBox.className = "payment-box";
-            paymentInfoBox.innerHTML = `
-            <div class="payment-customer">
-                <p><strong>상품명:</strong> ${data.itemName}</p>
-                <p><strong>수량:</strong> ${data.quantity}</p>
-                <p><strong>결제 금액:</strong> ${data.totalAmount}원</p>
-                <button class="btn btn-primary btn-sm payment-btn" onclick="handlePayment(this, '${reservationId}', '${customerId}', '${storeId}')">결제하기</button>
-                <div></div>
-                <span class="time_date">${timeString}</span>
-            </div>`;
-            chatBox.append(paymentInfoBox);
-            scrollToBottom();
-        }
-
 
 
         async function loadRecentMessages(reservationId, chatUrl) {
@@ -716,6 +666,9 @@
                         if (!loadedMessageIds.has(messageId)) {
                             loadedMessageIds.add(messageId);
                             const messageElement = document.createElement("div");
+                            if (message.itemName && message.quantity && message.totalAmount) {
+                                addPaymentInfoToChat(message);
+                            }
                             if (message.sender === window.customerName) {
                                 messageElement.className = "outgoing_msg";
                                 messageElement.innerHTML = getSendMsgBox(message);
@@ -744,6 +697,76 @@
                 isLoading = false;
             }
         }
+
+        function addPaymentInfoToChat(data) {
+            console.log('Adding payment info:', data); // 데이터 확인
+
+            const chatBox = document.querySelector("#chat-box");
+            const date = new Date(data.createdAt);
+            const timeString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+            const paymentInfoBox = document.createElement("div");
+            paymentInfoBox.className = "payment-box";
+
+            // Create the inner HTML for payment info
+            paymentInfoBox.innerHTML = `
+    <div class="payment-customer">
+        <p><strong>상품명:</strong> ${data.itemName}</p>
+        <p><strong>수량:</strong> ${data.quantity}</p>
+        <p><strong>결제 금액:</strong> ${data.totalAmount}원</p>
+        <button class="btn btn-primary btn-sm payment-btn">결제하기</button>
+        <div></div>
+        <span class="time_date">${timeString}</span>
+    </div>`;
+
+            // Append the payment info box to the chat box
+            chatBox.append(paymentInfoBox);
+
+            // Get the newly created button and set the data attributes
+            const paymentButton = paymentInfoBox.querySelector(".payment-btn");
+            paymentButton.setAttribute("data-reservation-id", window.reservationId);
+            paymentButton.setAttribute("data-customer-id", window.customerId);
+            paymentButton.setAttribute("data-store-id", window.storeId);
+
+            // Attach the event listener for the payment button
+            paymentButton.onclick = function() {
+                handlePayment(this);
+            };
+
+            scrollToBottom();
+        }
+        async function handlePayment(button) {
+            const reservationId = button.getAttribute('data-reservation-id');
+            const customerId = button.getAttribute('data-customer-id');
+            const storeId = button.getAttribute('data-store-id');
+
+            // Undefined 체크
+            if (!reservationId || !customerId || !storeId) {
+                console.error("Invalid data attributes: ", { reservationId, customerId, storeId });
+                return; // 필요한 값이 없는 경우 진행 중단
+            }
+
+            const paragraphs = button.parentNode.querySelectorAll('p');
+            let itemName = '';
+            let quantity = '';
+            let totalAmount = '';
+
+            paragraphs.forEach(p => {
+                if (p.textContent.includes('상품명:')) {
+                    itemName = p.textContent.replace('상품명:', '').trim();
+                } else if (p.textContent.includes('수량:')) {
+                    quantity = p.textContent.replace('수량:', '').trim();
+                } else if (p.textContent.includes('결제 금액:')) {
+                    totalAmount = p.textContent.replace('결제 금액:', '').trim().replace(/[^0-9]/g, '');
+                }
+            });
+
+            const taxFreeAmount = 0;
+
+            const queryString = `partnerOrderId=${encodeURIComponent(reservationId)}&partnerUserId=${encodeURIComponent(customerId)}&shopId=${encodeURIComponent(storeId)}&itemName=${encodeURIComponent(itemName)}&quantity=${encodeURIComponent(quantity)}&totalAmount=${encodeURIComponent(totalAmount)}&taxFreeAmount=${encodeURIComponent(taxFreeAmount)}`;
+
+            window.location.href = `/payment/request?${queryString}`;
+        }
+
 
         document.querySelectorAll('.chat-button').forEach(button => {
             button.addEventListener('click', async function () {
@@ -777,6 +800,8 @@
                 window.customerName = customerName;
                 window.reservationId = reservationId;
                 window.chatUrl = chatUrl;
+                window.customerId = customerId;
+                window.storeId = storeId;
 
                 console.log("Reservation ID:", reservationId);
                 console.log("Store Name:", storeName);

@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -62,9 +63,21 @@ public class StoreAdminService {
         );
     }
 
-    public void update(StoreUpdateRequestDto dto) {
-        String uploadedThumbnailUrl = fileService.uploadSingleFile(dto.getThumbnail(), "store-thumbnail"); // filePath: NCP에 생성될 파일폴더명 지정
-        List<String> uploadedImagesUrl = fileService.uploadFiles(dto.getImages(), "store-images");
+    public void update(StoreUpdateRequestDto dto, String originalThumbnail, List<String> originalImages) {
+        String uploadedThumbnailUrl = "";
+        List<String> uploadedImagesUrl = new ArrayList<>();
+        if (originalThumbnail == null && dto.getThumbnail().getSize() > 0){
+            uploadedThumbnailUrl = fileService.uploadSingleFile(dto.getThumbnail(), "store-thumbnail"); // filePath: NCP에 생성될 파일폴더명 지정
+        } else {
+            uploadedThumbnailUrl = originalThumbnail;
+        }
+
+        if (originalImages == null && !dto.getImages().isEmpty()){
+            uploadedImagesUrl = fileService.uploadFiles(dto.getImages(), "store-images");
+        } else {
+            uploadedImagesUrl.addAll(originalImages);
+        }
+
         log.debug("thumbnail ={}", uploadedThumbnailUrl);
         log.debug("images ={}", uploadedImagesUrl);
 
@@ -84,23 +97,23 @@ public class StoreAdminService {
                 .regularDayOff(dto.getRegularDayOff())
                 .build();
 
-        if(dto.getThumbnail().getSize()>0){
-            String folderName = "store-thumbnail";
-            String uploadedFileUrl = fileService.uploadSingleFile(dto.getThumbnail(), folderName);
-            if(!uploadedFileUrl.isEmpty()){
-                log.debug("Thumbnail URL: {}", uploadedFileUrl);
-                storeDetailDto.setThumbnail(uploadedFileUrl);
-            }
-        }
-
-        if(!dto.getImages().isEmpty()){
-            String folderName = "store-images";
-            List<String> uploadedFileUrl = fileService.uploadFiles(dto.getImages(), folderName);
-            if(!uploadedFileUrl.isEmpty()){
-                log.debug("Images URL: {}", uploadedFileUrl);
-                storeDetailDto.setImages(uploadedFileUrl);
-            }
-        }
+//        if(dto.getThumbnail().getSize()>0){
+//            String folderName = "store-thumbnail";
+//            String uploadedFileUrl = fileService.uploadSingleFile(dto.getThumbnail(), folderName);
+//            if(!uploadedFileUrl.isEmpty()){
+//                log.debug("Thumbnail URL: {}", uploadedFileUrl);
+//                storeDetailDto.setThumbnail(uploadedFileUrl);
+//            }
+//        }
+//
+//        if(!dto.getImages().isEmpty()){
+//            String folderName = "store-images";
+//            List<String> uploadedFileUrl = fileService.uploadFiles(dto.getImages(), folderName);
+//            if(!uploadedFileUrl.isEmpty()){
+//                log.debug("Images URL: {}", uploadedFileUrl);
+//                storeDetailDto.setImages(uploadedFileUrl);
+//            }
+//        }
 
         Store store = storeRepository.findByStoreId(dto.getStoreId());
         store.update(storeDetailDto);
