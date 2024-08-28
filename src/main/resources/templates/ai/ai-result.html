@@ -213,7 +213,9 @@
 
 
                         // 새로운 블록을 추가
-                        $('#image-container').append(newImageBlock);
+                        // $('#image-container').append(newImageBlock);
+                        $('#image-container').prepend(newImageBlock); // 생성된게 맨 앞으로
+
 
                         // 폼 초기화
                         $('#generateForm')[0].reset();
