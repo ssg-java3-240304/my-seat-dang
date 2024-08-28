@@ -36,12 +36,11 @@
 </head>
 <body>
 <main class="bg_gray pattern" layout:fragment="main">
-    <div class="container">
         <div class="row">
             <div class="col-xl-8 col-lg-7 col-md-7 d-none d-md-block">
                 <div class="breadcrumbs blog">
                     <ul>
-                        <li><a href="#">마이페이지</a></li>
+                        <li>AI 이미지생성</a></li>
                         <li>시안생성하기</a></li>
                         <!--				                <li>Page active</li>-->
                     </ul>
@@ -61,199 +60,53 @@
     </div>
     <!-- /page_header -->
 
-    <div class="container margin_30_40">
+    <div class="container">
         <div class="row">
-            <div class="col-lg-9">
-                <!--                <div class="row">-->
-                <!--&lt;!&ndash;                    동적으로 추가될 공간&ndash;&gt;-->
-                <!--                    <div class="col-md-6">-->
-                <!--                        <article class="blog">-->
-                <!--                            <figure>-->
-                <!--                                <img src="img/blog-1.jpg" alt="">-->
-                <!--                            </figure>-->
-                <!--                            <div class="post_info">-->
-                <!--                                <small>Category - 20 Nov. 2017</small>-->
-                <!--                                <h2>Ea exerci option hendrerit</a></h2>-->
-                <!--                                <p>Quodsi sanctus pro eu, ne audire scripserit quo. Vel an enim offendit salutandi, in eos quod omnes epicurei, ex veri qualisque scriptorem mei.</p>-->
-                <!--                                <ul>-->
-                <!--                                    <li>-->
-                <!--                                        <div class="thumb"><img src="img/avatar.jpg" alt=""></div> Admin-->
-                <!--                                    </li>-->
-                <!--                                    <li><i class="icon_comment_alt"></i>20</li>-->
-                <!--                                </ul>-->
-                <!--                            </div>-->
-                <!--                        </article>-->
-                <!--                        &lt;!&ndash; /article &ndash;&gt;-->
-                <!--                    </div>-->
-                <div class="row" id="image-container">
-                    <!--                    여기에 새로운 이미지 블록 추가-->
-                    <th:block th:each="image : ${imageList}">
-                        <div class="col-md-6">
-                            <article class="blog">
-                                <figure>
-                                    <img th:src="${image.generatedUrl}" alt="Generated Image">
-                                    <!--                                    <span class="ribbon off">old</span>-->
-                                </figure>
-                                <div class="post_info">
-                                    <small th:text="${#temporals.format(image.createdAt, 'yyyy-MM-dd')}">생성 날짜</small>
-                                    <h3 th:text="${image.inputText}"></h3>
-                                    <p>이 이미지는 AI로 생성된 케이크 시안입니다.</p>
-                                </div>
-                            </article>
-                        </div>
-                    </th:block>
-                </div>
-
-
-                <!--                    여기까지였다.-->
-
-                <!-- /col -->
-                <!--                    <div class="col-md-6">-->
-                <!--                        <article class="blog">-->
-                <!--                            <figure>-->
-                <!--                                <a href="blog-post.html"><img src="img/blog-6.jpg" alt="">-->
-                <!--                                    <div class="preview"><span>Read more</span></div>-->
-                <!--                                </a>-->
-                <!--                            </figure>-->
-                <!--                            <div class="post_info">-->
-                <!--                                <small>Category - 20 Nov. 2017</small>-->
-                <!--                                <h2><a href="blog-post.html">Te congue everti his salutandi</a></h2>-->
-                <!--                                <p>Quodsi sanctus pro eu, ne audire scripserit quo. Vel an enim offendit salutandi, in eos quod omnes epicurei, ex veri qualisque scriptorem mei.</p>-->
-                <!--                                <ul>-->
-                <!--                                    <li>-->
-                <!--                                        <div class="thumb"><img src="img/avatar.jpg" alt=""></div> Admin-->
-                <!--                                    </li>-->
-                <!--                                    <li><i class="icon_comment_alt"></i>20</li>-->
-                <!--                                </ul>-->
-                <!--                            </div>-->
-                <!--                        </article>-->
-                <!--                        &lt;!&ndash; /article &ndash;&gt;-->
-                <!--                    </div>-->
-                <!-- /col -->
-            </div>
-            <!-- /row -->
-            <div class="row">
-                <div class="col-lg-9">
-                    <div class="widget">
-                        <div class="widget-title first">
-                            <!--							음..-->
-                            <h4>AI 시안생성 하기</h4>
-                        </div>
-                        <ul class="comments-list">
-                            <!--							<li>-->
-                            <!--								<div class="alignleft">-->
-                            <!--									<a href="#0"><img src="img/blog-5.jpg" alt=""></a>-->
-                            <!--								</div>-->
-                            <!--								<small>Category - 11.08.2016</small>-->
-                            <!--								<h3><a href="#" title="">Verear qualisque ex minimum...</a></h3>-->
-                            <!--							</li>-->
+            <div class="col-lg-12">
+                <div class="widget">
+                    <div class="widget-title first text-center">
+                        <h4 style="font-size: 1.5rem; font-weight: 600;">AI로 케이크 시안생성 하기</h4>
+                    </div>
+                    <div class="form-container p-4 shadow-sm rounded" style="background-color: #f9f9f9; max-width: 600px; margin: 0 auto;">
+                        <form id="generateForm" method="post">
                             <div class="form-group">
-                                <!--                        <form id="generateForm" th:action="@{/ai/generate}" method="post">-->
-                                <form id="generateForm" method="post">
-                                    <!--                                <label for="cakeDescription">케이크 시안</label>-->
-                                    <!--                                <textarea id="cakeDescription" name="cakeDescription" class="form-control" style="height: 180px;" placeholder="만들고 싶은 케이크를 작성해주세요"></textarea>-->
-
-                                    <label for="cakePrompt">케이크 시안 </label>
-                                    <input id="cakePrompt" type="text" name="cakeDescription" class="form-control"
-                                           placeholder="원하는 케이크시안을 적어주세요" style="height: 180px;;">
-
-                                    <input type="submit" value="생성" class="btn btn-primary" style="margin-top: 20px;">
-                                </form>
+                                <label for="cakePrompt" style="font-size: 1.2rem; font-weight: 500;">케이크 시안</label>
+                                <input id="cakePrompt" type="text" name="cakeDescription" class="form-control"
+                                       placeholder="원하는 케이크 시안을 적어주세요"
+                                       style="height: 120px; font-size: 1rem; padding: 10px; border-radius: 10px; border: 1px solid #ccc;">
                             </div>
-                        </ul>
+                            <div class="text-center mt-4">
+                                <input type="submit" value="생성" class="btn btn-primary btn-lg px-5" style="border-radius: 30px;">
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-            <div class="pagination_fg">
-                <a href="#">&laquo;</a>
-                <a href="#" class="active">1</a>
-                <a href="#">2</a>
-                <a href="#">3</a>
-                <a href="#">4</a>
-                <a href="#">5</a>
-                <a href="#">&raquo;</a>
-            </div>
-
         </div>
-        <!-- /col -->
-
-        <!--        <aside class="col-lg-3">-->
-        <!--            <div class="widget">-->
-        <!--                <div class="widget-title first">-->
-        <!--                    &lt;!&ndash;							음..&ndash;&gt;-->
-        <!--                    <h4>AI 시안생성 하기</h4>-->
-        <!--                </div>-->
-        <!--                <ul class="comments-list">-->
-        <!--                    &lt;!&ndash;							<li>&ndash;&gt;-->
-        <!--                    &lt;!&ndash;								<div class="alignleft">&ndash;&gt;-->
-        <!--                    &lt;!&ndash;									<a href="#0"><img src="img/blog-5.jpg" alt=""></a>&ndash;&gt;-->
-        <!--                    &lt;!&ndash;								</div>&ndash;&gt;-->
-        <!--                    &lt;!&ndash;								<small>Category - 11.08.2016</small>&ndash;&gt;-->
-        <!--                    &lt;!&ndash;								<h3><a href="#" title="">Verear qualisque ex minimum...</a></h3>&ndash;&gt;-->
-        <!--                    &lt;!&ndash;							</li>&ndash;&gt;-->
-        <!--                    <div class="form-group">-->
-        <!--                        &lt;!&ndash;                        <form id="generateForm" th:action="@{/ai/generate}" method="post">&ndash;&gt;-->
-        <!--                        <form id="generateForm" method="post">-->
-        <!--                            &lt;!&ndash;                                <label for="cakeDescription">케이크 시안</label>&ndash;&gt;-->
-        <!--                            &lt;!&ndash;                                <textarea id="cakeDescription" name="cakeDescription" class="form-control" style="height: 180px;" placeholder="만들고 싶은 케이크를 작성해주세요"></textarea>&ndash;&gt;-->
-
-        <!--                            <label for="cakePrompt">케이크 시안 </label>-->
-        <!--                            <input id="cakePrompt" type="text" name="cakeDescription" class="form-control"-->
-        <!--                                   placeholder="원하는 케이크시안을 적어주세요" style="height: 180px;;">-->
-
-        <!--                            <input type="submit" value="생성" class="btn btn-primary" style="margin-top: 20px;">-->
-        <!--                        </form>-->
-        <!--                    </div>-->
-        <!--                </ul>-->
-        <!--            </div>-->
-        <!--            &lt;!&ndash; /widget &ndash;&gt;-->
-        <!--            &lt;!&ndash;					<div class="widget">&ndash;&gt;-->
-        <!--            &lt;!&ndash;						<div class="widget-title">&ndash;&gt;-->
-        <!--            &lt;!&ndash;							<h4>Categories</h4>&ndash;&gt;-->
-        <!--            &lt;!&ndash;						</div>&ndash;&gt;-->
-        <!--            &lt;!&ndash;						<ul class="cats">&ndash;&gt;-->
-        <!--            &lt;!&ndash;							<li><a href="#">Food <span>(12)</span></a></li>&ndash;&gt;-->
-        <!--            &lt;!&ndash;							<li><a href="#">Places to visit <span>(21)</span></a></li>&ndash;&gt;-->
-        <!--            &lt;!&ndash;							<li><a href="#">New Places <span>(44)</span></a></li>&ndash;&gt;-->
-        <!--            &lt;!&ndash;							<li><a href="#">Suggestions and guides <span>(31)</span></a></li>&ndash;&gt;-->
-        <!--            &lt;!&ndash;						</ul>&ndash;&gt;-->
-        <!--            &lt;!&ndash;					</div>&ndash;&gt;-->
-        <!--            &lt;!&ndash; /widget &ndash;&gt;-->
-        <!--            &lt;!&ndash;					<div class="widget">&ndash;&gt;-->
-        <!--            &lt;!&ndash;						<div class="widget-title">&ndash;&gt;-->
-        <!--            &lt;!&ndash;							<h4>Popular Tags</h4>&ndash;&gt;-->
-        <!--            &lt;!&ndash;						</div>&ndash;&gt;-->
-        <!--            &lt;!&ndash;						<div class="tags">&ndash;&gt;-->
-        <!--            &lt;!&ndash;							<a href="#">Food</a>&ndash;&gt;-->
-        <!--            &lt;!&ndash;							<a href="#">Bars</a>&ndash;&gt;-->
-        <!--            &lt;!&ndash;							<a href="#">Cooktails</a>&ndash;&gt;-->
-        <!--            &lt;!&ndash;							<a href="#">Shops</a>&ndash;&gt;-->
-        <!--            &lt;!&ndash;							<a href="#">Best Offers</a>&ndash;&gt;-->
-        <!--            &lt;!&ndash;							<a href="#">Transports</a>&ndash;&gt;-->
-        <!--            &lt;!&ndash;							<a href="#">Restaurants</a>&ndash;&gt;-->
-        <!--            &lt;!&ndash;						</div>&ndash;&gt;-->
-        <!--            &lt;!&ndash;					</div>&ndash;&gt;-->
-        <!--            &lt;!&ndash; /widget &ndash;&gt;-->
-        <!--        </aside>-->
-        <!-- /aside -->
     </div>
-    <!-- /row -->
-    </div>
-    <!-- /container -->
 
-    <!-- 로딩 인디케이터 추가 -->
-    <!--    <div id="loading-indicator" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">-->
-    <!--        <p>케이크 시안 생성중입니다 기다려 주세요🍰 <br> -마싯당-</p>-->
-    <!--    </div>-->
-    <!-- 로딩 인디케이터 추가 -->
-    <!--    <div id="loading-indicator" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">-->
-    <!--        <div style="background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); text-align: center; max-width: 300px;">-->
-    <!--            <p style="margin: 0; font-size: 16px; font-weight: 500;">-->
-    <!--                케이크 시안 생성중입니다 <br> 조금만 기다려 주세요🍰 <br> -마싯당- -->
-    <!--            </p>-->
-    <!--        </div>-->
-    <!--    </div>-->
-    <!--    더 큰 버전-->
+
+
+    <!-- 이미지 3개씩 출력 -->
+    <div class="container margin_30_40">
+        <div class="row" id="image-container">
+            <th:block th:each="image : ${imageList}">
+                <div class="col-md-4">
+                    <article class="blog">
+                        <figure style="width: 100%; height: 300px; overflow: hidden;">
+                            <img th:src="${image.generatedUrl}" alt="Generated Image" style="width: 100%; height: 100%; object-fit: cover;">
+                        </figure>
+                        <div class="post_info">
+                            <small th:text="${#temporals.format(image.createdAt, 'yyyy-MM-dd')}">생성 날짜</small>
+                            <h3 th:text="${image.inputText}"></h3>
+                            <p>이 이미지는 AI로 생성된 케이크 시안입니다.</p>
+                        </div>
+                    </article>
+                </div>
+            </th:block>
+        </div>
+    </div>
+
     <div id="loading-indicator"
          style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
         <div style="background-color: #fff; padding: 40px; border-radius: 20px; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); text-align: center; max-width: 500px;">
@@ -267,6 +120,14 @@
     </div>
 
 
+    <!-- 페이지 번호 버튼 -->
+    <nav aria-label="Page navigation" class="text-center">
+        <ul class="pagination justify-content-center" id="pagination">
+            <!-- 페이지 번호 버튼들이 동적으로 생성됩니다 -->
+        </ul>
+    </nav>
+
+
 </main>
 <!-- /main -->
 
@@ -275,6 +136,26 @@
 
 <div class="layer"></div><!-- Opacity Mask Menu Mobile -->
 <!-- /Sign In Modal -->
+
+<!--&lt;!&ndash; 페이지 번호 버튼 &ndash;&gt;-->
+<!--<nav aria-label="Page navigation" class="text-center">-->
+<!--    <ul class="pagination justify-content-center" id="pagination">-->
+<!--        &lt;!&ndash; 페이지 번호 버튼들이 동적으로 생성됩니다 &ndash;&gt;-->
+<!--    </ul>-->
+<!--</nav>-->
+
+
+<!--<div class="pagination_fg" style="display: block; visibility: visible;">-->
+<!--    <a href="javascript:void(0);" onclick="loadPage(1)">&laquo;</a> &lt;!&ndash; First page or previous page functionality &ndash;&gt;-->
+<!--    <a href="javascript:void(0);" class="active" onclick="loadPage(1)">1</a>-->
+<!--    <a href="javascript:void(0);" onclick="loadPage(2)">2</a>-->
+<!--    <a href="javascript:void(0);" onclick="loadPage(3)">3</a>-->
+<!--    <a href="javascript:void(0);" onclick="loadPage(4)">4</a>-->
+<!--    <a href="javascript:void(0);" onclick="loadPage(5)">5</a>-->
+<!--    <a href="javascript:void(0);" onclick="loadPage(5)">&raquo;</a> &lt;!&ndash; Last page or next page functionality &ndash;&gt;-->
+<!--</div>-->
+
+
 
 <!-- COMMON SCRIPTS -->
 <div layout:fragment="js">
@@ -357,6 +238,86 @@
                     $('#generateForm').find('input[type="submit"]').removeAttr('disabled');
                 }
             });
+        });
+    </script>
+    <script>
+        // 페이지 로드 시 첫 번째 페이지 자동 로드
+        $(document).ready(function () {
+            loadPage(1);  // 첫 번째 페이지 로드
+        });
+
+        function loadPage(page) {
+            $.ajax({
+                url: `/api/ai-result?page=${page}&size=6`,  // 요청할 URL과 쿼리 파라미터
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // 서버 응답 확인
+                    console.log(data);
+
+                    // 이미지 목록 업데이트
+                    $('#image-container').empty();
+                    data.imageList.forEach(function (image) {
+                        $('#image-container').append(`
+                    <div class="col-md-4">
+                        <article class="blog">
+                            <figure style="width: 100%; height: 300px; overflow: hidden;">
+                                <img src="${image.generatedUrl}" alt="Generated Image" style="width: 100%; height: 100%; object-fit: cover;">
+                            </figure>
+                            <div class="post_info">
+                                <small>${new Date(image.createdAt).toLocaleDateString()}</small>
+                                <h3>${image.inputText}</h3>
+                                <p>이 이미지는 AI로 생성된 케이크 시안입니다.</p>
+                            </div>
+                        </article>
+                    </div>
+                `);
+                    });
+
+                    // 페이지네이션 버튼 업데이트
+                    updatePagination(data.currentPage, data.totalPages);
+                },
+                error: function (error) {
+                    console.error("Error loading page:", error);
+                }
+            });
+        }
+
+        function updatePagination(currentPage, totalPages) {
+            const pagination = $('#pagination');
+            pagination.empty();
+
+            // 이전 페이지로 이동 버튼 (첫 페이지에서는 비활성화)
+            if (currentPage > 1) {
+                pagination.append(`
+            <li class="page-item">
+                <a class="page-link" href="javascript:void(0);" onclick="loadPage(${currentPage - 1})">&laquo;</a>
+            </li>
+        `);
+            }
+
+            // 페이지 번호 버튼 생성
+            for (let i = 1; i <= totalPages; i++) {
+                pagination.append(`
+            <li class="page-item ${i === currentPage ? 'active' : ''}">
+                <a class="page-link ${i === currentPage ? 'disabled' : ''}" href="javascript:void(0);" onclick="loadPage(${i})">${i}</a>
+            </li>
+        `);
+            }
+
+            // 다음 페이지로 이동 버튼 (마지막 페이지에서는 비활성화)
+            if (currentPage < totalPages) {
+                pagination.append(`
+            <li class="page-item">
+                <a class="page-link" href="javascript:void(0);" onclick="loadPage(${currentPage + 1})">&raquo;</a>
+            </li>
+        `);
+            }
+        }
+
+        // 페이지 로드 시 첫 번째 페이지 자동 로드
+        $(document).ready(function () {
+            loadPage(1);  // 첫 번째 페이지 로드
         });
     </script>
 </div>
