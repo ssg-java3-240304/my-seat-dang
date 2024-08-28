@@ -38,31 +38,7 @@ public class CakeDesignController {
     private final CustomerService customerService;
     private final GeneratedImageUrlRepository generatedImageUrlRepository;
     private final AuthService authService;
-    //    @GetMapping("/ai-image")
-//    public String getImage(Model model)
-//            throws IOException, InterruptedException {
-//        String prompt = cakeDesignService.
-////                generatePictureV2("케이크 시안을 원하는데 동그란시트 겨울왕국 올라프케이크 생성해줘");
-//                generatePictureV2("케이크 시안을 원하는데 아빠가 좋아할거같은 케이크 시안 부탁해");
-//        model.addAttribute("url", prompt);
-//        return "ai/test";
-//    }
-    // test 용도
-//    @GetMapping("/ai-image")
-//    public String getImage(Model model) throws IOException, InterruptedException {
-//        String imageUrl = cakeDesignService.generatePictureV2("케이크 시안을 원하는데 아빠가 좋아할거같은 케이크 시안 부탁해");
-//
-//        // 파일 저장 경로 설정 (예: "ai-generated-images/케이크-시안.jpg")
-//        String filePath = "ai-generated-images/cake-idea.jpg";
-//
-//        // 이미지 URL을 통해 S3에 업로드
-//        String uploadedImageUrl = cakeDesignService.uploadImageToS3(imageUrl, filePath);
-//
-//        // 업로드된 이미지 URL을 모델에 추가하여 뷰에 전달
-//        model.addAttribute("url", uploadedImageUrl);
-//
-//        return "ai/test";
-//    }
+
     @PostMapping("/ai/generate")
     @ResponseBody
     public ResponseEntity<?> generateImage(@RequestParam("cakeDescription") String cakeDescription) throws IOException, InterruptedException, ExecutionException {
