@@ -26,6 +26,4 @@ public class Chat {
     private Integer quantity; // 수량
     private Integer totalAmount; // 결제금액
 
-//    private Boolean isRead; // 읽음 상태 (새로운 필드)
-    private LocalDateTime timestamp; // 메세지를 찾기위한 필드
 }
