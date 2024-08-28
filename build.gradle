@@ -75,6 +75,10 @@ dependencies {
     implementation 'com.stripe:stripe-java:23.2.0'
     implementation 'javax.xml.bind:jaxb-api:2.3.1'
     implementation 'sh.platform:config:2.2.2'
+
+    // redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.redisson:redisson-spring-boot-starter:3.27.0' // ⭐ Redisson
 }
 
 tasks.named('test') {

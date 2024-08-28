@@ -1,15 +1,18 @@
 package com.matdang.seatdang.waiting.repository.query.dto;
 
+import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import java.time.LocalDateTime;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Data
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class WaitingDto {
-    private Long id;
     private Long waitingNumber;
     private Long waitingOrder;
 
@@ -24,4 +27,18 @@ public class WaitingDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime canceledTime;
 
+
+    public static WaitingDto create(Waiting waiting) {
+        WaitingDto waitingDto = new WaitingDto();
+        waitingDto.waitingNumber = waiting.getWaitingNumber();
+        waitingDto.waitingOrder = waiting.getWaitingOrder();
+        waitingDto.customerPhone = waiting.getCustomerInfo().getCustomerPhone();
+        waitingDto.peopleCount = waiting.getCustomerInfo().getPeopleCount();
+        waitingDto.waitingStatus = waiting.getWaitingStatus();
+        waitingDto.createdDate = waiting.getCreatedDate();
+        waitingDto.visitedTime = waiting.getVisitedTime();
+        waitingDto.canceledTime = waiting.getCanceledTime();
+
+        return waitingDto;
+    }
 }

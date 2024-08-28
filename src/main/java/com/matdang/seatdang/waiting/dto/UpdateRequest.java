@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class UpdateRequest {
-    private Long id;
+    private Long waitingNumber;
     private Long storeId;
     private Long waitingOrder;
     private Integer changeStatus;
