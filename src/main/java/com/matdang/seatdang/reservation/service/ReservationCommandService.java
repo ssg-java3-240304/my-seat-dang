@@ -6,6 +6,7 @@ import com.matdang.seatdang.payment.dto.ApproveFail;
 import com.matdang.seatdang.payment.dto.Status;
 import com.matdang.seatdang.payment.entity.PayApprove;
 import com.matdang.seatdang.reservation.dto.ReservationCancelRequestDto;
+import com.matdang.seatdang.reservation.dto.ReservationResponseDto;
 import com.matdang.seatdang.reservation.dto.ReservationSaveRequestDto;
 import com.matdang.seatdang.reservation.dto.ReservationSlotReturnDto;
 import com.matdang.seatdang.reservation.entity.Reservation;
@@ -37,6 +38,17 @@ public class ReservationCommandService {
         reservationRepository.save(saveRequestDto.toEntity());
     }
 
+    public Long createNormalMenuReservation(ReservationSaveRequestDto saveDto) {
+        log.debug("create empty reservation dto: {}", saveDto);
+        saveDto.setReservationStatus(ReservationStatus.AWAITING_PAYMENT);
+        boolean reservationExists =reservationRepository.findByCustomer_CustomerIdAndReservedAt(saveDto.getCustomer().getCustomerId(), LocalDateTime.of(saveDto.getDate(),saveDto.getTime())).isPresent();
+        if (reservationExists) {
+            throw new ReservationException("같은 시간에 중복된 예약이 있습니다");
+        }
+        Reservation saved = reservationRepository.save(saveDto.toEntity());
+        return saved.getId();
+    }
+
     public void updateStatusCustomReservation(Long reservationId, ReservationStatus reservationStatus) {
         log.debug("update reservation status service: {}", reservationId);
         Optional<Reservation> optReservation = reservationRepository.findById(reservationId);
@@ -66,4 +78,6 @@ public class ReservationCommandService {
     public void updateStatusToAwaitingCustomPayment(Long reservationId) {
         updateStatusCustomReservation(reservationId, ReservationStatus.AWAITING_CUSTOM_PAYMENT);
     }
+
+
 }

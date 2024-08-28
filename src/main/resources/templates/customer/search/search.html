@@ -8,6 +8,7 @@
     <title>Title</title>
     <!-- SPECIFIC CSS -->
     <link th:href="@{/css/customer/listing.css}" rel="stylesheet">
+    <link th:href="@{/css/customer/customcss/mysearch.css}" rel="stylesheet">
     <script type="text/javascript" th:src="@{|https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${ncpAccessId}&submodules=geocoder|}"></script>
 <!--    <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=m1vrso77rm&submodules=geocoder"></script>-->
 </head>
@@ -51,97 +52,185 @@
             </div>
         </div>
         <!-- /page_header -->
-        <div class="collapse show" id="collapseMap">
+        <div class="container margin_30_40" id="collapseMap">
             <div id="map" class="map"></div>
         </div>
         <!-- /Map -->
 
         <div class="container margin_30_40">
             <div class="row">
-                <aside class="col-lg-3" id="sidebar_fixed">
-                    <div class="clearfix">
-<!--                        <a class="btn_map d-flex align-items-center justify-content-center" data-bs-toggle="collapse" href="#collapseMap" aria-expanded="true" aria-controls="collapseMap" ><span class="btn_map_txt" data-text-swap="View on Map" data-text-original="Hide Map">View on Map</span></a>-->
-                        <div class="sort_select">
-                            <select name="sort" id="sort">
-                                <option value="popularity" selected="selected">Sort by Popularity</option>
-                                <option value="rating">Sort by Average rating</option>
-                                <option value="date">Sort by newness</option>
-                                <option value="price">Sort by Price: low to high</option>
-                                <option value="price-desc">Sort by Price: high to low</option>
-                            </select>
-                        </div>
-                        <a class="btn_map mobile btn_filters" data-bs-toggle="collapse" href="#collapseMap"><i class="icon_pin_alt"></i></a>
-                        <a href="#0" class="open_filters btn_filters"><i class="icon_adjust-vert"></i><span>Filters</span></a>
-                    </div>
-                    <div class="filter_col">
-                        <div class="inner_bt"><a href="#" class="open_filters"><i class="icon_close"></i></a></div>
-                        <div class="filter_type">
-                            <h4><a href="#filter_1" data-bs-toggle="collapse" class="opened">Categories</a></h4>
-                            <div class="collapse show" id="filter_1">
-                                <ul>
-                                    <li>
-                                        <label class="container_check">주문제작 <small>12</small>
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="container_check">웨이팅 <small>24</small>
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="container_check">일반예약 <small>24</small>
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    </li>
-                                </ul>
-                            </div>
-                            <!-- /filter_type -->
-                        </div>
-                        <!-- /filter_type -->
-                        <div class="buttons">
-                            <a href="#0" class="btn_1 full-width">Filter</a>
-                        </div>
-                    </div>
-                </aside>
+                <div class="tabs_detail">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a id="tab-A" href="#pane-A" class="nav-link active" data-bs-toggle="tab" role="tab">전체목록</a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="tab-B" href="#pane-B" class="nav-link" data-bs-toggle="tab" role="tab">웨이팅 매장</a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="tab-C" href="#pane-C" class="nav-link" data-bs-toggle="tab" role="tab">예약방문 매장</a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="tab-D" href="#pane-D" class="nav-link" data-bs-toggle="tab" role="tab">주문 제작 케이크</a>
+                        </li>
+                    </ul>
 
-                <!-- /상점 블록 -->
-                <div class="col-lg-9">
-                    <div class="row">
-<!--                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6" th:each="store : ${storePage}">-->
-                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6" th:each="store : ${storePage}">
-                            <div class="strip">
-                                <figure>
-                                    <span class="ribbon off">웨이팅N분</span>
-                                    <img th:src="@{/img/customer/detail_1.jpg}" th:data-src="${store.getThumbnail()}" class="img-fluid lazy" alt="">
-                                    <a th:href="|@{/my-seat-dang/store/detail/}${store.storeId}|" class="strip_info">
-                                        <small>케이크</small>
-                                        <div class="item_title">
-                                            <h3 th:text="${store.storeName}"></h3>
-                                            <small th:text="${store.storeAddress}"></small>
-                                        </div>
-                                    </a>
-                                </figure>
-                                <form action="@{/}" method="post">
-                                <ul>
-                                    <li><span class="loc_open">영업중</span></li>
-                                    <li style="padding: 0"><button type="submit" class="btn_1 small">웨이팅하기</button></li>
-                                    <li>
-                                        <div class="score"><span>Superb<em>350 Reviews</em></span><strong>8.9</strong></div>
-                                    </li>
-                                </ul>
-                                </form>
+                    <div class="tab-content" role="tablist">
+                        <div id="pane-A" class="card tab-pane fade show active mt-3" role="tabpanel" aria-labelledby="tab-A">
+                            <div class="card-header bg_gray pattern" role="tab" id="heading-A">
+                                <h5>
+                                    <span class="tab_info">
+                                        전체매장 목록 | 위의 탭을 클릭하여 원하시는 매장을 찾아보세요
+                                    </span>
+                                </h5>
                             </div>
+                            <!-- /상점 블록 -->
+
+                                <div class="col-lg-12 pt-3 bg_gray pattern">
+                                    <div class="row">
+                                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6" th:each="store : ${storePage}">
+                                                <div class="strip">
+                                                    <figure class="my-figure">
+                                                        <span th:classappend="${store.opened}? 'my_loc_open' : 'my_loc_closed'" th:text="${store.opened}? '영업중' : '영업종료'"></span>
+                                                        <img th:src="@{/img/customer/detail_1.jpg}" th:data-src="${store.getThumbnail()}" class="img-fluid lazy" alt="">
+                                                        <a th:href="|@{/my-seat-dang/store/detail/}${store.storeId}|" class="strip_info">
+                                                            <small th:text="${store.storeType.description}"></small>
+                                                            <div class="item_title">
+                                                                <h3 th:text="${store.storeName}"></h3>
+                                                                <small th:text="${store.storeAddress}"></small>
+                                                            </div>
+                                                        </a>
+                                                    </figure>
+                                                </div>
+
+                                        </div>
+                                        <!-- /strip grid -->
+                                    </div>
+                                    <!-- /row -->
+                                </div>
+                            <!-- /col -->
                         </div>
-                        <!-- /strip grid -->
+
+
+
+
+                        <div id="pane-B" class="card tab-pane fade mt-3" role="tabpanel" aria-labelledby="tab-B">
+                            <div class="card-header bg_gray pattern" role="tab" id="heading-B">
+                                <h5>
+                                    <span class="tab_info">
+                                        웨이팅형 매장 | 웨이팅이 가능한 매장 입니다
+                                    </span>
+                                </h5>
+                            </div>
+                            <!-- /상점 블록 -->
+                            <div class="col-lg-12 pt-3 bg_gray pattern">
+                                <div class="row">
+                                    <th:block th:each="store : ${storePage}">
+                                        <th:block th:if="*{store.storeType.toString().equals('GENERAL_WAITING')}">
+                                            <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
+                                                    <div class="strip">
+                                                        <figure class="my-figure">
+                                                            <span th:classappend="${store.opened}? 'my_loc_open' : 'my_loc_closed'" th:text="${store.opened}? '영업중' : '영업종료'"></span>
+                                                            <img th:src="@{/img/customer/detail_1.jpg}" th:data-src="${store.getThumbnail()}" class="img-fluid lazy" alt="">
+                                                            <a th:href="|@{/my-seat-dang/store/detail/}${store.storeId}|" class="strip_info">
+                                                                <small th:text="${store.storeType.description}"></small>
+                                                                <div class="item_title">
+                                                                    <h3 th:text="${store.storeName}"></h3>
+                                                                    <small th:text="${store.storeAddress}"></small>
+                                                                </div>
+                                                            </a>
+                                                        </figure>
+                                                    </div>
+                                            </div>
+                                        </th:block>
+                                    </th:block>
+                                    <!-- /strip grid -->
+                                </div>
+                                <!-- /row -->
+                            </div>
+                            <!-- /col -->
+                        </div>
+
+
+                        <div id="pane-C" class="card tab-pane fade mt-3" role="tabpanel" aria-labelledby="tab-C">
+                            <div class="card-header bg_gray pattern" role="tab" id="heading-C">
+                                <h5>
+                                    <span class="tab_info">
+                                        예약방문 매장 | 예약 방문하는 매장입니다
+                                    </span>
+                                </h5>
+                            </div>
+                            <!-- /상점 블록 -->
+                            <div class="col-lg-12 pt-3 bg_gray pattern">
+                                <div class="row">
+                                    <th:block th:each="store : ${storePage}">
+                                        <th:block th:if="*{store.storeType.toString().equals('GENERAL_RESERVATION')}">
+                                            <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
+                                                <div class="strip">
+                                                    <figure class="my-figure">
+                                                        <span th:classappend="${store.opened}? 'my_loc_open' : 'my_loc_closed'" th:text="${store.opened}? '영업중' : '영업종료'"></span>
+                                                        <img th:src="@{/img/customer/detail_1.jpg}" th:data-src="${store.getThumbnail()}" class="img-fluid lazy" alt="">
+                                                        <a th:href="|@{/my-seat-dang/store/detail/}${store.storeId}|" class="strip_info">
+                                                            <small th:text="${store.storeType.description}"></small>
+                                                            <div class="item_title">
+                                                                <h3 th:text="${store.storeName}"></h3>
+                                                                <small th:text="${store.storeAddress}"></small>
+                                                            </div>
+                                                        </a>
+                                                    </figure>
+                                                </div>
+                                            </div>
+                                        </th:block>
+                                    </th:block>
+                                    <!-- /strip grid -->
+                                </div>
+                                <!-- /row -->
+                            </div>
+                            <!-- /col -->
+                        </div>
+
+
+
+                        <div id="pane-D" class="card tab-pane fade mt-3" role="tabpanel" aria-labelledby="tab-D">
+                            <div class="card-header bg_gray pattern" role="tab" id="heading-D">
+                                <h5>
+                                    <span class="tab_info">
+                                        맞춤 제작 케이크 | 맞춤형 제작 케이크 시안 상담과 예약&결제를 한번에 할수 있습니다
+                                    </span>
+                                </h5>
+                            </div>
+                            <!-- /상점 블록 -->
+                            <div class="col-lg-12 pt-3 bg_gray pattern">
+                                <div class="row">
+                                    <th:block th:each="store : ${storePage}">
+                                        <th:block th:if="*{store.storeType.toString().equals('CUSTOM')}">
+                                            <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
+                                                <div class="strip">
+                                                    <figure class="my-figure">
+                                                        <span th:classappend="${store.opened}? 'my_loc_open' : 'my_loc_closed'" th:text="${store.opened}? '영업중' : '영업종료'"></span>
+                                                        <img th:src="@{/img/customer/detail_1.jpg}" th:data-src="${store.getThumbnail()}" class="img-fluid lazy" alt="">
+                                                        <a th:href="|@{/my-seat-dang/store/detail/}${store.storeId}|" class="strip_info">
+                                                            <small th:text="${store.storeType.description}"></small>
+                                                            <div class="item_title">
+                                                                <h3 th:text="${store.storeName}"></h3>
+                                                                <small th:text="${store.storeAddress}"></small>
+                                                            </div>
+                                                        </a>
+                                                    </figure>
+                                                </div>
+                                            </div>
+                                        </th:block>
+                                    </th:block>
+                                    <!-- /strip grid -->
+                                </div>
+                                <!-- /row -->
+                            </div>
+                            <!-- /col -->
+                        </div>
+
+                        <div th:replace="~{customer/fragments/pagenation::pagenationFragment}"></div>
                     </div>
-                    <!-- /row -->
-                    <div th:replace="~{customer/fragments/pagenation::pagenationFragment}"></div>
                 </div>
-                <!-- /col -->
             </div>
         </div>
         <!-- /container -->
@@ -157,8 +246,8 @@
     <script th:inline="javascript">
         var HOME_PATH = window.HOME_PATH || '.';
         var map = new naver.maps.Map('map', {
-            center: new naver.maps.LatLng(37.4086418, 127.0586395),
-            zoom: 15
+            center: new naver.maps.LatLng(37.5096296,127.055487),
+            zoom: 17
         });
 
         var bounds = map.getBounds(),
@@ -269,6 +358,21 @@
                 }
             }
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // 쿼리 파라미터에서 탭 활성화 정보 읽기
+            const urlParams = new URLSearchParams(window.location.search);
+            const tabId = urlParams.get('tab');
+
+            if (tabId) {
+                const tabElement = document.querySelector(`a[href="#${tabId}"]`);
+                if (tabElement) {
+                    const tab = new bootstrap.Tab(tabElement);
+                    tab.show();
+                }
+            }
+        });
+
     </script>
 </div>
 </body>

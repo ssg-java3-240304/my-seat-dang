@@ -1,6 +1,7 @@
 package com.matdang.seatdang.reservation.service;
 
 import com.matdang.seatdang.auth.principal.MemberUserDetails;
+import com.matdang.seatdang.auth.principal.StoreOwnerUserDetails;
 import com.matdang.seatdang.reservation.dto.ReservationResponseDto;
 import com.matdang.seatdang.reservation.dto.ResponseDto;
 import com.matdang.seatdang.reservation.entity.Reservation;
@@ -51,4 +52,13 @@ public class ReservationQueryService {
         responseDto.setThumbnail(reservation.getStore().getThumbnail());
         return responseDto;
     }
+
+    public List<ReservationResponseDto> getReservationsByStoreOwnerId(Long storeOwnerId) {
+        StoreOwnerUserDetails userDetails = (StoreOwnerUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<Reservation> reservations = reservationRepository.findByStoreOwner_StoreOwnerId(userDetails.getId());
+        return reservations.stream()
+                .map(this::convertToResponseDto)
+                .collect(Collectors.toList());
+    }
+
 }

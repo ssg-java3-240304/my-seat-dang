@@ -25,4 +25,5 @@ public class Chat {
     private String itemName; // 상품명
     private Integer quantity; // 수량
     private Integer totalAmount; // 결제금액
+
 }

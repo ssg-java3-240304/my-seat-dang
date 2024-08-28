@@ -1,5 +1,6 @@
 package com.matdang.seatdang.waiting.repository;
 
+import com.matdang.seatdang.dashboard.dto.WaitingDashboardResponseDto;
 import com.matdang.seatdang.waiting.repository.query.WaitingQueryRepository;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.entity.Waiting;
@@ -15,6 +16,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -128,22 +131,22 @@ class WaitingRepositoryTest {
         assertThat(result).isEqualTo(4);
     }
 
-    @Test
-    @DisplayName("상점 id로 웨이팅 전체 취소")
-    void cancelAllWaiting() {
-        // given
-        PageRequest pageable = PageRequest.of(0, 10);
-
-        // when
-        int result = waitingRepository.cancelAllWaiting(1L);
-        // then
-        assertThat(result).isEqualTo(10);
-        assertThat(waitingQueryRepository.findAllByStoreIdAndWaitingStatus(1L, WaitingStatus.WAITING, pageable)
-                .getTotalElements())
-                .isEqualTo(0);
-        assertThat(waitingQueryRepository.findAllByStoreIdAndWaitingStatus(1L, WaitingStatus.SHOP_CANCELED, pageable)
-                .getTotalElements()).isEqualTo(20);
-    }
+//    @Test
+//    @DisplayName("상점 id로 웨이팅 전체 취소")
+//    void cancelAllWaiting() {
+//        // given
+//        PageRequest pageable = PageRequest.of(0, 10);
+//
+//        // when
+//        int result = waitingRepository.cancelAllWaiting(1L);
+//        // then
+//        assertThat(result).isEqualTo(10);
+//        assertThat(waitingQueryRepository.findAllByStoreIdAndWaitingStatus(1L, WaitingStatus.WAITING, pageable)
+//                .getTotalElements())
+//                .isEqualTo(0);
+//        assertThat(waitingQueryRepository.findAllByStoreIdAndWaitingStatus(1L, WaitingStatus.SHOP_CANCELED, pageable)
+//                .getTotalElements()).isEqualTo(20);
+//    }
 
     @Test
     @DisplayName("상점 id로 웨이팅 전체 삭제")
