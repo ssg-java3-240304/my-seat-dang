@@ -5,7 +5,7 @@ spring:
     mongodb:
       uri: ${MONGO_DB_URI}
     redis:
-      host: localhost
+      host: ${HOST}
       port: 6379
   servlet:
     multipart:
@@ -16,7 +16,7 @@ spring:
 # profile관리
   profiles:
     default: test
-  #    active: prod
+  #    active: prodmyseatdangdb
 
 #  # ai api 추가
   openai:
