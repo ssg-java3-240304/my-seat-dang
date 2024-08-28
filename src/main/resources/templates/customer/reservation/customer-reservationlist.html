@@ -669,9 +669,6 @@
                         if (!loadedMessageIds.has(messageId)) {
                             loadedMessageIds.add(messageId);
                             const messageElement = document.createElement("div");
-                            if (message.itemName && message.quantity && message.totalAmount) {
-                                addPaymentInfoToChat(message);
-                            }
                             if (message.sender === window.customerName) {
                                 messageElement.className = "outgoing_msg";
                                 messageElement.innerHTML = getSendMsgBox(message);
