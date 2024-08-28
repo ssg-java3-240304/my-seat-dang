@@ -13,6 +13,7 @@ import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
 import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingCustomerFacade;
 import jakarta.persistence.EntityManager;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +58,7 @@ class SchedulerServiceTest {
     @DisplayName("웨이팅 종료상태(마감, 이용불가)시 Redis 오늘 데이터 -> Mysql 기록 데이터 이동")
     void relocateWaitingData() {
         // given
-
+        LocalDateTime start = LocalDateTime.now();
         Store storeA = storeRepository.save(Store.builder()
                 .storeSetting(StoreSetting.builder()
                         .waitingStatus(com.matdang.seatdang.store.vo.WaitingStatus.CLOSE)
@@ -99,8 +100,8 @@ class SchedulerServiceTest {
         }
 
         // storeB
-        // 등록 50개
-        for (int i = 0; i < 50; i++) {
+        // 등록 10000개
+        for (int i = 0; i < 10000; i++) {
             Long id = redissonLockWaitingCustomerFacade.createWaiting(storeB.getStoreId(), 2).getWaitingNumber();
             waitingIds.add(id);
         }
@@ -126,7 +127,6 @@ class SchedulerServiceTest {
         String maxAn = (String) redisTemplate.opsForValue().get("waitingNumber:" + storeA.getStoreId());
         assertThat(maxAo).isNull();
         assertThat(maxAn).isNull();
-
 
         // storeB
         List<Waiting> waitingsB = redisTemplate.opsForHash().values("store:" + storeB.getStoreId()).stream()
@@ -156,8 +156,17 @@ class SchedulerServiceTest {
 
         // then
         assertThat(findSA.size()).isEqualTo(100);
-        assertThat(findSB.size()).isEqualTo(50);
+        assertThat(findSB.size()).isEqualTo(10000);
         assertThat(findSC.size()).isEqualTo(0);
+
+        LocalDateTime end = LocalDateTime.now();
+        System.out.println("  =====  elapsed time  ===== ");
+        System.out.println("  =====  "+Duration.between(start, end).toMillis() +"  =====  ");
+
+
+        // 시퀀스 PooledOptimizer 적용 16818, 17008 ms
+        // Auto 19514, 20438 -> seq 테이블이 생성되어 batch가 적용됨
+        // Identity 28934, 29484 -> batch 적용 안됨
     }
 
     @Test
@@ -241,7 +250,7 @@ class SchedulerServiceTest {
                 .storeSetting(StoreSetting.builder()
                         .waitingStatus(com.matdang.seatdang.store.vo.WaitingStatus.OPEN)
                         .waitingTime(WaitingTime.builder()
-                                .waitingCloseTime(LocalTime.of(0,0))
+                                .waitingCloseTime(LocalTime.of(0, 0))
                                 .build())
                         .build())
                 .build());
@@ -250,7 +259,7 @@ class SchedulerServiceTest {
                 .storeSetting(StoreSetting.builder()
                         .waitingStatus(com.matdang.seatdang.store.vo.WaitingStatus.OPEN)
                         .waitingTime(WaitingTime.builder()
-                                .waitingCloseTime(LocalTime.of(11,50))
+                                .waitingCloseTime(LocalTime.of(11, 50))
                                 .build())
                         .build())
                 .build());
@@ -259,7 +268,7 @@ class SchedulerServiceTest {
                 .storeSetting(StoreSetting.builder()
                         .waitingStatus(com.matdang.seatdang.store.vo.WaitingStatus.OPEN)
                         .waitingTime(WaitingTime.builder()
-                                .waitingCloseTime(LocalTime.of(12,0))
+                                .waitingCloseTime(LocalTime.of(12, 0))
                                 .build())
                         .build())
                 .build());
@@ -268,7 +277,7 @@ class SchedulerServiceTest {
                 .storeSetting(StoreSetting.builder()
                         .waitingStatus(com.matdang.seatdang.store.vo.WaitingStatus.OPEN)
                         .waitingTime(WaitingTime.builder()
-                                .waitingCloseTime(LocalTime.of(23,50))
+                                .waitingCloseTime(LocalTime.of(23, 50))
                                 .build())
                         .build())
                 .build());
@@ -323,12 +332,10 @@ class SchedulerServiceTest {
         LocalTime setting = LocalTime.of(0, 0);
         LocalTime minus = LocalTime.of(23, 50);
 
-
         assertThat(minutes).isNegative();
         assertThat(setting.isAfter(current)).isFalse();
 
-
-        assertThat( minus.minusHours(12)).isEqualTo(11);
+        assertThat(minus.minusHours(12)).isEqualTo(11);
         // when
         // then
     }
