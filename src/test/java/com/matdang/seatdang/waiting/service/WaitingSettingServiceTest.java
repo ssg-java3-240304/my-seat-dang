@@ -166,82 +166,82 @@ class WaitingSettingServiceTest {
                 com.matdang.seatdang.store.vo.WaitingStatus.CLOSE);
     }
 
-//    @Test
-//    @DisplayName("웨이팅 불가 상태로 변경")
-//    public void changeWaitingStatusByUnavailable() {
-//        // given
-//        Store store = storeRepository.save(Store.builder()
-//                .storeId(1L)
-//                .storeSetting(StoreSetting.builder()
-//                        .waitingTime(WaitingTime.builder()
-//                                .build())
-//                        .build())
-//                .build());
-//
-//        for (long i = 0; i < 10; i++) {
-//            waitingRepository.save(Waiting.builder()
-//                    .waitingNumber(i)
-//                    .waitingOrder(i)
-//                    .storeId(store.getStoreId())
-//                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
-//                    .waitingStatus(WaitingStatus.WAITING)
-//                    .visitedTime(null)
-//                    .build());
-//        }
-//        em.flush();
-//        em.clear();
-//
-//        PageRequest pageable = PageRequest.of(0, 10);
-//
-//        // when
-//        waitingSettingService.changeWaitingStatus(3, store.getStoreId());
-//
-//        // then
-//        assertThat(storeRepository.findByStoreId(store.getStoreId()).getStoreSetting().getWaitingStatus()).isEqualTo(
-//                com.matdang.seatdang.store.vo.WaitingStatus.UNAVAILABLE);
-//        assertThat(waitingQueryRepository.findAllByStoreIdAndWaitingStatus(store.getStoreId(), WaitingStatus.WAITING,
-//                        pageable).getTotalElements())
-//                .isEqualTo(0);
-//        assertThat(
-//                waitingQueryRepository.findAllByStoreIdAndWaitingStatus(store.getStoreId(), WaitingStatus.SHOP_CANCELED,
-//                                pageable).getTotalElements())
-//                .isEqualTo(10);
-//    }
-//
-//    @Test
-//    @DisplayName("존재하는 웨이팅 인원수 가져오기")
-//    public void findWaitingPeopleCount() {
-//        // given
-//        Store store = storeRepository.save(Store.builder()
-//                .storeSetting(StoreSetting.builder()
-//                        .waitingPeopleCount(3)
-//                        .build())
-//                .build());
-//        em.flush();
-//        em.clear();
-//
-//        // when
-//        Integer findResult = waitingSettingService.findWaitingPeopleCount(store.getStoreId());
-//
-//        // then
-//        assertThat(findResult).isNotNull();
-//        assertThat(findResult).isEqualTo(3);
-//    }
-//
-//    @Test
-//    @DisplayName("존재하지 않는 웨이팅 인원수 가져오기")
-//    public void findWaitingPeopleCountByNotExistence() {
-//        // given
-//        Store store = storeRepository.save(Store.builder()
-//                .build());
-//        em.flush();
-//        em.clear();
-//
-//        // when
-//        Integer findResult = waitingSettingService.findWaitingPeopleCount(store.getStoreId());
-//
-//        // then
-//        assertThat(findResult).isNotNull();
-//        assertThat(findResult).isEqualTo(0);
-//    }
+    @Test
+    @DisplayName("웨이팅 불가 상태로 변경")
+    public void changeWaitingStatusByUnavailable() {
+        // given
+        Store store = storeRepository.save(Store.builder()
+                .storeId(1L)
+                .storeSetting(StoreSetting.builder()
+                        .waitingTime(WaitingTime.builder()
+                                .build())
+                        .build())
+                .build());
+
+        for (long i = 0; i < 10; i++) {
+            waitingRepository.save(Waiting.builder()
+                    .waitingNumber(i)
+                    .waitingOrder(i)
+                    .storeId(store.getStoreId())
+                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+                    .waitingStatus(WaitingStatus.WAITING)
+                    .visitedTime(null)
+                    .build());
+        }
+        em.flush();
+        em.clear();
+
+        PageRequest pageable = PageRequest.of(0, 10);
+
+        // when
+        waitingSettingService.changeWaitingStatus(3, store.getStoreId());
+
+        // then
+        assertThat(storeRepository.findByStoreId(store.getStoreId()).getStoreSetting().getWaitingStatus()).isEqualTo(
+                com.matdang.seatdang.store.vo.WaitingStatus.UNAVAILABLE);
+        assertThat(waitingQueryRepository.findAllByStoreIdAndWaitingStatus(store.getStoreId(), WaitingStatus.WAITING,
+                        pageable).getTotalElements())
+                .isEqualTo(0);
+        assertThat(
+                waitingQueryRepository.findAllByStoreIdAndWaitingStatus(store.getStoreId(), WaitingStatus.SHOP_CANCELED,
+                                pageable).getTotalElements())
+                .isEqualTo(10);
+    }
+
+    @Test
+    @DisplayName("존재하는 웨이팅 인원수 가져오기")
+    public void findWaitingPeopleCount() {
+        // given
+        Store store = storeRepository.save(Store.builder()
+                .storeSetting(StoreSetting.builder()
+                        .waitingPeopleCount(3)
+                        .build())
+                .build());
+        em.flush();
+        em.clear();
+
+        // when
+        Integer findResult = waitingSettingService.findWaitingPeopleCount(store.getStoreId());
+
+        // then
+        assertThat(findResult).isNotNull();
+        assertThat(findResult).isEqualTo(3);
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 웨이팅 인원수 가져오기")
+    public void findWaitingPeopleCountByNotExistence() {
+        // given
+        Store store = storeRepository.save(Store.builder()
+                .build());
+        em.flush();
+        em.clear();
+
+        // when
+        Integer findResult = waitingSettingService.findWaitingPeopleCount(store.getStoreId());
+
+        // then
+        assertThat(findResult).isNotNull();
+        assertThat(findResult).isEqualTo(0);
+    }
 }

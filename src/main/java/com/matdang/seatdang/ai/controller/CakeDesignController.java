@@ -11,6 +11,10 @@ import com.matdang.seatdang.member.entity.Customer;
 import com.matdang.seatdang.member.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,7 +26,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @Controller
@@ -95,6 +101,30 @@ public class CakeDesignController {
     }
 
 
+    @GetMapping("/api/ai-result")
+    @ResponseBody
+    public Map<String, Object> showResult(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "6") int size) {
+
+        // 현재 로그인된 고객 정보
+        Long customerId = authService.getAuthenticatedMember().getMemberId();
+
+        // 페이지 요청 객체 생성
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdAt").descending());
+
+        // 페이징 처리된 이미지 목록 조회
+        Page<GeneratedImageUrl> imagePage = generatedImageUrlRepository.findPageByCustomerId(customerId, pageable);
+
+        // 응답 데이터 구성
+        Map<String, Object> response = new HashMap<>();
+        response.put("imageList", imagePage.getContent());
+        response.put("currentPage", page);
+        response.put("totalPages", imagePage.getTotalPages());
+
+        return response;
+    }
+
     @GetMapping("/ai-result")
     public String showResult(Model model){
 
@@ -109,4 +139,5 @@ public class CakeDesignController {
 
         return "ai/ai-result";
     }
+
 }

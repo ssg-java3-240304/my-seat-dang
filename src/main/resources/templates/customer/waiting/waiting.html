@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{customer/layout/default}">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Waiting List</title>
@@ -17,130 +16,85 @@
             color: #6c757d;
             cursor: not-allowed;
         }
-
     </style>
-    <script>
-        window.onload = function () {
-            const isIncorrectWaitingStatus = [[${isIncorrectWaitingStatus != null ? isIncorrectWaitingStatus : 'false'}]];
-            const isNotAwaiting = [[${isNotAwaiting != null ? isNotAwaiting : 'false'}]];
-
-            if (isIncorrectWaitingStatus) {
-                alert('존재하지 않는 페이지입니다.');
-                return;
-            }
-            if (isNotAwaiting) {
-                alert('이미 처리된 웨이팅 입니다.');
-
-            }
-        };
-    </script>
-    <!--    main page only css-->
-    <link th:href="@{/css/customer/home.css}" rel="stylesheet">
 </head>
 <body>
-<main layout:fragment="main">
-    <h1>Waiting List</h1>
+<h1>Waiting List</h1>
 
 
-    <div class="row mb-4">
-        <div class="col">
-            <div class="btn-group" role="group" aria-label="Status buttons">
-                <a href="#" th:href="@{/my-seat-dang/waiting(status=0, when=${when})}"
-                   class="btn btn-outline-primary" th:classappend="${status == 0} ? 'active-button' : ''">방문예정</a>
-                <a href="#" th:href="@{/my-seat-dang/waiting(status=1, when=${when})}"
-                   class="btn btn-outline-success" th:classappend="${status == 1} ? 'active-button' : ''">방문 완료</a>
-                <a href="#" th:href="@{/my-seat-dang/waiting(status=2, when=${when})}"
-                   class="btn btn-outline-danger" th:classappend="${status == 2} ? 'active-button' : ''">취소/노쇼</a>
-            </div>
-        </div>
-    </div>
+<!-- 버튼들 -->
+<div class="btn-group mb-4" role="group" aria-label="Status buttons">
+    <a href="#" th:href="@{/my-seat-dang/waiting(status=0)}"
+       class="btn btn-outline-primary" th:classappend="${status == 0} ? 'active-button' : ''">방문예정</a>
+    <a href="#" th:href="@{/my-seat-dang/waiting(status=1)}"
+       class="btn btn-outline-success" th:classappend="${status == 1} ? 'active-button' : ''">방문 완료</a>
+    <a href="#" th:href="@{/my-seat-dang/waiting(status=2)}"
+       class="btn btn-outline-danger" th:classappend="${status == 2} ? 'active-button' : ''">취소/노쇼</a>
+</div>
 
-    <!-- When Buttons -->
-    <div class="row mb-4">
-        <div class="col">
-            <div class="btn-group" role="group" aria-label="When buttons">
-                <a href="#" th:href="@{/my-seat-dang/waiting(when='today', status=${status})}"
-                   class="btn btn-outline-primary" th:classappend="${when == 'today'} ? 'active-button' : ''">오늘</a>
-                <a href="#" th:href="@{/my-seat-dang/waiting(when='history', status=${status})}"
-                   class="btn btn-outline-secondary" th:classappend="${when == 'history'} ? 'active-button' : ''">기록</a>
-            </div>
-        </div>
-    </div>
-    <hr/>
 
-    <!-- 웨이팅 리스트 -->
-    <div>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Store Name</th>
-                <th>Waiting Number</th>
-                <th>People Count</th>
-                <th>Status</th>
-                <th>Detail</th>
-                <th th:if="${status == 0}">Cancel</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="waiting : ${waitings}">
-                <td th:text="${waiting.storeName}">Store Name</td>
-                <td th:text="${waiting.waitingNumber}">Waiting Number</td>
-                <td th:text="${waiting.peopleCount}">People Count</td>
-                <td th:text="${waiting.waitingStatus}">Status</td>
+<hr/>
 
-                <td>
-                    <!-- Define the URL based on status -->
-                    <a th:with="urlPath=${'/my-seat-dang/waiting/' + waiting.waitingNumber +
+<!-- 웨이팅 리스트 -->
+<div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Store Name</th>
+            <th>Waiting Number</th>
+            <th>People Count</th>
+            <th>Status</th>
+            <th>Detail</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="waiting : ${waitings}">
+            <td th:text="${waiting.storeName}">Store Name</td>
+            <td th:text="${waiting.waitingNumber}">Waiting Number</td>
+            <td th:text="${waiting.peopleCount}">People Count</td>
+            <td th:text="${waiting.waitingStatus}">Status</td>
+
+            <td>
+                <!-- Define the URL based on status -->
+                <a th:with="urlPath=${'/my-seat-dang/waiting/' + waiting.id +
                   (status == 0 ? '/awaiting/detail' :
                   (status == 1 ? '/visited/detail' :
-                  (status == 2 ? '/canceled/detail' : '')))}+ '?storeId=' + ${waiting.storeId}
-                   + '&when=' + ${when}"
-                       th:href="${urlPath}" class="btn btn-info">상세</a>
-                </td>
-                <td th:if="${status == 0}">
-                    <form th:action="@{|/my-seat-dang/waiting/${waiting.waitingNumber}?storeId=${waiting.storeId}|}"
-                          method="post">
-                        <button type="submit" class="btn btn-danger">취소</button>
-                    </form>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+                  (status == 2 ? '/canceled/detail' : '')))}"
+                   th:href="${urlPath}" class="btn btn-info">상세</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 
-    <!-- Pagination Controls -->
-    <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center" th:if="${totalPages >= 1}">
-            <!-- Previous Button (Always Visible but Disabled if on First Page) -->
-            <li class="page-item">
-                <a class="page-link"
-                   th:href="${currentPage == 0} ? '#' : @{/my-seat-dang/waiting(status=${status}, when=${when}, page=${currentPage - 1})}"
-                   th:classappend="${currentPage == 0} ? 'disabled-link' : ''">
-                    &laquo; Previous
-                </a>
-            </li>
+<!-- Pagination Controls -->
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        <!-- Previous Button (Always Visible but Disabled if on First Page) -->
+        <li class="page-item">
+            <a class="page-link"
+               th:href="${currentPage == 0} ? '#' : @{/my-seat-dang/waiting(status=${status}, page=${currentPage - 1})}"
+               th:classappend="${currentPage == 0} ? 'disabled-link' : ''">
+                &laquo; Previous
+            </a>
+        </li>
 
-            <!-- Page Numbers -->
-            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-                <a class="page-link"
-                   th:href="@{/my-seat-dang/waiting(status=${status}, when=${when}, page=${i})}"
-                   th:text="${i + 1}"
-                   th:classappend="${i == currentPage} ? 'active' : ''"></a>
-            </li>
+        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+            <a class="page-link" th:href="@{/my-seat-dang/waiting(status=${status}, page=${i})}"
+               th:text="${i + 1}" th:classappend="${i == currentPage} ? 'active' : ''"></a>
+        </li>
 
-            <!-- Next Button (Always Visible but Disabled if on Last Page) -->
-            <li class="page-item">
-                <a class="page-link"
-                   th:href="${currentPage == totalPages - 1} ? '#' : @{/my-seat-dang/waiting(status=${status}, when=${when}, page=${currentPage + 1})}"
-                   th:classappend="${currentPage == totalPages - 1} ? 'disabled-link' : ''">
-                    Next &raquo;
-                </a>
-            </li>
-        </ul>
-    </nav>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</main>
-
+        <!-- Next Button (Always Visible but Disabled if on Last Page) -->
+        <li class="page-item">
+            <a class="page-link"
+               th:href="${currentPage == totalPages - 1} ? '#' : @{/my-seat-dang/waiting(status=${status}, page=${currentPage + 1})}"
+               th:classappend="${currentPage == totalPages - 1} ? 'disabled-link' : ''">
+                Next &raquo;
+            </a>
+        </li>
+    </ul>
+</nav>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -92,50 +92,29 @@ values (1000, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/store-image
 -- 제작 케이크 항목
 INSERT INTO menu (menu_id, menu_name, menu_price, image, menu_desc, store_id, sheet, size, cream, lettering)
 VALUES
-    (1, '초코 케이크', 15000, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/99397_60912_2445.jpg', '맛있는 쪼꼬', 1, '딸기잼', '6인치', '생크림', '생일 축하합니다'),
-    (2, '레드벨벳 케이크', 17000, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/711695a2-ece7-4270-86de-f1e300972c52.jpg', '빠바빨간맛', 1, '크림치즈', '8인치', '크림치즈', '사랑합니다'),
-    (3, '망고 케이크', 16000, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/99397_60912_2445.jpg', '달콤한 망고', 1, '망고잼', '7인치', '휘핑크림', '축하합니다'),
-    (4, '녹차 케이크', 18000, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/6b96ac81-2eaf-4eee-92c4-bbcd9b113d8c.jpg', '상큼한 녹차', 1, '고소한 녹차', '8인치', '생크림', '행복한 하루 되세요'),
-    (11, '딸기 케이크', 14000, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/99397_60912_2445.jpg', '신선한 딸기', 1, '딸기잼', '6인치', '생크림', '행복한 생일'),
+    (1, '초코 케이크', 15000, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/cake.jpg', '맛있는 쪼꼬', 1000, '딸기잼', '6인치', '생크림', '생일 축하합니다'),
+    (2, '레드벨벳 케이크', 17000, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/711695a2-ece7-4270-86de-f1e300972c52.jpg', '빠바빨간맛', 1000, '크림치즈', '8인치', '크림치즈', '사랑합니다'),
+    (3, '망고 케이크', 16000, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/cake.jpg', '달콤한 망고', 1000, '망고잼', '7인치', '휘핑크림', '축하합니다'),
+    (4, '녹차 케이크', 18000, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/6b96ac81-2eaf-4eee-92c4-bbcd9b113d8c.jpg', '상큼한 녹차', 1000, '고소한 녹차', '8인치', '생크림', '행복한 하루 되세요'),
+    (11, '딸기 케이크', 14000, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/cake.jpg', '신선한 딸기', 1000, '딸기잼', '6인치', '생크림', '행복한 생일'),
     (12, '레몬 케이크', 15500, 'lemon_cake.jpg', '상큼한 레몬', 1002, '레몬커드', '7인치', '휘핑크림', '기분 좋은 하루'),
     (13, '호두 케이크', 17500, 'walnut_cake.jpg', '고소한 호두', 1003, '호두잼', '8인치', '생크림', '사랑합니다'),
     (14, '카라멜 케이크', 16500, 'caramel_cake.jpg', '달콤한 카라멜', 1004, '카라멜소스', '8인치', '생크림', '축하합니다'),
 
 -- 베이커리 항목
-    (5, '블루베리 머핀', 5000, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/c3ad439e-c012-4a86-ad8e-58cd66ac066f.jpg', '블루베리~~', 1, NULL, NULL, NULL, NULL),
-    (6, '프랑스식 바게트', 4000, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/6b96ac81-2eaf-4eee-92c4-bbcd9b113d8c.jpg', '봉쥬르', 1, NULL, NULL, NULL, NULL),
-    (7, '커스터드 도넛', 6000, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/711695a2-ece7-4270-86de-f1e300972c52.jpg', '맛있어여ㅎ', 1, NULL, NULL, NULL, NULL),
-    (8, '치아바타', 5500, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/c3ad439e-c012-4a86-ad8e-58cd66ac066f.jpg', '부드럽고 담백', 1, NULL, NULL, NULL, NULL),
-    (9, '크로와상', 4500, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/6b96ac81-2eaf-4eee-92c4-bbcd9b113d8c.jpg', '바삭하고 고소한', 1, NULL, NULL, NULL, NULL),
+    (5, '블루베리 머핀', 5000, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/c3ad439e-c012-4a86-ad8e-58cd66ac066f.jpg', '블루베리~~', 1000, NULL, NULL, NULL, NULL),
+    (6, '프랑스식 바게트', 4000, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/6b96ac81-2eaf-4eee-92c4-bbcd9b113d8c.jpg', '봉쥬르', 1000, NULL, NULL, NULL, NULL),
+    (7, '커스터드 도넛', 6000, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/711695a2-ece7-4270-86de-f1e300972c52.jpg', '맛있어여ㅎ', 1000, NULL, NULL, NULL, NULL),
+    (8, '치아바타', 5500, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/c3ad439e-c012-4a86-ad8e-58cd66ac066f.jpg', '부드럽고 담백', 1000, NULL, NULL, NULL, NULL),
+    (9, '크로와상', 4500, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/6b96ac81-2eaf-4eee-92c4-bbcd9b113d8c.jpg', '바삭하고 고소한', 1000, NULL, NULL, NULL, NULL),
     (10, '프레첼', 3000, 'pretzel.jpg', '짭짤한 간식', 1001, NULL, NULL, NULL, NULL),
-    (15, '자몽 머핀', 5200, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/711695a2-ece7-4270-86de-f1e300972c52.jpg', '상큼한 자몽', 1, NULL, NULL, NULL, NULL),
+    (15, '자몽 머핀', 5200, 'https://kr.object.ncloudstorage.com/myseatdang-bucket/menu/711695a2-ece7-4270-86de-f1e300972c52.jpg', '상큼한 자몽', 1000, NULL, NULL, NULL, NULL),
     (16, '호두빵', 4700, 'walnut_bread.jpg', '고소한 호두빵', 1002, NULL, NULL, NULL, NULL),
     (17, '시나몬 롤', 6200, 'cinnamon_roll.jpg', '달콤한 시나몬', 1003, NULL, NULL, NULL, NULL),
     (18, '치즈케이크', 5500, 'cheesecake.jpg', '부드러운 치즈', 1004, NULL, NULL, NULL, NULL),
     (19, '파운드 케이크', 5300, 'pound_cake.jpg', '진한 맛', 1005, NULL, NULL, NULL, NULL),
     (20, '바나나 브레드', 5000, 'banana_bread.jpg', '부드러운 바나나', 1006, NULL, NULL, NULL, NULL);
 
-insert into pay_approve (aid, quantity, total, approved_at, created_at, shop_id)
-values ('A6b2d0593aa5606e25ca', 1, 15000, '2024-08-20T10:34:56.789', '2024-08-20T12:34:56.789', 1),
-       ('A7b2d0593aa5606e25ca', 2, 45000, '2024-08-19T10:34:56.789', '2024-08-19T12:34:56.789', 1),
-       ('A8b2d0593aa5606e25ca', 1, 25000, '2024-08-18T10:34:56.789', '2024-08-18T12:34:56.789', 1),
-       ('A9b2d0593aa5606e25ca', 3, 31000, '2024-08-16T10:34:56.789', '2024-08-16T12:34:56.789', 1);
-
-insert into waiting (id, store_id, visited_time, waiting_status)
-values (1, 1, '2024-08-21T12:34:56.789', 'VISITED'),
-       (2, 1, '2024-08-21T10:34:56.789', 'VISITED'),
-       (3, 1, '2024-08-21T11:34:56.789', 'VISITED'),
-       (4, 1, '2024-08-20T12:34:56.789', 'VISITED'),
-       (5, 1, '2024-08-20T10:34:56.789', 'VISITED'),
-       (6, 1, '2024-08-19T10:34:56.789', 'VISITED'),
-       (7, 1, '2024-08-18T12:34:56.789', 'VISITED'),
-       (8, 1, '2024-08-18T10:34:56.789', 'VISITED'),
-       (9, 1, '2024-08-17T10:34:56.789', 'VISITED'),
-       (10, 1, '2024-08-16T12:34:56.789', 'VISITED'),
-       (11, 1, '2024-08-15T10:34:56.789', 'VISITED'),
-       (12, 1, '2024-08-14T10:34:56.789', 'VISITED'),
-       (13, 1, '2024-08-14T12:34:56.789', 'VISITED'),
-       (14, 1, '2024-08-14T11:34:56.789', 'WAITING');
 
 -- 일반빵 데이터 삽입
 # INSERT INTO general_menu (menu_name, menu_price, image, menu_type) VALUES

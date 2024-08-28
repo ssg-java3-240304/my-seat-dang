@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Controller
-@RequestMapping("/storeowner/store")
+@RequestMapping("/store")
 @RequiredArgsConstructor
 @Slf4j
 public class StoreOwnerController {
@@ -28,7 +28,7 @@ public class StoreOwnerController {
     @GetMapping("/main")
     public String main() {
 
-        return "storeowner/main";
+        return "store/main";
     }
 
     @GetMapping("/storeDetail")
@@ -57,7 +57,7 @@ public class StoreOwnerController {
         log.debug("dto = {}", dto);
 
         storeAdminService.regist(dto, thumbnail, images);
-        return "redirect:/storeowner/store/storeRegist";
+        return "redirect:/store/storeRegist";
     }
 
     @GetMapping(path = "/storeUpdate")
@@ -72,12 +72,8 @@ public class StoreOwnerController {
 
     @PostMapping("/storeUpdate")
     public String storeUpdate(
-            @ModelAttribute StoreUpdateRequestDto dto,
-            @RequestParam(value = "originalThumbnail", required = false) String originalThumbnail,
-            @RequestParam(value = "originalImages", required = false) List<String> originalImages){
-        log.debug("originalThumbnail = {}", originalThumbnail);
-        log.debug("originalImages = {}", originalImages);
-        storeAdminService.update(dto, originalThumbnail, originalImages);
-        return "redirect:/storeowner/store/storeUpdate";
+            @ModelAttribute StoreUpdateRequestDto dto){
+        storeAdminService.update(dto);
+        return "redirect:/store/storeUpdate";
     }
 }

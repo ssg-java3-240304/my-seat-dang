@@ -20,7 +20,6 @@ public class AwaitingWaitingResponse {
     private Long waitingOrder;
     private WaitingStatus waitingStatus;
     private Integer peopleCount;
-    private Long storeId;
     private String storeName;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
@@ -36,7 +35,6 @@ public class AwaitingWaitingResponse {
             awaitingWaitingResponse.createdDate = ((Waiting) waiting).getCreatedDate();
             awaitingWaitingResponse.peopleCount = ((Waiting) waiting).getCustomerInfo().getPeopleCount();
             awaitingWaitingResponse.storeName = store.getStoreName();
-            awaitingWaitingResponse.storeId = store.getStoreId();
         } else if (waiting instanceof WaitingStorage) {
             awaitingWaitingResponse.waitingId = ((WaitingStorage) waiting).getId();
             awaitingWaitingResponse.waitingNumber = ((WaitingStorage) waiting).getWaitingNumber();
@@ -45,7 +43,6 @@ public class AwaitingWaitingResponse {
             awaitingWaitingResponse.createdDate = ((WaitingStorage) waiting).getCreatedDate();
             awaitingWaitingResponse.peopleCount = ((WaitingStorage) waiting).getCustomerInfo().getPeopleCount();
             awaitingWaitingResponse.storeName = store.getStoreName();
-            awaitingWaitingResponse.storeId = store.getStoreId();
         }
 
         return awaitingWaitingResponse;

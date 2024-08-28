@@ -3,9 +3,8 @@ package com.matdang.seatdang.store.controller;
 import com.matdang.seatdang.menu.dto.MenuResponseDto;
 import com.matdang.seatdang.menu.service.MenuService;
 import com.matdang.seatdang.store.dto.StoreResponseDto;
-import com.matdang.seatdang.store.repository.StoreRepository;
+import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.service.StoreService;
-import com.matdang.seatdang.waiting.service.WaitingCustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -21,13 +20,9 @@ import java.util.List;
 public class StoreCustomerController {
     private final StoreService storeService;
     private final MenuService menuService;
-    private final WaitingCustomerService waitingCustomerService;
-    private final StoreRepository storeRepository;
 
     @GetMapping("/detail/{storeId}")
     public String detail(@PathVariable Long storeId, Model model){
-        boolean isWaitingExists = waitingCustomerService.isWaitingExists(storeId);
-
         StoreResponseDto storeResponseDto = storeService.findByStoreId(storeId);
         List<MenuResponseDto> menus = menuService.findByStoreId(storeId);
 
@@ -35,10 +30,6 @@ public class StoreCustomerController {
         log.debug("menus = {}", menus);
         log.debug("thumbnail = {}", storeResponseDto.getThumbnail());
         log.debug("images = {}", storeResponseDto.getImages());
-
-        model.addAttribute("storeStatus", storeRepository.findByStoreId(storeId).getStoreSetting().getWaitingStatus().toString());
-        model.addAttribute("storeId", storeId);
-        model.addAttribute("isWaitingExists", isWaitingExists);
 
         model.addAttribute("store", storeResponseDto);
         model.addAttribute("menus", menus);

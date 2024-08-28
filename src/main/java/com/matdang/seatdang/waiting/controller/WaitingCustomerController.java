@@ -3,36 +3,44 @@ package com.matdang.seatdang.waiting.controller;
 import com.matdang.seatdang.auth.service.AuthService;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
-import com.matdang.seatdang.waiting.controller.dto.*;
-import com.matdang.seatdang.waiting.dto.WaitingId;
+import com.matdang.seatdang.waiting.controller.dto.AwaitingWaitingResponse;
+import com.matdang.seatdang.waiting.controller.dto.CanceledWaitingResponse;
+import com.matdang.seatdang.waiting.controller.dto.ReadyWaitingResponse;
+import com.matdang.seatdang.waiting.controller.dto.VisitedWaitingResponse;
+import com.matdang.seatdang.waiting.controller.dto.WaitingRequest;
+import com.matdang.seatdang.waiting.entity.Waiting;
+import com.matdang.seatdang.waiting.entity.WaitingStorage;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
+import com.matdang.seatdang.waiting.repository.query.WaitingQueryRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
+import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoProjection;
 import com.matdang.seatdang.waiting.service.WaitingCustomerService;
-import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingCustomerFacade;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.time.LocalDateTime;
 
 @Slf4j
 @Controller
 @RequestMapping("/my-seat-dang")
 @RequiredArgsConstructor
 public class WaitingCustomerController {
-    private final RedissonLockWaitingCustomerFacade redissonLockWaitingCustomerFacade;
     private final WaitingCustomerService waitingCustomerService;
     private final WaitingStorageRepository waitingStorageRepository;
     private final WaitingRepository waitingRepository;
     private final StoreRepository storeRepository;
     private final AuthService authService;
+
 
     @Value("${spring.data.redis.host}")
     private String host;
@@ -58,15 +66,10 @@ public class WaitingCustomerController {
      */
     // TODO : URL 직접 접근 막기 - 개선필요
     @GetMapping("/waiting/{storeId}")
-    public String readyWaiting(@PathVariable Long storeId, Model model, HttpServletRequest request,
-                               RedirectAttributes redirectAttributes) {
-        if (waitingCustomerService.isWaitingExists(storeId)) {
-            redirectAttributes.addFlashAttribute("status", true);
-            return "redirect:/my-seat-dang/store/detail/" + storeId;
-        }
-
+    public String readyWaiting(@PathVariable Long storeId, Model model, HttpServletRequest request) {
         String referer = request.getHeader("Referer");
         // 유효한 referer URL인지 확인 (예: "https://example.com/somepage")
+
         if (referer == null || (!referer.startsWith("http://localhost:8080/my-seat-dang/store/detail/" + storeId)
                 && !referer.startsWith("http://" + host + ":8080/my-seat-dang/store/detail/" + storeId))) {
             return "error/403";
@@ -83,31 +86,18 @@ public class WaitingCustomerController {
     @PostMapping("/waiting")
     public String createWaiting(@ModelAttribute WaitingRequest waitingRequest, RedirectAttributes redirectAttributes) {
         log.debug("=== create Waiting ===");
-        log.debug("=== create Waiting === {}", LocalDateTime.now());
-        WaitingId waitingId = redissonLockWaitingCustomerFacade.createWaiting(waitingRequest.getStoreId(),
+        Long waitingId = waitingCustomerService.createWaiting(waitingRequest.getStoreId(),
                 waitingRequest.getPeopleCount());
-        redirectAttributes.addAttribute("waitingNumber", waitingId.getWaitingNumber());
-        redirectAttributes.addAttribute("storeId", waitingId.getStoreId());
+        redirectAttributes.addAttribute("waitingId", waitingId);
 
-        return "redirect:/my-seat-dang/waiting/{waitingNumber}/awaiting/detail";
+        return "redirect:/my-seat-dang/waiting/{waitingId}/awaiting/detail";
     }
 
     @GetMapping("/waiting")
-    public String showWaiting(
-            @RequestParam(defaultValue = "today") String when,
-            @RequestParam(defaultValue = "0") int status,
-            @RequestParam(defaultValue = "0") int page,
-            Model model) {
-        Page<WaitingInfoDto> waitings = null;
-        if (when.equals("today")) {
-            waitings = waitingCustomerService.showTodayWaiting(status, page);
-        } else if (when.equals("history")) {
-            waitings = waitingCustomerService.showHistoryWaiting(status, page);
-        }
-        System.out.println("isNotAwaiting = "+model.getAttribute("isNotAwaiting"));
-        System.out.println("waitings = " + waitings.getContent());
-        System.out.println("waitings = " + waitings.getTotalElements());
-        model.addAttribute("when", when);
+    public String showWaiting(@RequestParam(defaultValue = "0") int status,
+                              @RequestParam(defaultValue = "0") int page,
+                              Model model) {
+        Page<WaitingInfoProjection> waitings = waitingCustomerService.showWaiting(status, page);
         model.addAttribute("status", status);
         model.addAttribute("waitings", waitings.getContent());
         model.addAttribute("currentPage", waitings.getNumber());
@@ -118,46 +108,24 @@ public class WaitingCustomerController {
 
     // TODO : 취소 후 url에 접속 못하게 막기(if문 상태처리)
 
-    @PostMapping("/waiting/{waitingNumber}")
-    public String cancelWaiting(@PathVariable Long waitingNumber,
-                                @RequestParam Long storeId,
-                                RedirectAttributes redirectAttributes) {
-        if (waitingCustomerService.isNotAwaiting(storeId, waitingNumber)) {
-            redirectAttributes.addFlashAttribute("isNotAwaiting", true);
-            System.out.println("hihi = ");
-            return "redirect:/my-seat-dang/waiting";
+    @PostMapping("/waiting/{waitingId}/awaiting/detail")
+    public String cancelWaiting(@PathVariable Long waitingId, RedirectAttributes redirectAttributes) {
+        int result = waitingCustomerService.cancelWaitingByCustomer(waitingId);
+        if (result > 0) {
+            log.info("=== 웨이팅 고객 취소 ===");
+        } else {
+            log.error("== 웨이팅 고객 취소 오류 ===");
         }
-        log.debug("=== cancel Waiting === {}", LocalDateTime.now());
 
-        redissonLockWaitingCustomerFacade.cancelWaitingByCustomer(waitingNumber, storeId);
-        log.info("=== 웨이팅 고객 취소 ===");
-//        if (result > 0) {
-//            log.info("=== 웨이팅 고객 취소 ===");
-//        } else {
-//            log.error("== 웨이팅 고객 취소 오류 ===");
-//        }
+        redirectAttributes.addAttribute("waitingId", waitingId);
 
-        redirectAttributes.addAttribute("waitingNumber", waitingNumber);
-        redirectAttributes.addAttribute("storeId", storeId);
-
-        return "redirect:/my-seat-dang/waiting/{waitingNumber}/canceled/detail";
+        return "redirect:/my-seat-dang/waiting/{waitingId}/canceled/detail";
     }
 
-    @GetMapping("/waiting/{waitingNumber}/{status}/detail")
-    public String showWaitingDetail(@PathVariable Long waitingNumber,
-                                    @PathVariable String status,
-                                    @RequestParam Long storeId,
-                                    @RequestParam(defaultValue = "today") String when,
-                                    Model model,
-                                    HttpServletRequest request,
-                                    RedirectAttributes redirectAttributes) {
+    @GetMapping("/waiting/{waitingId}/{status}/detail")
+    public String showWaitingDetail(@PathVariable Long waitingId, @PathVariable String status, Model model,
+                                    HttpServletRequest request) {
         // Referer 검증 (awaiting 상태일 때만)
-        if (waitingCustomerService.isIncorrectWaitingStatus(storeId, waitingNumber, status, when)) {
-            redirectAttributes.addFlashAttribute("isIncorrectWaitingStatus", true);
-
-            return "redirect:/my-seat-dang/waiting";
-        }
-
         if ("awaiting".equals(status)) {
             String referer = request.getHeader("Referer");
             if (referer == null || (!referer.startsWith("http://localhost:8080/my-seat-dang/waiting")
@@ -166,20 +134,16 @@ public class WaitingCustomerController {
             }
         }
 
-        Object response = getWaitingDetailResponse(new WaitingId(storeId, waitingNumber), status, when);
+        Object response = getWaitingDetailResponse(waitingId, status);
         model.addAttribute("waitingDetailResponse", response);
-        model.addAttribute("when", when);
-
-        log.debug("=== create finish Waiting === {}", LocalDateTime.now());
-        log.debug("=== cancel finish Waiting === {}", LocalDateTime.now());
 
         // 상태에 따라 뷰 이름을 반환
         return getViewName(status);
     }
 
-    private Object getWaitingDetailResponse(WaitingId waitingId, String status, String when) {
-        Object waiting = findWaitingEntity(waitingId, when);
-        Store store = storeRepository.findByStoreId(waitingId.getStoreId());
+    private Object getWaitingDetailResponse(Long waitingId, String status) {
+        Object waiting = findWaitingEntity(waitingId);
+        Store store = storeRepository.findByStoreId(getStoreId(waiting));
 
         switch (status) {
             case "canceled":
@@ -193,17 +157,25 @@ public class WaitingCustomerController {
         }
     }
 
-    private Object findWaitingEntity(WaitingId waitingId, String when) {
-        if (when.equals("today")) {
-            return waitingCustomerService.findById(waitingId);
-        } else if (when.equals("history")) {
-            return waitingStorageRepository.findByStoreIdAndWaitingNumber(waitingId.getStoreId(),
-                    waitingId.getWaitingNumber());
+    private Object findWaitingEntity(Long waitingId) {
+        Optional<Waiting> waiting = waitingRepository.findById(waitingId);
+        if (waiting.isPresent()) {
+            return waiting.get();
         }
 
-        return null;
+        Optional<WaitingStorage> waitingStorage = waitingStorageRepository.findById(waitingId);
+        return waitingStorage.orElse(null);
     }
 
+    private Long getStoreId(Object waiting) {
+        if (waiting instanceof Waiting) {
+            return ((Waiting) waiting).getStoreId();
+        } else if (waiting instanceof WaitingStorage) {
+            return ((WaitingStorage) waiting).getStoreId();
+        } else {
+            return null;
+        }
+    }
 
     // 상태에 따라 뷰 이름을 반환하는 메서드
     private String getViewName(String status) {
