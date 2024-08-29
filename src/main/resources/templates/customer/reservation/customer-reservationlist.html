@@ -87,10 +87,10 @@
                 <div class="tabs_detail">
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
-                            <a id="tab-A" href="#pane-A" class="nav-link" data-bs-toggle="tab" role="tab">전체예약</a>
+                            <a id="tab-A" href="#pane-A" class="nav-link active" data-bs-toggle="tab" role="tab">전체예약</a>
                         </li>
                         <li class="nav-item">
-                            <a id="tab-B" href="#pane-B" class="nav-link active" data-bs-toggle="tab" role="tab">결제 전</a>
+                            <a id="tab-B" href="#pane-B" class="nav-link" data-bs-toggle="tab" role="tab">결제 전</a>
                         </li>
                         <li class="nav-item">
                             <a id="tab-C" href="#pane-C" class="nav-link" data-bs-toggle="tab" role="tab">방문예정</a>
@@ -104,7 +104,7 @@
                     </ul>
 
                     <div class="tab-content" role="tablist">
-                        <div id="pane-A" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-A">
+                        <div id="pane-A" class="card tab-pane fade show active" role="tabpanel" aria-labelledby="tab-A">
                             <div class="card-header" role="tab" id="heading-A">
                                 <h5>
                                     <a class="collapsed" data-bs-toggle="collapse" href="#collapse-A" aria-expanded="true" aria-controls="collapse-A">
@@ -148,7 +148,7 @@
                         </div>
                         <!-- /tab -->
 
-                        <div id="pane-B" class="card tab-pane fade show active" role="tabpanel" aria-labelledby="tab-B">
+                        <div id="pane-B" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-B">
                             <div class="card-header" role="tab" id="heading-B">
                                 <h5>
                                     <a class="collapsed" data-bs-toggle="collapse" href="#collapse-B" aria-expanded="true" aria-controls="collapse-B">
@@ -420,7 +420,6 @@
                 </div>
                 <div class="modal-body">
                     <form id="cancelForm" th:action="@{/my-seat-dang/reservation/cancel}" method="POST">
-                        <!--                        <p th:text=""></p>-->
                         <input name="reservationId" id="cancel-reservId" hidden="hidden">
                         <div class="mb-3">
                             <label for="cancelReason" class="form-label">취소 사유</label>
@@ -461,8 +460,6 @@
     </div>
 
 
-
-
     <!-- Progress Bar -->
     <!-- Toast 메시지 -->
     <div id="toast" style="visibility: hidden; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background-color: #4CAF50; color: #ffffff; padding: 16px; border-radius: 5px; z-index: 1000;">생성이 완료되었습니다! 채팅창 왼쪽에 케이크 모양을 클릭하세요!</div>
@@ -476,21 +473,12 @@
 </main>
 </body>
 <div layout:fragment="js">
-    <!-- Bootstrap core JavaScript -->
-    <!--    <script src="/vendor/admin/jquery/jquery.min.js"></script>-->
-    <!--    <script src="/vendor/admin/bootstrap/js/bootstrap.bundle.min.js"></script>-->
-    <!-- Core plugin JavaScript -->
     <script th:src="@{/vendor/admin/jquery-easing/jquery.easing.min.js}"></script>
-    <!-- Page level plugin JavaScript -->
     <script th:src="@{/vendor/admin/jquery.magnific-popup.min.js}"></script>
-    <!-- Custom scripts for all pages -->
-    <!--    <script src="/js/admin/admin.js"></script>-->
     <!-- 이 페이지 전용 스크립트 -->
-    <!--    <script th:src="@{/js/customer/specific_detail.js}"></script>-->
     <script th:src="@{/js/customer/sticky_sidebar.min.js}"></script>
 
     <script th:inline="javascript">
-
         let selectedImageUrl = null; // selectedImageUrl 변수를 초기화합니다.
 
         // 모달이 열릴 때마다 이미지 선택 상태 초기화
