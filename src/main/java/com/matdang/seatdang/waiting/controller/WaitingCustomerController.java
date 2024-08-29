@@ -12,6 +12,7 @@ import com.matdang.seatdang.waiting.service.WaitingCustomerService;
 import com.matdang.seatdang.waiting.service.WaitingSettingService;
 import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingCustomerFacade;
 import jakarta.servlet.http.HttpServletRequest;
+import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -97,9 +98,15 @@ public class WaitingCustomerController {
         if (when.equals("today")) {
             waitings = waitingCustomerService.showTodayWaiting(status, page);
         } else if (when.equals("history")) {
-            waitings = waitingCustomerService.showHistoryWaiting(status, page);
+            LocalDateTime start = LocalDateTime.now();
+
+            waitings = waitingCustomerService.showHistoryWaiting(authService.getAuthenticatedMember().getMemberId(),
+                    status, page);
+            LocalDateTime end = LocalDateTime.now();
+            log.debug(" === elapsed time ===");
+            log.debug(" === {} === ", Duration.between(start, end).toMillis());
         }
-        System.out.println("isNotAwaiting = "+model.getAttribute("isNotAwaiting"));
+        System.out.println("isNotAwaiting = " + model.getAttribute("isNotAwaiting"));
         System.out.println("waitings = " + waitings.getContent());
         System.out.println("waitings = " + waitings.getTotalElements());
         model.addAttribute("when", when);
@@ -156,7 +163,7 @@ public class WaitingCustomerController {
         if ("awaiting".equals(status)) {
             String referer = request.getHeader("Referer");
             if (referer == null || (!referer.startsWith("http://localhost:8080/my-seat-dang/waiting")
-                    && !referer.startsWith("http://" + host + ":8080/my-seat-dang/waiting"))){
+                    && !referer.startsWith("http://" + host + ":8080/my-seat-dang/waiting"))) {
                 return "error/403";
             }
         }

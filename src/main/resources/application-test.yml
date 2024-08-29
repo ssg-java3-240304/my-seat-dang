@@ -36,3 +36,7 @@ cid: ${KAKAO_PAY_CID}
 
 hostUrl: http://localhost:8080
 
+logging:
+  level:
+    org.springframework.cache: trace
+

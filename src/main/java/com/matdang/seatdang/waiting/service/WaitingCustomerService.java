@@ -17,6 +17,7 @@ import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.repository.query.WaitingStorageQueryRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -328,9 +329,11 @@ public class WaitingCustomerService {
 //        return Page.empty();
 //    }
 
-    public Page<WaitingInfoDto> showHistoryWaiting(int status, int page) {
+
+    @Cacheable(cacheNames = "historyWaiting", key = "'historyWaiting:customer'+#customerId+ 'status:' +#status +'page:' + #page ", cacheManager = "waitingStorageCacheManager")
+    public Page<WaitingInfoDto> showHistoryWaiting(Long customerId, int status, int page) {
+
         PageRequest pageable = PageRequest.of(page, 10);
-        Long customerId = authService.getAuthenticatedMember().getMemberId();
         if (status <= 1) {
             return waitingStorageQueryRepository.findAllByCustomerIdAndWaitingStatus(customerId,
                     WaitingStatus.findWaiting(status), pageable);
