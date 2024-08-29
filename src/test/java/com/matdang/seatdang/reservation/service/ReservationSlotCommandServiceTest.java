@@ -18,6 +18,7 @@ import java.util.concurrent.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Transactional
 @SpringBootTest
 class ReservationSlotCommandServiceTest {
     @Autowired
@@ -127,7 +128,7 @@ class ReservationSlotCommandServiceTest {
         int maxReservation = 5;
         Long storeId = 1L;
         LocalDate date = LocalDate.now();
-        LocalTime time = LocalTime.of(12, 30);
+        LocalTime time = LocalTime.of(1, 30);
 
         //when
         ReservationTicket ticket = reservationSlotCommandService.getReservationTicket(new ReservationTicketRequestDTO(storeId, date, time, maxReservation));
@@ -142,7 +143,7 @@ class ReservationSlotCommandServiceTest {
         //given
         Long storeId = 5L;
         LocalDate date = LocalDate.now().plusDays(7);
-        LocalTime time = LocalTime.of(12, 30);
+        LocalTime time = LocalTime.of(13, 30);
         int maxReservation = 5;
         ReservationSlot reservationSlot = new ReservationSlot(storeId, date, time, maxReservation);
         reservationSlotRepository.save(reservationSlot);
@@ -161,7 +162,7 @@ class ReservationSlotCommandServiceTest {
                 .time(time)
                 .build();
         //when
-        reservationSlotCommandService.returnSlot(dto);
+        reservationSlotCommandService.releaseSlot(dto);
         //then
         reservationSlotRepository.flush();
         Optional<ReservationSlot> optSlot2 = reservationSlotRepository.findByStoreAndDateAndTime(storeId, date, time);
