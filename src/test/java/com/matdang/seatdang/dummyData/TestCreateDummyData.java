@@ -55,7 +55,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-//@Disabled
+@Disabled
 @SpringBootTest
 public class TestCreateDummyData {
     @Autowired
@@ -277,7 +277,7 @@ public class TestCreateDummyData {
         String[] desc ={"웨이팅을 받는 웨이팅 전용 매장입니다", "사전 주문 케이크만 판매 합니다. 예약 후 방문 해주세요", "특별한 날에 걸맞는 특별한 케이크를 준비 해드립니다"};
         String csvFile = "csv/store_sample_seoul.csv"; // CSV 파일 경로 설정
         String[] bakeryNames = {
-                "달콤한 바게트", "빵굽는 마을", "행복한 빵집", "프랑스 마카롱", "따뜻한 식빵", "황금 크루아상",
+                "마싯당", "빵굽는 마을", "행복한 빵집", "프랑스 마카롱", "따뜻한 식빵", "황금 크루아상",
                 "구름빵집", "크림 가득한 빵집", "버터 향기", "마들렌의 집", "달콤한 케이크", "소보로의 미소",
                 "바삭한 페스츄리", "파리의 아침", "슈크림 천국", "초코렛 브라우니", "베이커리 하우스", "오후의 도넛",
                 "촉촉한 빵집", "에그타르트의 향기", "치즈의 유혹", "꿈꾸는 단팥빵", "바닐라 크림빵", "멜론빵 가게",
@@ -292,7 +292,7 @@ public class TestCreateDummyData {
                 "맛있는 크로와상", "달콤한 시나몬롤", "고급 초콜릿", "향긋한 치즈케이크", "아름다운 파운드케이크",
                 "부드러운 마카롱", "새콤한 레몬파이", "세련된 타르트", "부드러운 크림빵", "풍부한 앙트레", "모던한 빵집",
                 "디저트의 천국", "햇살이 가득한 빵집", "쫄깃한 브라우니", "달콤한 프레즐", "예쁜 비스코티", "향기로운 소보로",
-                "부드러운 단팥빵", "수제 타르트", "사랑의 롤케이크", "유럽풍 빵집", "매일매일 신선한 빵집", "마싯당"
+                "부드러운 단팥빵", "수제 타르트", "사랑의 롤케이크", "유럽풍 빵집", "매일매일 신선한 빵집", "달콤한 바게트"
         };
         Random random = new Random();
         List<String> addresses = new ArrayList<>();
