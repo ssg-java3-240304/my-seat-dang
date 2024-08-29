@@ -3,7 +3,7 @@ package com.matdang.seatdang.store.service;
 import com.matdang.seatdang.store.dto.StoreDetailDto;
 import com.matdang.seatdang.store.dto.StoreRegistRequestDto;
 import com.matdang.seatdang.store.dto.StoreUpdateRequestDto;
-import com.matdang.seatdang.store.repository.StoreOwnerRepository;
+import com.matdang.seatdang.store.repository.StoreAdminRepository;
 import com.matdang.seatdang.object_storage.service.FileService;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
@@ -22,7 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StoreOwnerService {
     private final StoreRepository storeRepository;
-    private final StoreOwnerRepository storeOwnerRepository;
+    private final StoreAdminRepository storeAdminRepository;
     private final FileService fileService; // File 업로드용
 
     public void regist(StoreRegistRequestDto dto, MultipartFile thumbnail, List<MultipartFile> images) {
@@ -46,11 +46,11 @@ public class StoreOwnerService {
                 .thumbnail(uploadedThumbnailUrl)
                 .images(uploadedImagesUrl)
                 .build();
-        storeOwnerRepository.save(store);
+        storeAdminRepository.save(store);
     }
 
     public int findByStoreName(String storeName) {
-        Store store = storeOwnerRepository.findByStoreName(storeName);
+        Store store = storeAdminRepository.findByStoreName(storeName);
         // Store 객체가 null이면 사용 가능(중복되지 않음), 그렇지 않으면 사용 중(중복됨)
         return (store == null) ? 0 : 1;
     }
@@ -58,7 +58,7 @@ public class StoreOwnerService {
 
     public StoreDetailDto findByStoreId(Long storeId) {
         return StoreDetailDto.fromStore(
-                storeOwnerRepository.findById(storeId)
+                storeAdminRepository.findById(storeId)
                         .orElseThrow(() -> new RuntimeException("Store not found for id: " + storeId))
         );
     }

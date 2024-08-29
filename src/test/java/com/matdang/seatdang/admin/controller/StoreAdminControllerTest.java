@@ -1,6 +1,6 @@
 package com.matdang.seatdang.admin.controller;
 
-import com.matdang.seatdang.store.repository.StoreOwnerRepository;
+import com.matdang.seatdang.store.repository.StoreAdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class StoreAdminControllerTest {
     @Autowired
-    private StoreOwnerRepository storeOwnerRepository;
+    private StoreAdminRepository storeAdminRepository;
 
 //    @Test
 //    @DisplayName("storeList 조회")

@@ -4,7 +4,7 @@ import com.matdang.seatdang.store.entity.Store;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 
-public interface StoreOwnerRepository extends JpaRepository<Store, Long> {
+public interface StoreAdminRepository extends JpaRepository<Store, Long> {
     Store findByStoreName(@Param("storeName") String storeName);
 
 
