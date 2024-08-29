@@ -3,7 +3,7 @@ package com.matdang.seatdang.store.service;
 import com.matdang.seatdang.store.dto.StoreDetailDto;
 import com.matdang.seatdang.store.dto.StoreRegistRequestDto;
 import com.matdang.seatdang.store.dto.StoreUpdateRequestDto;
-import com.matdang.seatdang.store.repository.StoreAdminRepository;
+import com.matdang.seatdang.store.repository.StoreOwnerRepository;
 import com.matdang.seatdang.object_storage.service.FileService;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
@@ -20,9 +20,9 @@ import java.util.List;
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
-public class StoreAdminService {
+public class StoreOwnerService {
     private final StoreRepository storeRepository;
-    private final StoreAdminRepository storeAdminRepository;
+    private final StoreOwnerRepository storeOwnerRepository;
     private final FileService fileService; // File 업로드용
 
     public void regist(StoreRegistRequestDto dto, MultipartFile thumbnail, List<MultipartFile> images) {
@@ -46,11 +46,11 @@ public class StoreAdminService {
                 .thumbnail(uploadedThumbnailUrl)
                 .images(uploadedImagesUrl)
                 .build();
-        storeAdminRepository.save(store);
+        storeOwnerRepository.save(store);
     }
 
     public int findByStoreName(String storeName) {
-        Store store = storeAdminRepository.findByStoreName(storeName);
+        Store store = storeOwnerRepository.findByStoreName(storeName);
         // Store 객체가 null이면 사용 가능(중복되지 않음), 그렇지 않으면 사용 중(중복됨)
         return (store == null) ? 0 : 1;
     }
@@ -58,7 +58,7 @@ public class StoreAdminService {
 
     public StoreDetailDto findByStoreId(Long storeId) {
         return StoreDetailDto.fromStore(
-                storeAdminRepository.findById(storeId)
+                storeOwnerRepository.findById(storeId)
                         .orElseThrow(() -> new RuntimeException("Store not found for id: " + storeId))
         );
     }
@@ -96,24 +96,6 @@ public class StoreAdminService {
                 .lastOrder(dto.getLastOrder())
                 .regularDayOff(dto.getRegularDayOff())
                 .build();
-
-//        if(dto.getThumbnail().getSize()>0){
-//            String folderName = "store-thumbnail";
-//            String uploadedFileUrl = fileService.uploadSingleFile(dto.getThumbnail(), folderName);
-//            if(!uploadedFileUrl.isEmpty()){
-//                log.debug("Thumbnail URL: {}", uploadedFileUrl);
-//                storeDetailDto.setThumbnail(uploadedFileUrl);
-//            }
-//        }
-//
-//        if(!dto.getImages().isEmpty()){
-//            String folderName = "store-images";
-//            List<String> uploadedFileUrl = fileService.uploadFiles(dto.getImages(), folderName);
-//            if(!uploadedFileUrl.isEmpty()){
-//                log.debug("Images URL: {}", uploadedFileUrl);
-//                storeDetailDto.setImages(uploadedFileUrl);
-//            }
-//        }
 
         Store store = storeRepository.findByStoreId(dto.getStoreId());
         store.update(storeDetailDto);

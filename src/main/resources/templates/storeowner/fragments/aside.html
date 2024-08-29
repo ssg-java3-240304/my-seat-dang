@@ -14,12 +14,6 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
                 <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
-                    <a class="nav-link" th:href="@{/store-owner/mypage/dashboard}">
-                        <i class="fa fa-fw fa-dashboard"></i>
-                        <span class="nav-link-text">대시보드</span>
-                    </a>
-                </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
                     <a class="nav-link" th:href="@{/store-owner/waiting}">
                         <i class="fa fa-fw fa-dashboard"></i>
                         <span class="nav-link-text">웨이팅 현황</span>
@@ -32,10 +26,10 @@
                     </a>
                     <ul class="sidenav-second-level" id="collapseStoreListings">
                         <li>
-                            <a th:href="@{/storeowner/store/storeRegist}">매장 등록</a>
+                            <a th:href="@{/store-owner/store/store-regist}">매장 등록</a>
                         </li>
                         <li>
-                            <a th:href="@{/storeowner/store/storeUpdate}">매장 수정</a>
+                            <a th:href="@{/store-owner/store/store-update}">매장 수정</a>
                         </li>
                     </ul>
                 </li>
