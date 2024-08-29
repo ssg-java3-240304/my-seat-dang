@@ -175,8 +175,10 @@
                         <div class="main">
                             <input type="text" id="datepicker_field" name="date">
                             <div id="DatePicker"></div>
+
+                            <br><span class="plain_text">예약 시간</span>
                             <div class="dropdown time last-option">
-                                <a href="#" data-bs-toggle="dropdown">Hour <span id="selected_time"></span></a>
+                                <a href="#" data-bs-toggle="dropdown"><span id="selected_time">방문하실 시간을 선택하세요 </span></a>
                                 <div class="dropdown-menu">
                                     <div class="dropdown-menu-content">
                                         <div class="radio_select hour-container add_bottom_15" id="time-list">
@@ -184,6 +186,16 @@
                                     </div>
                                 </div>
                             </div>
+
+<!--                            <div class="dropdown time last-option">-->
+<!--                                <a href="#" data-bs-toggle="dropdown">Hour <span id="selected_time"></span></a>-->
+<!--                                <div class="dropdown-menu">-->
+<!--                                    <div class="dropdown-menu-content">-->
+<!--                                        <div class="radio_select hour-container add_bottom_15" id="time-list">-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
                             <!-- /dropdown -->
 
                             <input name="store.storeId" th:value="${store.storeId}" hidden="hidden">
@@ -266,6 +278,17 @@
         console.log(storeOpenTime);
         console.log(storeCloseTime);
 
+        const $dropdownElement = document.querySelector('.time');
+        const dropdown = new bootstrap.Dropdown($dropdownElement);
+
+        const openTimeList = () =>{
+            dropdown.show();
+        };
+
+        const closeTimeList = () =>{
+            dropdown.hide();
+        };
+
         // 시간 목록을 생성하기 전에 기존 목록을 지웁니다.
         const clearTimeList = () => {
             while (timeList.firstChild) {
@@ -313,6 +336,7 @@
                 listItem.addEventListener('click', function(event) {
                     if (!listItem.classList.contains('disabled-label')) {
                         selectedTimeSpan.textContent = timeStr;
+                        closeTimeList();
                     }
                 });
 

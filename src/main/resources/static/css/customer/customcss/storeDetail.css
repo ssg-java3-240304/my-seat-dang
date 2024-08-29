@@ -69,3 +69,18 @@ input[type="radio"]:disabled + label:hover {
     border-radius: 1px;
     border-color: forestgreen;
 }
+
+.plain_text{
+    font-size: 1.05rem;
+}
+
+#selected_time{
+    font-size: 1.2rem;
+}
+
+.box_booking .head .my_offer {
+    color: forestgreen;
+    font-weight: 500;
+    font-size: 16px;
+    font-size: 1rem;
+}
