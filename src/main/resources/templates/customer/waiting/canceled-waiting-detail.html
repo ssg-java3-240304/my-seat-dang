@@ -3,7 +3,7 @@
       layout:decorate="~{customer/layout/default}">
 <head>
     <meta charset="UTF-8">
-    <title>Canceled Waiting Detail</title>
+    <title>취소한 웨이팅 상세보기</title>
     <link th:href="@{/css/customer/home.css}" rel="stylesheet">
     <style>
         /* 페이지 중앙 정렬 */
@@ -73,17 +73,17 @@
 <body>
 <main layout:fragment="main">
     <div>
-        <h1>Canceled Waiting Detail</h1>
+        <h1>취소한 웨이팅 상세보기</h1>
         <p><strong>웨이팅 번호:</strong> <span th:text="${waitingDetailResponse.waitingNumber}"></span></p>
-        <p><strong>웨이팅 상태:</strong> <span th:text="${waitingDetailResponse.waitingStatus}"></span></p>
+        <p><strong>현재 웨이팅 상태:</strong> <span th:text="${waitingDetailResponse.waitingStatus.status}"></span></p>
         <p><strong>웨이팅 예약일시:</strong>
             <span th:text="${waitingDetailResponse.createdDate.toLocalDate()} + ' ' + ${waitingDetailResponse.createdDate.toLocalTime().truncatedTo(T(java.time.temporal.ChronoUnit).SECONDS)}"></span>
         </p>
-        <p><strong>웨이팅 취소시간:</strong>
+        <p><strong>웨이팅 취소 시간 : </strong>
             <span th:text="${waitingDetailResponse.canceledTime.toLocalDate()} + ' ' + ${waitingDetailResponse.canceledTime.toLocalTime().truncatedTo(T(java.time.temporal.ChronoUnit).SECONDS)}"></span>
         </p>
         <p><strong>인원 수:</strong> <span th:text="${waitingDetailResponse.peopleCount}"></span></p>
-        <p><strong>상점명:</strong> <span th:text="${waitingDetailResponse.storeName}"></span></p>
+        <p><strong>상점 명:</strong> <span th:text="${waitingDetailResponse.storeName}"></span></p>
 
         <a th:href="@{|/my-seat-dang/waiting?status=2&when=${when}|}" class="btn btn-secondary">내 웨이팅리스트</a>
     </div>
