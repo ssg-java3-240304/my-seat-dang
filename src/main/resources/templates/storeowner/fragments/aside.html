@@ -25,6 +25,17 @@
                         <span class="nav-link-text">웨이팅 현황</span>
                     </a>
                 </li>
+                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Settings">
+                    <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#settings">
+                        <i class="fa fa-fw fa-list"></i>
+                        <span class="nav-link-text">설정</span>
+                    </a>
+                    <ul class="sidenav-second-level collapse" id="settings">
+                        <li>
+                            <a th:href="@{/store-owner/setting/waiting}">웨이팅 설정</a>
+                        </li>
+                    </ul>
+                </li>
                 <li class="nav-item" data-toggle="tooltip" data-placement="right" title="My Store">
                     <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseStoreListings">
                         <i class="fa fa-fw fa-list"></i>
@@ -79,17 +90,7 @@
                     </ul>
                 </li>
 
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Settings">
-                    <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#settings">
-                        <i class="fa fa-fw fa-list"></i>
-                        <span class="nav-link-text">설정</span>
-                    </a>
-                    <ul class="sidenav-second-level collapse" id="settings">
-                        <li>
-                            <a th:href="@{/store-owner/setting/waiting}">웨이팅 설정</a>
-                        </li>
-                    </ul>
-                </li>
+
                 <!--                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="My listings">-->
                 <!--                    <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMylistings">-->
                 <!--                        <i class="fa fa-fw fa-list"></i>-->
