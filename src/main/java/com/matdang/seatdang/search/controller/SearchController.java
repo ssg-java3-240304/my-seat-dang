@@ -32,7 +32,7 @@ public class SearchController {
     public String searchStore(
             @RequestParam(name = "store_name", required = false) String storeNameParam,
             @RequestParam(name = "store_address", required = false) String storeAddressParam,
-            @PageableDefault(page = 1, size = 12) Pageable pageable,
+            @PageableDefault(page = 1, size = 30) Pageable pageable,
             Model model) {
 
         log.debug("search store controller start storeName={}, storeAddress={}", storeNameParam, storeAddressParam);
@@ -48,27 +48,11 @@ public class SearchController {
         //Pageable을 0-based로 변환
         pageable = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize());
 
-        Page<SearchStoreResponseDto> storePageResponse;
+        Page<SearchStoreResponseDto> storePageResponse = searchStoreQueryService.searchStore(storeName, storeAddress, pageable);
 
-        if (storeName.isPresent() && storeAddress.isPresent()) {
-            // 두 파라미터가 모두 제공된 경우
-            log.debug("case: name&address | storeName={}, storeAddress={}", storeName, storeAddress);
-            storePageResponse = searchStoreQueryService.searchStoreByNameAndAddress(storeName.get(), storeAddress.get(), pageable);
-            model.addAttribute("storePage", storePageResponse.getContent());
-        } else if (storeName.isPresent()) {
-            // storeName만 제공된 경우
-            storePageResponse = searchStoreQueryService.searchStoreByStoreName(storeName.get(), pageable);
-            model.addAttribute("storePage", storePageResponse.getContent());
-            log.debug("storePageResponse: {}", storePageResponse.getContent());
-        } else if (storeAddress.isPresent()) {
-            // storeAddress만 제공된 경우
-            storePageResponse = searchStoreQueryService.searchStoreByAddress(storeAddress.get(), pageable);
-            model.addAttribute("storePage", storePageResponse.getContent());
-            log.debug("storePageResponse: {}", storePageResponse.getContent());
-        } else {
-            // 둘 다 제공되지 않은 경우
-            return "customer/search/search";
-        }
+        model.addAttribute("storePage", storePageResponse.getContent());
+
+        log.debug("storePageResponse: {}", storePageResponse.getContent());
 
         // 페이지바 설정
         int page = storePageResponse.getNumber(); // 0-based 페이지번호
