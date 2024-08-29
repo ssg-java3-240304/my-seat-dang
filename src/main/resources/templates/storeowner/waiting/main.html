@@ -54,8 +54,8 @@
         </div>
 
         <div class="waiting-info">
-            <p>앞에 남은 자리: <span th:text="${waitingPeople.teamCount}"></span></p>
-            <p>방문 인원 수: <span th:text="${waitingPeople.peopleCount}"></span></p>
+            <p>총 등록 수: <span th:text="${waitingPeople.teamCount}"></span></p>
+            <p>총 인원 수: <span th:text="${waitingPeople.peopleCount}"></span></p>
         </div>
 
         <div class="btn-group mb-4" role="group" aria-label="Status buttons">
@@ -92,7 +92,7 @@
                     <td th:if="${status != 1}" th:text="${waiting.waitingOrder}"></td>
                     <td th:text="${waiting.customerPhone}"></td>
                     <td th:text="${waiting.peopleCount}"></td>
-                    <td th:text="${waiting.waitingStatus}"></td>
+                    <td th:text="${waiting.waitingStatus.status}"></td>
                     <td th:text="${{waiting.createdDate}}"></td>
                     <td th:if="${status == 1}" th:text="${{waiting.visitedTime}}"></td>
                     <td th:if="${status >= 2}" th:text="${{waiting.canceledTime}}"></td>
