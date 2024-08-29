@@ -102,12 +102,12 @@
 <main layout:fragment="main">
     <div>
         <h1>웨이팅 상세정보</h1>
-        <p><strong>웨이팅 번호:</strong> <span th:text="${waitingDetailResponse.waitingNumber}"></span></p>
-        <p><strong>웨이팅 순서:</strong> <span th:text="${waitingDetailResponse.waitingOrder}"></span></p>
-        <p><strong>웨이팅 상태:</strong> <span th:text="${waitingDetailResponse.waitingStatus}"></span></p>
-        <p><strong>웨이팅 예약일시:</strong> <span th:text="${waitingDetailResponse.createdDate.toLocalDate()}"></span></p>
-        <p><strong>인원 수:</strong> <span th:text="${waitingDetailResponse.peopleCount}"></span></p>
-        <p><strong>상점 명:</strong> <span th:text="${waitingDetailResponse.storeName}"></span></p>
+        <p><strong>웨이팅 번호 :</strong> <span th:text="${waitingDetailResponse.waitingNumber}"></span></p>
+        <p><strong>웨이팅 순서 :</strong> <span th:text="${waitingDetailResponse.waitingOrder}"></span></p>
+        <p><strong>현재 웨이팅 상태 :</strong> <span th:text="${waitingDetailResponse.waitingStatus.status}"></span></p>
+        <p><strong>웨이팅 등록일시 :</strong> <span th:text="${waitingDetailResponse.createdDate.toLocalDate()}"></span></p>
+        <p><strong>인원 수 :</strong> <span th:text="${waitingDetailResponse.peopleCount}"></span></p>
+        <p><strong>상점 명 :</strong> <span th:text="${waitingDetailResponse.storeName}"></span></p>
         <form id="cancelWaitingForm" th:action="@{|/my-seat-dang/waiting/${waitingDetailResponse.waitingNumber}?storeId=${waitingDetailResponse.storeId}|}" method="post">
             <button type="submit">웨이팅 취소</button>
         </form>

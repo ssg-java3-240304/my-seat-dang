@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>Waiting List</title>
+    <title>웨이팅 목록</title>
     <style>
         .active-button {
             font-weight: bold;
@@ -45,17 +45,17 @@
 <body>
 <div layout:fragment="content">
     <div class="container mt-4">
-        <h2>Waiting List</h2>
+        <h2>웨이팅 목록</h2>
 
         <p>현재 상태: <span th:text="${waitingStatus.waitingStatus}"></span></p>
 
         <div th:if="${status == 0}">
-            <h2>Estimated Waiting Time: <span th:text="${estimatedTime}"></span></h2>
+            <h2>예상 대기 시간: <span th:text="${estimatedTime}"></span></h2>
         </div>
 
         <div class="waiting-info">
-            <p>Team Count: <span th:text="${waitingPeople.teamCount}"></span></p>
-            <p>People Count: <span th:text="${waitingPeople.peopleCount}"></span></p>
+            <p>총 등록 수: <span th:text="${waitingPeople.teamCount}"></span></p>
+            <p>총 인원 수: <span th:text="${waitingPeople.peopleCount}"></span></p>
         </div>
 
         <div class="btn-group mb-4" role="group" aria-label="Status buttons">
@@ -75,15 +75,15 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th>Waiting Number</th>
-                    <th th:if="${status != 1}">Waiting Order</th>
-                    <th>Customer Phone Number</th>
-                    <th>People Count</th>
-                    <th>Waiting Status</th>
-                    <th>Created Date</th>
-                    <th th:if="${status == 1}">Visited Time</th>
-                    <th th:if="${status >= 2}">Canceled Time</th>
-                    <th th:if="${status == 0}">Status Change</th>
+                    <th>대기 번호</th>
+                    <th th:if="${status != 1}">대기 순서</th>
+                    <th>고객 전화번호</th>
+                    <th>방문 인원수</th>
+                    <th>대기 상태</th>
+                    <th>생성일</th>
+                    <th th:if="${status == 1}">방문 시간</th>
+                    <th th:if="${status >= 2}">취소 시간</th>
+                    <th th:if="${status == 0}">상태 변경</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -92,7 +92,7 @@
                     <td th:if="${status != 1}" th:text="${waiting.waitingOrder}"></td>
                     <td th:text="${waiting.customerPhone}"></td>
                     <td th:text="${waiting.peopleCount}"></td>
-                    <td th:text="${waiting.waitingStatus}"></td>
+                    <td th:text="${waiting.waitingStatus.status}"></td>
                     <td th:text="${{waiting.createdDate}}"></td>
                     <td th:if="${status == 1}" th:text="${{waiting.visitedTime}}"></td>
                     <td th:if="${status >= 2}" th:text="${{waiting.canceledTime}}"></td>
@@ -139,7 +139,7 @@
                 <li class="page-item">
                     <a class="page-link" th:href="${currentPage == totalPages - 1} ? '#' : @{/store-owner/waiting(status=${status}, page=${currentPage + 1})}"
                        th:classappend="${currentPage == totalPages - 1} ? 'disabled-link' : ''">
-                        Next &raquo;
+                        다음 &raquo;
                     </a>
                 </li>
             </ul>

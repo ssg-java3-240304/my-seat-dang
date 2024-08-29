@@ -3,21 +3,86 @@
       layout:decorate="~{customer/layout/default}">
 <head>
     <meta charset="UTF-8">
-    <title>Visited Waiting Detail</title>
-    <!--    main page only css-->
+    <title>방문한 웨이팅 상세보기</title>
     <link th:href="@{/css/customer/home.css}" rel="stylesheet">
+    <style>
+        /* 페이지 중앙 정렬 */
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+        }
+
+        /* 컨테이너 스타일 */
+        main > div {
+            background-color: #f9f9f9;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            text-align: left;
+        }
+
+        /* 제목 스타일 */
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        /* 문단 및 레이블 스타일 */
+        p {
+            margin: 10px 0;
+            color: #666;
+        }
+
+        p strong {
+            color: #333;
+        }
+
+        /* 링크 스타일 */
+        a.btn {
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        a.btn-secondary {
+            background-color: #6c757d;
+        }
+
+        a.btn:hover {
+            background-color: #0056b3;
+        }
+
+        a.btn-secondary:hover {
+            background-color: #5a6268;
+        }
+    </style>
 </head>
 <body>
 <main layout:fragment="main">
-    <h1>Visited Waiting Detail</h1>
-    <p><strong>Waiting Number:</strong> <span th:text="${waitingDetailResponse.waitingNumber}"></span></p>
-    <p><strong>Waiting Status:</strong> <span th:text="${waitingDetailResponse.waitingStatus}"></span></p>
-    <p><strong>Created Date:</strong> <span th:text="${{waitingDetailResponse.createdDate}}"></span></p>
-    <p><strong>Visited Time:</strong> <span th:text="${{waitingDetailResponse.visitedTime}}"></span></p>
-    <p><strong>People Count:</strong> <span th:text="${waitingDetailResponse.peopleCount}"></span></p>
-    <p><strong>Store Name:</strong> <span th:text="${waitingDetailResponse.storeName}"></span></p>
+    <div>
+        <h1>방문한 웨이팅 가게 정보</h1>
+        <p><strong>웨이팅 번호 :</strong> <span th:text="${waitingDetailResponse.waitingNumber}"></span></p>
+        <p><strong>현재 웨이팅 상태 :</strong> <span th:text="${waitingDetailResponse.waitingStatus.status}"></span></p>
+        <p><strong>웨이팅 등록 일시 :</strong> <span th:text="${waitingDetailResponse.createdDate}"></span></p>
+        <p><strong>웨이팅 입장 시간 :</strong> <span th:text="${waitingDetailResponse.visitedTime}"></span></p>
+        <p><strong>인원 수 :</strong> <span th:text="${waitingDetailResponse.peopleCount}"></span></p>
+        <p><strong>상점 명 :</strong> <span th:text="${waitingDetailResponse.storeName}"></span></p>
 
-    <a th:href="@{|/my-seat-dang/waiting?status=1&when=${when}|}" class="btn btn-secondary">Back to Waiting List</a>
+        <a th:href="@{|/my-seat-dang/waiting?status=1&when=${when}|}" class="btn btn-secondary">웨이팅 목록으로 돌아가기</a>
+    </div>
 </main>
 </body>
 </html>

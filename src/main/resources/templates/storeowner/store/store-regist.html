@@ -3,7 +3,7 @@
       layout:decorate="~{storeowner/layout/default}" xmlns="http://www.w3.org/1999/html">
 
 <div layout:fragment="content">
-    <form th:action="@{/templates/storeowner/storeRegist}" method="post" enctype="multipart/form-data">
+    <form th:action="@{/store-owner/store/store-regist}" method="post" enctype="multipart/form-data">
         <!-- Breadcrumbs-->
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
@@ -308,8 +308,17 @@
 
         let isclicked = 0;
         document.querySelector("#checkStoreNameBtn").onclick = () => {
+            // 매장명 입력 필드의 값 가져오기
+            let storeName = $('#storeName').val();
+
+            // 매장명이 비어있는지 확인
+            if (storeName.trim() === "") {
+                alert("매장명을 입력하세요.");
+                return; // 빈 값일 경우 함수 종료
+            }
+
             $.ajax({
-                url: '[[@{/storeowner/store/storeNameCheck}]]',
+                url: '[[@{/store-owner/store/store-name-check}]]',
                 method: 'get',
                 data: {storeName: $('#storeName').val()},
                 dataType: 'json',
@@ -375,7 +384,7 @@
             formData.append('regularDayOff', $('#regularDayOff').val());
 
             $.ajax({
-                url: '[[@{/storeowner/store/storeRegist}]]',
+                url: '[[@{/store-owner/store/store-regist}]]',
                 method: 'post',
                 contentType: false,
                 processData: false,
