@@ -1215,4 +1215,3 @@
   return jarallaxVideo;
 
 }));
-//# sourceMappingURL=jarallax-video.js.map
