@@ -21,7 +21,9 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -37,6 +39,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -60,30 +64,45 @@ public class TestCreateDummyData {
     private RedisTemplate<String, Object> redisTemplate;
 
 
-    @CsvSource({
-            "customer@test.com, '이재용', 'https://kr.object.ncloudstorage.com/myseatdang-bucket/member/fa6265015dbc9466b5047f11cabe160b_res.jpeg'",
-            "customer2@test.com, '카리나', 'https://kr.object.ncloudstorage.com/myseatdang-bucket/member/c150140d8344c1d3e3bc9f6ae3f293e8_res.jpeg'",
-            "customer3@test.com, '서강준', 'profile.jpg'",
-            "customer4@test.com, '차은우', 'profile.jpg'",
-            "customer5@test.com, '윈터', 'profile.jpg'"
-    })
+
+    static Stream<Arguments> customerProvider() {
+        String[] names = {
+                "김민준", "이서윤", "박서연", "최지후", "김도윤", "이주원", "박지호", "김서준", "정예린", "박하준",
+                "이하은", "김수빈", "박현우", "정지아", "최하늘", "김예준", "이하진", "박채원", "정민서", "최윤서",
+                "김현우", "이지안", "박예원", "정다인", "최민재", "김지우", "이준서", "박지민", "정지원", "최수아",
+                "김지훈", "이하율", "박서현", "정예원", "최다은", "김서영", "이하린", "박서윤", "정하율", "최지호",
+                "김도현", "이준우", "박채연", "정수빈", "최윤아", "김민서", "이지후", "박서하", "정지우", "최하윤",
+                "김주원", "이서현", "박하린", "정예린", "최민서", "김예린", "이지아", "박하율", "정다은", "최서연",
+                "김하은", "이하영", "박채윤", "정서윤", "최하린", "김현서", "이지훈", "박하진", "정하은", "최도윤",
+                "김주호", "이도윤", "박서우", "정민주", "최주원", "김예은", "이지은", "박하은", "정수현", "최다윤",
+                "김하율", "이서영", "박채은", "정하윤", "최민호", "김채원", "이지안", "박서은", "정지호", "최하준",
+                "김다은", "이주하", "박서린", "정서현", "최하영", "김주은", "이지훈", "박하윤", "정수아", "최도현"
+        };
+        return IntStream.rangeClosed(1, 100).mapToObj(i -> {
+            String email = "customer" + i + "@naver.com";
+            String name = names[i - 1];
+            return Arguments.of(email, name);
+        });
+    }
+
     @DisplayName("일반 회원 더미 데이터 세팅")
     @ParameterizedTest
-    public void Test1(String email, String memberName, String profileImage) {
+    @MethodSource("customerProvider")
+    public void Test1(String email, String memberName) {
         //given
         Customer customer = Customer.builder()
                 .memberEmail(email)
                 .joinDate(LocalDate.now())
                 .memberName(memberName)
                 .memberPassword(bCryptPasswordEncoder.encode("1234"))
-                .memberPhone("010-1234-5678")
+                .memberPhone(generateRandomKoreanPhoneNumber())
                 .memberRole(MemberRole.ROLE_CUSTOMER)
                 .memberStatus(MemberStatus.APPROVED)
                 .imageGenLeft(5)
                 .customerGender(Gender.MALE)
                 .customerBirthday(LocalDate.of(1990, 1, 1))
                 .customerNickName("미식가" + memberName)
-                .customerProfileImage(profileImage)
+                .customerProfileImage("https://kr.object.ncloudstorage.com/myseatdang-bucket/profile-images/1/abstract-user-flat-4.png")
                 .build();
         //when
         Customer savedCustomer = (Customer) memberRepository.save(customer);
@@ -99,6 +118,7 @@ public class TestCreateDummyData {
         return String.format("010-%04d-%04d", exchangeCode, subscriberNumber);
     }
 
+    @Disabled
     @Test
     @DisplayName("웨이팅 오늘 데이터 생성")
     void createWaitingToday() {
