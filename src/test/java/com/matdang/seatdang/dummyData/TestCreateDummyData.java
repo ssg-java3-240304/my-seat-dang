@@ -401,6 +401,7 @@ public class TestCreateDummyData {
                                             .waitingCloseTime(LocalTime.of(23, 0))
                                             .estimatedWaitingTime(LocalTime.of(0, 10))
                                             .build())
+                                    .waitingPeopleCount(10)
                                     .maxReservationInDay(1000)
                                     .maxReservationInTime(5)
                                     .build()

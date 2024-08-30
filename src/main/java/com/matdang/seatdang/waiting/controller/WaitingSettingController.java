@@ -72,12 +72,12 @@ public class WaitingSettingController {
     @PostMapping("/waiting-status")
     public String changeWaitingStatus(@RequestParam int status) {
         Long storeId = authService.getAuthenticatedStoreId();
-        int result = redissonLockWaitingSettingFacade.changeWaitingStatus(status, storeId);
+        redissonLockWaitingSettingFacade.changeWaitingStatus(status, storeId);
 
-        if (result>=1) {
-            log.info("=== Change Waiting Status ===");
-        }
-        log.debug("result ={}", result);
+//        if (result>=1) {
+//            log.info("=== Change Waiting Status ===");
+//        }
+//        log.debug("result ={}", result);
 
         return "redirect:/store-owner/setting/waiting";
     }
