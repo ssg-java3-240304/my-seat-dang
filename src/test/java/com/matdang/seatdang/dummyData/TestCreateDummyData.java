@@ -262,7 +262,8 @@ public class TestCreateDummyData {
                             .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
                             .createdDate(LocalDateTime.now())
                             .waitingStatus(value)
-                            .visitedTime(null)
+                            .visitedTime(LocalDateTime.now())
+                            .canceledTime(LocalDateTime.now())
                             .build());
                 }
             }

@@ -76,7 +76,7 @@
         <h1>취소한 웨이팅 상세보기</h1>
         <p><strong>웨이팅 번호:</strong> <span th:text="${waitingDetailResponse.waitingNumber}"></span></p>
         <p><strong>현재 웨이팅 상태:</strong> <span th:text="${waitingDetailResponse.waitingStatus.status}"></span></p>
-        <p><strong>웨이팅 예약일시:</strong>
+        <p><strong>웨이팅 등록일시:</strong>
             <span th:text="${waitingDetailResponse.createdDate.toLocalDate()} + ' ' + ${waitingDetailResponse.createdDate.toLocalTime().truncatedTo(T(java.time.temporal.ChronoUnit).SECONDS)}"></span>
         </p>
         <p><strong>웨이팅 취소 시간 : </strong>
