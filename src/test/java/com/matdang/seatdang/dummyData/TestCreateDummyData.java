@@ -55,7 +55,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@Disabled
+//@Disabled
 @SpringBootTest
 public class TestCreateDummyData {
     @Autowired
@@ -230,7 +230,6 @@ public class TestCreateDummyData {
         return menuList;
     }
 
-    @Disabled
     @Test
     @DisplayName("웨이팅 오늘 데이터 생성")
     void createWaitingToday() {
