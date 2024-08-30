@@ -94,10 +94,12 @@ public class WaitingCustomerController {
             @RequestParam(defaultValue = "0") int page,
             Model model) {
         Page<WaitingInfoDto> waitings = null;
+
         if (when.equals("today")) {
             waitings = waitingCustomerService.showTodayWaiting(status, page);
         } else if (when.equals("history")) {
-            waitings = waitingCustomerService.showHistoryWaiting(status, page);
+
+            waitings = waitingCustomerService.showHistoryWaiting(authService.getAuthenticatedMember().getMemberId(), status, page);
         }
         System.out.println("isNotAwaiting = "+model.getAttribute("isNotAwaiting"));
         System.out.println("waitings = " + waitings.getContent());

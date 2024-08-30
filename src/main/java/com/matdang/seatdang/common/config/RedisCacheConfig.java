@@ -1,6 +1,8 @@
 package com.matdang.seatdang.common.config;
 
 import java.time.Duration;
+
+import com.matdang.seatdang.waiting.dto.RedisPage;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +33,26 @@ public class RedisCacheConfig {
                 )
                 // 데이터의 만료기간(TTL) 설정
                 .entryTtl(Duration.ofMinutes(5L));
+
+        return RedisCacheManager
+                .RedisCacheManagerBuilder
+                .fromConnectionFactory(redisConnectionFactory)
+                .cacheDefaults(redisCacheConfiguration)
+                .build();
+    }
+
+    @Bean
+    public CacheManager waitingStorageCacheManager(RedisConnectionFactory redisConnectionFactory) {
+        RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration
+                .defaultCacheConfig()
+                .serializeKeysWith(
+                        RedisSerializationContext.SerializationPair.fromSerializer(
+                                new StringRedisSerializer()))
+                .serializeValuesWith(
+                        RedisSerializationContext.SerializationPair.fromSerializer(
+                                new Jackson2JsonRedisSerializer<>(RedisPage.class)) // 사용한 DTO 클래스
+                )
+                .entryTtl(Duration.ofHours(5));
 
         return RedisCacheManager
                 .RedisCacheManagerBuilder
