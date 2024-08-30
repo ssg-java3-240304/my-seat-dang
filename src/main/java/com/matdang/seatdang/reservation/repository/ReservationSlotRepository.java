@@ -20,7 +20,6 @@ public interface ReservationSlotRepository extends JpaRepository<ReservationSlot
             AND r.reservationSlotId.date = :date
             AND r.reservationSlotId.time = :time
         """)
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<ReservationSlot> findByStoreAndDateAndTime(@Param("storeId") Long storeId,
                                                                  @Param("date") LocalDate date,
                                                                  @Param("time") LocalTime time);

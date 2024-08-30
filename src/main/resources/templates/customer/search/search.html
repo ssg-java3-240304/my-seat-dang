@@ -62,21 +62,21 @@
                 <div class="tabs_detail">
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
-                            <a id="tab-A" href="#pane-A" class="nav-link active" data-bs-toggle="tab" role="tab">전체목록</a>
+                            <a id="tab-A" href="#pane-A" class="nav-link" data-bs-toggle="tab" role="tab" th:classappend="${storeType == null} ? 'active' : '' ">전체목록</a>
                         </li>
                         <li class="nav-item">
-                            <a id="tab-B" href="#pane-B" class="nav-link" data-bs-toggle="tab" role="tab">웨이팅 매장</a>
+                            <a id="tab-B" href="#pane-B" class="nav-link" data-bs-toggle="tab" role="tab" th:classappend="${storeType != null and storeType.toString().equals('GENERAL_WAITING')} ? 'active' : '' ">웨이팅 매장</a>
                         </li>
                         <li class="nav-item">
-                            <a id="tab-C" href="#pane-C" class="nav-link" data-bs-toggle="tab" role="tab">예약방문 매장</a>
+                            <a id="tab-C" href="#pane-C" class="nav-link" data-bs-toggle="tab" role="tab" th:classappend="${storeType != null and storeType.toString().equals('GENERAL_RESERVATION')} ? 'active' :''">예약방문 매장</a>
                         </li>
                         <li class="nav-item">
-                            <a id="tab-D" href="#pane-D" class="nav-link" data-bs-toggle="tab" role="tab">주문 제작 케이크</a>
+                            <a id="tab-D" href="#pane-D" class="nav-link" data-bs-toggle="tab" role="tab" th:classappend="${storeType != null and storeType.toString().equals('CUSTOM')} ? 'active' : '' ">주문 제작 케이크</a>
                         </li>
                     </ul>
 
                     <div class="tab-content" role="tablist">
-                        <div id="pane-A" class="card tab-pane fade show active mt-3" role="tabpanel" aria-labelledby="tab-A">
+                        <div id="pane-A" class="card tab-pane fade mt-3" role="tabpanel" aria-labelledby="tab-A" th:classappend="${storeType == null} ? 'show active' : '' ">
                             <div class="card-header bg_gray pattern" role="tab" id="heading-A">
                                 <h5>
                                     <span class="tab_info">
@@ -114,7 +114,7 @@
 
 
 
-                        <div id="pane-B" class="card tab-pane fade mt-3" role="tabpanel" aria-labelledby="tab-B">
+                        <div id="pane-B" class="card tab-pane fade mt-3" role="tabpanel" aria-labelledby="tab-B" th:classappend="${storeType != null and storeType.toString().equals('GENERAL_WAITING')} ? 'show active' : '' ">
                             <div class="card-header bg_gray pattern" role="tab" id="heading-B">
                                 <h5>
                                     <span class="tab_info">
@@ -152,7 +152,7 @@
                         </div>
 
 
-                        <div id="pane-C" class="card tab-pane fade mt-3" role="tabpanel" aria-labelledby="tab-C">
+                        <div id="pane-C" class="card tab-pane fade mt-3" role="tabpanel" aria-labelledby="tab-C" th:classappend="${storeType != null and storeType.toString().equals('GENERAL_RESERVATION')} ? 'show active' :''">
                             <div class="card-header bg_gray pattern" role="tab" id="heading-C">
                                 <h5>
                                     <span class="tab_info">
@@ -191,7 +191,7 @@
 
 
 
-                        <div id="pane-D" class="card tab-pane fade mt-3" role="tabpanel" aria-labelledby="tab-D">
+                        <div id="pane-D" class="card tab-pane fade mt-3" role="tabpanel" aria-labelledby="tab-D" th:classappend="${storeType != null and storeType.toString().equals('CUSTOM')} ? 'show active' : '' ">
                             <div class="card-header bg_gray pattern" role="tab" id="heading-D">
                                 <h5>
                                     <span class="tab_info">
@@ -283,8 +283,7 @@
                                         <div class="marker_info" id="marker_info">
                                         <img src="${store.thumbnail}" alt="" style="width: 240px; height: 140px; display: block; margin: 0 auto; cursor: pointer;" onclick="window.location.href='/my-seat-dang/store/detail/${store.storeId}'">
                                         <span>
-                                            <span class="infobox_rate">평점 | 7.5</span><h3>${store.storeName}</h3><em>제과점</em><strong>undefined</strong>
-                                            <a class="btn_infobox_detail"></a>
+                                            <h3>${store.storeName}</h3><em>제과점</em><strong>undefined</strong>
                                             <a class="btn_infobox_phone">02-1234-5678</a>
                                         </span>
                                        </div></div>`,

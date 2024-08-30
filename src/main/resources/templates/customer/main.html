@@ -115,7 +115,7 @@
             <!-- /main_title -->
             <div class="owl-carousel owl-theme categories_carousel">
                 <div class="item">
-                    <a th:href="@{/my-seat-dang/search(tab='tab-B')}">
+                    <a th:href="|@{/my-seat-dang/search?storeType=GENERAL_WAITING}|">
                         <span>98</span>
                         <i class="icon-food_icon_chinese"></i>
                         <h3>웨이팅</h3>
@@ -123,7 +123,7 @@
                     </a>
                 </div>
                 <div class="item">
-                    <a href="#0">
+                    <a th:href="|@{/my-seat-dang/search?storeType=CUSTOM}|">
                         <span>87</span>
                         <i class="icon-food_icon_cake_2"></i>
                         <h3>커스텀 케이크 예약</h3>
@@ -131,7 +131,7 @@
                     </a>
                 </div>
                 <div class="item">
-                    <a href="#0">
+                    <a th:href="|@{/my-seat-dang/search?storeType=GENERAL_RESERVATION}|">
                         <span>96</span>
                         <i class="icon-food_icon_burrito"></i>
                         <h3>일반 베이커리 예약</h3>

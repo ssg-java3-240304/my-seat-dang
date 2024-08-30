@@ -3,7 +3,6 @@ package com.matdang.seatdang.waiting.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.matdang.seatdang.search.repository.SearchRepository;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.store.vo.StoreSetting;

@@ -3,7 +3,7 @@ package com.matdang.seatdang.store.controller;
 import com.matdang.seatdang.store.dto.StoreDetailDto;
 import com.matdang.seatdang.store.dto.StoreRegistRequestDto;
 import com.matdang.seatdang.store.dto.StoreUpdateRequestDto;
-import com.matdang.seatdang.store.service.StoreAdminService;
+import com.matdang.seatdang.store.service.StoreOwnerService;
 import com.matdang.seatdang.auth.principal.StoreOwnerUserDetails;
 import com.matdang.seatdang.object_storage.service.FileService;
 import lombok.RequiredArgsConstructor;
@@ -18,66 +18,62 @@ import java.io.IOException;
 import java.util.List;
 
 @Controller
-@RequestMapping("/storeowner/store")
+@RequestMapping("/store-owner/store")
 @RequiredArgsConstructor
 @Slf4j
 public class StoreOwnerController {
     private final FileService fileService;
-    private final StoreAdminService storeAdminService;
+    private final StoreOwnerService storeOwnerService;
 
-    @GetMapping("/main")
-    public String main() {
-
-        return "storeowner/main";
-    }
-
-    @GetMapping("/storeDetail")
+    @GetMapping("/store-detail")
     public void storeDetail(@RequestParam("storeId") Long storeId, Model model){
-        StoreDetailDto store = storeAdminService.findByStoreId(storeId);
+        StoreDetailDto store = storeOwnerService.findByStoreId(storeId);
         log.debug("store = {}", store);
         model.addAttribute("store", store);
     }
 
-    @GetMapping("/storeRegist")
-    public void storeRegist(){
-        log.info("GET /store/storeRegist");
+    @GetMapping("/store-regist")
+    public String storeRegist(){
+        log.info("GET /store/store-regist");
+        return "storeowner/store/store-regist";
     }
 
-    @GetMapping(path = "/storeNameCheck", produces = "application/json; charset=utf-8")
+    @GetMapping(path = "/store-name-check", produces = "application/json; charset=utf-8")
     @ResponseBody
     public int storeNameCheck(@RequestParam String storeName){
-        log.info("GET /store/storeNameCheck");
-        return storeAdminService.findByStoreName(storeName);
+        log.info("GET /store/store-name-check");
+        return storeOwnerService.findByStoreName(storeName);
     }
 
-    @PostMapping("/storeRegist")
+    @PostMapping("/store-regist")
     public String storeRegist(
             @ModelAttribute StoreRegistRequestDto dto,
             @RequestParam("thumbnail") MultipartFile thumbnail, @RequestParam("images") List<MultipartFile> images) throws IOException {
         log.debug("dto = {}", dto);
 
-        storeAdminService.regist(dto, thumbnail, images);
-        return "redirect:/storeowner/store/storeRegist";
+        storeOwnerService.regist(dto, thumbnail, images);
+        return "redirect:/store-owner/store/store-regist";
     }
 
-    @GetMapping(path = "/storeUpdate")
-    public void storeUpdate(Model model){
+    @GetMapping(path = "/store-update")
+    public String storeUpdate(Model model){
         StoreOwnerUserDetails userDetails = (StoreOwnerUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long storeId = userDetails.getStore().getStoreId();
-        StoreDetailDto dto = storeAdminService.findByStoreId(storeId);
-        log.info("GET /store/storeUpdate");
+        StoreDetailDto dto = storeOwnerService.findByStoreId(storeId);
+        log.info("GET /store/store-update");
         log.debug("dto = {}", dto);
         model.addAttribute("store", dto);
+        return "storeowner/store/store-update";
     }
 
-    @PostMapping("/storeUpdate")
+    @PostMapping("/store-update")
     public String storeUpdate(
             @ModelAttribute StoreUpdateRequestDto dto,
             @RequestParam(value = "originalThumbnail", required = false) String originalThumbnail,
             @RequestParam(value = "originalImages", required = false) List<String> originalImages){
         log.debug("originalThumbnail = {}", originalThumbnail);
         log.debug("originalImages = {}", originalImages);
-        storeAdminService.update(dto, originalThumbnail, originalImages);
-        return "redirect:/storeowner/store/storeUpdate";
+        storeOwnerService.update(dto, originalThumbnail, originalImages);
+        return "redirect:/store-owner/store/store-update";
     }
 }

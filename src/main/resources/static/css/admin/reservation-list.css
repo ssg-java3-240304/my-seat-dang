@@ -30,7 +30,7 @@
 .list_general > ul > li {
     margin: 0 -30px 0 -30px;
     position: relative;
-    padding: 30px 30px 5px 120px;
+    padding: 30px 30px 5px 40px;
     border-top: 1px solid #ededed;
 }
 @media (max-width: 767px) {
@@ -62,22 +62,7 @@
         left: 0;
     }
 }
-.list_general > ul > li figure img {
-    width: 70px;
-    height: auto;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-}
-.list_general > ul h4 {
-    font-size: 21px;
-    font-size: 1.3125rem;
-}
+
 .list_general > ul span {
     float: right;
     font-style: italic;
@@ -96,9 +81,20 @@ ul.buttons {
     margin: 0 0 30px 0;
     padding: 0;
     position: absolute;
-    top: 142px;
+    /*top: 142px;*/
     right: 30px;
 }
+
+ul.buttons.my_cancel{
+    top:142px;
+    right: 30px;
+}
+
+ul.buttons.my_confirm{
+    top:142px;
+    right: 140px;
+}
+
 @media (max-width: 767px) {
     ul.buttons {
         /* For less than 767px */
@@ -130,7 +126,7 @@ ul.booking_list li strong {
     }
 }
 
-.unread, .read, .pending, .cancel, .approved, .awaiting_payment, .before_visit, .visit_complete, .canceled, .awaiting_custom_payment {
+.unread, .read, .pending, .cancel, .approved, .awaiting_payment, .before_visit, .visit_completed, .canceled, .awaiting_custom_payment {
     background-color: #dc3545;
     -webkit-border-radius: 50px;
     -moz-border-radius: 50px;
@@ -231,4 +227,3 @@ a.btn_1:hover,
 .modal-body .form-control{
     height: 100px;
 }
-

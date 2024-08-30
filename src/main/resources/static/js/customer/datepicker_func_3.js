@@ -28,6 +28,7 @@ $('#DatePicker').datepicker({
         selectedDate = new Date(dateText);
         clearTimeList();
         generateTimes();
+        openTimeList();
     }
 
 

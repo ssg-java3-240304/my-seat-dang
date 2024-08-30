@@ -20,6 +20,7 @@ import com.matdang.seatdang.reservation.dto.*;
 import com.matdang.seatdang.reservation.service.ReservationCommandService;
 import com.matdang.seatdang.reservation.service.ReservationQueryService;
 import com.matdang.seatdang.reservation.service.ReservationSlotCommandService;
+import com.matdang.seatdang.reservation.service.ReservationSlotLockFacade;
 import com.matdang.seatdang.reservation.vo.CustomerInfo;
 import com.matdang.seatdang.reservation.vo.ReservationTicket;
 import com.matdang.seatdang.reservation.vo.StoreOwnerInfo;
@@ -41,7 +42,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReservationCustomerController {
     private final ReservationCommandService reservationCommandService;
-    private final ReservationSlotCommandService reservationSlotCommandService;
+    private final ReservationSlotLockFacade reservationSlotLockFacade;
     private final StoreService storeService;
     private final StoreOwnerMemberService storeOwnerMemberService;
     private final AuthService authService;
@@ -118,7 +119,7 @@ public class ReservationCustomerController {
                 .maxReservation(maxReservationInTime)
                 .build();
         //예약 한도 조회
-        ReservationTicket ticket = reservationSlotCommandService.getReservationTicket(ticketRequestDTO);
+        ReservationTicket ticket = reservationSlotLockFacade.getTicket(ticketRequestDTO);
         //예약 가능 키를 획득했으면 예약
         if(ticket.equals(ReservationTicket.AVAILABLE)){
             //예약 티켓 획득 성공시 처리
@@ -150,7 +151,7 @@ public class ReservationCustomerController {
                 .maxReservation(maxReservationInTime)
                 .build();
         //예약 한도 조회
-        ReservationTicket ticket = reservationSlotCommandService.getReservationTicket(ticketRequestDTO);
+        ReservationTicket ticket = reservationSlotLockFacade.getTicket(ticketRequestDTO);
         //예약 가능 키를 획득했으면 예약
 
         if(ticket.equals(ReservationTicket.AVAILABLE)){

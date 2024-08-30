@@ -27,6 +27,7 @@ import java.util.Optional;
 public class ReservationCommandService {
     private final ReservationRepository reservationRepository;
     private final ReservationSlotCommandService reservationSlotCommandService;
+    private final ReservationSlotLockFacade reservationSlotLockFacade;
 
     public void createCustomMenuReservation(ReservationSaveRequestDto saveRequestDto) {
         log.debug("create empty reservation dto: {}", saveRequestDto);
@@ -63,7 +64,7 @@ public class ReservationCommandService {
         reservation.cancel(cancelRequestDto.convertToReservationCancellationRecord());
 
         //예약 슬롯 반환
-        reservationSlotCommandService.returnSlot(ReservationSlotReturnDto.builder()
+        reservationSlotLockFacade.releaseSlot(ReservationSlotReturnDto.builder()
                 .storeId(reservation.getStore().getStoreId())
                 .date(reservation.getReservedAt().toLocalDate())
                 .time(reservation.getReservedAt().toLocalTime())
@@ -80,4 +81,7 @@ public class ReservationCommandService {
     }
 
 
+    public void updateStatusToCompleted(Long reservationId) {
+        updateStatusCustomReservation(reservationId, ReservationStatus.VISIT_COMPLETED);
+    }
 }

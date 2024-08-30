@@ -20,7 +20,7 @@ import java.util.List;
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
-public class StoreAdminService {
+public class StoreOwnerService {
     private final StoreRepository storeRepository;
     private final StoreAdminRepository storeAdminRepository;
     private final FileService fileService; // File 업로드용
@@ -96,24 +96,6 @@ public class StoreAdminService {
                 .lastOrder(dto.getLastOrder())
                 .regularDayOff(dto.getRegularDayOff())
                 .build();
-
-//        if(dto.getThumbnail().getSize()>0){
-//            String folderName = "store-thumbnail";
-//            String uploadedFileUrl = fileService.uploadSingleFile(dto.getThumbnail(), folderName);
-//            if(!uploadedFileUrl.isEmpty()){
-//                log.debug("Thumbnail URL: {}", uploadedFileUrl);
-//                storeDetailDto.setThumbnail(uploadedFileUrl);
-//            }
-//        }
-//
-//        if(!dto.getImages().isEmpty()){
-//            String folderName = "store-images";
-//            List<String> uploadedFileUrl = fileService.uploadFiles(dto.getImages(), folderName);
-//            if(!uploadedFileUrl.isEmpty()){
-//                log.debug("Images URL: {}", uploadedFileUrl);
-//                storeDetailDto.setImages(uploadedFileUrl);
-//            }
-//        }
 
         Store store = storeRepository.findByStoreId(dto.getStoreId());
         store.update(storeDetailDto);

@@ -14,7 +14,7 @@ spring:
     username: ${TEST_DB_USERNAME}
     password: ${TEST_DB_PASSWORD}
 #    hikari:
-#      maximum-pool-size: 103
+#      maximum-pool-size: 150
 #    url: jdbc:mysql://localhost:3306/myseatdangdb
 #    username: sh
 #    password: sh
