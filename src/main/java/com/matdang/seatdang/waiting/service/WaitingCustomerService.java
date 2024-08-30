@@ -328,8 +328,8 @@ public class WaitingCustomerService {
 //
 //        return Page.empty();
 //    }
-@Cacheable(cacheNames = "historyWaiting", key = "'historyWaiting:customerId'+#customerId+':page:'+ #page", cacheManager = "waitingStorageCacheManager")
-public RedisPage<WaitingInfoDto> showHistoryWaiting(Long customerId, int status, int page) {
+//@Cacheable(cacheNames = "historyWaiting", key = "'historyWaiting:customerId'+#customerId+':page:'+ #page", cacheManager = "waitingStorageCacheManager")
+public Page<WaitingInfoDto> showHistoryWaiting(Long customerId, int status, int page) {
     PageRequest pageable = PageRequest.of(page, 10);
     Page<WaitingInfoDto> resultPage;
 
@@ -341,7 +341,8 @@ public RedisPage<WaitingInfoDto> showHistoryWaiting(Long customerId, int status,
         resultPage = Page.empty();
     }
 
-    return new RedisPage<>(resultPage);
+    return resultPage;
+//    return new RedisPage<>(resultPage);
 }
 
 
