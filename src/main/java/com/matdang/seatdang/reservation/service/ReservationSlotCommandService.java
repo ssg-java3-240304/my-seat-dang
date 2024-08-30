@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -16,12 +17,12 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@Transactional(isolation = Isolation.REPEATABLE_READ)
 @RequiredArgsConstructor
 public class ReservationSlotCommandService {
     private final ReservationSlotRepository reservationSlotRepository;
 
-    public synchronized ReservationTicket getReservationTicket(ReservationTicketRequestDTO requestDTO) {
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public ReservationTicket getReservationTicket(ReservationTicketRequestDTO requestDTO) {
         Optional<ReservationSlot> optSlot = reservationSlotRepository.findByStoreAndDateAndTime(requestDTO.getStoreId(), requestDTO.getDate(), requestDTO.getTime());
 
         ReservationSlot slot = optSlot.orElseGet(()->{
@@ -42,7 +43,7 @@ public class ReservationSlotCommandService {
         }
     }
 
-    public synchronized void returnSlot(ReservationSlotReturnDto requestDTO) {
+    public void releaseSlot(ReservationSlotReturnDto requestDTO) {
         log.debug("reservation slot returned service input: {}", requestDTO);
         Optional<ReservationSlot> OptSlot = reservationSlotRepository.findByStoreAndDateAndTime(requestDTO.getStoreId(), requestDTO.getDate(), requestDTO.getTime());
         OptSlot.ifPresent(ReservationSlot::returnSlot);
