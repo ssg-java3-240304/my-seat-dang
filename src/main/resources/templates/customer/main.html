@@ -11,24 +11,6 @@
 <main layout:fragment="main">
     <div id="carousel-home">
         <div class="owl-carousel owl-theme">
-            <div class="owl-slide cover" data-jarallax-video="https://www.youtube.com/watch?v=oaRRrSqGFmU&pp=ygUJ7LyA7J207YGs">
-                <div class="opacity-mask d-flex align-items-center" data-opacity-mask="rgba(0, 0, 0, 0.5)">
-                    <div class="container">
-                        <div class="row justify-content-center justify-content-md-end">
-                            <div class="col-lg-6 static">
-                                <div class="slide-text text-end white">
-                                    <h2 class="owl-slide-animated owl-slide-title">커스텀<br>케이크 예약</h2>
-                                    <p class="owl-slide-animated owl-slide-subtitle">
-                                        소중한 날에 함께하는 특별한 케이크
-                                    </p>
-                                    <div class="owl-slide-animated owl-slide-cta"><a class="btn_1" th:href="@{/my-seat-dang/search}" role="button">예약하러 가기</a></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--/owl-slide-->
             <div class="owl-slide cover" data-jarallax-video="https://vimeo.com/188111691">
                 <div class="opacity-mask d-flex align-items-center" data-opacity-mask="rgba(0, 0, 0, 0.5)">
                     <div class="container">
@@ -39,7 +21,25 @@
                                     <p class="owl-slide-animated owl-slide-subtitle">
                                         당신의 달콤한 순간을 예약하세요!
                                     </p>
-                                    <div class="owl-slide-animated owl-slide-cta"><a class="btn_1" th:href="@{/my-seat-dang/search}" role="button">예약하러 가기</a></div>
+                                    <div class="owl-slide-animated owl-slide-cta"><a class="btn_1" th:href="|@{/my-seat-dang/search?storeType=GENERAL_RESERVATION}|" role="button">예약하러 가기</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--/owl-slide-->
+            <div class="owl-slide cover" data-jarallax-video="https://www.youtube.com/watch?v=oaRRrSqGFmU&pp=ygUJ7LyA7J207YGs">
+                <div class="opacity-mask d-flex align-items-center" data-opacity-mask="rgba(0, 0, 0, 0.5)">
+                    <div class="container">
+                        <div class="row justify-content-center justify-content-md-end">
+                            <div class="col-lg-6 static">
+                                <div class="slide-text text-end white">
+                                    <h2 class="owl-slide-animated owl-slide-title">제작<br>케이크 예약</h2>
+                                    <p class="owl-slide-animated owl-slide-subtitle">
+                                        소중한 날에 함께하는 특별한 케이크
+                                    </p>
+                                    <div class="owl-slide-animated owl-slide-cta"><a class="btn_1" th:href="|@{/my-seat-dang/search?storeType=CUSTOM}|" role="button">예약하러 가기</a></div>
                                 </div>
                             </div>
                         </div>
@@ -57,7 +57,7 @@
                                     <p class="owl-slide-animated owl-slide-subtitle">
                                         빠르고 간편하게 줄서기, 여기가 마싯당
                                     </p>
-                                    <div class="owl-slide-animated owl-slide-cta"><a class="btn_1" th:href="@{/my-seat-dang/search}" role="button">웨이팅하러 가기</a></div>
+                                    <div class="owl-slide-animated owl-slide-cta"><a class="btn_1" th:href="|@{/my-seat-dang/search?storeType=GENERAL_WAITING}|" role="button">웨이팅하러 가기</a></div>
                                 </div>
                             </div>
                         </div>
@@ -70,41 +70,6 @@
     </div>
     <!--/carousel-->
 
-<!--    <div class="hero_single jarallax" data-jarallax-video="https://www.youtube.com/watch?v=oaRRrSqGFmU&pp=ygUJ7LyA7J207YGs">-->
-<!--        <div class="opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)">-->
-<!--            <div class="container">-->
-<!--                <div class="row justify-content-center">-->
-<!--                    <div class="col-xl-9 col-lg-10 col-md-8">-->
-<!--                        <h1>My Seat Dang</h1><br>-->
-<!--                        <h5>당신의 달콤한 순간을 간편하게 예약 – 베이커리 웨이팅과 맞춤형 케이크까지 여기가 마싯당</h5><br>-->
-<!--                        <form method="get" th:action="@{/my-seat-dang/search}">-->
-<!--                            <div class="row g-0 custom-search-input">-->
-<!--                                <div class="col-lg-4">-->
-<!--                                    <div class="form-group">-->
-<!--                                        <input name="store_name" class="form-control" type="text" placeholder="매장명을 입력하세요.">-->
-<!--                                        <i class="icon_search"></i>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                                <div class="col-lg-6">-->
-<!--                                    <div class="form-group">-->
-<!--                                        <input name="store_address" class="form-control no_border_r" type="text" placeholder="주소 또는 지역을 입력하세요.">-->
-<!--                                        <i class="icon_pin_alt"></i>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                                <div class="col-lg-2">-->
-<!--                                    <input type="submit" value="검색">-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            &lt;!&ndash; /row &ndash;&gt;-->
-<!--                        </form>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                &lt;!&ndash; /row &ndash;&gt;-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-    <!-- /Background YouTube Parallax -->
-
     <div class="bg_gray">
         <div class="container margin_60_40">
             <div class="main_title center">
@@ -115,27 +80,27 @@
             <!-- /main_title -->
             <div class="owl-carousel owl-theme categories_carousel">
                 <div class="item">
-                    <a th:href="|@{/my-seat-dang/search?storeType=GENERAL_WAITING}|">
-                        <span>98</span>
-                        <i class="icon-food_icon_chinese"></i>
-                        <h3>웨이팅</h3>
-                        <small>집에서 웨이팅 하기!</small>
+                    <a th:href="|@{/my-seat-dang/search?storeType=GENERAL_RESERVATION}|">
+                        <span>96</span>
+                        <i class="icon-food_icon_burrito"></i>
+                        <h3>일반 베이커리 예약</h3>
+                        <small>빵순이들 모여라!</small>
                     </a>
                 </div>
                 <div class="item">
                     <a th:href="|@{/my-seat-dang/search?storeType=CUSTOM}|">
                         <span>87</span>
                         <i class="icon-food_icon_cake_2"></i>
-                        <h3>커스텀 케이크 예약</h3>
+                        <h3>제작 케이크 예약</h3>
                         <small>나만의 특별한 선물 예약하기!</small>
                     </a>
                 </div>
                 <div class="item">
-                    <a th:href="|@{/my-seat-dang/search?storeType=GENERAL_RESERVATION}|">
-                        <span>96</span>
-                        <i class="icon-food_icon_burrito"></i>
-                        <h3>일반 베이커리 예약</h3>
-                        <small>빵순이들 모여라!</small>
+                    <a th:href="|@{/my-seat-dang/search?storeType=GENERAL_WAITING}|">
+                        <span>98</span>
+                        <i class="icon-food_icon_chinese"></i>
+                        <h3>웨이팅</h3>
+                        <small>집에서 웨이팅 하기!</small>
                     </a>
                 </div>
             </div>
@@ -145,15 +110,29 @@
     </div>
     <!-- /bg_gray -->
 
+<!--    <div class="container margin_60_40">-->
+<!--        <div class="banner lazy" data-jarallax-video="https://www.youtube.com/watch?v=hhmStBpyqwM">-->
+<!--            <div class="wrapper d-flex align-items-center opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.2)">-->
+<!--                <div>-->
+<!--                    <small>AI 이미지 생성</small>-->
+<!--                    <h3>커스텀 케이크 시안 간단하게 생성하기</h3>-->
+<!--                    <p>완성된 시안으로 바로 예약까지!</p>-->
+<!--                    <a th:href="@{/ai-result}" class="btn_1">AI 시안 생성</a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            &lt;!&ndash; /wrapper &ndash;&gt;-->
+<!--        </div>-->
+<!--        &lt;!&ndash; /banner &ndash;&gt;-->
+<!--    </div>-->
+
     <div class="container margin_60_40">
         <div class="banner lazy" data-jarallax-video="https://www.youtube.com/watch?v=hhmStBpyqwM">
-<!--            data-bg="url(img/banner_bg_desktop.jpg)"-->
             <div class="wrapper d-flex align-items-center opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.2)">
                 <div>
                     <small>AI 이미지 생성</small>
-                    <h3>커스텀 케이크 시안 간단하게 생성하기</h3>
-                    <p>완성된 시안으로 바로 예약까지!</p>
-                    <a th:href="@{/ai-result}" class="btn_1">AI 시안 생성</a>
+                    <h3>혹시 생각해둔 제작 케이크 시안이 없으세요?</h3>
+                    <p>채팅창 내에서 시안 생성 후 간편하게 예약하세요!</p>
+                    <a th:href="|@{/my-seat-dang/search?storeType=CUSTOM}|" class="btn_1">예약하러 가기</a>
                 </div>
             </div>
             <!-- /wrapper -->
