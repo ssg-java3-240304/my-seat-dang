@@ -7,9 +7,9 @@ spring:
     mongodb:
       uri: ${MONGO_DB_URI}
     redis:
-      host: ${HOST}
+      host: 127.0.0.1
       port: 6379
-      password: ${REDIS_PASSWORD}
+      password:
   datasource:
     url: jdbc:mysql://localhost:3306/myseatdangdb?rewriteBatchedStatements=true
     username: ${TEST_DB_USERNAME}
