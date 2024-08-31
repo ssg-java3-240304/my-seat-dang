@@ -23,7 +23,7 @@ import java.util.Set;
 
 @Controller
 @Slf4j
-@RequestMapping("my-seat-dang/search")
+@RequestMapping("customer/search")
 @RequiredArgsConstructor
 public class SearchController {
     private final MapService mapService;

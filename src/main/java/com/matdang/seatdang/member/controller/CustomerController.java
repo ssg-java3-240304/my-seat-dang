@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @Controller
-@RequestMapping("my-seat-dang")
+@RequestMapping("customer")
 public class CustomerController {
 
     private final AuthService authService;
@@ -86,7 +86,7 @@ public class CustomerController {
 
 
 
-            return "redirect:/my-seat-dang/mypage/edit-profile"; // 업데이트 후 메인 마이페이지로 리다이렉트 // @이름변경 edit-profile로 이름
+            return "redirect:/customer/mypage/edit-profile"; // 업데이트 후 메인 마이페이지로 리다이렉트 // @이름변경 edit-profile로 이름
         } else {
             return "redirect:/login";
         }
@@ -116,7 +116,7 @@ public class CustomerController {
             model.addAttribute("success", "비밀번호가 성공적으로 변경되었습니다.");
             return "redirect:/login?passwordChanged=true"; // 비밀번호 변경 후 성공모달창으로 리다이렉트
         } else {
-            return "redirect:/my-seat-dang/mypage/edit-profile";
+            return "redirect:/customer/mypage/edit-profile";
         }
     }
 
