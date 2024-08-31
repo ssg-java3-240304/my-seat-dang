@@ -13,10 +13,12 @@ import com.matdang.seatdang.waiting.service.WaitingService;
 import com.matdang.seatdang.waiting.service.WaitingSettingService;
 import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingCustomerFacade;
 import jakarta.servlet.http.HttpServletRequest;
+import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.jaxb.SpringDataJaxb.PageDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -41,18 +43,6 @@ public class WaitingCustomerController {
     @Value("${spring.data.redis.host}")
     private String host;
 
-//    @GetMapping("/test-store")
-//    public String showStore(@RequestParam(defaultValue = "2") Long storeId,
-//                            Model model) {
-//        Long memberId = authService.getAuthenticatedMember().getMemberId();
-//        boolean isWaitingExists = waitingCustomerService.isWaitingExists(storeId);
-//
-//        model.addAttribute("storeStatus", storeRepository.findByStoreId(storeId).getStoreSetting().getWaitingStatus().toString());
-//        model.addAttribute("storeId", storeId);
-//        model.addAttribute("isWaitingExists", isWaitingExists);
-//
-//        return "customer/waiting/test-store";
-//    }
 
     @GetMapping("/waiting/{storeId}")
     public String readyWaiting(@PathVariable Long storeId, Model model, HttpServletRequest request,
@@ -101,10 +91,19 @@ public class WaitingCustomerController {
         if (when.equals("today")) {
             waitings = waitingCustomerService.showTodayWaiting(status, page);
         } else if (when.equals("history")) {
+            LocalDateTime start = LocalDateTime.now();
 
-            waitings = waitingCustomerService.showHistoryWaiting(authService.getAuthenticatedMember().getMemberId(), status, page);
+            waitings = waitingCustomerService.showHistoryWaiting(authService.getAuthenticatedMember().getMemberId(),
+                    status, page);
+
+            LocalDateTime end = LocalDateTime.now();
+            log.debug(" === elapsed time ===");
+            log.debug(" === {} === ", Duration.between(start, end).toMillis());
         }
-        System.out.println("isNotAwaiting = "+model.getAttribute("isNotAwaiting"));
+
+        PageRangeDto pageRangeDto = PageRangeDto.calculatePage(waitings);
+
+        System.out.println("isNotAwaiting = " + model.getAttribute("isNotAwaiting"));
         System.out.println("waitings = " + waitings.getContent());
         System.out.println("waitings = " + waitings.getTotalElements());
         model.addAttribute("when", when);
@@ -112,9 +111,13 @@ public class WaitingCustomerController {
         model.addAttribute("waitings", waitings.getContent());
         model.addAttribute("currentPage", waitings.getNumber());
         model.addAttribute("totalPages", waitings.getTotalPages());
+        model.addAttribute("startPage", pageRangeDto.getStartPage());
+        model.addAttribute("endPage", pageRangeDto.getEndPage());
 
         return "customer/waiting/waiting";
     }
+
+
 
     // TODO : 취소 후 url에 접속 못하게 막기(if문 상태처리)
 

@@ -11,6 +11,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+import org.hibernate.cfg.AvailableSettings;
+import org.hibernate.id.enhanced.SequenceStyleGenerator;
 import org.springframework.data.domain.Persistable;
 
 @Entity
@@ -23,8 +27,17 @@ import org.springframework.data.domain.Persistable;
 public class WaitingStorage extends StorageBaseEntity implements Persistable<Long> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "waiting_sequence_generator")
-    @SequenceGenerator(name="waiting_sequence_generator", sequenceName = "waiting_storage_sequence", allocationSize=500)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "waiting_storage_sequence")
+    @GenericGenerator(
+            name = "waiting_storage_sequence",
+            strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
+            parameters = {
+                    @Parameter(name = "sequence_name", value = "waiting_storage_sequence"),
+                    @Parameter(name = "optimizer", value = "pooled"),
+                    @Parameter(name = "initial_value", value = "1"),
+                    @Parameter(name = "increment_size", value = "1000")
+            }
+    )
     private Long id;
 
     private Long waitingNumber;

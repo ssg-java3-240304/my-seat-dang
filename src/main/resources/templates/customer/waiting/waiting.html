@@ -121,8 +121,8 @@
                 </a>
             </li>
 
-            <!-- Page Numbers -->
-            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+
+            <li class="page-item" th:each="i : ${#numbers.sequence(startPage, endPage)}">
                 <a class="page-link"
                    th:href="@{/customer/waiting(status=${status}, when=${when}, page=${i})}"
                    th:text="${i + 1}"
