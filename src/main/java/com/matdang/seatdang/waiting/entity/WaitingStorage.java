@@ -22,7 +22,9 @@ import org.springframework.data.domain.Persistable;
 @AllArgsConstructor
 public class WaitingStorage extends StorageBaseEntity implements Persistable<Long> {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "waiting_sequence_generator")
+    @SequenceGenerator(name="waiting_sequence_generator", sequenceName = "waiting_storage_sequence", allocationSize=500)
     private Long id;
 
     private Long waitingNumber;
