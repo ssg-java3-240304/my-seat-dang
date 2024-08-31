@@ -328,6 +328,7 @@ public class WaitingCustomerService {
 //
 //        return Page.empty();
 //    }
+
     @Cacheable(cacheNames = "showHistoryWaiting", key = "'historyWaiting:customer'+#customerId+ ':status:' +#status +':page:' + #page ", cacheManager = "waitingStorageCacheManager")
     public RedisWaitingPage showHistoryWaiting(Long customerId, int status, int page) {
         PageRequest pageable = PageRequest.of(page, 10);
