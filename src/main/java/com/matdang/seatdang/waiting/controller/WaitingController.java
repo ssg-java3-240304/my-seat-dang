@@ -9,6 +9,7 @@ import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.store.vo.StoreSetting;
 import com.matdang.seatdang.store.vo.WaitingTime;
+import com.matdang.seatdang.waiting.controller.dto.PageRangeDto;
 import com.matdang.seatdang.waiting.controller.dto.WaitingPeople;
 import com.matdang.seatdang.waiting.dto.UpdateRequest;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
@@ -59,7 +60,8 @@ public class WaitingController {
         log.info("===  showWaiting  ===");
 
         Page<WaitingDto> waitings = waitingService.showWaiting(storeId, status, page);
-        System.out.println("waitings.getContent() = " + waitings.getContent());
+
+        PageRangeDto pageRangeDto = PageRangeDto.calculatePage(waitings);
 
         model.addAttribute("estimatedTime",
                 createEstimatedWaitingTime(status, (int) waitings.getTotalElements(), waitings.getContent(), storeId));
@@ -70,6 +72,9 @@ public class WaitingController {
         model.addAttribute("status", status);
         model.addAttribute("currentPage", waitings.getNumber());
         model.addAttribute("totalPages", waitings.getTotalPages());
+        model.addAttribute("startPage", pageRangeDto.getStartPage());
+        model.addAttribute("endPage", pageRangeDto.getEndPage());
+
         return "storeowner/waiting/main";
     }
 
@@ -87,7 +92,7 @@ public class WaitingController {
         return "redirect:/store-owner/waiting";
     }
 
-    private LocalTime createEstimatedWaitingTime(int status, int size, List<WaitingDto> waitings, Long storeId) {
+    private String createEstimatedWaitingTime(int status, int size, List<WaitingDto> waitings, Long storeId) {
         if (status == 0 && !waitings.isEmpty()) {
             int diff = 0;
             long elapsedTime = Duration.between(waitings.get(0).getCreatedDate(), LocalDateTime.now()).toMinutes();
@@ -101,11 +106,12 @@ public class WaitingController {
             int hours = totalMinutes / 60;
             int minutes = totalMinutes % 60;
 
-            return LocalTime.of(hours, minutes);
+            return String.format("%02d:%02d", hours, minutes);
         }
 
         return null;
     }
+
 
     /**
      * test 실행시 주석 필요

@@ -126,13 +126,15 @@
                 <li class="page-item">
                     <a class="page-link" th:href="${currentPage == 0} ? '#' : @{/store-owner/waiting(status=${status}, page=${currentPage - 1})}"
                        th:classappend="${currentPage == 0} ? 'disabled-link' : ''">
-                        &laquo; Previous
+                        &laquo; 이전
                     </a>
                 </li>
 
-                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-                    <a class="page-link" th:href="@{/store-owner/waiting(status=${status}, page=${i})}"
-                       th:text="${i + 1}" th:classappend="${i == currentPage} ? 'active' : ''"></a>
+                <li class="page-item" th:each="i : ${#numbers.sequence(startPage, endPage)}">
+                    <a class="page-link"
+                       th:href="@{/store-owner/waiting(status=${status}, page=${i})}"
+                       th:text="${i + 1}"
+                       th:classappend="${i == currentPage} ? 'active' : ''"></a>
                 </li>
 
                 <!-- Next Button (Always Visible but Disabled if on Last Page) -->
