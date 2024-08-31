@@ -26,7 +26,7 @@ import java.time.LocalDateTime;
 
 @Slf4j
 @Controller
-@RequestMapping("/my-seat-dang")
+@RequestMapping("/customer")
 @RequiredArgsConstructor
 public class WaitingCustomerController {
     private final RedissonLockWaitingCustomerFacade redissonLockWaitingCustomerFacade;
@@ -59,13 +59,13 @@ public class WaitingCustomerController {
                                RedirectAttributes redirectAttributes) {
         if (waitingCustomerService.isWaitingExists(storeId)) {
             redirectAttributes.addFlashAttribute("status", true);
-            return "redirect:/my-seat-dang/store/detail/" + storeId;
+            return "redirect:/customer/store/detail/" + storeId;
         }
 
         String referer = request.getHeader("Referer");
         // 유효한 referer URL인지 확인 (예: "https://example.com/somepage")
-        if (referer == null || (!referer.startsWith("http://localhost:8080/my-seat-dang/store/detail/" + storeId)
-                && !referer.startsWith("http://" + host + ":8080/my-seat-dang/store/detail/" + storeId))) {
+        if (referer == null || (!referer.startsWith("http://localhost:8080/customer/store/detail/" + storeId)
+                && !referer.startsWith("http://" + host + ":8080/customer/store/detail/" + storeId))) {
             return "error/403";
         }
 
@@ -87,7 +87,7 @@ public class WaitingCustomerController {
         redirectAttributes.addAttribute("waitingNumber", waitingId.getWaitingNumber());
         redirectAttributes.addAttribute("storeId", waitingId.getStoreId());
 
-        return "redirect:/my-seat-dang/waiting/{waitingNumber}/awaiting/detail";
+        return "redirect:/customer/waiting/{waitingNumber}/awaiting/detail";
     }
 
     @GetMapping("/waiting")
@@ -125,7 +125,7 @@ public class WaitingCustomerController {
         if (waitingCustomerService.isNotAwaiting(storeId, waitingNumber)) {
             redirectAttributes.addFlashAttribute("isNotAwaiting", true);
             System.out.println("hihi = ");
-            return "redirect:/my-seat-dang/waiting";
+            return "redirect:/customer/waiting";
         }
         log.debug("=== cancel Waiting === {}", LocalDateTime.now());
 
@@ -140,7 +140,7 @@ public class WaitingCustomerController {
         redirectAttributes.addAttribute("waitingNumber", waitingNumber);
         redirectAttributes.addAttribute("storeId", storeId);
 
-        return "redirect:/my-seat-dang/waiting/{waitingNumber}/canceled/detail";
+        return "redirect:/customer/waiting/{waitingNumber}/canceled/detail";
     }
 
     @GetMapping("/waiting/{waitingNumber}/{status}/detail")
@@ -155,13 +155,13 @@ public class WaitingCustomerController {
         if (waitingCustomerService.isIncorrectWaitingStatus(storeId, waitingNumber, status, when)) {
             redirectAttributes.addFlashAttribute("isIncorrectWaitingStatus", true);
 
-            return "redirect:/my-seat-dang/waiting";
+            return "redirect:/customer/waiting";
         }
 
         if ("awaiting".equals(status)) {
             String referer = request.getHeader("Referer");
-            if (referer == null || (!referer.startsWith("http://localhost:8080/my-seat-dang/waiting")
-                    && !referer.startsWith("http://" + host + ":8080/my-seat-dang/waiting"))){
+            if (referer == null || (!referer.startsWith("http://localhost:8080/customer/waiting")
+                    && !referer.startsWith("http://" + host + ":8080/customer/waiting"))){
                 return "error/403";
             }
         }

@@ -45,11 +45,11 @@
     <div class="row mb-4">
         <div class="col">
             <div class="btn-group" role="group" aria-label="Status buttons">
-                <a href="#" th:href="@{/my-seat-dang/waiting(status=0, when=${when})}"
+                <a href="#" th:href="@{/customer/waiting(status=0, when=${when})}"
                    class="btn btn-outline-primary" th:classappend="${status == 0} ? 'active-button' : ''">방문예정</a>
-                <a href="#" th:href="@{/my-seat-dang/waiting(status=1, when=${when})}"
+                <a href="#" th:href="@{/customer/waiting(status=1, when=${when})}"
                    class="btn btn-outline-success" th:classappend="${status == 1} ? 'active-button' : ''">방문 완료</a>
-                <a href="#" th:href="@{/my-seat-dang/waiting(status=2, when=${when})}"
+                <a href="#" th:href="@{/customer/waiting(status=2, when=${when})}"
                    class="btn btn-outline-danger" th:classappend="${status == 2} ? 'active-button' : ''">취소/노쇼</a>
             </div>
         </div>
@@ -59,9 +59,9 @@
     <div class="row mb-4">
         <div class="col">
             <div class="btn-group" role="group" aria-label="When buttons">
-                <a href="#" th:href="@{/my-seat-dang/waiting(when='today', status=${status})}"
+                <a href="#" th:href="@{/customer/waiting(when='today', status=${status})}"
                    class="btn btn-outline-primary" th:classappend="${when == 'today'} ? 'active-button' : ''">오늘</a>
-                <a href="#" th:href="@{/my-seat-dang/waiting(when='history', status=${status})}"
+                <a href="#" th:href="@{/customer/waiting(when='history', status=${status})}"
                    class="btn btn-outline-secondary" th:classappend="${when == 'history'} ? 'active-button' : ''">기록</a>
             </div>
         </div>
@@ -90,7 +90,7 @@
 
                 <td>
                     <!-- Define the URL based on status -->
-                    <a th:with="urlPath=${'/my-seat-dang/waiting/' + waiting.waitingNumber +
+                    <a th:with="urlPath=${'/customer/waiting/' + waiting.waitingNumber +
                   (status == 0 ? '/awaiting/detail' :
                   (status == 1 ? '/visited/detail' :
                   (status == 2 ? '/canceled/detail' : '')))}+ '?storeId=' + ${waiting.storeId}
@@ -98,7 +98,7 @@
                        th:href="${urlPath}" class="btn btn-info">상세</a>
                 </td>
                 <td th:if="${status == 0}">
-                    <form th:action="@{|/my-seat-dang/waiting/${waiting.waitingNumber}?storeId=${waiting.storeId}|}"
+                    <form th:action="@{|/customer/waiting/${waiting.waitingNumber}?storeId=${waiting.storeId}|}"
                           method="post">
                         <button type="submit" class="btn btn-danger">취소</button>
                     </form>
@@ -115,7 +115,7 @@
             <!-- Previous Button (Always Visible but Disabled if on First Page) -->
             <li class="page-item">
                 <a class="page-link"
-                   th:href="${currentPage == 0} ? '#' : @{/my-seat-dang/waiting(status=${status}, when=${when}, page=${currentPage - 1})}"
+                   th:href="${currentPage == 0} ? '#' : @{/customer/waiting(status=${status}, when=${when}, page=${currentPage - 1})}"
                    th:classappend="${currentPage == 0} ? 'disabled-link' : ''">
                     &laquo; Previous
                 </a>
@@ -124,7 +124,7 @@
             <!-- Page Numbers -->
             <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
                 <a class="page-link"
-                   th:href="@{/my-seat-dang/waiting(status=${status}, when=${when}, page=${i})}"
+                   th:href="@{/customer/waiting(status=${status}, when=${when}, page=${i})}"
                    th:text="${i + 1}"
                    th:classappend="${i == currentPage} ? 'active' : ''"></a>
             </li>
@@ -132,7 +132,7 @@
             <!-- Next Button (Always Visible but Disabled if on Last Page) -->
             <li class="page-item">
                 <a class="page-link"
-                   th:href="${currentPage == totalPages - 1} ? '#' : @{/my-seat-dang/waiting(status=${status}, when=${when}, page=${currentPage + 1})}"
+                   th:href="${currentPage == totalPages - 1} ? '#' : @{/customer/waiting(status=${status}, when=${when}, page=${currentPage + 1})}"
                    th:classappend="${currentPage == totalPages - 1} ? 'disabled-link' : ''">
                     Next &raquo;
                 </a>

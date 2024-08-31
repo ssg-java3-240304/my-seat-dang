@@ -38,7 +38,7 @@ import java.util.List;
 
 @Controller
 @Slf4j
-@RequestMapping("/my-seat-dang/reservation")
+@RequestMapping("/customer/reservation")
 @RequiredArgsConstructor
 public class ReservationCustomerController {
     private final ReservationCommandService reservationCommandService;
@@ -128,7 +128,7 @@ public class ReservationCustomerController {
             //예약 티켓 획득 실패시 처리
             throw new RuntimeException("이미 마감된 예약입니다");
         }
-        return "redirect:/my-seat-dang/reservation/list";
+        return "redirect:/customer/reservation/list";
     }
 
     @PostMapping("/create-normal")
@@ -183,6 +183,6 @@ public class ReservationCustomerController {
         cancelRequestDto.setCancelledAt(LocalDateTime.now());
         cancelRequestDto.setCancelledBy(role);
         reservationCommandService.cancelReservation(cancelRequestDto);
-        return "redirect:/my-seat-dang/reservation/list";
+        return "redirect:/customer/reservation/list";
     }
 }

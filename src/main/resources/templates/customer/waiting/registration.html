@@ -108,7 +108,7 @@
             <p><span th:text="${readyWaitingResponse.storeName}"></span>에 예약하시겠습니까?</p>
             <p>현재 대기팀: <span th:text="${waitingTeam}"></span></p>
         </div>
-        <form id="waitingForm" action="/my-seat-dang/waiting" method="post">
+        <form id="waitingForm" action="/customer/waiting" method="post">
             <input type="hidden" name="storeId" th:value="${readyWaitingResponse.storeId}"/>
             <div class="form-group">
                 <label for="peopleCount">인원 수: </label>
@@ -117,7 +117,7 @@
             </div>
             <button type="submit">예약</button>
         </form>
-        <a href="/my-seat-dang">메인페이지로</a>
+        <a href="/customer">메인페이지로</a>
     </div>
 </main>
 </body>

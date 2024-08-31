@@ -63,17 +63,17 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/","/login","/signup", "/my-seat-dang","/my-seat-dang/search","/my-seat-dang/store/detail/*","/signupProc","/check-nickname","/check-email", "/storeRegist", "/storeUpdate").permitAll() // 누구나 허용
+                        .requestMatchers("/","/login","/signup", "/customer","/customer/search","/customer/store/detail/*","/signupProc","/check-nickname","/check-email", "/storeRegist", "/storeUpdate").permitAll() // 누구나 허용
 //                        .requestMatchers("/","/login","/signup","/signupProc","/check-nickname","/check-email").permitAll() // 누구나 허용
                         .requestMatchers("/payment/**").permitAll() // /payment 하위 경로는 인증 없이 허용
                         .requestMatchers("/admin/**").hasRole("ADMIN") // ROLE_ADMIN 권한이 있는 사용자만 허용
-                        .requestMatchers("/my-seat-dang/mypage/**").hasRole("CUSTOMER") // ROLE_Customer
+                        .requestMatchers("/customer/mypage/**").hasRole("CUSTOMER") // ROLE_Customer
                         .requestMatchers("/store-owner/**").hasRole("STORE_OWNER") // ROLE_STORE_OWNER 권한이 있는 사용자만 허용
                         .anyRequest().authenticated() // 나머지 로그인 사용자만 이용가능
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/login") // OAuth2 로그인 페이지 설정
-                        .defaultSuccessUrl("/my-seat-dang", true) // 로그인 성공 후 리다이렉트될 URL
+                        .defaultSuccessUrl("/customer", true) // 로그인 성공 후 리다이렉트될 URL
                         .failureUrl("/login?error=true") // 로그인 실패 시 리다이렉트될 URL
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService) // 커스텀 OAuth2UserService 설정 가능
@@ -93,7 +93,7 @@ public class SecurityConfig {
 //                                String targetUrl = savedRequest.getRedirectUrl();
 //                                response.sendRedirect(targetUrl);
 //                            } else {
-//                                response.sendRedirect("/my-seat-dang");
+//                                response.sendRedirect("/customer");
 //                            }
 //                        })
                         .successHandler(customAuthenticationSuccessHandler())
@@ -188,9 +188,9 @@ public class SecurityConfig {
             } else if (authentication.getAuthorities().stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_STORE_OWNER"))) {
                 targetUrl = "/store-owner/main";
             } else if (authentication.getAuthorities().stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_CUSTOMER"))) {
-                targetUrl = "/my-seat-dang";
+                targetUrl = "/customer";
             } else {
-                targetUrl = "/my-seat-dang"; // 기본 URL
+                targetUrl = "/customer"; // 기본 URL
             }
 
             // 사용자가 로그인하기 전에 가려고 했던 URL이 있는지 확인
