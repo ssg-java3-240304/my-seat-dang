@@ -312,7 +312,7 @@ public class WaitingCustomerService {
         redisTemplate.opsForHash().putAll(storeKey, hashEntries);
     }
 
-//    @Transactional(readOnly = true)
+    //    @Transactional(readOnly = true)
 //    public Page<WaitingInfoProjection> showWaiting(int status, int page) {
 //        PageRequest pageable = PageRequest.of(page, 10);
 //        Long memberId = authService.getAuthenticatedMember().getMemberId();
@@ -328,37 +328,22 @@ public class WaitingCustomerService {
 //
 //        return Page.empty();
 //    }
-@Cacheable(cacheNames = "historyWaiting", key = "'historyWaiting:customer'+#customerId+ 'status:' +#status +'page:' + #page ", cacheManager = "waitingStorageCacheManager")
-public RedisPage<WaitingInfoDto> showHistoryWaiting(Long customerId, int status, int page) {
-    PageRequest pageable = PageRequest.of(page, 10);
-    Page<WaitingInfoDto> resultPage;
+    @Cacheable(cacheNames = "historyWaiting", key = "'historyWaiting:customer'+#customerId+ 'status:' +#status +'page:' + #page ", cacheManager = "waitingStorageCacheManager")
+    public RedisPage<WaitingInfoDto> showHistoryWaiting(Long customerId, int status, int page) {
+        PageRequest pageable = PageRequest.of(page, 10);
+        Page<WaitingInfoDto> resultPage;
 
-    if (status <= 1) {
-        resultPage = waitingStorageQueryRepository.findAllByCustomerIdAndWaitingStatus(customerId, WaitingStatus.findWaiting(status), pageable);
-    } else if (status == 2) {
-        resultPage = waitingStorageQueryRepository.findAllByCustomerIdAndCancelStatus(customerId, pageable);
-    } else {
-        resultPage = Page.empty();
+        if (status <= 1) {
+            resultPage = waitingStorageQueryRepository.findAllByCustomerIdAndWaitingStatus(customerId,
+                    WaitingStatus.findWaiting(status), pageable);
+        } else if (status == 2) {
+            resultPage = waitingStorageQueryRepository.findAllByCustomerIdAndCancelStatus(customerId, pageable);
+        } else {
+            resultPage = Page.empty();
+        }
+
+        return new RedisPage<>(resultPage);
     }
-
-    return new RedisPage<>(resultPage);
-}
-
-
-//@Cacheable(cacheNames = "historyWaiting", key = "'historyWaiting:page:'+ #page" , cacheManager = "waitingStorageCacheManager")
-//    public Page<WaitingInfoDto> showHistoryWaiting(int status, int page) {
-//        PageRequest pageable = PageRequest.of(page, 10);
-//        Long customerId = authService.getAuthenticatedMember().getMemberId();
-//        if (status <= 1) {
-//            return waitingStorageQueryRepository.findAllByCustomerIdAndWaitingStatus(customerId,
-//                    WaitingStatus.findWaiting(status), pageable);
-//        }
-//        if (status == 2) {
-//            return waitingStorageQueryRepository.findAllByCustomerIdAndCancelStatus(customerId, pageable);
-//        }
-//
-//        return Page.empty();
-//    }
 
     public Page<WaitingInfoDto> showTodayWaiting(int status, int page) {
         Pageable pageable = PageRequest.of(page, 10);

@@ -5,6 +5,40 @@
     <meta charset="UTF-8">
     <title th:text="${store.storeName}"></title>
     <link th:href="@{/css/customer/detail-page.css}" rel="stylesheet">
+
+    <style>
+        .btn_custom {
+            background-color: #289d6e;
+            color: #ffffff;
+            font-size: 16px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn_custom:hover {
+            background-color: #289d6e;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .btn_custom:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 텍스트와 버튼을 모두 가운데 정렬하는 스타일 */
+        .center-align {
+            text-align: center; /* 텍스트와 inline 요소를 가운데 정렬 */
+        }
+
+    </style>
+
+
+
     <script>
         window.onload = function () {
             const storeId = [[${storeId}]];
@@ -61,7 +95,7 @@
                         <div class="col-xl-4 col-lg-5 col-md-6">
                             <div class="head">
                                 <div class="score">
-                                    <span><em>350 Reviews</em></span><strong>[[${store.starRating}]]</strong></div>
+                                    <strong>[[${store.starRating}]]</strong></div>
                             </div>
                             <h1>[[${store.storeName}]]</h1>
                             [[${store.storeAddress}]] - <a
@@ -75,7 +109,7 @@
                                                 class="icon_image"></i>View photos</a>
                                         <a th:each="image : ${images}" th:href="${image}" data-effect="mfp-zoom-in"></a>
                                     </span>
-                                <a href="#0" class="btn_hero wishlist"><i class="icon_heart"></i>Wishlist</a>
+<!--                                <a href="#0" class="btn_hero wishlist"><i class="icon_heart"></i>Wishlist</a>-->
                             </div>
                         </div>
                     </div>
@@ -96,9 +130,6 @@
                         <li class="nav-item">
                             <a id="tab-A" href="#pane-A" class="nav-link active" data-bs-toggle="tab" role="tab">홈</a>
                         </li>
-                        <li class="nav-item">
-                            <a id="tab-B" href="#pane-B" class="nav-link" data-bs-toggle="tab" role="tab">리뷰</a>
-                        </li>
                     </ul>
 
                     <div class="tab-content" role="tablist">
@@ -113,8 +144,10 @@
                             </div>
                             <div id="collapse-A" class="collapse" role="tabpanel" aria-labelledby="heading-A">
                                 <div class="card-body info_content">
-                                    <p>[[${store.description}]]</p>
-                                    <button id="goWaitingButton" type="button">Go to Waiting Page</button>
+                                    <div class="center-align">
+                                        <p>[[${store.description}]]</p>
+                                        <button id="goWaitingButton" class="btn_custom" type="button">웨이팅 하러가기</button>
+                                    </div>
                                     <hr>
                                     <div class="add_bottom_25"></div>
                                     <!--                                    <h2>Pictures from our users</h2>-->

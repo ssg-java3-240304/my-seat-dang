@@ -5,40 +5,114 @@
     <meta charset="UTF-8">
     <title>Awaiting Waiting Detail</title>
     <script>
-        // 페이지가 로드된 후 실행되는 스크립트
         window.onload = function() {
-            // 폼 요소를 가져옵니다.
             const form = document.getElementById('cancelWaitingForm');
-
-            // 폼의 submit 이벤트 리스너 추가
             form.addEventListener('submit', function(event) {
-                // 확인 창을 표시하여 사용자의 선택을 요청합니다.
                 const confirmed = confirm('정말 취소하겠습니까?');
                 if (!confirmed) {
-                    // 사용자가 취소를 클릭하면 폼 제출을 취소합니다.
                     event.preventDefault();
                 }
-                // 사용자가 확인을 클릭하면 폼이 제출됩니다.
             });
         };
     </script>
-    <!--    main page only css-->
     <link th:href="@{/css/customer/home.css}" rel="stylesheet">
+    <style>
+        /* 페이지 중앙 정렬 */
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+        }
+
+        /* 컨테이너 스타일 */
+        main > div {
+            background-color: #f9f9f9;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            text-align: left;
+        }
+
+        /* 제목 스타일 */
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        /* 문단 및 레이블 스타일 */
+        p {
+            margin: 10px 0;
+            color: #666;
+        }
+
+        p strong {
+            color: #333;
+        }
+
+        /* 버튼 스타일 */
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* 링크 스타일 */
+        a.btn {
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        a.btn-secondary {
+            background-color: #6c757d;
+        }
+
+        a.btn:hover {
+            background-color: #0056b3;
+        }
+
+        a.btn-secondary:hover {
+            background-color: #5a6268;
+        }
+    </style>
 </head>
 <body>
 <main layout:fragment="main">
-    <h1>Awaiting Waiting Detail</h1>
-    <p><strong>Waiting Number:</strong> <span th:text="${waitingDetailResponse.waitingNumber}"></span></p>
-    <p><strong>Waiting Order:</strong> <span th:text="${waitingDetailResponse.waitingOrder}"></span></p>
-    <p><strong>Waiting Status:</strong> <span th:text="${waitingDetailResponse.waitingStatus}"></span></p>
-    <p><strong>Created Date:</strong> <span th:text="${{waitingDetailResponse.createdDate}}"></span></p>
-    <p><strong>People Count:</strong> <span th:text="${waitingDetailResponse.peopleCount}"></span></p>
-    <p><strong>Store Name:</strong> <span th:text="${waitingDetailResponse.storeName}"></span></p>
-    <form id="cancelWaitingForm"  th:action="@{|/my-seat-dang/waiting/${waitingDetailResponse.waitingNumber}?storeId=${waitingDetailResponse.storeId}|}" method="post">
-        <button type="submit">Cancel Waiting</button>
-    </form>
-
-    <a th:href="@{|/my-seat-dang/waiting?status=0&when=${when}|}" class="btn btn-secondary">Back to Waiting List</a>
+    <div>
+        <h1>웨이팅 상세정보</h1>
+        <p><strong>웨이팅 번호 :</strong> <span th:text="${waitingDetailResponse.waitingNumber}"></span></p>
+        <p><strong>웨이팅 순서 :</strong> <span th:text="${waitingDetailResponse.waitingOrder}"></span></p>
+        <p><strong>현재 웨이팅 상태 :</strong> <span th:text="${waitingDetailResponse.waitingStatus.status}"></span></p>
+        <p><strong>웨이팅 등록일시 :</strong> <span th:text="${{waitingDetailResponse.createdDate}}"></span></p>
+        <p><strong>인원 수 :</strong> <span th:text="${waitingDetailResponse.peopleCount}"></span></p>
+        <p><strong>상점 명 :</strong> <span th:text="${waitingDetailResponse.storeName}"></span></p>
+        <form id="cancelWaitingForm" th:action="@{|/my-seat-dang/waiting/${waitingDetailResponse.waitingNumber}?storeId=${waitingDetailResponse.storeId}|}" method="post">
+            <button type="submit">웨이팅 취소</button>
+        </form>
+        <a th:href="@{|/my-seat-dang/waiting?status=0&when=${when}|}" class="btn btn-secondary">내 웨이팅리스트</a>
+    </div>
 </main>
 </body>
 </html>

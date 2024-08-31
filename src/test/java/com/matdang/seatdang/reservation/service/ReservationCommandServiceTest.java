@@ -37,6 +37,8 @@ class ReservationCommandServiceTest {
     MemberRepository memberRepository;
     @Autowired
     ReservationRepository reservationRepository;
+    @Autowired
+    private ReservationSlotLockFacade reservationSlotLockFacade;
 
     @Transactional
     @DisplayName("가예약 1건 생성")
@@ -63,7 +65,7 @@ class ReservationCommandServiceTest {
                 .build();
 
         //when
-        ReservationTicket reservationTicket = reservationSlotCommandService.getReservationTicket(ticketRequestDTO);
+        ReservationTicket reservationTicket = reservationSlotLockFacade.getTicket(ticketRequestDTO);
         if(reservationTicket.equals(ReservationTicket.AVAILABLE)){
             reservationCommandService.createCustomMenuReservation(saveRequestDto);
         }

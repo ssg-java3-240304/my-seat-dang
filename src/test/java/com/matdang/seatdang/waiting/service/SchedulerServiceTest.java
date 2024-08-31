@@ -1,5 +1,7 @@
 package com.matdang.seatdang.waiting.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.matdang.seatdang.auth.service.AuthService;
 import com.matdang.seatdang.member.entity.Customer;
 import com.matdang.seatdang.store.entity.Store;

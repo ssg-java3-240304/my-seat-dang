@@ -3,7 +3,7 @@
       layout:decorate="~{storeowner/layout/default}" xmlns="http://www.w3.org/1999/html">
 
 <div layout:fragment="content">
-    <form th:action="@{/templates/storeowner/storeUpdate}" method="post" enctype="multipart/form-data">
+    <form th:action="@{/store-owner/store/store-update}" method="post" enctype="multipart/form-data">
         <!-- Breadcrumbs-->
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
@@ -281,14 +281,14 @@
 
             // 현재 매장명과 새로 입력한 매장명이 같은 경우
             if (newStoreName === currentStoreName) {
-                alert("현재 매장명과 동일합니다.");
+                alert("현재 매장명과 동일합니다. 변경하지 않으시려면 계속 진행하세요.");
                 isClicked = 1;
                 return;
             }
 
             // 매장명이 다를 경우 중복 체크 수행
             $.ajax({
-                url: '[[@{/storeowner/store/storeNameCheck}]]',
+                url: '[[@{/store-owner/store/store-name-check}]]',
                 method: 'get',
                 data: {storeName: newStoreName},
                 dataType: 'json',
@@ -372,53 +372,6 @@
                     }
                 }
             });
-
-            // const preview2 = document.getElementById('preview2');
-            // const imagesInput = document.getElementById('images');
-            // const originalImagesInput = document.getElementById('originalImages');
-            //
-            // // 원래 이미지 URL 리스트 가져오기
-            // const originalImages = JSON.parse(originalImagesInput.value || '[]');
-            //
-            // // 기존 이미지 미리보기 생성
-            // function createImagePreview(url) {
-            //     if (url) {
-            //         const img = document.createElement('img');
-            //         img.src = url;
-            //         img.className = 'photo-preview';
-            //         img.style.width = '200px'; // 미리보기 크기 설정
-            //         img.style.height = '200px'; // 미리보기 크기 설정
-            //         preview2.appendChild(img);
-            //     }
-            // }
-            //
-            // // 페이지 로드 시 기존 이미지 미리보기 생성
-            // originalImages.forEach(createImagePreview);
-            //
-            // // 파일 선택 시 미리보기 업데이트
-            // imagesInput.addEventListener('change', function(event) {
-            //     const files = event.target.files;
-            //
-            //     // 기존 미리보기 이미지 제거
-            //     preview2.innerHTML = '';
-            //
-            //     // 새로 선택된 이미지 미리보기 생성
-            //     for (let i = 0; i < files.length; i++) {
-            //         const file = files[i];
-            //         if (file) {
-            //             const reader = new FileReader();
-            //             reader.onload = function(e) {
-            //                 const img = document.createElement('img');
-            //                 img.src = e.target.result;
-            //                 img.className = 'photo-preview';
-            //                 img.style.width = '200px'; // 미리보기 크기 설정
-            //                 img.style.height = '200px'; // 미리보기 크기 설정
-            //                 preview2.appendChild(img);
-            //             };
-            //             reader.readAsDataURL(file);
-            //         }
-            //     }
-            // });
         });
 
         // 주소 구분자로 나눠서 디폴드값으로 보여주기
@@ -533,7 +486,7 @@
             formData.append('regularDayOff', $('#regularDayOff').val());
 
             $.ajax({
-                url: '[[@{/storeowner/store/storeUpdate}]]',
+                url: '[[@{/store-owner/store/store-update}]]',
                 method: 'post',
                 contentType: false,
                 processData: false,

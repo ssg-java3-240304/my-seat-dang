@@ -9,6 +9,7 @@ import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
 import com.matdang.seatdang.waiting.service.WaitingCustomerService;
+import com.matdang.seatdang.waiting.service.WaitingService;
 import com.matdang.seatdang.waiting.service.WaitingSettingService;
 import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingCustomerFacade;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,6 +36,7 @@ public class WaitingCustomerController {
     private final WaitingRepository waitingRepository;
     private final StoreRepository storeRepository;
     private final WaitingSettingService waitingSettingService;
+    private final WaitingService waitingService;
     private final AuthService authService;
 
     @Value("${spring.data.redis.host}")
@@ -70,7 +72,8 @@ public class WaitingCustomerController {
 
         Store store = storeRepository.findByStoreId(storeId);
 
-        model.addAttribute("waitingTeam", waitingRepository.countWaitingByStoreIdAndWaitingStatus(storeId));
+//        model.addAttribute("waitingTeam", waitingRepository.countWaitingByStoreIdAndWaitingStatus(storeId));
+        model.addAttribute("waitingTeam", waitingService.countWaitingInStore(storeId));
         model.addAttribute("readyWaitingResponse", ReadyWaitingResponse.create(store));
 
         return "customer/waiting/registration";

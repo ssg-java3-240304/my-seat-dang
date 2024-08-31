@@ -87,10 +87,10 @@
                 <div class="tabs_detail">
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
-                            <a id="tab-A" href="#pane-A" class="nav-link" data-bs-toggle="tab" role="tab">전체예약</a>
+                            <a id="tab-A" href="#pane-A" class="nav-link active" data-bs-toggle="tab" role="tab">전체예약</a>
                         </li>
                         <li class="nav-item">
-                            <a id="tab-B" href="#pane-B" class="nav-link active" data-bs-toggle="tab" role="tab">결제 전</a>
+                            <a id="tab-B" href="#pane-B" class="nav-link" data-bs-toggle="tab" role="tab">결제 전</a>
                         </li>
                         <li class="nav-item">
                             <a id="tab-C" href="#pane-C" class="nav-link" data-bs-toggle="tab" role="tab">방문예정</a>
@@ -104,7 +104,7 @@
                     </ul>
 
                     <div class="tab-content" role="tablist">
-                        <div id="pane-A" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-A">
+                        <div id="pane-A" class="card tab-pane fade show active" role="tabpanel" aria-labelledby="tab-A">
                             <div class="card-header" role="tab" id="heading-A">
                                 <h5>
                                     <a class="collapsed" data-bs-toggle="collapse" href="#collapse-A" aria-expanded="true" aria-controls="collapse-A">
@@ -148,7 +148,7 @@
                         </div>
                         <!-- /tab -->
 
-                        <div id="pane-B" class="card tab-pane fade show active" role="tabpanel" aria-labelledby="tab-B">
+                        <div id="pane-B" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-B">
                             <div class="card-header" role="tab" id="heading-B">
                                 <h5>
                                     <a class="collapsed" data-bs-toggle="collapse" href="#collapse-B" aria-expanded="true" aria-controls="collapse-B">
@@ -411,24 +411,6 @@
     <!--  여기까지 ai 모달-->
 
     <!--  예약 취소 모달 -->
-<!--    <div id="cancel-modal" class="cancel-modal">-->
-<!--        <div class="modal_header">-->
-<!--            <h3>예약 취소</h3>-->
-<!--        </div>-->
-<!--        <div class="sign-in-wrapper">-->
-<!--            <div class="modal-content">-->
-<!--                <span id="modal-close-btn" class="close">&times;</span>-->
-<!--&lt;!&ndash;                <div class="modal-header">예약 취소</div>&ndash;&gt;-->
-<!--                <div class="modal-body">-->
-<!--                    <p>취소 사유를 적어주세요:</p>-->
-<!--                    <textarea id="cancelReason" placeholder="취소 사유를 입력하세요"></textarea>-->
-<!--                </div>-->
-<!--                <div class="modal-footer">-->
-<!--                    <button id="submitCancel" class="btn">Submit</button>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
     <div id="cancel-modal" class="modal">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -438,7 +420,6 @@
                 </div>
                 <div class="modal-body">
                     <form id="cancelForm" th:action="@{/my-seat-dang/reservation/cancel}" method="POST">
-<!--                        <p th:text=""></p>-->
                         <input name="reservationId" id="cancel-reservId" hidden="hidden">
                         <div class="mb-3">
                             <label for="cancelReason" class="form-label">취소 사유</label>
@@ -454,7 +435,6 @@
             </div>
         </div>
     </div>
-
     <!-- 여기까지 취소 모달 -->
 
     <!-- 사용자 정의 모달 -->
@@ -463,9 +443,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">케이크 시안을 만들어 드릴게요</h5>
-<!--                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-<!--                        <span aria-hidden="true">&times;</span>-->
-<!--                    </button>-->
+                    <!--                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+                    <!--                        <span aria-hidden="true">&times;</span>-->
+                    <!--                    </button>-->
                 </div>
                 <div class="modal-body">
                     원하는 케이크에 대해 설명해주세요:
@@ -478,8 +458,6 @@
             </div>
         </div>
     </div>
-
-
 
 
     <!-- Progress Bar -->
@@ -495,21 +473,12 @@
 </main>
 </body>
 <div layout:fragment="js">
-    <!-- Bootstrap core JavaScript -->
-<!--    <script src="/vendor/admin/jquery/jquery.min.js"></script>-->
-<!--    <script src="/vendor/admin/bootstrap/js/bootstrap.bundle.min.js"></script>-->
-    <!-- Core plugin JavaScript -->
     <script th:src="@{/vendor/admin/jquery-easing/jquery.easing.min.js}"></script>
-    <!-- Page level plugin JavaScript -->
     <script th:src="@{/vendor/admin/jquery.magnific-popup.min.js}"></script>
-    <!-- Custom scripts for all pages -->
-<!--    <script src="/js/admin/admin.js"></script>-->
     <!-- 이 페이지 전용 스크립트 -->
-<!--    <script th:src="@{/js/customer/specific_detail.js}"></script>-->
     <script th:src="@{/js/customer/sticky_sidebar.min.js}"></script>
 
     <script th:inline="javascript">
-
         let selectedImageUrl = null; // selectedImageUrl 변수를 초기화합니다.
 
         // 모달이 열릴 때마다 이미지 선택 상태 초기화
@@ -600,7 +569,9 @@
         }
 
 
-        async function loadRecentMessages(reservationId, chatUrl) {
+        async function loadRecentMessages() {
+            let reservationId = window.reservationId;
+            let chatUrl = window.chatUrl;
             try {
                 // 최근 20개 메시지를 로드
                 const response = await fetch(`${chatUrl}/chat/roomNum/${reservationId}/messages?limit=20`);
@@ -631,9 +602,10 @@
             }
         }
 
-        async function loadMoreMessages(reservationId, chatUrl) {
+        async function loadMoreMessages() {
             console.log('loadMoreMessages function called');
-
+            let reservationId = window.reservationId;
+            let chatUrl = window.chatUrl;
             if (isLoading) {
                 console.log('Loading in progress');
                 return;
@@ -718,16 +690,13 @@
         <span class="time_date">${timeString}</span>
     </div>`;
 
-            // Append the payment info box to the chat box
             chatBox.append(paymentInfoBox);
 
-            // Get the newly created button and set the data attributes
             const paymentButton = paymentInfoBox.querySelector(".payment-btn");
             paymentButton.setAttribute("data-reservation-id", window.reservationId);
             paymentButton.setAttribute("data-customer-id", window.customerId);
             paymentButton.setAttribute("data-store-id", window.storeId);
 
-            // Attach the event listener for the payment button
             paymentButton.onclick = function() {
                 handlePayment(this);
             };
@@ -1095,7 +1064,7 @@
             })
         });
 
-        // 폼 제출
+        // 예약 취소 폼 제출
         document.getElementById("submitCancel").onclick = function() {
             const reason = document.getElementById("cancelReason").value;
             if (reason.trim() === "") {
@@ -1292,11 +1261,6 @@
                 }, 3000);
             }
         });
-
-
-
-
-
     </script>
 </div>
 </html>

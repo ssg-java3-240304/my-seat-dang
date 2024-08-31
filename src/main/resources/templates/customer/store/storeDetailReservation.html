@@ -17,7 +17,7 @@
                 <div class="main_info">
                     <div class="row">
                         <div class="col-xl-4 col-lg-5 col-md-6">
-                            <div class="head"><div class="score"><span><em>350 Reviews</em></span><strong>[[${store.starRating}]]</strong></div></div>
+                            <div class="head"><div class="score"><strong>[[${store.starRating}]]</strong></div></div>
                             <h1>[[${store.storeName}]]</h1>
                             [[${store.storeAddress}]] - <a href="https://www.google.com/maps/dir//Assistance+%E2%80%93+H%C3%B4pitaux+De+Paris,+3+Avenue+Victoria,+75004+Paris,+Francia/@48.8606548,2.3348734,14z/data=!4m15!1m6!3m5!1s0x47e66e1de36f4147:0xb6615b4092e0351f!2sAssistance+Publique+-+H%C3%B4pitaux+de+Paris+(AP-HP)+-+Si%C3%A8ge!8m2!3d48.8568376!4d2.3504305!4m7!1m0!1m5!1m1!1s0x47e67031f8c20147:0xa6a9af76b1e2d899!2m2!1d2.3504327!2d48.8568361" target="blank">Get directions</a>
                         </div>
@@ -27,7 +27,7 @@
                                         <a th:href="${thumbnail}" class="btn_hero" data-effect="mfp-zoom-in"><i class="icon_image"></i>View photos</a>
                                         <a th:each="image : ${images}" th:href="${image}" data-effect="mfp-zoom-in"></a>
                                     </span>
-                                <a href="#0" class="btn_hero wishlist"><i class="icon_heart"></i>Wishlist</a>
+<!--                                <a href="#0" class="btn_hero wishlist"><i class="icon_heart"></i>Wishlist</a>-->
                             </div>
                         </div>
                     </div>
@@ -48,9 +48,6 @@
                         <li class="nav-item">
                             <a id="tab-A" href="#pane-A" class="nav-link active" data-bs-toggle="tab" role="tab">홈</a>
                         </li>
-                        <li class="nav-item">
-                            <a id="tab-B" href="#pane-B" class="nav-link" data-bs-toggle="tab" role="tab">리뷰</a>
-                        </li>
                     </ul>
 
                     <div class="tab-content" role="tablist">
@@ -67,17 +64,7 @@
                                     <p>[[${store.description}]]</p>
                                     <hr>
                                     <div class="add_bottom_25"></div>
-                                    <!--                                    <h2>Pictures from our users</h2>-->
-                                    <!--                                    <div class="pictures magnific-gallery clearfix">-->
-                                    <!--                                        <figure><a th:href="@{img/customer/detail_gallery/detail_1.jpg}" title="Photo title" data-effect="mfp-zoom-in"><img th:src="@{img/customer/thumb_detail_placeholder.jpg}" data-src="img/thumb_detail_1.jpg" class="lazy" alt=""></a></figure>-->
-                                    <!--                                        <figure><a th:href="@{img/customer/detail_gallery/detail_2.jpg}" title="Photo title" data-effect="mfp-zoom-in"><img th:src="@{img/customer/thumb_detail_placeholder.jpg}" data-src="img/thumb_detail_2.jpg" class="lazy" alt=""></a></figure>-->
-                                    <!--                                        <figure><a th:href="@{img/customer/detail_gallery/detail_3.jpg}" title="Photo title" data-effect="mfp-zoom-in"><img th:src="@{img/customer/thumb_detail_placeholder.jpg}" data-src="img/thumb_detail_3.jpg" class="lazy" alt=""></a></figure>-->
-                                    <!--                                        <figure><a th:href="@{img/customer/detail_gallery/detail_4.jpg}" title="Photo title" data-effect="mfp-zoom-in"><img th:src="@{img/customer/thumb_detail_placeholder.jpg}" data-src="img/thumb_detail_4.jpg" class="lazy" alt=""></a></figure>-->
-                                    <!--                                        <figure><a th:href="@{img/customer/detail_gallery/detail_5.jpg}" title="Photo title" data-effect="mfp-zoom-in"><span class="d-flex align-items-center justify-content-center">+10</span><img th:src="@{img/customer/thumb_detail_placeholder.jpg}" data-src="img/thumb_detail_5.jpg" class="lazy" alt=""></a></figure>-->
-                                    <!--                                    </div>-->
-                                    <!-- /pictures -->
                                     <h2>Menu</h2>
-                                    <!--                                    <h3>Main Course</h3>-->
                                     <div class="menu-gallery">
                                         <div class="menu_item thumbs" th:each="menu, iter : ${menus}" th:if="${iter.index < 5}">
                                             <figure>
@@ -142,18 +129,6 @@
                             </div>
                         </div>
                         <!-- /tab -->
-
-                        <div id="pane-B" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-B">
-                            <div class="card-header" role="tab" id="heading-B">
-                                <h5>
-                                    <a class="collapsed" data-bs-toggle="collapse" href="#collapse-B" aria-expanded="false" aria-controls="collapse-B">
-                                        리뷰
-                                    </a>
-                                </h5>
-                            </div>
-                            <div id="collapse-B" class="collapse" role="tabpanel" aria-labelledby="heading-B">
-                            </div>
-                        </div>
                     </div>
                     <!-- /tab-content -->
                 </div>
@@ -175,8 +150,10 @@
                         <div class="main">
                             <input type="text" id="datepicker_field" name="date">
                             <div id="DatePicker"></div>
+
+                            <br><span class="plain_text">예약 시간</span>
                             <div class="dropdown time last-option">
-                                <a href="#" data-bs-toggle="dropdown">Hour <span id="selected_time"></span></a>
+                                <a href="#" data-bs-toggle="dropdown"><span id="selected_time">방문하실 시간을 선택하세요 </span></a>
                                 <div class="dropdown-menu">
                                     <div class="dropdown-menu-content">
                                         <div class="radio_select hour-container add_bottom_15" id="time-list">
@@ -184,6 +161,16 @@
                                     </div>
                                 </div>
                             </div>
+
+<!--                            <div class="dropdown time last-option">-->
+<!--                                <a href="#" data-bs-toggle="dropdown">Hour <span id="selected_time"></span></a>-->
+<!--                                <div class="dropdown-menu">-->
+<!--                                    <div class="dropdown-menu-content">-->
+<!--                                        <div class="radio_select hour-container add_bottom_15" id="time-list">-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
                             <!-- /dropdown -->
 
                             <input name="store.storeId" th:value="${store.storeId}" hidden="hidden">
@@ -266,6 +253,17 @@
         console.log(storeOpenTime);
         console.log(storeCloseTime);
 
+        const $dropdownElement = document.querySelector('.time');
+        const dropdown = new bootstrap.Dropdown($dropdownElement);
+
+        const openTimeList = () =>{
+            dropdown.show();
+        };
+
+        const closeTimeList = () =>{
+            dropdown.hide();
+        };
+
         // 시간 목록을 생성하기 전에 기존 목록을 지웁니다.
         const clearTimeList = () => {
             while (timeList.firstChild) {
@@ -313,6 +311,7 @@
                 listItem.addEventListener('click', function(event) {
                     if (!listItem.classList.contains('disabled-label')) {
                         selectedTimeSpan.textContent = timeStr;
+                        closeTimeList();
                     }
                 });
 
