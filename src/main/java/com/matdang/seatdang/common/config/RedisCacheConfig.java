@@ -59,7 +59,7 @@ public class RedisCacheConfig {
                         RedisSerializationContext.SerializationPair.fromSerializer(
                                 new Jackson2JsonRedisSerializer<>(RedisPage.class)) // 사용한 DTO 클래스
                 )
-                .entryTtl(Duration.ofHours(5));
+                .entryTtl(Duration.ofHours(3));
 
         return RedisCacheManager
                 .RedisCacheManagerBuilder
