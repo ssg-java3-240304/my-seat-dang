@@ -76,12 +76,12 @@
         <h1>방문한 웨이팅 가게 정보</h1>
         <p><strong>웨이팅 번호 :</strong> <span th:text="${waitingDetailResponse.waitingNumber}"></span></p>
         <p><strong>현재 웨이팅 상태 :</strong> <span th:text="${waitingDetailResponse.waitingStatus.status}"></span></p>
-        <p><strong>웨이팅 등록 일시 :</strong> <span th:text="${waitingDetailResponse.createdDate}"></span></p>
-        <p><strong>웨이팅 입장 시간 :</strong> <span th:text="${waitingDetailResponse.visitedTime}"></span></p>
+        <p><strong>웨이팅 등록 일시 :</strong> <span th:text="${{waitingDetailResponse.createdDate}}"></span></p>
+        <p><strong>웨이팅 입장 시간 :</strong> <span th:text="${{waitingDetailResponse.visitedTime}}"></span></p>
         <p><strong>인원 수 :</strong> <span th:text="${waitingDetailResponse.peopleCount}"></span></p>
         <p><strong>상점 명 :</strong> <span th:text="${waitingDetailResponse.storeName}"></span></p>
 
-        <a th:href="@{|/my-seat-dang/waiting?status=1&when=${when}|}" class="btn btn-secondary">웨이팅 목록으로 돌아가기</a>
+        <a th:href="@{|/my-seat-dang/waiting?status=1&when=${when}|}" class="btn btn-secondary">내 웨이팅리스트</a>
     </div>
 </main>
 </body>

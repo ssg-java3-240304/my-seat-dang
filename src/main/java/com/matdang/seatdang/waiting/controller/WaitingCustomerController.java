@@ -9,6 +9,8 @@ import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
 import com.matdang.seatdang.waiting.service.WaitingCustomerService;
+import com.matdang.seatdang.waiting.service.WaitingService;
+import com.matdang.seatdang.waiting.service.WaitingSettingService;
 import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingCustomerFacade;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,8 @@ public class WaitingCustomerController {
     private final WaitingStorageRepository waitingStorageRepository;
     private final WaitingRepository waitingRepository;
     private final StoreRepository storeRepository;
+    private final WaitingSettingService waitingSettingService;
+    private final WaitingService waitingService;
     private final AuthService authService;
 
     @Value("${spring.data.redis.host}")
@@ -50,13 +54,6 @@ public class WaitingCustomerController {
 //        return "customer/waiting/test-store";
 //    }
 
-    /**
-     * TODO : 삭제 필요
-     * defaultValue는 test 용도임
-     * <p>
-     * TODO : URL 변경
-     */
-    // TODO : URL 직접 접근 막기 - 개선필요
     @GetMapping("/waiting/{storeId}")
     public String readyWaiting(@PathVariable Long storeId, Model model, HttpServletRequest request,
                                RedirectAttributes redirectAttributes) {
@@ -74,7 +71,8 @@ public class WaitingCustomerController {
 
         Store store = storeRepository.findByStoreId(storeId);
 
-        model.addAttribute("waitingTeam", waitingRepository.countWaitingByStoreIdAndWaitingStatus(storeId));
+//        model.addAttribute("waitingTeam", waitingRepository.countWaitingByStoreIdAndWaitingStatus(storeId));
+        model.addAttribute("waitingTeam", waitingService.countWaitingInStore(storeId));
         model.addAttribute("readyWaitingResponse", ReadyWaitingResponse.create(store));
 
         return "customer/waiting/registration";
@@ -99,10 +97,12 @@ public class WaitingCustomerController {
             @RequestParam(defaultValue = "0") int page,
             Model model) {
         Page<WaitingInfoDto> waitings = null;
+
         if (when.equals("today")) {
             waitings = waitingCustomerService.showTodayWaiting(status, page);
         } else if (when.equals("history")) {
-            waitings = waitingCustomerService.showHistoryWaiting(status, page);
+
+            waitings = waitingCustomerService.showHistoryWaiting(authService.getAuthenticatedMember().getMemberId(), status, page);
         }
         System.out.println("isNotAwaiting = "+model.getAttribute("isNotAwaiting"));
         System.out.println("waitings = " + waitings.getContent());
