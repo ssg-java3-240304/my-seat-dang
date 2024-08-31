@@ -92,6 +92,16 @@ public class WaitingService {
                 filteredWaitings.size());
     }
 
+    public long countWaitingInStore(Long storeId) {
+        String key = "store:" + storeId;
+
+        return redisTemplate.opsForHash().values(key).stream()
+                .map(this::convertStringToWaiting)
+                .filter(waiting -> waiting.getWaitingStatus() == WaitingStatus.WAITING)
+                .count();
+    }
+
+
     public Waiting convertStringToWaiting(Object jsonString) {
         try {
             // JSON 문자열을 Waiting 객체로 역직렬화
