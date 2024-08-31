@@ -1,31 +1,40 @@
 package com.matdang.seatdang.waiting.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
+import com.matdang.seatdang.auth.service.AuthService;
+import com.matdang.seatdang.member.entity.Customer;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.store.repository.query.dto.AvailableWaitingTime;
 import com.matdang.seatdang.store.vo.StoreSetting;
 import com.matdang.seatdang.store.vo.WaitingTime;
-import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.repository.query.WaitingQueryRepository;
+import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingCustomerFacade;
 import jakarta.persistence.EntityManager;
-import java.time.LocalTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @Transactional
 class WaitingSettingServiceTest {
-
+    @Autowired
+    private RedissonLockWaitingCustomerFacade redissonLockWaitingCustomerFacade;
+    @MockBean
+    private AuthService authService;
     @Autowired
     private StoreRepository storeRepository;
     @Autowired
@@ -36,6 +45,10 @@ class WaitingSettingServiceTest {
     private WaitingQueryRepository waitingQueryRepository;
     @Autowired
     private EntityManager em;
+    @Autowired
+    private WaitingService waitingService;
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Test
     @DisplayName("존재하는 이용 가능한 웨이팅 시간 가져오기")
@@ -166,47 +179,61 @@ class WaitingSettingServiceTest {
                 com.matdang.seatdang.store.vo.WaitingStatus.CLOSE);
     }
 
-//    @Test
-//    @DisplayName("웨이팅 불가 상태로 변경")
-//    public void changeWaitingStatusByUnavailable() {
-//        // given
-//        Store store = storeRepository.save(Store.builder()
-//                .storeId(1L)
-//                .storeSetting(StoreSetting.builder()
-//                        .waitingTime(WaitingTime.builder()
-//                                .build())
-//                        .build())
-//                .build());
-//
-//        for (long i = 0; i < 10; i++) {
-//            waitingRepository.save(Waiting.builder()
-//                    .waitingNumber(i)
-//                    .waitingOrder(i)
-//                    .storeId(store.getStoreId())
-//                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
-//                    .waitingStatus(WaitingStatus.WAITING)
-//                    .visitedTime(null)
-//                    .build());
-//        }
-//        em.flush();
-//        em.clear();
-//
-//        PageRequest pageable = PageRequest.of(0, 10);
-//
-//        // when
-//        waitingSettingService.changeWaitingStatus(3, store.getStoreId());
-//
-//        // then
-//        assertThat(storeRepository.findByStoreId(store.getStoreId()).getStoreSetting().getWaitingStatus()).isEqualTo(
-//                com.matdang.seatdang.store.vo.WaitingStatus.UNAVAILABLE);
-//        assertThat(waitingQueryRepository.findAllByStoreIdAndWaitingStatus(store.getStoreId(), WaitingStatus.WAITING,
-//                        pageable).getTotalElements())
-//                .isEqualTo(0);
-//        assertThat(
-//                waitingQueryRepository.findAllByStoreIdAndWaitingStatus(store.getStoreId(), WaitingStatus.SHOP_CANCELED,
-//                                pageable).getTotalElements())
-//                .isEqualTo(10);
-//    }
+    @Test
+    @DisplayName("웨이팅 불가 상태로 변경 - Redis 적용")
+    public void changeWaitingStatusByUnavailable() {
+        // given
+        Store store = storeRepository.save(Store.builder()
+                .storeId(1L)
+                .storeSetting(StoreSetting.builder()
+                        .waitingTime(WaitingTime.builder()
+                                .build())
+                        .waitingStatus(com.matdang.seatdang.store.vo.WaitingStatus.OPEN)
+                        .build())
+                .build());
+
+        em.flush();
+        em.clear();
+
+        Customer mockCustomer = Customer.builder()
+                .memberId(1L)
+                .memberPhone("010-1234-1234")
+                .build();
+        when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
+        List<Long> waitingIds = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            Long id = redissonLockWaitingCustomerFacade.createWaiting(1L, 2).getWaitingNumber();
+            waitingIds.add(id);
+        }
+
+        // when
+        waitingSettingService.changeWaitingStatus(3, store.getStoreId());
+
+        // then
+        assertThat(storeRepository.findByStoreId(store.getStoreId()).getStoreSetting().getWaitingStatus()).isEqualTo(
+                com.matdang.seatdang.store.vo.WaitingStatus.UNAVAILABLE);
+
+
+        String max = (String) redisTemplate.opsForValue().get("waitingOrder:1");
+        assertThat(Integer.parseInt(max)).isEqualTo(0);
+
+        List<Waiting> waitingList = redisTemplate.opsForHash().values("store:1").stream()
+                .map(waiting -> waitingService.convertStringToWaiting(waiting))
+                .toList();
+        int waitingCount = 0;
+        int canceledCount = 0;
+        for (Waiting waiting : waitingList) {
+            if (waiting.getWaitingStatus() == WaitingStatus.WAITING) {
+                waitingCount++;
+            }
+            if (waiting.getWaitingStatus() == WaitingStatus.SHOP_CANCELED) {
+                canceledCount++;
+            }
+        }
+
+        assertThat(waitingCount).isEqualTo(0);
+        assertThat(canceledCount).isEqualTo(100);
+    }
 //
 //    @Test
 //    @DisplayName("존재하는 웨이팅 인원수 가져오기")

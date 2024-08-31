@@ -55,7 +55,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@Disabled
+//@Disabled
 @SpringBootTest
 public class TestCreateDummyData {
     @Autowired
@@ -230,7 +230,6 @@ public class TestCreateDummyData {
         return menuList;
     }
 
-    @Disabled
     @Test
     @DisplayName("웨이팅 오늘 데이터 생성")
     void createWaitingToday() {
@@ -263,7 +262,8 @@ public class TestCreateDummyData {
                             .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
                             .createdDate(LocalDateTime.now())
                             .waitingStatus(value)
-                            .visitedTime(null)
+                            .visitedTime(LocalDateTime.now())
+                            .canceledTime(LocalDateTime.now())
                             .build());
                 }
             }
@@ -402,6 +402,7 @@ public class TestCreateDummyData {
                                             .waitingCloseTime(LocalTime.of(23, 0))
                                             .estimatedWaitingTime(LocalTime.of(0, 10))
                                             .build())
+                                    .waitingPeopleCount(10)
                                     .maxReservationInDay(1000)
                                     .maxReservationInTime(5)
                                     .build()

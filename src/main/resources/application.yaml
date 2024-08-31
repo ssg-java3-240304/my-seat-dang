@@ -4,9 +4,7 @@ spring:
   data:
     mongodb:
       uri: ${MONGO_DB_URI}
-    redis:
-      host: ${HOST}
-      port: 6379
+
   servlet:
     multipart:
       max-file-size: 10MB

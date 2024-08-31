@@ -13,12 +13,12 @@ public class RedissonLockWaitingSettingFacade {
     private final RedissonClient redissonClient;
     private final WaitingSettingService waitingSettingService;
 
-    public int changeWaitingStatus(int status, Long storeId) {
+    public void changeWaitingStatus(int status, Long storeId) {
         RLock lock = redissonClient.getLock("waitingLock:" + storeId);
         lock.lock(3, TimeUnit.SECONDS);
 
         try {
-            return waitingSettingService.changeWaitingStatus(status, storeId);
+            waitingSettingService.changeWaitingStatus(status, storeId);
         } finally {
             lock.unlock();
         }

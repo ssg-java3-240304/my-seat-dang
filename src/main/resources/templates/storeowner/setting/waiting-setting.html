@@ -164,7 +164,7 @@
                 </div>
 
                 <div>
-                    <label for="waitingCloseTime">웨이팅 닫는 시간:</label>
+                    <label for="waitingCloseTime">웨이팅 마감 시간:</label>
                     <input type="time" id="waitingCloseTime" name="waitingCloseTime"
                            th:value="${availableWaitingTime.waitingCloseTime}"/>
                 </div>
@@ -193,7 +193,7 @@
                 <div>
                     <label for="waitingPeopleCount">웨이팅 최대 인원 수:</label>
                     <input type="number" id="waitingPeopleCount" name="waitingPeopleCount"
-                           th:value="${waitingPeopleCount}" required min="0" max="20">
+                           th:value="${waitingPeopleCount}" required min="1" max="20">
                 </div>
                 <button type="submit">수정</button>
             </form>
@@ -212,6 +212,7 @@
                 </div>
             </form>
         </div>
+
     </div>
 </div>
 <div layout:fragment="script">
