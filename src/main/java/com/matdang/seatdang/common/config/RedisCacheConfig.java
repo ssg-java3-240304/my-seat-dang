@@ -1,14 +1,19 @@
 package com.matdang.seatdang.common.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
 import java.time.Duration;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -41,6 +46,8 @@ public class RedisCacheConfig {
                 .build();
     }
 
+
+
     @Bean
     public CacheManager waitingStorageCacheManager(RedisConnectionFactory redisConnectionFactory) {
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration
@@ -52,11 +59,11 @@ public class RedisCacheConfig {
                 // Redis에 Value를 저장할 때 Json으로 직렬화(변환)해서 저장
                 .serializeValuesWith(
                         RedisSerializationContext.SerializationPair.fromSerializer(
-                                new Jackson2JsonRedisSerializer<>(Object.class)
+                                new GenericJackson2JsonRedisSerializer()
                         )
                 )
                 // 데이터의 만료기간(TTL) 설정
-                .entryTtl(Duration.ofHours(5));
+                .entryTtl(Duration.ofMinutes(10L));
 
         return RedisCacheManager
                 .RedisCacheManagerBuilder
