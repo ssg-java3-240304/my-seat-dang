@@ -7,15 +7,15 @@ import com.matdang.seatdang.auth.service.AuthService;
 import com.matdang.seatdang.common.annotation.DoNotUse;
 import com.matdang.seatdang.member.entity.Member;
 import com.matdang.seatdang.store.service.StoreService;
+import com.matdang.seatdang.waiting.dto.RedisPage;
 import com.matdang.seatdang.waiting.dto.WaitingId;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.entity.Waiting;
-import com.matdang.seatdang.waiting.entity.WaitingStorage;
-import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
-import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingCustomerFacade;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
+import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
 import com.matdang.seatdang.waiting.repository.query.WaitingStorageQueryRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
+import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingCustomerFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -328,22 +328,37 @@ public class WaitingCustomerService {
 //
 //        return Page.empty();
 //    }
+@Cacheable(cacheNames = "historyWaiting", key = "'historyWaiting:customer'+#customerId+ 'status:' +#status +'page:' + #page ", cacheManager = "waitingStorageCacheManager")
+public RedisPage<WaitingInfoDto> showHistoryWaiting(Long customerId, int status, int page) {
+    PageRequest pageable = PageRequest.of(page, 10);
+    Page<WaitingInfoDto> resultPage;
 
-
-    @Cacheable(cacheNames = "historyWaiting", key = "'historyWaiting:customer'+#customerId+ 'status:' +#status +'page:' + #page ", cacheManager = "waitingStorageCacheManager")
-    public Page<WaitingInfoDto> showHistoryWaiting(Long customerId, int status, int page) {
-
-        PageRequest pageable = PageRequest.of(page, 10);
-        if (status <= 1) {
-            return waitingStorageQueryRepository.findAllByCustomerIdAndWaitingStatus(customerId,
-                    WaitingStatus.findWaiting(status), pageable);
-        }
-        if (status == 2) {
-            return waitingStorageQueryRepository.findAllByCustomerIdAndCancelStatus(customerId, pageable);
-        }
-
-        return Page.empty();
+    if (status <= 1) {
+        resultPage = waitingStorageQueryRepository.findAllByCustomerIdAndWaitingStatus(customerId, WaitingStatus.findWaiting(status), pageable);
+    } else if (status == 2) {
+        resultPage = waitingStorageQueryRepository.findAllByCustomerIdAndCancelStatus(customerId, pageable);
+    } else {
+        resultPage = Page.empty();
     }
+
+    return new RedisPage<>(resultPage);
+}
+
+
+//@Cacheable(cacheNames = "historyWaiting", key = "'historyWaiting:page:'+ #page" , cacheManager = "waitingStorageCacheManager")
+//    public Page<WaitingInfoDto> showHistoryWaiting(int status, int page) {
+//        PageRequest pageable = PageRequest.of(page, 10);
+//        Long customerId = authService.getAuthenticatedMember().getMemberId();
+//        if (status <= 1) {
+//            return waitingStorageQueryRepository.findAllByCustomerIdAndWaitingStatus(customerId,
+//                    WaitingStatus.findWaiting(status), pageable);
+//        }
+//        if (status == 2) {
+//            return waitingStorageQueryRepository.findAllByCustomerIdAndCancelStatus(customerId, pageable);
+//        }
+//
+//        return Page.empty();
+//    }
 
     public Page<WaitingInfoDto> showTodayWaiting(int status, int page) {
         Pageable pageable = PageRequest.of(page, 10);

@@ -95,6 +95,7 @@ public class WaitingCustomerController {
             @RequestParam(defaultValue = "0") int page,
             Model model) {
         Page<WaitingInfoDto> waitings = null;
+
         if (when.equals("today")) {
             waitings = waitingCustomerService.showTodayWaiting(status, page);
         } else if (when.equals("history")) {
@@ -105,6 +106,7 @@ public class WaitingCustomerController {
             LocalDateTime end = LocalDateTime.now();
             log.debug(" === elapsed time ===");
             log.debug(" === {} === ", Duration.between(start, end).toMillis());
+
         }
         System.out.println("isNotAwaiting = " + model.getAttribute("isNotAwaiting"));
         System.out.println("waitings = " + waitings.getContent());

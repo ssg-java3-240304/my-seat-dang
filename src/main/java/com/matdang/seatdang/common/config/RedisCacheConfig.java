@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
 import java.time.Duration;
+
+import com.matdang.seatdang.waiting.dto.RedisPage;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -46,24 +48,18 @@ public class RedisCacheConfig {
                 .build();
     }
 
-
-
     @Bean
     public CacheManager waitingStorageCacheManager(RedisConnectionFactory redisConnectionFactory) {
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration
                 .defaultCacheConfig()
-                // Redis에 Key를 저장할 때 String으로 직렬화(변환)해서 저장
                 .serializeKeysWith(
                         RedisSerializationContext.SerializationPair.fromSerializer(
                                 new StringRedisSerializer()))
-                // Redis에 Value를 저장할 때 Json으로 직렬화(변환)해서 저장
                 .serializeValuesWith(
                         RedisSerializationContext.SerializationPair.fromSerializer(
-                                new GenericJackson2JsonRedisSerializer()
-                        )
+                                new Jackson2JsonRedisSerializer<>(RedisPage.class)) // 사용한 DTO 클래스
                 )
-                // 데이터의 만료기간(TTL) 설정
-                .entryTtl(Duration.ofMinutes(10L));
+                .entryTtl(Duration.ofHours(5));
 
         return RedisCacheManager
                 .RedisCacheManagerBuilder
