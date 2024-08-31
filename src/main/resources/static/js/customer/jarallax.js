@@ -757,4 +757,3 @@
   return jarallax;
 
 }));
-//# sourceMappingURL=jarallax.js.map

@@ -1,6 +1,7 @@
 package com.matdang.seatdang.search.controller;
 
 import com.matdang.seatdang.common.paging.PageCriteria;
+import com.matdang.seatdang.common.storeEnum.StoreType;
 import com.matdang.seatdang.search.dto.SearchStoreResponseDto;
 import com.matdang.seatdang.search.service.MapService;
 import com.matdang.seatdang.search.service.SearchStoreQueryService;
@@ -33,6 +34,7 @@ public class SearchController {
             @RequestParam(name = "store_name", required = false) String storeNameParam,
             @RequestParam(name = "store_address", required = false) String storeAddressParam,
             @PageableDefault(page = 1, size = 30) Pageable pageable,
+            @RequestParam(name = "storeType", required = false) StoreType storeTypeParam,
             Model model) {
 
         log.debug("search store controller start storeName={}, storeAddress={}", storeNameParam, storeAddressParam);
@@ -44,24 +46,29 @@ public class SearchController {
         // Optional.empty()는 내부적으로 아무런 값이 없는 Optional 객체를 반환합니다.
         Optional<String> storeName = Optional.ofNullable(storeNameParam).filter(s -> !s.isEmpty());
         Optional<String> storeAddress = Optional.ofNullable(storeAddressParam).filter(s -> !s.isEmpty());
+        Optional<StoreType> storeType = Optional.ofNullable(storeTypeParam);
 
         //Pageable을 0-based로 변환
         pageable = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize());
 
-        Page<SearchStoreResponseDto> storePageResponse = searchStoreQueryService.searchStore(storeName, storeAddress, pageable);
-
+        Page<SearchStoreResponseDto> storePageResponse = searchStoreQueryService.searchStore(storeName, storeAddress, pageable, storeType);
         model.addAttribute("storePage", storePageResponse.getContent());
-
         log.debug("storePageResponse: {}", storePageResponse.getContent());
+
+        if(storeType.isPresent()){
+            model.addAttribute("storeType", storeType.get());
+            log.debug("search store controller end storeType={}", storeType.get());
+        }
 
         // 페이지바 설정
         int page = storePageResponse.getNumber(); // 0-based 페이지번호
         int limit = storePageResponse.getSize();
         int totalCount = (int) storePageResponse.getTotalElements();
         String url = "search";
-        if(storeName.isPresent() || storeAddress.isPresent()){
-            url = url + "?store_name=" + storeName.orElse("") +"&store_address="+ storeAddress.orElse(""); // 상대주소
+        if(storeName.isPresent() || storeAddress.isPresent()||storeType.isPresent()){
+            url = url + "?store_name=" + storeName.orElse("") + "&store_address="+ storeAddress.orElse("") + "&storeType=" + storeType.orElse(null); // 상대주소
         }
+
         model.addAttribute("pageCriteria", new PageCriteria(page, limit, totalCount, url));
         log.debug("page url = {} page = {}", url, storePageResponse.getNumber() );
 
