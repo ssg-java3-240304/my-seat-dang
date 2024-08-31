@@ -25,7 +25,7 @@ public class ReservationSlotLockFacade {
         try {
             // 락선점
             Integer hasLock = lockRepository.getLock(key);
-            // 락을 획득한 경우에만 업무로직처리하도록 한다.
+            // 락을 획득한 경우에만 예약슬롯에 접근 가능
             if(hasLock > 0) {
                 ticket = reservationSlotCommandService.getReservationTicket(ticketRequestDTO);
             }else
@@ -43,7 +43,7 @@ public class ReservationSlotLockFacade {
         try {
             // 락선점
             Integer hasLock = lockRepository.getLock(key);
-            // 락을 획득한 경우에만 업무로직처리하도록 한다.
+            // 락을 획득한 경우에만 예약슬롯에 접근 가능
             if(hasLock > 0) {
                 reservationSlotCommandService.releaseSlot(requestDTO);
             }else
