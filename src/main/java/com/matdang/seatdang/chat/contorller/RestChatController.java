@@ -19,6 +19,7 @@ public class RestChatController {
     private final ChatService chatService;
 
     // SSE 엔드포인트 추가
+    @CrossOrigin(origins = "*")
     @GetMapping(value = "/chat/roomNum/{roomNum}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<Chat> streamMessages(@PathVariable String roomNum) {
         LocalDateTime connectionTime = LocalDateTime.now(); // SSE 연결 시간
@@ -28,7 +29,7 @@ public class RestChatController {
                 .subscribeOn(Schedulers.boundedElastic());
     }
 
-    @CrossOrigin
+    @CrossOrigin(origins = "*")
     @GetMapping(value = "/chat/roomNum/{roomNum}/messages", produces = MediaType.APPLICATION_JSON_VALUE)
     public Flux<Chat> getMessagesWithPagination(
             @PathVariable String roomNum,
