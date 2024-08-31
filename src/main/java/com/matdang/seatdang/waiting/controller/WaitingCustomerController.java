@@ -14,6 +14,7 @@ import com.matdang.seatdang.waiting.service.WaitingSettingService;
 import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingCustomerFacade;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.Duration;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -106,10 +107,10 @@ public class WaitingCustomerController {
 
             waitings = waitingCustomerService.showHistoryWaiting(authService.getAuthenticatedMember().getMemberId(),
                     status, page);
+
             LocalDateTime end = LocalDateTime.now();
             log.debug(" === elapsed time ===");
             log.debug(" === {} === ", Duration.between(start, end).toMillis());
-
         }
         System.out.println("isNotAwaiting = " + model.getAttribute("isNotAwaiting"));
         System.out.println("waitings = " + waitings.getContent());

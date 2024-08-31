@@ -7,7 +7,7 @@ import com.matdang.seatdang.auth.service.AuthService;
 import com.matdang.seatdang.common.annotation.DoNotUse;
 import com.matdang.seatdang.member.entity.Member;
 import com.matdang.seatdang.store.service.StoreService;
-import com.matdang.seatdang.waiting.dto.RedisPage;
+import com.matdang.seatdang.waiting.dto.RedisWaitingPage;
 import com.matdang.seatdang.waiting.dto.WaitingId;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.entity.Waiting;
@@ -328,11 +328,10 @@ public class WaitingCustomerService {
 //
 //        return Page.empty();
 //    }
-    @Cacheable(cacheNames = "historyWaiting", key = "'historyWaiting:customer'+#customerId+ 'status:' +#status +'page:' + #page ", cacheManager = "waitingStorageCacheManager")
-    public RedisPage<WaitingInfoDto> showHistoryWaiting(Long customerId, int status, int page) {
+    @Cacheable(cacheNames = "showHistoryWaiting", key = "'historyWaiting:customer'+#customerId+ ':status:' +#status +':page:' + #page ", cacheManager = "waitingStorageCacheManager")
+    public RedisWaitingPage showHistoryWaiting(Long customerId, int status, int page) {
         PageRequest pageable = PageRequest.of(page, 10);
         Page<WaitingInfoDto> resultPage;
-
         if (status <= 1) {
             resultPage = waitingStorageQueryRepository.findAllByCustomerIdAndWaitingStatus(customerId,
                     WaitingStatus.findWaiting(status), pageable);
@@ -342,7 +341,7 @@ public class WaitingCustomerService {
             resultPage = Page.empty();
         }
 
-        return new RedisPage<>(resultPage);
+        return new RedisWaitingPage(resultPage);
     }
 
     public Page<WaitingInfoDto> showTodayWaiting(int status, int page) {

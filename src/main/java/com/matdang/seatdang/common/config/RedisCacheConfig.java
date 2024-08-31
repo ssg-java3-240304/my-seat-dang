@@ -1,21 +1,16 @@
 package com.matdang.seatdang.common.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
 import java.time.Duration;
 
-import com.matdang.seatdang.waiting.dto.RedisPage;
+import com.matdang.seatdang.waiting.dto.RedisWaitingPage;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.domain.Page;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -57,7 +52,7 @@ public class RedisCacheConfig {
                                 new StringRedisSerializer()))
                 .serializeValuesWith(
                         RedisSerializationContext.SerializationPair.fromSerializer(
-                                new Jackson2JsonRedisSerializer<>(RedisPage.class)) // 사용한 DTO 클래스
+                                new Jackson2JsonRedisSerializer<>(RedisWaitingPage.class)) // 사용한 DTO 클래스
                 )
                 .entryTtl(Duration.ofHours(3));
 
