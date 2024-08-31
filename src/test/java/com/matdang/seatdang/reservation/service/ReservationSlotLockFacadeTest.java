@@ -74,9 +74,9 @@ class ReservationSlotLockFacadeTest {
     }
 
     @Transactional
-    @DisplayName("10건 동시 예약슬롯 획득 시도")
+    @DisplayName("100건 동시 예약슬롯 획득 시도")
     @Test
-    public void test2() {
+    public void test2() throws InterruptedException {
         //given
         int numberOfRequests = 100;
         int maxReservation = 5;

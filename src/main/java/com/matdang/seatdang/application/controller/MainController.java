@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class MainController {
 
-    @GetMapping("/my-seat-dang")
+    @GetMapping("/customer")
     public String customerMain(){
         return "customer/main";
     }

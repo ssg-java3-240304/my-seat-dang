@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/my-seat-dang/store")
+@RequestMapping("/customer/store")
 @RequiredArgsConstructor
 @Slf4j
 public class StoreCustomerController {
