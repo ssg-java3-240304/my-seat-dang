@@ -12,7 +12,6 @@ spring:
       password:
   datasource:
     url: ${TEST_DB_URL}
-
     username: ${TEST_DB_USERNAME}
     password: ${TEST_DB_PASSWORD}
 
@@ -30,6 +29,7 @@ spring:
           auto: update
         dialect: org.hibernate.dialect.MySQLDialect
     open-in-view: false
+
 kakao:
   secret:
     key: ${KAKAO_PAY_SECRET_KEY}

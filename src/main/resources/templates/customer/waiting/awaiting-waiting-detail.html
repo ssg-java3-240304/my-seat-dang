@@ -108,10 +108,10 @@
         <p><strong>웨이팅 등록일시 :</strong> <span th:text="${{waitingDetailResponse.createdDate}}"></span></p>
         <p><strong>인원 수 :</strong> <span th:text="${waitingDetailResponse.peopleCount}"></span></p>
         <p><strong>상점 명 :</strong> <span th:text="${waitingDetailResponse.storeName}"></span></p>
-        <form id="cancelWaitingForm" th:action="@{|/my-seat-dang/waiting/${waitingDetailResponse.waitingNumber}?storeId=${waitingDetailResponse.storeId}|}" method="post">
+        <form id="cancelWaitingForm" th:action="@{|/customer/waiting/${waitingDetailResponse.waitingNumber}?storeId=${waitingDetailResponse.storeId}|}" method="post">
             <button type="submit">웨이팅 취소</button>
         </form>
-        <a th:href="@{|/my-seat-dang/waiting?status=0&when=${when}|}" class="btn btn-secondary">내 웨이팅리스트</a>
+        <a th:href="@{|/customer/waiting?status=0&when=${when}|}" class="btn btn-secondary">내 웨이팅리스트</a>
     </div>
 </main>
 </body>

@@ -130,6 +130,7 @@ class SchedulerServiceTest {
         assertThat(maxAo).isNull();
         assertThat(maxAn).isNull();
 
+
         // storeB
         List<Waiting> waitingsB = redisTemplate.opsForHash().values("store:" + storeB.getStoreId()).stream()
                 .map(waiting -> waitingService.convertStringToWaiting(waiting))
@@ -253,6 +254,7 @@ class SchedulerServiceTest {
                         .waitingStatus(com.matdang.seatdang.store.vo.WaitingStatus.OPEN)
                         .waitingTime(WaitingTime.builder()
                                 .waitingCloseTime(LocalTime.of(0, 0))
+
                                 .build())
                         .build())
                 .build());
@@ -261,7 +263,8 @@ class SchedulerServiceTest {
                 .storeSetting(StoreSetting.builder()
                         .waitingStatus(com.matdang.seatdang.store.vo.WaitingStatus.OPEN)
                         .waitingTime(WaitingTime.builder()
-                                .waitingCloseTime(LocalTime.of(11, 50))
+
+                                .waitingCloseTime(LocalTime.of(11,50))
                                 .build())
                         .build())
                 .build());
@@ -270,7 +273,8 @@ class SchedulerServiceTest {
                 .storeSetting(StoreSetting.builder()
                         .waitingStatus(com.matdang.seatdang.store.vo.WaitingStatus.OPEN)
                         .waitingTime(WaitingTime.builder()
-                                .waitingCloseTime(LocalTime.of(12, 0))
+
+                                .waitingCloseTime(LocalTime.of(12,0))
                                 .build())
                         .build())
                 .build());
@@ -279,7 +283,8 @@ class SchedulerServiceTest {
                 .storeSetting(StoreSetting.builder()
                         .waitingStatus(com.matdang.seatdang.store.vo.WaitingStatus.OPEN)
                         .waitingTime(WaitingTime.builder()
-                                .waitingCloseTime(LocalTime.of(23, 50))
+
+                                .waitingCloseTime(LocalTime.of(23,50))
                                 .build())
                         .build())
                 .build());
@@ -338,6 +343,7 @@ class SchedulerServiceTest {
         assertThat(setting.isAfter(current)).isFalse();
 
         assertThat(minus.minusHours(12)).isEqualTo(11);
+
         // when
         // then
     }

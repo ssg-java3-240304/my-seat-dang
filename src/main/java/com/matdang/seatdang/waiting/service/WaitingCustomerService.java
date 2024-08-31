@@ -341,9 +341,9 @@ public class WaitingCustomerService {
         } else {
             resultPage = Page.empty();
         }
-
         return new RedisWaitingPage(resultPage);
     }
+
 
     public Page<WaitingInfoDto> showTodayWaiting(int status, int page) {
         Pageable pageable = PageRequest.of(page, 10);

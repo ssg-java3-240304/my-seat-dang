@@ -30,7 +30,7 @@
 <!--                        검색 -->
                     </div>
                     <div class="col-xl-4 col-lg-5 col-md-5">
-                        <form th:action="@{/my-seat-dang/search}" method="get" >
+                        <form th:action="@{/customer/search}" method="get" >
                             <div class="search-wrapper">
                                 <div class="input-group">
                                     <div class="input-field">
@@ -93,7 +93,7 @@
                                                     <figure class="my-figure">
                                                         <span th:classappend="${store.opened}? 'my_loc_open' : 'my_loc_closed'" th:text="${store.opened}? '영업중' : '영업종료'"></span>
                                                         <img th:src="@{/img/customer/detail_1.jpg}" th:data-src="${store.getThumbnail()}" class="img-fluid lazy" alt="">
-                                                        <a th:href="|@{/my-seat-dang/store/detail/}${store.storeId}|" class="strip_info">
+                                                        <a th:href="|@{/customer/store/detail/}${store.storeId}|" class="strip_info">
                                                             <small th:text="${store.storeType.description}"></small>
                                                             <div class="item_title">
                                                                 <h3 th:text="${store.storeName}"></h3>
@@ -132,7 +132,7 @@
                                                         <figure class="my-figure">
                                                             <span th:classappend="${store.opened}? 'my_loc_open' : 'my_loc_closed'" th:text="${store.opened}? '영업중' : '영업종료'"></span>
                                                             <img th:src="@{/img/customer/detail_1.jpg}" th:data-src="${store.getThumbnail()}" class="img-fluid lazy" alt="">
-                                                            <a th:href="|@{/my-seat-dang/store/detail/}${store.storeId}|" class="strip_info">
+                                                            <a th:href="|@{/customer/store/detail/}${store.storeId}|" class="strip_info">
                                                                 <small th:text="${store.storeType.description}"></small>
                                                                 <div class="item_title">
                                                                     <h3 th:text="${store.storeName}"></h3>
@@ -170,7 +170,7 @@
                                                     <figure class="my-figure">
                                                         <span th:classappend="${store.opened}? 'my_loc_open' : 'my_loc_closed'" th:text="${store.opened}? '영업중' : '영업종료'"></span>
                                                         <img th:src="@{/img/customer/detail_1.jpg}" th:data-src="${store.getThumbnail()}" class="img-fluid lazy" alt="">
-                                                        <a th:href="|@{/my-seat-dang/store/detail/}${store.storeId}|" class="strip_info">
+                                                        <a th:href="|@{/customer/store/detail/}${store.storeId}|" class="strip_info">
                                                             <small th:text="${store.storeType.description}"></small>
                                                             <div class="item_title">
                                                                 <h3 th:text="${store.storeName}"></h3>
@@ -209,7 +209,7 @@
                                                     <figure class="my-figure">
                                                         <span th:classappend="${store.opened}? 'my_loc_open' : 'my_loc_closed'" th:text="${store.opened}? '영업중' : '영업종료'"></span>
                                                         <img th:src="@{/img/customer/detail_1.jpg}" th:data-src="${store.getThumbnail()}" class="img-fluid lazy" alt="">
-                                                        <a th:href="|@{/my-seat-dang/store/detail/}${store.storeId}|" class="strip_info">
+                                                        <a th:href="|@{/customer/store/detail/}${store.storeId}|" class="strip_info">
                                                             <small th:text="${store.storeType.description}"></small>
                                                             <div class="item_title">
                                                                 <h3 th:text="${store.storeName}"></h3>
@@ -281,7 +281,7 @@
                             content: `
                                         <div class="infoBox" style="position: absolute; visibility: visible; width: 290px; left: 25px; bottom: -1px;">
                                         <div class="marker_info" id="marker_info">
-                                        <img src="${store.thumbnail}" alt="" style="width: 240px; height: 140px; display: block; margin: 0 auto; cursor: pointer;" onclick="window.location.href='/my-seat-dang/store/detail/${store.storeId}'">
+                                        <img src="${store.thumbnail}" alt="" style="width: 240px; height: 140px; display: block; margin: 0 auto; cursor: pointer;" onclick="window.location.href='/customer/store/detail/${store.storeId}'">
                                         <span>
                                             <h3>${store.storeName}</h3><em>제과점</em><strong>undefined</strong>
                                             <a class="btn_infobox_phone">02-1234-5678</a>
