@@ -13,10 +13,12 @@ import com.matdang.seatdang.waiting.service.WaitingService;
 import com.matdang.seatdang.waiting.service.WaitingSettingService;
 import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingCustomerFacade;
 import jakarta.servlet.http.HttpServletRequest;
+import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.jaxb.SpringDataJaxb.PageDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +28,7 @@ import java.time.LocalDateTime;
 
 @Slf4j
 @Controller
-@RequestMapping("/my-seat-dang")
+@RequestMapping("/customer")
 @RequiredArgsConstructor
 public class WaitingCustomerController {
     private final RedissonLockWaitingCustomerFacade redissonLockWaitingCustomerFacade;
@@ -41,31 +43,19 @@ public class WaitingCustomerController {
     @Value("${spring.data.redis.host}")
     private String host;
 
-//    @GetMapping("/test-store")
-//    public String showStore(@RequestParam(defaultValue = "2") Long storeId,
-//                            Model model) {
-//        Long memberId = authService.getAuthenticatedMember().getMemberId();
-//        boolean isWaitingExists = waitingCustomerService.isWaitingExists(storeId);
-//
-//        model.addAttribute("storeStatus", storeRepository.findByStoreId(storeId).getStoreSetting().getWaitingStatus().toString());
-//        model.addAttribute("storeId", storeId);
-//        model.addAttribute("isWaitingExists", isWaitingExists);
-//
-//        return "customer/waiting/test-store";
-//    }
 
     @GetMapping("/waiting/{storeId}")
     public String readyWaiting(@PathVariable Long storeId, Model model, HttpServletRequest request,
                                RedirectAttributes redirectAttributes) {
         if (waitingCustomerService.isWaitingExists(storeId)) {
             redirectAttributes.addFlashAttribute("status", true);
-            return "redirect:/my-seat-dang/store/detail/" + storeId;
+            return "redirect:/customer/store/detail/" + storeId;
         }
 
         String referer = request.getHeader("Referer");
         // 유효한 referer URL인지 확인 (예: "https://example.com/somepage")
-        if (referer == null || (!referer.startsWith("http://localhost:8080/my-seat-dang/store/detail/" + storeId)
-                && !referer.startsWith("http://" + host + ":8080/my-seat-dang/store/detail/" + storeId))) {
+        if (referer == null || (!referer.startsWith("http://localhost:8080/customer/store/detail/" + storeId)
+                && !referer.startsWith("http://" + host + ":8080/customer/store/detail/" + storeId))) {
             return "error/403";
         }
 
@@ -87,7 +77,7 @@ public class WaitingCustomerController {
         redirectAttributes.addAttribute("waitingNumber", waitingId.getWaitingNumber());
         redirectAttributes.addAttribute("storeId", waitingId.getStoreId());
 
-        return "redirect:/my-seat-dang/waiting/{waitingNumber}/awaiting/detail";
+        return "redirect:/customer/waiting/{waitingNumber}/awaiting/detail";
     }
 
     @GetMapping("/waiting")
@@ -101,10 +91,19 @@ public class WaitingCustomerController {
         if (when.equals("today")) {
             waitings = waitingCustomerService.showTodayWaiting(status, page);
         } else if (when.equals("history")) {
+            LocalDateTime start = LocalDateTime.now();
 
-            waitings = waitingCustomerService.showHistoryWaiting(authService.getAuthenticatedMember().getMemberId(), status, page);
+            waitings = waitingCustomerService.showHistoryWaiting(authService.getAuthenticatedMember().getMemberId(),
+                    status, page);
+
+            LocalDateTime end = LocalDateTime.now();
+            log.debug(" === elapsed time ===");
+            log.debug(" === {} === ", Duration.between(start, end).toMillis());
         }
-        System.out.println("isNotAwaiting = "+model.getAttribute("isNotAwaiting"));
+
+        PageRangeDto pageRangeDto = PageRangeDto.calculatePage(waitings);
+
+        System.out.println("isNotAwaiting = " + model.getAttribute("isNotAwaiting"));
         System.out.println("waitings = " + waitings.getContent());
         System.out.println("waitings = " + waitings.getTotalElements());
         model.addAttribute("when", when);
@@ -112,9 +111,13 @@ public class WaitingCustomerController {
         model.addAttribute("waitings", waitings.getContent());
         model.addAttribute("currentPage", waitings.getNumber());
         model.addAttribute("totalPages", waitings.getTotalPages());
+        model.addAttribute("startPage", pageRangeDto.getStartPage());
+        model.addAttribute("endPage", pageRangeDto.getEndPage());
 
         return "customer/waiting/waiting";
     }
+
+
 
     // TODO : 취소 후 url에 접속 못하게 막기(if문 상태처리)
 
@@ -125,7 +128,7 @@ public class WaitingCustomerController {
         if (waitingCustomerService.isNotAwaiting(storeId, waitingNumber)) {
             redirectAttributes.addFlashAttribute("isNotAwaiting", true);
             System.out.println("hihi = ");
-            return "redirect:/my-seat-dang/waiting";
+            return "redirect:/customer/waiting";
         }
         log.debug("=== cancel Waiting === {}", LocalDateTime.now());
 
@@ -140,7 +143,7 @@ public class WaitingCustomerController {
         redirectAttributes.addAttribute("waitingNumber", waitingNumber);
         redirectAttributes.addAttribute("storeId", storeId);
 
-        return "redirect:/my-seat-dang/waiting/{waitingNumber}/canceled/detail";
+        return "redirect:/customer/waiting/{waitingNumber}/canceled/detail";
     }
 
     @GetMapping("/waiting/{waitingNumber}/{status}/detail")
@@ -155,13 +158,13 @@ public class WaitingCustomerController {
         if (waitingCustomerService.isIncorrectWaitingStatus(storeId, waitingNumber, status, when)) {
             redirectAttributes.addFlashAttribute("isIncorrectWaitingStatus", true);
 
-            return "redirect:/my-seat-dang/waiting";
+            return "redirect:/customer/waiting";
         }
 
         if ("awaiting".equals(status)) {
             String referer = request.getHeader("Referer");
-            if (referer == null || (!referer.startsWith("http://localhost:8080/my-seat-dang/waiting")
-                    && !referer.startsWith("http://" + host + ":8080/my-seat-dang/waiting"))){
+            if (referer == null || (!referer.startsWith("http://localhost:8080/customer/waiting")
+                    && !referer.startsWith("http://" + host + ":8080/customer/waiting"))){
                 return "error/403";
             }
         }

@@ -419,7 +419,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="cancelForm" th:action="@{/my-seat-dang/reservation/cancel}" method="POST">
+                    <form id="cancelForm" th:action="@{/customer/reservation/cancel}" method="POST">
                         <input name="reservationId" id="cancel-reservId" hidden="hidden">
                         <div class="mb-3">
                             <label for="cancelReason" class="form-label">취소 사유</label>
@@ -977,7 +977,7 @@
         document.querySelector("#chat-ai").addEventListener("click", async () => {
             // 모달 열기 전에 데이터를 서버에서 동적으로 가져오기
             try {
-                const response = await fetch('/my-seat-dang/reservation/images'); // 서버에서 이미지를 가져오는 API 엔드포인트
+                const response = await fetch('/customer/reservation/images'); // 서버에서 이미지를 가져오는 API 엔드포인트
                 if (!response.ok) {
                     throw new Error('데이터를 불러오지 못했습니다.');
                 }

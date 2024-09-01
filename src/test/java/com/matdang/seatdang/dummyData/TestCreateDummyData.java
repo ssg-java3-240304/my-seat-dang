@@ -236,7 +236,7 @@ public class TestCreateDummyData {
         RedisConnection connection = redisTemplate.getConnectionFactory().getConnection();
         connection.flushAll(); // 모든 데이터 삭제
 
-        for (long i = 1; i <= 15; i++) {
+        for (long i = 1; i <= 6; i++) {
             Customer mockCustomer = Customer.builder()
                     .memberId(i)
                     .memberPhone(generateRandomKoreanPhoneNumber())
@@ -254,7 +254,7 @@ public class TestCreateDummyData {
         for (com.matdang.seatdang.waiting.entity.WaitingStatus value : com.matdang.seatdang.waiting.entity.WaitingStatus.values()) {
             if (value != com.matdang.seatdang.waiting.entity.WaitingStatus.WAITING) {
 
-                for (int j = 0; j < 10; j++, i++) {
+                for (int j = 0; j < 20; j++, i++) {
                     waitingStorageRepository.save(WaitingStorage.builder()
                             .waitingNumber(i)
                             .waitingOrder(i)
@@ -268,6 +268,7 @@ public class TestCreateDummyData {
                 }
             }
         }
+
     }
 
     @DisplayName("상점 더미데이터 100개 빵집, 10호점씩 생성")
