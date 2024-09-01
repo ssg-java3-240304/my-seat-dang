@@ -815,9 +815,46 @@
                 };
 
                 eventSource.onerror = function () {
-                    console.error("EventSource failed, closing connection.");
+                    console.error("EventSource failed, attempting to reconnect...");
                     eventSource.close();
-                    eventSource = null; // 오류 발생 시 연결 해제
+
+                    // 자동 재연결 시도
+                    setTimeout(() => {
+                        eventSource = new EventSource(`${chatUrl}/chat/roomNum/${reservationId}`);
+
+                        eventSource.onmessage = (event) => {
+                            const data = JSON.parse(event.data);
+                            const messageId = data.id || data.createdAt; // 유니크한 메시지 식별자
+
+                            // 중복 메시지 체크 - loadedMessageIds에 없으면 추가
+                            if (!loadedMessageIds.has(messageId)) {
+                                loadedMessageIds.add(messageId); // 메시지 ID 추가
+
+                                console.log("Received data:", data);
+
+                                // 결제 정보가 포함된 메시지인 경우 처리
+                                if (data.itemName && data.quantity && data.totalAmount) {
+                                    addPaymentInfoToChat(data);
+                                }
+
+                                // 메시지 발신자에 따른 메시지 처리
+                                if (data.sender === customerName) {
+                                    initMyMessage(data);
+                                } else {
+                                    initYourMessage(data);
+                                }
+                            } else {
+                                console.log("Duplicate message ignored:", data);
+                            }
+                        };
+
+                        eventSource.onerror = function () {
+                            console.error("EventSource failed again, closing connection.");
+                            eventSource.close();
+                            eventSource = null;
+                        };
+
+                    }, 3000); // 3초 후에 다시 연결 시도
                 };
 
                 // 스크롤 이벤트 리스너 추가 (스크롤이 상단에 도달하면 이전 메시지 로드)
