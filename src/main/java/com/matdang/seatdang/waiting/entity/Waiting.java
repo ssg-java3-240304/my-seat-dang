@@ -1,11 +1,9 @@
 package com.matdang.seatdang.waiting.entity;
 
-import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 
 @Data
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor
 public class Waiting  {
@@ -25,7 +23,7 @@ public class Waiting  {
                 .waitingNumber(this.waitingNumber)
                 .waitingOrder(this.waitingOrder)
                 .storeId(this.storeId)
-                .customerInfo(this.customerInfo) // Assuming CustomerInfo is directly usable
+                .customerInfo(this.customerInfo)
                 .createdDate(this.createdDate)
                 .waitingStatus(this.waitingStatus)
                 .visitedTime(this.visitedTime)

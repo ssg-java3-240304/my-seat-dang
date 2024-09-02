@@ -8,7 +8,6 @@ import com.matdang.seatdang.store.repository.query.dto.AvailableWaitingTime;
 import com.matdang.seatdang.store.repository.query.dto.StoreQueryRepository;
 import com.matdang.seatdang.store.vo.WaitingStatus;
 import com.matdang.seatdang.waiting.entity.Waiting;
-import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingSettingFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -27,7 +26,6 @@ import java.util.stream.Collectors;
 public class WaitingSettingService {
     private final StoreQueryRepository storeQueryRepository;
     private final StoreRepository storeRepository;
-    private final WaitingRepository waitingRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
 

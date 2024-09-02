@@ -1,8 +1,6 @@
 package com.matdang.seatdang.waiting.service.facade;
 
 import com.matdang.seatdang.waiting.dto.WaitingId;
-import com.matdang.seatdang.waiting.entity.Waiting;
-import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.service.WaitingCustomerService;
 import java.util.NoSuchElementException;
 import java.util.Optional;

@@ -6,20 +6,16 @@ import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.store.vo.WaitingStatus;
 import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStorage;
-import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
-import com.matdang.seatdang.waiting.repository.query.WaitingQueryRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -27,8 +23,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class SchedulerService {
     private final StoreRepository storeRepository;
-    private final WaitingRepository waitingRepository;
-    private final WaitingQueryRepository waitingQueryRepository;
     private final WaitingStorageRepository waitingStorageRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;

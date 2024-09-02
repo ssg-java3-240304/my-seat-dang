@@ -15,7 +15,6 @@ import com.matdang.seatdang.waiting.dto.UpdateRequest;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.entity.WaitingStorage;
-import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingDto;
 import com.matdang.seatdang.waiting.service.WaitingService;

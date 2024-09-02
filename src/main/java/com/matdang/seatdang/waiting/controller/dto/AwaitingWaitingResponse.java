@@ -29,7 +29,6 @@ public class AwaitingWaitingResponse {
     public static AwaitingWaitingResponse create(Object waiting, Store store) {
         AwaitingWaitingResponse awaitingWaitingResponse = new AwaitingWaitingResponse();
         if (waiting instanceof Waiting) {
-            awaitingWaitingResponse.waitingId = ((Waiting) waiting).getId();
             awaitingWaitingResponse.waitingNumber = ((Waiting) waiting).getWaitingNumber();
             awaitingWaitingResponse.waitingOrder = ((Waiting) waiting).getWaitingOrder();
             awaitingWaitingResponse.waitingStatus = ((Waiting) waiting).getWaitingStatus();

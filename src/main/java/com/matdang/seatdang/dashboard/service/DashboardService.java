@@ -3,7 +3,6 @@ package com.matdang.seatdang.dashboard.service;
 import com.matdang.seatdang.dashboard.dto.WaitingDashboardResponseDto;
 import com.matdang.seatdang.waiting.entity.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
-import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,29 +18,29 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class DashboardService {
-    private final WaitingRepository waitingRepository;
+//    private final WaitingRepository waitingRepository;
 
-    public Map<LocalDate, Long> getWeeklyWaitingCnt(Long storeId){
-        LocalDateTime startOfWeek = LocalDateTime.now().minusWeeks(1).toLocalDate().atStartOfDay();
-        LocalDateTime endOfWeek = LocalDateTime.now().withHour(23).withMinute(59).withSecond(59).withNano(999999999);
-
-//        LocalDateTime endOfWeek = LocalDateTime.now();
-//        LocalDateTime startOfWeek = endOfWeek.minusWeeks(1);
-        List<Waiting> waitings = waitingRepository.findVisitedWithinCertainPeriod(storeId, startOfWeek, endOfWeek, WaitingStatus.VISITED);
-
-        Map<LocalDate, Long> dailyCounts = new LinkedHashMap<>();
-        for (int i = 0; i < 7; i++) {
-            LocalDate date = startOfWeek.plusDays(i).toLocalDate();
-            dailyCounts.put(date, 0L);
-        }
-
-        for (Waiting waiting : waitings) {
-            LocalDate visitDate = waiting.getVisitedTime().toLocalDate();
-            dailyCounts.put(visitDate, dailyCounts.getOrDefault(visitDate, 0L) + 1);
-        }
-
-        return dailyCounts;
-    }
+//    public Map<LocalDate, Long> getWeeklyWaitingCnt(Long storeId){
+//        LocalDateTime startOfWeek = LocalDateTime.now().minusWeeks(1).toLocalDate().atStartOfDay();
+//        LocalDateTime endOfWeek = LocalDateTime.now().withHour(23).withMinute(59).withSecond(59).withNano(999999999);
+//
+////        LocalDateTime endOfWeek = LocalDateTime.now();
+////        LocalDateTime startOfWeek = endOfWeek.minusWeeks(1);
+////        List<Waiting> waitings = waitingRepository.findVisitedWithinCertainPeriod(storeId, startOfWeek, endOfWeek, WaitingStatus.VISITED);
+//
+//        Map<LocalDate, Long> dailyCounts = new LinkedHashMap<>();
+//        for (int i = 0; i < 7; i++) {
+//            LocalDate date = startOfWeek.plusDays(i).toLocalDate();
+//            dailyCounts.put(date, 0L);
+//        }
+//
+//        for (Waiting waiting : waitings) {
+//            LocalDate visitDate = waiting.getVisitedTime().toLocalDate();
+//            dailyCounts.put(visitDate, dailyCounts.getOrDefault(visitDate, 0L) + 1);
+//        }
+//
+//        return dailyCounts;
+//    }
 
 //    public long getWeeklyWaitingCnt(Long storeId){
 //        LocalDateTime startOfWeek = LocalDateTime.now().minusWeeks(1); // 1주일 이내
