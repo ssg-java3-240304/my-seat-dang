@@ -1,5 +1,7 @@
 package com.matdang.seatdang.waiting.redis;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import org.junit.jupiter.api.DisplayName;
@@ -18,13 +20,54 @@ class RedisTemplateTest {
     private RedisTemplate<String, Object> redisTemplate;
     @Autowired
     private RedisTemplate<String, Waiting> waitingRedisTemplate;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-    /**
-
-     */
     @Test
-    @DisplayName("Waiting Redis 데이터 생성")
-    void create() {
+    @DisplayName("Waiting Redis 데이터 생성 - ObjectMapper 사용o")
+    void createByRedisTemplate() {
+        // given
+        Waiting waiting = Waiting.builder()
+                .waitingNumber(1L)
+                .waitingOrder(1L)
+                .storeId(1L)
+                .createdDate(LocalDateTime.now())
+                .customerInfo(CustomerInfo.builder()
+                        .customerId(1L)
+                        .customerPhone("010-1234-1234")
+                        .peopleCount(1)
+                        .build())
+                .waitingStatus(WaitingStatus.WAITING)
+                .visitedTime(null)
+                .build();
+
+        // when
+
+        LocalTime start = LocalTime.now();
+        for (int i = 0; i < 1000; i++) {
+            String waitingJson = null;
+            // then
+            try {
+                waitingJson = objectMapper.writeValueAsString(waiting);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+
+            redisTemplate.opsForHash().put("store:1", "1", waitingJson);
+        }
+
+        LocalTime end = LocalTime.now();
+
+        System.out.println(" elapsed time = "+ Duration.between(start, end).toMillis());
+    }
+
+    // 665ms
+
+
+
+    @Test
+    @DisplayName("Waiting Redis 데이터 생성 - ObjectMapper 사용x")
+    void createByWaitingRedisTemplate() {
         // given
         Waiting waiting = Waiting.builder()
                 .waitingNumber(1L)
@@ -41,13 +84,14 @@ class RedisTemplateTest {
                 .build();
         // when
         // then
-//        redisTemplate.opsForHash().put("store:1", "1",waiting );
         LocalTime start = LocalTime.now();
-        waitingRedisTemplate.opsForHash().put("store:1", 1L, waiting);
+        for (int i = 0; i < 1000; i++) {
+            waitingRedisTemplate.opsForHash().put("store:1", 1L, waiting);
+        }
         LocalTime end = LocalTime.now();
 
         System.out.println(" elapsed time = "+ Duration.between(start, end).toMillis());
     }
 
-    // 328
+    // 682ms
 }
