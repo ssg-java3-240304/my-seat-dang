@@ -59,11 +59,8 @@ class RedisTemplateTest {
         LocalTime end = LocalTime.now();
 
         System.out.println(" elapsed time = "+ Duration.between(start, end).toMillis());
+        // 665ms
     }
-
-    // 665ms
-
-
 
     @Test
     @DisplayName("Waiting Redis 데이터 생성 - ObjectMapper 사용x")
@@ -91,7 +88,41 @@ class RedisTemplateTest {
         LocalTime end = LocalTime.now();
 
         System.out.println(" elapsed time = "+ Duration.between(start, end).toMillis());
+        // 682ms
     }
 
-    // 682ms
+    @Test
+    @DisplayName("Waiting Redis 데이터 조회")
+    void findByWaitingRedisTemplate() {
+        // given
+        Waiting waiting = Waiting.builder()
+                .waitingNumber(1L)
+                .waitingOrder(1L)
+                .storeId(1L)
+                .createdDate(LocalDateTime.now())
+                .customerInfo(CustomerInfo.builder()
+                        .customerId(1L)
+                        .customerPhone("010-1234-1234")
+                        .peopleCount(1)
+                        .build())
+                .waitingStatus(WaitingStatus.WAITING)
+                .visitedTime(null)
+                .build();
+        waitingRedisTemplate.opsForHash().put("store:1", 1L, waiting);
+
+        // when
+        // then
+        LocalTime start = LocalTime.now();
+        Waiting findResult = null;
+        for (int i = 0; i < 1000; i++) {
+            findResult = (Waiting) waitingRedisTemplate.opsForHash().get("store:1", 1L);
+        }
+        LocalTime end = LocalTime.now();
+
+        System.out.println("findResult = " + findResult);
+
+        System.out.println(" elapsed time = " + Duration.between(start, end).toMillis());
+    }
+
+    // 451ms
 }

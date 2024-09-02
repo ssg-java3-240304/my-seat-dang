@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class Waiting  {
     private Long waitingNumber;
