@@ -9,8 +9,7 @@ import com.matdang.seatdang.store.vo.StoreSetting;
 import com.matdang.seatdang.store.vo.WaitingTime;
 import com.matdang.seatdang.waiting.redis.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
-import com.matdang.seatdang.waiting.repository.WaitingRepository;
-import com.matdang.seatdang.waiting.repository.query.WaitingQueryRepository;
+
 import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingCustomerFacade;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
@@ -39,10 +38,6 @@ class WaitingSettingServiceTest {
     private StoreRepository storeRepository;
     @Autowired
     private WaitingSettingService waitingSettingService;
-    @Autowired
-    private WaitingRepository waitingRepository;
-    @Autowired
-    private WaitingQueryRepository waitingQueryRepository;
     @Autowired
     private EntityManager em;
     @Autowired

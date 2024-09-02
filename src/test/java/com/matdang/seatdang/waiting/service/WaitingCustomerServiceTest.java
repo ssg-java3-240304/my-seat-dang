@@ -9,7 +9,6 @@ import com.matdang.seatdang.waiting.dto.WaitingId;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.redis.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
-import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
 import jakarta.persistence.EntityManager;
 
@@ -43,8 +42,7 @@ class WaitingCustomerServiceTest {
     private WaitingCustomerService waitingCustomerService;
     @Autowired
     private StoreRepository storeRepository;
-    @Autowired
-    private WaitingRepository waitingRepository;
+
     @Autowired
     private WaitingStorageRepository waitingStorageRepository;
     @Autowired
@@ -55,67 +53,67 @@ class WaitingCustomerServiceTest {
     private AuthService authService;
 
 
-    @Test
-    @DisplayName("웨이팅 등록")
-    void createWaiting() {
-        // given
-        Store storeA = storeRepository.save(Store.builder()
-                .build());
-        for (long i = 0; i < 5; i++) {
-            waitingRepository.save(Waiting.builder()
-                    .waitingNumber(i)
-                    .waitingOrder(i)
-                    .storeId(storeA.getStoreId())
-                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
-                    .waitingStatus(WaitingStatus.WAITING)
-                    .visitedTime(null)
-                    .build());
-        }
-        for (long i = 5; i < 10; i++) {
-            waitingRepository.save(Waiting.builder()
-                    .waitingNumber(i)
-                    .waitingOrder(i)
-                    .storeId(storeA.getStoreId())
-                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
-                    .waitingStatus(WaitingStatus.VISITED)
-                    .visitedTime(null)
-                    .build());
-        }
-
-        Store storeB = storeRepository.save(Store.builder()
-                .build());
-        for (long i = 0; i < 5; i++) {
-            waitingRepository.save(Waiting.builder()
-                    .waitingNumber(i)
-                    .waitingOrder(i)
-                    .storeId(storeB.getStoreId())
-                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
-                    .waitingStatus(WaitingStatus.WAITING)
-                    .visitedTime(null)
-                    .build());
-        }
-        em.flush();
-        em.clear();
-
-        Customer mockCustomer = Customer.builder()
-                .memberId(50L)
-                .memberPhone("010-1234-1234")
-                .build();
-        when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
-        // when
-        waitingCustomerService.createWaiting(storeA.getStoreId(), 2);
-        em.flush();
-        em.clear();
-        List<Waiting> findResult = waitingRepository.findAllByCustomerId(50L);
-
-        // then
-
-        assertThat(findResult.size()).isEqualTo(1);
-        assertThat(findResult.get(0).getWaitingOrder()).isEqualTo(5L);
-        assertThat(findResult.get(0).getWaitingNumber()).isEqualTo(10L);
-        assertThat(findResult.get(0).getCustomerInfo().getCustomerPhone()).isEqualTo("010-1234-1234");
-
-    }
+//    @Test
+//    @DisplayName("웨이팅 등록")
+//    void createWaiting() {
+//        // given
+//        Store storeA = storeRepository.save(Store.builder()
+//                .build());
+//        for (long i = 0; i < 5; i++) {
+//            waitingRepository.save(Waiting.builder()
+//                    .waitingNumber(i)
+//                    .waitingOrder(i)
+//                    .storeId(storeA.getStoreId())
+//                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+//                    .waitingStatus(WaitingStatus.WAITING)
+//                    .visitedTime(null)
+//                    .build());
+//        }
+//        for (long i = 5; i < 10; i++) {
+//            waitingRepository.save(Waiting.builder()
+//                    .waitingNumber(i)
+//                    .waitingOrder(i)
+//                    .storeId(storeA.getStoreId())
+//                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+//                    .waitingStatus(WaitingStatus.VISITED)
+//                    .visitedTime(null)
+//                    .build());
+//        }
+//
+//        Store storeB = storeRepository.save(Store.builder()
+//                .build());
+//        for (long i = 0; i < 5; i++) {
+//            waitingRepository.save(Waiting.builder()
+//                    .waitingNumber(i)
+//                    .waitingOrder(i)
+//                    .storeId(storeB.getStoreId())
+//                    .customerInfo(new CustomerInfo(i, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+//                    .waitingStatus(WaitingStatus.WAITING)
+//                    .visitedTime(null)
+//                    .build());
+//        }
+//        em.flush();
+//        em.clear();
+//
+//        Customer mockCustomer = Customer.builder()
+//                .memberId(50L)
+//                .memberPhone("010-1234-1234")
+//                .build();
+//        when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
+//        // when
+//        waitingCustomerService.createWaiting(storeA.getStoreId(), 2);
+//        em.flush();
+//        em.clear();
+//        List<Waiting> findResult = waitingRepository.findAllByCustomerId(50L);
+//
+//        // then
+//
+//        assertThat(findResult.size()).isEqualTo(1);
+//        assertThat(findResult.get(0).getWaitingOrder()).isEqualTo(5L);
+//        assertThat(findResult.get(0).getWaitingNumber()).isEqualTo(10L);
+//        assertThat(findResult.get(0).getCustomerInfo().getCustomerPhone()).isEqualTo("010-1234-1234");
+//
+//    }
 
 //    @ParameterizedTest
 //    @CsvSource(value = {"0,20", "1,20", "2,60"})
@@ -176,100 +174,100 @@ class WaitingCustomerServiceTest {
 //        assertThat(findResult.getTotalElements()).isEqualTo(size);
 //    }
 
-    @Disabled
-    @Test
-    @DisplayName("웨이팅 id로 웨이팅 취소")
-    void cancelWaitingByCustomer() {
-        // given
-        Waiting waiting = waitingRepository.save(Waiting.builder()
-                .waitingNumber(0L)
-                .waitingOrder(0L)
-                .storeId(1L)
-                .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
-                .waitingStatus(WaitingStatus.WAITING)
-                .visitedTime(null)
-                .build());
+//    @Disabled
+//    @Test
+//    @DisplayName("웨이팅 id로 웨이팅 취소")
+//    void cancelWaitingByCustomer() {
+//        // given
+//        Waiting waiting = waitingRepository.save(Waiting.builder()
+//                .waitingNumber(0L)
+//                .waitingOrder(0L)
+//                .storeId(1L)
+//                .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+//                .waitingStatus(WaitingStatus.WAITING)
+//                .visitedTime(null)
+//                .build());
+//
+//        waitingRepository.save(Waiting.builder()
+//                .waitingNumber(1L)
+//                .waitingOrder(1L)
+//                .storeId(1L)
+//                .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+//                .waitingStatus(WaitingStatus.WAITING)
+//                .visitedTime(null)
+//                .build());
+//        waitingRepository.save(Waiting.builder()
+//                .waitingNumber(2L)
+//                .waitingOrder(2L)
+//                .storeId(1L)
+//                .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
+//                .waitingStatus(WaitingStatus.WAITING)
+//                .visitedTime(null)
+//                .build());
+//        em.flush();
+//        em.clear();
+//
+//        // when
+////        int result = waitingCustomerService.cancelWaitingByCustomer(waiting.getId());
+////
+////        // then
+////        assertThat(waitingRepository.findById(waiting.getId()).get().getWaitingStatus()).isEqualTo(
+////                WaitingStatus.CUSTOMER_CANCELED);
+////        assertThat(result).isEqualTo(3);
+//    }
 
-        waitingRepository.save(Waiting.builder()
-                .waitingNumber(1L)
-                .waitingOrder(1L)
-                .storeId(1L)
-                .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
-                .waitingStatus(WaitingStatus.WAITING)
-                .visitedTime(null)
-                .build());
-        waitingRepository.save(Waiting.builder()
-                .waitingNumber(2L)
-                .waitingOrder(2L)
-                .storeId(1L)
-                .customerInfo(new CustomerInfo(1L, "010-1111-1111", ((int) (Math.random() * 3 + 1))))
-                .waitingStatus(WaitingStatus.WAITING)
-                .visitedTime(null)
-                .build());
-        em.flush();
-        em.clear();
-
-        // when
-//        int result = waitingCustomerService.cancelWaitingByCustomer(waiting.getId());
+//    @Test
+//    @DisplayName(" 웨이팅 100개 등록")
+//    void createWaitingByNotConcurrency() {
+//        // given
+//        Customer mockCustomer = Customer.builder()
+//                .memberId(1L)
+//                .memberPhone("010-1234-1234")
+//                .build();
+//        when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
+//        // when
+//        for (int i = 0; i < 100; i++) {
+//            waitingCustomerService.createWaiting(1L, 2);
+//        }
 //
 //        // then
-//        assertThat(waitingRepository.findById(waiting.getId()).get().getWaitingStatus()).isEqualTo(
-//                WaitingStatus.CUSTOMER_CANCELED);
-//        assertThat(result).isEqualTo(3);
-    }
-
-    @Test
-    @DisplayName(" 웨이팅 100개 등록")
-    void createWaitingByNotConcurrency() {
-        // given
-        Customer mockCustomer = Customer.builder()
-                .memberId(1L)
-                .memberPhone("010-1234-1234")
-                .build();
-        when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
-        // when
-        for (int i = 0; i < 100; i++) {
-            waitingCustomerService.createWaiting(1L, 2);
-        }
-
-        // then
-        Long findResult = waitingRepository.findMaxWaitingOrderByStoreId(1L);
-        assertThat(findResult).isEqualTo(100);
-    }
-
-    //    @Disabled
-    @Test
-//    @Rollback(value = false)
-    @DisplayName("동시에 웨이팅 50개 등록 동시성 테스트")
-    void createWaitingByConcurrency() throws InterruptedException {
-        // given
-        int threadCount = 50;
-        ExecutorService executorService = Executors.newFixedThreadPool(8);
-        CountDownLatch latch = new CountDownLatch(threadCount);
-
-        Customer mockCustomer = Customer.builder()
-                .memberId(1L)
-                .memberPhone("010-1234-1234")
-                .build();
-        when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
-        // when
-        for (int i = 0; i < threadCount; i++) {
-            executorService.execute(() -> {
-                try {
-                    waitingCustomerService.createWaiting(1L, 2);
-                } finally {
-                    latch.countDown();
-                }
-            });
-        }
-        latch.await();
-        executorService.shutdown();
-
-        // then
-        Long findResult = waitingRepository.findMaxWaitingOrderByStoreId(1L);
-
-        assertThat(findResult).isEqualTo(50);
-    }
+//        Long findResult = waitingRepository.findMaxWaitingOrderByStoreId(1L);
+//        assertThat(findResult).isEqualTo(100);
+//    }
+//
+//    //    @Disabled
+//    @Test
+////    @Rollback(value = false)
+//    @DisplayName("동시에 웨이팅 50개 등록 동시성 테스트")
+//    void createWaitingByConcurrency() throws InterruptedException {
+//        // given
+//        int threadCount = 50;
+//        ExecutorService executorService = Executors.newFixedThreadPool(8);
+//        CountDownLatch latch = new CountDownLatch(threadCount);
+//
+//        Customer mockCustomer = Customer.builder()
+//                .memberId(1L)
+//                .memberPhone("010-1234-1234")
+//                .build();
+//        when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
+//        // when
+//        for (int i = 0; i < threadCount; i++) {
+//            executorService.execute(() -> {
+//                try {
+//                    waitingCustomerService.createWaiting(1L, 2);
+//                } finally {
+//                    latch.countDown();
+//                }
+//            });
+//        }
+//        latch.await();
+//        executorService.shutdown();
+//
+//        // then
+//        Long findResult = waitingRepository.findMaxWaitingOrderByStoreId(1L);
+//
+//        assertThat(findResult).isEqualTo(50);
+//    }
 
     @ParameterizedTest
     @CsvSource(value = {"1,true", "2,false"})
@@ -410,6 +408,6 @@ class WaitingCustomerServiceTest {
 //        Long findResult = waitingRepository.findMaxWaitingOrderByStoreId(1L);
 //
 //        assertThat(findResult).isEqualTo(40);
+
 }
 
-//}

@@ -8,7 +8,6 @@ import com.matdang.seatdang.member.entity.Customer;
 import com.matdang.seatdang.waiting.dto.UpdateRequest;
 import com.matdang.seatdang.waiting.redis.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
-import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.service.WaitingService;
 import java.util.ArrayList;
 import java.util.List;

@@ -38,6 +38,7 @@ public class WaitingCustomerService {
     private final StoreService storeService;
     private final AuthService authService;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, Waiting> waitingRedisTemplate;
     private final ObjectMapper objectMapper;
     private final WaitingStorageRepository waitingStorageRepository;
 
@@ -49,7 +50,10 @@ public class WaitingCustomerService {
         if (customer == null) {
             return false;
         }
-        return redisTemplate.opsForHash().values(key).stream()
+        Waiting waiting1 = (Waiting) waitingRedisTemplate.opsForHash().get(key, 1L);
+
+
+        return waitingRedisTemplate.opsForHash().values(key).stream()
                 .map(this::convertStringToWaiting)
                 .anyMatch(waiting -> waiting.getCustomerInfo().getCustomerId().equals(customer.getMemberId())
                         && waiting.getWaitingStatus() == WaitingStatus.WAITING);

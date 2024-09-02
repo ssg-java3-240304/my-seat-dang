@@ -10,7 +10,6 @@ import com.matdang.seatdang.store.vo.StoreSetting;
 import com.matdang.seatdang.store.vo.WaitingTime;
 import com.matdang.seatdang.waiting.redis.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStorage;
-import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
 import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingCustomerFacade;
 import jakarta.persistence.EntityManager;
@@ -37,8 +36,6 @@ import static org.mockito.Mockito.when;
 class SchedulerServiceTest {
     @Autowired
     private SchedulerService schedulerService;
-    @Autowired
-    private WaitingRepository waitingRepository;
     @Autowired
     private WaitingStorageRepository waitingStorageRepository;
     @Autowired
