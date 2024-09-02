@@ -255,11 +255,9 @@ public class WaitingCustomerService {
 
     public Waiting findById(WaitingId waitingId) {
         String storeKey = "store:" + waitingId.getStoreId();
-        System.out.println("storeKey = " + storeKey);
 
         // Redis Hash에서 특정 필드의 값을 가져옴
         String waitingJson = (String) redisTemplate.opsForHash().get(storeKey, waitingId.getWaitingNumber().toString());
-        System.out.println("waitingJson = " + waitingJson);
 
         // JSON 문자열을 Waiting 객체로 역직렬화
         try {
@@ -352,7 +350,6 @@ public class WaitingCustomerService {
         // 1. 고객의 모든 상점과 대기번호 목록 가져오기
         Map<Long, List<Long>> customerWaitingData = getAllWaitingNumbersByCustomer(customerId);
 
-        System.out.println("customerWaitingData = " + customerWaitingData);
 
         // 2. 각 상점의 대기번호에 대해 실제 waiting 정보 조회 및 필터링
         List<WaitingInfoDto> allWaitingInfoDtos = new ArrayList<>();
@@ -369,8 +366,6 @@ public class WaitingCustomerService {
             filterStatuses.add(WaitingStatus.CUSTOMER_CANCELED);
         }
 
-        System.out.println("filterStatuses = " + filterStatuses);
-
         for (Map.Entry<Long, List<Long>> entry : customerWaitingData.entrySet()) {
             Long storeId = entry.getKey();
             List<Long> waitingNumbers = entry.getValue();
@@ -384,8 +379,6 @@ public class WaitingCustomerService {
             // 캐시에서 데이터를 조회합니다.
             HashOperations<String, String, String> hashOps = redisTemplate.opsForHash();
             List<String> waitingInfoJsonList = hashOps.multiGet("store:" + storeId, waitingFields);
-
-            System.out.println("waitingInfoJsonList = " + waitingInfoJsonList);
 
             for (String waitingInfoJson : waitingInfoJsonList) {
                 if (waitingInfoJson != null) {
@@ -415,16 +408,12 @@ public class WaitingCustomerService {
                 .sorted(Comparator.comparing(WaitingInfoDto::getCreateDate).reversed())
                 .collect(Collectors.toList());
 
-        System.out.println("sortedWaitingInfoDtos = " + sortedWaitingInfoDtos);
-
         // 4. 페이징 처리
         int total = sortedWaitingInfoDtos.size();
         int start = (int) pageable.getOffset();
         int end = Math.min(start + pageable.getPageSize(), total);
 
         List<WaitingInfoDto> pagedWaitingInfoDtos = sortedWaitingInfoDtos.subList(start, end);
-
-        System.out.println("pagedWaitingInfoDtos = " + pagedWaitingInfoDtos);
 
         return new PageImpl<>(pagedWaitingInfoDtos, pageable, total);
     }

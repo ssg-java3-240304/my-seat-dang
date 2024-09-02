@@ -56,7 +56,6 @@ public class WaitingService {
                 .filter(Objects::nonNull)
                 .map(WaitingDto::create)
                 .toList();
-        System.out.println("waitingDtos = " + waitingDtos);
 
         List<WaitingDto> filteredWaitings;
         if (status == 0) {

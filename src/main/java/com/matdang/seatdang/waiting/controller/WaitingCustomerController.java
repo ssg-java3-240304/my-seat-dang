@@ -100,9 +100,6 @@ public class WaitingCustomerController {
 
         PageRangeDto pageRangeDto = PageRangeDto.calculatePage(waitings);
 
-        System.out.println("isNotAwaiting = " + model.getAttribute("isNotAwaiting"));
-        System.out.println("waitings = " + waitings.getContent());
-        System.out.println("waitings = " + waitings.getTotalElements());
         model.addAttribute("when", when);
         model.addAttribute("status", status);
         model.addAttribute("waitings", waitings.getContent());
@@ -124,7 +121,6 @@ public class WaitingCustomerController {
                                 RedirectAttributes redirectAttributes) {
         if (waitingCustomerService.isNotAwaiting(storeId, waitingNumber)) {
             redirectAttributes.addFlashAttribute("isNotAwaiting", true);
-            System.out.println("hihi = ");
             return "redirect:/customer/waiting";
         }
         log.debug("=== cancel Waiting === {}", LocalDateTime.now());
