@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
+import com.matdang.seatdang.waiting.repository.query.dto.WaitingDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -162,4 +165,51 @@ class RedisTemplateTest {
         System.out.println(" elapsed time = " + Duration.between(start, end).toMillis());
         // 400 ~500ms
     }
+
+    @Test
+    @DisplayName("Waiting Redis 데이터 여러건 조회 - objectMapper 사용 o")
+    void findAllByRedisTemplate() {
+        // given
+        Waiting waiting = Waiting.builder()
+                .waitingNumber(1L)
+                .waitingOrder(1L)
+                .storeId(1L)
+                .createdDate(LocalDateTime.now())
+                .customerInfo(CustomerInfo.builder()
+                        .customerId(1L)
+                        .customerPhone("010-1234-1234")
+                        .peopleCount(1)
+                        .build())
+                .waitingStatus(WaitingStatus.WAITING)
+                .visitedTime(null)
+                .build();
+        waitingRedisTemplate.opsForHash().put("store:1", 1L, waiting);
+
+        // when
+
+
+        LocalTime start = LocalTime.now();
+
+        List<Waiting> findResult = null;
+
+        for (int i = 0; i < 1000; i++) {
+            findResult = redisTemplate.opsForHash().values("store:1").stream()
+                    .map(waitingModel -> {
+                        try {
+                            return objectMapper.readValue((String) waitingModel, Waiting.class);
+                        } catch (JsonProcessingException e) {
+                            throw new RuntimeException(e);
+                        }
+                    })
+                    .toList();
+
+        }
+        LocalTime end = LocalTime.now();
+        // then
+        assertThat(findResult.size()).isEqualTo(1);
+
+        System.out.println(" elapsed time = " + Duration.between(start, end).toMillis());
+        // 400 ~500ms
+    }
+
 }
