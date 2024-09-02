@@ -123,7 +123,7 @@ class RedisTemplateTest {
         assertThat(findResult.getWaitingStatus()).isEqualTo(waiting.getWaitingStatus());
 
         System.out.println(" elapsed time = " + Duration.between(start, end).toMillis());
-        // 451ms
+        // 400 ~ 500ms
     }
 
     @Test
@@ -160,7 +160,6 @@ class RedisTemplateTest {
         assertThat(findResult.getWaitingStatus()).isEqualTo(waiting.getWaitingStatus());
 
         System.out.println(" elapsed time = " + Duration.between(start, end).toMillis());
-        // 542ms
+        // 400 ~500ms
     }
-
 }
