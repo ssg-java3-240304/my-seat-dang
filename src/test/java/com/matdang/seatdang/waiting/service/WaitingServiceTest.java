@@ -3,7 +3,7 @@ package com.matdang.seatdang.waiting.service;
 import com.matdang.seatdang.waiting.dto.UpdateRequest;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingDto;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
-import com.matdang.seatdang.waiting.entity.Waiting;
+import com.matdang.seatdang.waiting.redis.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import jakarta.persistence.EntityManager;

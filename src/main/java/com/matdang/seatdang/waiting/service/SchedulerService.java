@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.store.vo.WaitingStatus;
-import com.matdang.seatdang.waiting.entity.Waiting;
+import com.matdang.seatdang.waiting.redis.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStorage;
 import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
 import lombok.AllArgsConstructor;

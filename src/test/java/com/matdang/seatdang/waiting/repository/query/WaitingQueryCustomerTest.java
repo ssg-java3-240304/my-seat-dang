@@ -5,15 +5,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
-import com.matdang.seatdang.waiting.entity.Waiting;
+import com.matdang.seatdang.waiting.redis.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.entity.WaitingStorage;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
-import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoProjection;
 import jakarta.persistence.EntityManager;
-import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest

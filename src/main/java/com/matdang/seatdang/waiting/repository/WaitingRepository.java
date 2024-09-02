@@ -1,7 +1,7 @@
 //package com.matdang.seatdang.waiting.repository;
 //
 //import com.matdang.seatdang.dashboard.dto.WaitingDashboardResponseDto;
-//import com.matdang.seatdang.waiting.entity.Waiting;
+//import com.matdang.seatdang.waiting.redis.Waiting;
 //import com.matdang.seatdang.waiting.entity.WaitingStatus;
 //import org.springframework.data.jpa.repository.JpaRepository;
 //import org.springframework.data.jpa.repository.Modifying;

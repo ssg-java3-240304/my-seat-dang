@@ -7,12 +7,10 @@ import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.waiting.dto.UpdateRequest;
 import com.matdang.seatdang.waiting.dto.WaitingId;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
-import com.matdang.seatdang.waiting.entity.Waiting;
+import com.matdang.seatdang.waiting.redis.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
-import com.matdang.seatdang.waiting.entity.WaitingStorage;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
-import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoProjection;
 import jakarta.persistence.EntityManager;
 
 import java.util.concurrent.CountDownLatch;
@@ -29,7 +27,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

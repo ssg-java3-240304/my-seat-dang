@@ -7,7 +7,7 @@ import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.store.repository.query.dto.AvailableWaitingTime;
 import com.matdang.seatdang.store.repository.query.dto.StoreQueryRepository;
 import com.matdang.seatdang.store.vo.WaitingStatus;
-import com.matdang.seatdang.waiting.entity.Waiting;
+import com.matdang.seatdang.waiting.redis.Waiting;
 import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingSettingFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;

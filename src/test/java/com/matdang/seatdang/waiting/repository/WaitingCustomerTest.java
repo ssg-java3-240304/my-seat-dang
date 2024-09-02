@@ -3,7 +3,7 @@ package com.matdang.seatdang.waiting.repository;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
-import com.matdang.seatdang.waiting.entity.Waiting;
+import com.matdang.seatdang.waiting.redis.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;

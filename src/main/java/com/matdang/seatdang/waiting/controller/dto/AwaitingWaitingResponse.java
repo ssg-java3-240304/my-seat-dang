@@ -1,7 +1,7 @@
 package com.matdang.seatdang.waiting.controller.dto;
 
 import com.matdang.seatdang.store.entity.Store;
-import com.matdang.seatdang.waiting.entity.Waiting;
+import com.matdang.seatdang.waiting.redis.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.entity.WaitingStorage;
 import java.time.LocalDateTime;

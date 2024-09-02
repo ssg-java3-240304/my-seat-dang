@@ -1,5 +1,8 @@
-package com.matdang.seatdang.waiting.entity;
+package com.matdang.seatdang.waiting.redis;
 
+import com.matdang.seatdang.waiting.entity.CustomerInfo;
+import com.matdang.seatdang.waiting.entity.WaitingStatus;
+import com.matdang.seatdang.waiting.entity.WaitingStorage;
 import lombok.*;
 import java.time.LocalDateTime;
 

@@ -7,7 +7,7 @@ import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.store.repository.query.dto.AvailableWaitingTime;
 import com.matdang.seatdang.store.vo.StoreSetting;
 import com.matdang.seatdang.store.vo.WaitingTime;
-import com.matdang.seatdang.waiting.entity.Waiting;
+import com.matdang.seatdang.waiting.redis.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.repository.query.WaitingQueryRepository;

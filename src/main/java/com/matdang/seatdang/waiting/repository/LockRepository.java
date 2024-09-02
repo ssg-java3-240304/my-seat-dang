@@ -1,9 +1,5 @@
 package com.matdang.seatdang.waiting.repository;
 
-import com.matdang.seatdang.waiting.entity.Waiting;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-
 //@Deprecated
 //public interface LockRepository extends JpaRepository<Waiting, Long> {
 //

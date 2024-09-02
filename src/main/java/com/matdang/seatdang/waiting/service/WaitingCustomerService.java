@@ -10,7 +10,7 @@ import com.matdang.seatdang.store.service.StoreService;
 import com.matdang.seatdang.waiting.dto.RedisWaitingPage;
 import com.matdang.seatdang.waiting.dto.WaitingId;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
-import com.matdang.seatdang.waiting.entity.Waiting;
+import com.matdang.seatdang.waiting.redis.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
 import com.matdang.seatdang.waiting.repository.query.WaitingStorageQueryRepository;

@@ -1,18 +1,8 @@
 package com.matdang.seatdang.dashboard.service;
 
-import com.matdang.seatdang.dashboard.dto.WaitingDashboardResponseDto;
-import com.matdang.seatdang.waiting.entity.Waiting;
-import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
