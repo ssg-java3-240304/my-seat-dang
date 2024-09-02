@@ -11,15 +11,9 @@ spring:
       port: 6379
       password:
   datasource:
-    url: jdbc:mysql://localhost:3306/myseatdangdb?rewriteBatchedStatements=true
+    url: ${TEST_DB_URL}
     username: ${TEST_DB_USERNAME}
     password: ${TEST_DB_PASSWORD}
-#    hikari:
-#      maximum-pool-size: 150
-#    url: jdbc:mysql://localhost:3306/myseatdangdb
-#    username: sh
-#    password: sh
-#    driver-class-name: com.mysql.cj.jdbc.Driver
 
 
   jpa:
@@ -27,19 +21,23 @@ spring:
     properties:
       hibernate:
         jdbc:
-          batch_size: 500
+          batch_size: 1000
         order_inserts: true
         order_updates: true
         format_sql: true
-        #        show_sql: true
         hbm2ddl:
           auto: update
         dialect: org.hibernate.dialect.MySQLDialect
     open-in-view: false
+
 kakao:
   secret:
     key: ${KAKAO_PAY_SECRET_KEY}
 cid: ${KAKAO_PAY_CID}
 
 hostUrl: http://localhost:8080
+
+logging:
+  level:
+    org.springframework.cache: trace
 
