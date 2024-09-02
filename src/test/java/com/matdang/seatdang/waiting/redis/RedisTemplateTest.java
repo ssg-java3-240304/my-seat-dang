@@ -186,10 +186,7 @@ class RedisTemplateTest {
         waitingRedisTemplate.opsForHash().put("store:1", 1L, waiting);
 
         // when
-
-
         LocalTime start = LocalTime.now();
-
         List<Waiting> findResult = null;
 
         for (int i = 0; i < 1000; i++) {
@@ -211,5 +208,42 @@ class RedisTemplateTest {
         System.out.println(" elapsed time = " + Duration.between(start, end).toMillis());
         // 400 ~500ms
     }
+
+    @Test
+    @DisplayName("Waiting Redis 데이터 여러건 조회 - objectMapper 사용 x")
+    void findAllByWaitingRedisTemplate() {
+        // given
+        Waiting waiting = Waiting.builder()
+                .waitingNumber(1L)
+                .waitingOrder(1L)
+                .storeId(1L)
+                .createdDate(LocalDateTime.now())
+                .customerInfo(CustomerInfo.builder()
+                        .customerId(1L)
+                        .customerPhone("010-1234-1234")
+                        .peopleCount(1)
+                        .build())
+                .waitingStatus(WaitingStatus.WAITING)
+                .visitedTime(null)
+                .build();
+        waitingRedisTemplate.opsForHash().put("store:1", 1L, waiting);
+
+        // when
+        LocalTime start = LocalTime.now();
+        List<Waiting> findResult = null;
+
+        for (int i = 0; i < 1000; i++) {
+            findResult = waitingRedisTemplate.opsForHash().values("store:1").stream()
+                    .map(waitingModel -> (Waiting) waitingModel)
+                    .toList();
+        }
+        LocalTime end = LocalTime.now();
+        // then
+        assertThat(findResult.size()).isEqualTo(1);
+
+        System.out.println(" elapsed time = " + Duration.between(start, end).toMillis());
+        // 400 ~500ms
+    }
+
 
 }
