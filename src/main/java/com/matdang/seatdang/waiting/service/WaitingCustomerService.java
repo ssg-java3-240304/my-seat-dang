@@ -10,8 +10,8 @@ import com.matdang.seatdang.store.service.StoreService;
 import com.matdang.seatdang.waiting.dto.RedisWaitingPage;
 import com.matdang.seatdang.waiting.dto.WaitingId;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
-import com.matdang.seatdang.waiting.redis.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
+import com.matdang.seatdang.waiting.redis.Waiting;
 import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
 import com.matdang.seatdang.waiting.repository.query.WaitingStorageQueryRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
@@ -41,6 +41,7 @@ public class WaitingCustomerService {
     private final ObjectMapper objectMapper;
     private final WaitingStorageRepository waitingStorageRepository;
 
+    @Transactional(readOnly = true)
     public boolean isWaitingExists(Long storeId) {
         String key = "store:" + storeId;
         Member customer = authService.getAuthenticatedMember();
@@ -61,6 +62,7 @@ public class WaitingCustomerService {
                 .getWaitingStatus() != WaitingStatus.WAITING;
     }
 
+    @Transactional(readOnly = true)
     public Boolean isIncorrectWaitingStatus(Long storeId, Long waitingNumber, String status, String when) {
         WaitingStatus waitingStatus = null;
         if (when.equals("today")) {
@@ -102,7 +104,7 @@ public class WaitingCustomerService {
      * {@link RedissonLockWaitingCustomerFacade#createWaiting(Long, Integer)} 을 사용하세요.
      */
     @DoNotUse(message = "이 메서드를 직접 사용하지 마세요.")
-    @Transactional
+    @Transactional(readOnly = true)
     public WaitingId createWaiting(Long storeId, Integer peopleCount) {
         Member customer = authService.getAuthenticatedMember();
 
@@ -200,7 +202,6 @@ public class WaitingCustomerService {
         return new HashMap<>();
     }
 
-
     private Long getNextWaitingNumber(Long storeId) {
         String waitingNumberKey = "waitingNumber:" + storeId;
         // Redis에서 waitingNumber 값을 1씩 증가시키고 반환
@@ -272,7 +273,6 @@ public class WaitingCustomerService {
      * {@link RedissonLockWaitingCustomerFacade#cancelWaitingByCustomer(Long, Long)} 을 사용하세요.
      */
     @DoNotUse(message = "이 메서드를 직접 사용하지 마세요.")
-    @Transactional
     public void cancelWaitingByCustomer(Long waitingNumber, Long storeId) {
         getPreviousWaitingOrder(storeId);
         Map<Long, Waiting> waitings = getWaitingsForStore(storeId);
@@ -286,7 +286,6 @@ public class WaitingCustomerService {
             if (waiting.getWaitingOrder() < waitings.get(l).getWaitingOrder()) {
                 waitings.get(l).setWaitingOrder(waitings.get(l).getWaitingOrder() - 1);
             }
-
         }
 
         saveWaitingsToRedis(waitings, waiting.getStoreId());
@@ -329,6 +328,7 @@ public class WaitingCustomerService {
 //        return Page.empty();
 //    }
 
+    @Transactional(readOnly = true)
     @Cacheable(cacheNames = "showHistoryWaiting", key = "'historyWaiting:customer'+#customerId+ ':status:' +#status +':page:' + #page ", cacheManager = "waitingStorageCacheManager")
     public RedisWaitingPage showHistoryWaiting(Long customerId, int status, int page) {
         PageRequest pageable = PageRequest.of(page, 10);
@@ -344,11 +344,10 @@ public class WaitingCustomerService {
         return new RedisWaitingPage(resultPage);
     }
 
-
+    @Transactional(readOnly = true)
     public Page<WaitingInfoDto> showTodayWaiting(int status, int page) {
         Pageable pageable = PageRequest.of(page, 10);
         Long customerId = authService.getAuthenticatedMember().getMemberId();
-//
 
         // 1. 고객의 모든 상점과 대기번호 목록 가져오기
         Map<Long, List<Long>> customerWaitingData = getAllWaitingNumbersByCustomer(customerId);
@@ -429,5 +428,4 @@ public class WaitingCustomerService {
 
         return new PageImpl<>(pagedWaitingInfoDtos, pageable, total);
     }
-
 }

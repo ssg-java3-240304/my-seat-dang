@@ -21,10 +21,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class WaitingService {
     private final ObjectMapper objectMapper;
@@ -131,7 +129,6 @@ public class WaitingService {
      * {@link RedissonLockWaitingFacade#updateStatus(UpdateRequest)} 을 사용하세요.
      */
     @DoNotUse(message = "이 메서드를 직접 사용하지 마세요.")
-    @Transactional
     public void updateStatus(UpdateRequest updateRequest) {
         String key = "store:" + updateRequest.getStoreId();
 

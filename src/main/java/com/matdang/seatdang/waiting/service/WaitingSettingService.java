@@ -21,7 +21,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class WaitingSettingService {
     private final StoreQueryRepository storeQueryRepository;
@@ -29,6 +28,8 @@ public class WaitingSettingService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
 
+
+    @Transactional(readOnly = true)
     public AvailableWaitingTime findAvailableWaitingTime(Long storeId) {
         AvailableWaitingTime findResult = storeQueryRepository.findAvailableWaitingTime(storeId);
         if (findResult.getWaitingOpenTime() == null) {
@@ -38,6 +39,7 @@ public class WaitingSettingService {
         return findResult;
     }
 
+    @Transactional(readOnly = true)
     public LocalTime findEstimatedWaitingTime(Long storeId) {
         LocalTime findResult = storeQueryRepository.findEstimatedWaitingTime(storeId);
         if (findResult == null) {
@@ -107,7 +109,6 @@ public class WaitingSettingService {
             saveWaitingsToRedis(updatedWaitings, storeId);
 
         }
-
     }
 
     private Long decreaseWaitingOrder(Long storeId) {
@@ -119,6 +120,7 @@ public class WaitingSettingService {
     /**
      * 상점 생성시, StoreSetting이 생성되면, null값이 들어오지 않아 삭제해도 됨 test code 생략
      */
+    @Transactional(readOnly = true)
     public WaitingStatus findWaitingStatus(Long storeId) {
         WaitingStatus findResult = storeQueryRepository.findWaitingStatus(storeId);
         if (findResult == null) {
@@ -127,6 +129,7 @@ public class WaitingSettingService {
         return findResult;
     }
 
+    @Transactional(readOnly = true)
     public Integer findWaitingPeopleCount(Long storeId) {
         Integer findResult = storeQueryRepository.findWaitingPeopleCount(storeId);
         if (findResult == null) {
