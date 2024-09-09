@@ -1,10 +1,12 @@
 package com.matdang.seatdang.waiting.redis;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingDto;
+import java.util.ArrayList;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ class RedisTemplateTest {
     private RedisTemplate<String, Waiting> waitingRedisTemplate;
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private RedisTemplate<String, WaitingNumbers> waitingNumbersRedisTemplate;
 
     @Test
     @DisplayName("Waiting Redis 데이터 생성 - ObjectMapper 사용o")
@@ -63,7 +68,7 @@ class RedisTemplateTest {
 
         LocalTime end = LocalTime.now();
 
-        System.out.println(" elapsed time = "+ Duration.between(start, end).toMillis());
+        System.out.println(" elapsed time = " + Duration.between(start, end).toMillis());
         // 665ms
     }
 
@@ -92,7 +97,7 @@ class RedisTemplateTest {
         }
         LocalTime end = LocalTime.now();
 
-        System.out.println(" elapsed time = "+ Duration.between(start, end).toMillis());
+        System.out.println(" elapsed time = " + Duration.between(start, end).toMillis());
         // 682ms
     }
 
@@ -153,7 +158,8 @@ class RedisTemplateTest {
         Waiting findResult = null;
         for (int i = 0; i < 1000; i++) {
             try {
-                findResult = objectMapper.readValue((String) redisTemplate.opsForHash().get("store:1", "1"), Waiting.class);
+                findResult = objectMapper.readValue((String) redisTemplate.opsForHash().get("store:1", "1"),
+                        Waiting.class);
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
@@ -243,6 +249,51 @@ class RedisTemplateTest {
 
         System.out.println(" elapsed time = " + Duration.between(start, end).toMillis());
         // 400 ~500ms
+    }
+
+    @Test
+    @DisplayName("WaitingNumber 생성 & 조회 - ObjectMapper 사용 o")
+    void findWaitingNumberByRedisTemplate() {
+        // given
+        String key = "customer:" + 1;
+        String field = "1";
+        // when
+
+        // 생성
+        String currentValue = (String) redisTemplate.opsForHash().get(key, field);
+
+        List<Long> waitingNumbers = null;
+        try {
+            if (currentValue == null) {
+                waitingNumbers = new ArrayList<>();
+            } else {
+                waitingNumbers = objectMapper.readValue(currentValue, new TypeReference<List<Long>>() {
+                });
+            }
+            waitingNumbers.add(1L);
+
+            // JSON 배열로 직렬화하여 Redis에 저장
+            redisTemplate.opsForHash().put(key, field, objectMapper.writeValueAsString(waitingNumbers));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // 조회
+        currentValue = (String) redisTemplate.opsForHash().get(key, field);
+        try {
+            if (currentValue == null) {
+                waitingNumbers = new ArrayList<>();
+            } else {
+                waitingNumbers = objectMapper.readValue(currentValue, new TypeReference<List<Long>>() {
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // then
+        assertThat(waitingNumbers.size()).isEqualTo(1);
+        assertThat(waitingNumbers.get(0)).isEqualTo(1);
     }
 
 
