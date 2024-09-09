@@ -3,6 +3,7 @@ package com.matdang.seatdang.common.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.matdang.seatdang.waiting.redis.Waiting;
+import com.matdang.seatdang.waiting.redis.WaitingNumbers;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -54,6 +55,20 @@ public class RedisConfig {
     }
 
     @Bean
+    public RedisTemplate<String, WaitingNumbers> waitingNumbersRedisTemplate() {
+        RedisTemplate<String, WaitingNumbers> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory());
+
+        // Redis에서 key를 String으로, value를 JSON 형태로 저장하도록 설정
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashKeySerializer(new GenericToStringSerializer<>(Long.class));
+
+        redisTemplate.setHashKeySerializer(new Jackson2JsonRedisSerializer<>(WaitingNumbers.class));
+        redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(WaitingNumbers.class));
+        return redisTemplate;
+    }
+
+    @Bean
     public RedisTemplate<String, Waiting> waitingRedisTemplate() {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
@@ -67,7 +82,8 @@ public class RedisConfig {
 //        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Waiting.class));
 //        redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(Waiting.class));
 
-        Jackson2JsonRedisSerializer<Waiting> serializer = new Jackson2JsonRedisSerializer<>(objectMapper, Waiting.class);
+        Jackson2JsonRedisSerializer<Waiting> serializer = new Jackson2JsonRedisSerializer<>(objectMapper,
+                Waiting.class);
         redisTemplate.setValueSerializer(serializer);
         redisTemplate.setHashValueSerializer(serializer);
 
