@@ -296,5 +296,34 @@ class RedisTemplateTest {
         assertThat(waitingNumbers.get(0)).isEqualTo(1);
     }
 
+    @Test
+    @DisplayName("WaitingNumber 생성 & 조회 - ObjectMapper 사용 x")
+    void findWaitingNumberByWaitingNumbersRedisTemplate() {
+        // given
+        String key = "customer:" + 1;
+        Long field = 1L;
+        // when
 
+        // 생성
+        WaitingNumbers currentValue = (WaitingNumbers) waitingNumbersRedisTemplate.opsForHash().get(key, field);
+
+        if (currentValue == null) {
+            currentValue = new WaitingNumbers();
+        }
+
+        currentValue.getWaitingNumbers().add(1L);
+
+        // JSON 배열로 직렬화하여 Redis에 저장
+        waitingNumbersRedisTemplate.opsForHash().put(key, field, currentValue);
+
+        // 조회
+        currentValue = (WaitingNumbers) waitingNumbersRedisTemplate.opsForHash().get(key, field);
+        if (currentValue == null) {
+            currentValue = new WaitingNumbers();
+        }
+
+        // then
+        assertThat(currentValue.getWaitingNumbers().size()).isEqualTo(1);
+        assertThat(currentValue.getWaitingNumbers().get(0)).isEqualTo(1);
+    }
 }
