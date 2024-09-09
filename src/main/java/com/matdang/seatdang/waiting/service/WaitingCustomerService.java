@@ -187,12 +187,9 @@ public class WaitingCustomerService {
 
     private void addWaitingToStore(Long storeId, Waiting waiting) {
         String storeKey = "store:" + storeId;
-//        Long waitingNumber = waiting.getWaitingNumber(); // 자동으로 증가된 waitingNumber를 가져옴
-//        String waitingJson = objectMapper.writeValueAsString(waiting);
 
         // Redis Hash에 추가
         waitingRedisTemplate.opsForHash().put(storeKey, waiting.getWaitingNumber(), waiting);
-//        redisTemplate.opsForHash().put(storeKey, waitingNumber.toString(), waitingJson);
     }
 
     public Map<Long, Waiting> getWaitingsForStore(Long storeId) {
