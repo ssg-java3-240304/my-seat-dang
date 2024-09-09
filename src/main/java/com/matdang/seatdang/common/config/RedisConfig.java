@@ -63,7 +63,6 @@ public class RedisConfig {
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setHashKeySerializer(new GenericToStringSerializer<>(Long.class));
 
-        redisTemplate.setHashKeySerializer(new Jackson2JsonRedisSerializer<>(WaitingNumbers.class));
         redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(WaitingNumbers.class));
         return redisTemplate;
     }
