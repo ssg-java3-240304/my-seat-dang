@@ -7,6 +7,9 @@ import com.matdang.seatdang.waiting.entity.CustomerInfo;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingDto;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -394,5 +397,33 @@ class RedisTemplateTest {
         // then
         assertThat(currentValue.getWaitingNumbers().size()).isEqualTo(1);
         assertThat(currentValue.getWaitingNumbers().get(0)).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("waitingNumbersRedisTemplate 사용 속도 체크")
+    void getAllWaitingNumbersByCustomer() {
+        WaitingNumbers waitingNumbers = new WaitingNumbers();
+        String key = "customer:" + 1L;
+        for (long i = 0; i < 100; i++) {
+            waitingNumbers.getWaitingNumbers().add(i);
+        }
+
+        for (int i = 0; i < 100000; i++) {
+            waitingNumbersRedisTemplate.opsForHash().put(key, i, waitingNumbers);
+        }
+
+        LocalTime start = LocalTime.now();
+        Map<Object, Object> rawEntries = waitingNumbersRedisTemplate.opsForHash().entries(key);
+
+        Map<Long, WaitingNumbers> findResult = rawEntries.entrySet().stream()
+                .collect(Collectors.toMap(
+                        entry -> (Long) entry.getKey(),
+                        entry -> (WaitingNumbers) entry.getValue()
+                ));
+
+        LocalTime end = LocalTime.now();
+        System.out.println(" elapsed time = " + Duration.between(start, end).toMillis());
+
+        // 700 ~ 900 ms
     }
 }
