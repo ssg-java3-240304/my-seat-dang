@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 
 @SpringBootTest
@@ -26,6 +27,8 @@ class RedissonWaitingCustomerTest {
     private RedissonLockWaitingCustomerFacade redissonLockWaitingCustomerFacade;
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+    @Autowired
+    private RedisTemplate<String, Waiting> waitingRedisTemplate;
     @Autowired
     private WaitingService waitingService;
     @MockBean
@@ -67,6 +70,51 @@ class RedissonWaitingCustomerTest {
         // 싱글 스레드 Redis 사용 - Redisson Lock 사용 X
         // 675ms, 778ms, 766ms
 
+    }
+
+    @Test
+    @DisplayName("HashOperations를 공유하여 동시에 100개 조회")
+    void findWaitingByConcurrencyAndUseHashOperations() throws InterruptedException {
+        // given
+        int threadCount = 100;
+        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
+        CountDownLatch latch = new CountDownLatch(threadCount);
+
+        Customer mockCustomer = Customer.builder()
+                .memberId(1L)
+                .memberPhone("010-1234-1234")
+                .build();
+        when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
+        // when
+        for (int i = 0; i < threadCount; i++) {
+            executorService.execute(() -> {
+                try {
+                    redissonLockWaitingCustomerFacade.createWaiting(1L, 2);
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+        latch.await();
+        executorService.shutdown();
+
+        // then
+        HashOperations<String, Long, Waiting> hashOperations = waitingRedisTemplate.opsForHash();
+        ExecutorService executorService2 = Executors.newFixedThreadPool(threadCount);
+        CountDownLatch latch2 = new CountDownLatch(threadCount);
+
+        for (int i = 0; i < threadCount; i++) {
+            long waitingNumber =i+1;
+            executorService2.execute(() -> {
+                try {
+                    assertThat(hashOperations.get("store:1", waitingNumber).getWaitingNumber()).isEqualTo(waitingNumber);
+                } finally {
+                    latch2.countDown();
+                }
+            });
+        }
+        latch2.await();
+        executorService2.shutdown();
     }
 
     @Test
