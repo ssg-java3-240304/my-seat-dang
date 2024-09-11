@@ -401,7 +401,7 @@ class RedisTemplateTest {
 
     @Test
     @DisplayName("waitingNumbersRedisTemplate 사용 속도 체크")
-    void getAllWaitingNumbersByCustomer() {
+    void getAllWaitingNumbersByCustomerAndUsingRedisTemplate() {
         WaitingNumbers waitingNumbers = new WaitingNumbers();
         String key = "customer:" + 1L;
         for (long i = 0; i < 100; i++) {
@@ -413,17 +413,46 @@ class RedisTemplateTest {
         }
 
         LocalTime start = LocalTime.now();
-        Map<Object, Object> rawEntries = waitingNumbersRedisTemplate.opsForHash().entries(key);
+        Map<Long, WaitingNumbers> findResult = null;
+        for (int i = 0; i < 10; i++) {
+            Map<Object, Object> rawEntries = waitingNumbersRedisTemplate.opsForHash().entries(key);
 
-        Map<Long, WaitingNumbers> findResult = rawEntries.entrySet().stream()
-                .collect(Collectors.toMap(
-                        entry -> (Long) entry.getKey(),
-                        entry -> (WaitingNumbers) entry.getValue()
-                ));
+            findResult = rawEntries.entrySet().stream()
+                    .collect(Collectors.toMap(
+                            entry -> (Long) entry.getKey(),
+                            entry -> (WaitingNumbers) entry.getValue()
+                    ));
+        }
+
+        LocalTime end = LocalTime.now();
+        assertThat(findResult.size()).isEqualTo(100000);
+        System.out.println(" elapsed time = " + Duration.between(start, end).toMillis());
+
+        // 4500 ~ 4700 ms
+    }
+
+    @Test
+    @DisplayName("HashOperations 사용 속도 체크")
+    void getAllWaitingNumbersByCustomerAndUsingHashOperations() {
+        WaitingNumbers waitingNumbers = new WaitingNumbers();
+        String key = "customer:" + 1L;
+        for (long i = 0; i < 100; i++) {
+            waitingNumbers.getWaitingNumbers().add(i);
+        }
+
+        for (int i = 0; i < 100000; i++) {
+            waitingNumbersRedisTemplate.opsForHash().put(key, i, waitingNumbers);
+        }
+        HashOperations<String, Long, WaitingNumbers> hashOperations = waitingNumbersRedisTemplate.opsForHash();
+
+        LocalTime start = LocalTime.now();
+        for (int i = 0; i < 10; i++) {
+            Map<Long, WaitingNumbers> rawEntries = hashOperations.entries(key);
+        }
 
         LocalTime end = LocalTime.now();
         System.out.println(" elapsed time = " + Duration.between(start, end).toMillis());
 
-        // 700 ~ 900 ms
+        // 4400 ~ 4600 ms
     }
 }
