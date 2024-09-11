@@ -14,6 +14,7 @@ import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
 import com.matdang.seatdang.waiting.repository.query.WaitingStorageQueryRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
 import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingCustomerFacade;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
@@ -39,6 +41,17 @@ public class WaitingCustomerService {
     private final RedisTemplate<String, WaitingNumbers> waitingNumbersRedisTemplate;
     private final WaitingStorageRepository waitingStorageRepository;
 
+    private HashOperations<String, Long, Waiting> waitingHashOps;
+    private HashOperations<String, Long, WaitingNumbers> waitingNumberHashOps;
+    private ValueOperations<String, Object> valueOps;
+
+    @PostConstruct
+    public void init() {
+        this.valueOps = redisTemplate.opsForValue();
+        this.waitingHashOps = waitingRedisTemplate.opsForHash();
+        this.waitingNumberHashOps = waitingNumbersRedisTemplate.opsForHash();
+    }
+
     @Transactional(readOnly = true)
     public boolean isWaitingExists(Long storeId) {
         String key = "store:" + storeId;
@@ -48,8 +61,7 @@ public class WaitingCustomerService {
             return false;
         }
 
-        return waitingRedisTemplate.opsForHash().values(key).stream()
-                .map(value -> (Waiting) value)
+        return waitingHashOps.values(key).stream()
                 .anyMatch(waiting -> waiting.getCustomerInfo().getCustomerId().equals(customer.getMemberId())
                         && waiting.getWaitingStatus() == WaitingStatus.WAITING);
     }
@@ -57,8 +69,7 @@ public class WaitingCustomerService {
     public boolean isNotAwaiting(Long storeId, Long waitingNumber) {
         String key = "store:" + storeId;
 
-        return ((Waiting) waitingRedisTemplate.opsForHash().get(key, waitingNumber.toString()))
-                .getWaitingStatus() != WaitingStatus.WAITING;
+        return waitingHashOps.get(key, waitingNumber.toString()).getWaitingStatus() != WaitingStatus.WAITING;
     }
 
     @Transactional(readOnly = true)
@@ -66,8 +77,7 @@ public class WaitingCustomerService {
         WaitingStatus waitingStatus = null;
         if (when.equals("today")) {
             String key = "store:" + storeId;
-            waitingStatus = ((Waiting) waitingRedisTemplate.opsForHash()
-                    .get(key, waitingNumber.toString())).getWaitingStatus();
+            waitingStatus = waitingHashOps.get(key, waitingNumber.toString()).getWaitingStatus();
         }
         if (when.equals("history")) {
             waitingStatus = waitingStorageRepository.findByStoreIdAndWaitingNumber(storeId,
@@ -129,20 +139,21 @@ public class WaitingCustomerService {
         String key = "customer:" + customerId;
 
         // 현재 필드의 값을 가져오기
-        WaitingNumbers currentValue = (WaitingNumbers) waitingNumbersRedisTemplate.opsForHash().get(key, storeId);
+
+        WaitingNumbers currentValue = waitingNumberHashOps.get(key, storeId);
 
         if (currentValue == null) {
             currentValue = new WaitingNumbers();
         }
         currentValue.getWaitingNumbers().add(waitingNumber);
 
-        waitingNumbersRedisTemplate.opsForHash().put(key, storeId, currentValue);
+        waitingNumberHashOps.put(key, storeId, currentValue);
     }
 
     // 특정 고객의 특정 상점에 대한 웨이팅 번호 리스트 가져오기
     public List<Long> getWaitingNumbersByCustomerAndStore(Long customerId, Long storeId) {
         String key = "customer:" + customerId;
-        WaitingNumbers value = (WaitingNumbers) waitingNumbersRedisTemplate.opsForHash().get(key, storeId);
+        WaitingNumbers value = waitingNumberHashOps.get(key, storeId);
 
         if (value != null) {
             return value.getWaitingNumbers();
@@ -153,66 +164,39 @@ public class WaitingCustomerService {
     // 특정 고객의 모든 상점과 웨이팅 번호 리스트 가져오기
     public Map<Long, WaitingNumbers> getAllWaitingNumbersByCustomer(Long customerId) {
         String key = "customer:" + customerId;
-        Map<Object, Object> rawEntries = waitingNumbersRedisTemplate.opsForHash().entries(key);
-
-        if (rawEntries.isEmpty()) {
-            return new HashMap<>();
-        }
-
-        return rawEntries.entrySet().stream()
-                .collect(Collectors.toMap(
-                        entry -> (Long) entry.getKey(),
-                        entry -> (WaitingNumbers) entry.getValue()
-                ));
+        return waitingNumberHashOps.entries(key);
     }
 
     private Long getNextWaitingNumber(Long storeId) {
         String waitingNumberKey = "waitingNumber:" + storeId;
         // Redis에서 waitingNumber 값을 1씩 증가시키고 반환
-        return redisTemplate.opsForValue().increment(waitingNumberKey, 1);
+        return valueOps.increment(waitingNumberKey, 1);
     }
 
     private Long getNextWaitingOrder(Long storeId) {
         String waitingOrderKey = "waitingOrder:" + storeId;
-        // Redis에서 waitingOrder 값을 1씩 증가시키고 반환
-        return redisTemplate.opsForValue().increment(waitingOrderKey, 1);
+        return valueOps.increment(waitingOrderKey, 1);
     }
 
 
     private Long getPreviousWaitingOrder(Long storeId) {
         String waitingOrderKey = "waitingOrder:" + storeId;
-        // Redis에서 waitingOrder 값을 1씩 감소시키고 반환
-        return redisTemplate.opsForValue().increment(waitingOrderKey, -1);
+        return valueOps.increment(waitingOrderKey, -1);
     }
 
     private void addWaitingToStore(Long storeId, Waiting waiting) {
         String storeKey = "store:" + storeId;
-
-        // Redis Hash에 추가
-        waitingRedisTemplate.opsForHash().put(storeKey, waiting.getWaitingNumber(), waiting);
+        waitingHashOps.put(storeKey, waiting.getWaitingNumber(), waiting);
     }
 
     public Map<Long, Waiting> getWaitingsForStore(Long storeId) {
         String storeKey = "store:" + storeId;
-
-        // Redis Hash에서 모든 필드와 값을 가져옴
-        Map<Object, Object> entries = waitingRedisTemplate.opsForHash().entries(storeKey);
-
-        if (entries.isEmpty()) {
-            return new HashMap<>();
-        }
-
-        return entries.entrySet().stream()
-                .collect(Collectors.toMap(
-                        entry -> (Long) entry.getKey(),
-                        entry -> (Waiting) entry.getValue()
-                ));
+        return waitingHashOps.entries(storeKey);
     }
 
     public Waiting findById(WaitingId waitingId) {
         String storeKey = "store:" + waitingId.getStoreId();
-
-        return (Waiting) waitingRedisTemplate.opsForHash().get(storeKey, waitingId.getWaitingNumber());
+        return waitingHashOps.get(storeKey, waitingId.getWaitingNumber());
     }
 
     /**
@@ -240,7 +224,7 @@ public class WaitingCustomerService {
     public void saveWaitingsToRedis(Map<Long, Waiting> waitings, Long storeId) {
         String storeKey = "store:" + storeId;
 
-        waitingRedisTemplate.opsForHash().putAll(storeKey, waitings);
+        waitingHashOps.putAll(storeKey, waitings);
     }
 
     @Transactional(readOnly = true)
@@ -282,14 +266,13 @@ public class WaitingCustomerService {
             filterStatuses.add(WaitingStatus.CUSTOMER_CANCELED);
         }
 
-        HashOperations<String, Long, Waiting> hashOps = waitingRedisTemplate.opsForHash();
         for (Map.Entry<Long, WaitingNumbers> entry : customerWaitingData.entrySet()) {
             Long storeId = entry.getKey();
             List<Long> waitingNumbers = entry.getValue().getWaitingNumbers();
 
             String storeName = storeService.findStoreNameByStoreId(storeId);
 
-            List<Waiting> waitingInfoJsonList = hashOps.multiGet("store:" + storeId, waitingNumbers);
+            List<Waiting> waitingInfoJsonList = waitingHashOps.multiGet("store:" + storeId, waitingNumbers);
 
             for (Waiting waiting : waitingInfoJsonList) {
                 if (filterStatuses.contains(waiting.getWaitingStatus())) {
