@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.time.Duration;
@@ -131,7 +132,41 @@ class RedisTemplateTest {
         assertThat(findResult.getWaitingStatus()).isEqualTo(waiting.getWaitingStatus());
 
         System.out.println(" elapsed time = " + Duration.between(start, end).toMillis());
-        // 400 ~ 500ms
+        // 200 ~ 300ms
+    }
+
+    @Test
+    @DisplayName("Waiting Redis 데이터 조회 - 캐스팅 x")
+    void findByWaitingRedisTemplateAndNotCasting() {
+        // given
+        Waiting waiting = Waiting.builder()
+                .waitingNumber(1L)
+                .waitingOrder(1L)
+                .storeId(1L)
+                .createdDate(LocalDateTime.now())
+                .customerInfo(CustomerInfo.builder()
+                        .customerId(1L)
+                        .customerPhone("010-1234-1234")
+                        .peopleCount(1)
+                        .build())
+                .waitingStatus(WaitingStatus.WAITING)
+                .visitedTime(null)
+                .build();
+        waitingRedisTemplate.opsForHash().put("store:1", 1L, waiting);
+
+        // when
+        LocalTime start = LocalTime.now();
+        Waiting findResult = null;
+        HashOperations<String, Long, Waiting> hashOperations = waitingRedisTemplate.opsForHash();
+        for (int i = 0; i < 1000; i++) {
+            findResult = hashOperations.get("store:1", 1L);
+        }
+        LocalTime end = LocalTime.now();
+        // then
+        assertThat(findResult.getWaitingStatus()).isEqualTo(waiting.getWaitingStatus());
+
+        System.out.println(" elapsed time = " + Duration.between(start, end).toMillis());
+        // 200 ~ 300ms
     }
 
     @Test
@@ -169,7 +204,7 @@ class RedisTemplateTest {
         assertThat(findResult.getWaitingStatus()).isEqualTo(waiting.getWaitingStatus());
 
         System.out.println(" elapsed time = " + Duration.between(start, end).toMillis());
-        // 400 ~500ms
+        // 200 ~300ms
     }
 
     @Test
@@ -195,7 +230,7 @@ class RedisTemplateTest {
         LocalTime start = LocalTime.now();
         List<Waiting> findResult = null;
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 100000; i++) {
             findResult = redisTemplate.opsForHash().values("store:1").stream()
                     .map(waitingModel -> {
                         try {
@@ -212,7 +247,7 @@ class RedisTemplateTest {
         assertThat(findResult.size()).isEqualTo(1);
 
         System.out.println(" elapsed time = " + Duration.between(start, end).toMillis());
-        // 400 ~500ms
+        // 11700 ~12000ms
     }
 
     @Test
@@ -238,7 +273,7 @@ class RedisTemplateTest {
         LocalTime start = LocalTime.now();
         List<Waiting> findResult = null;
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 100000; i++) {
             findResult = waitingRedisTemplate.opsForHash().values("store:1").stream()
                     .map(waitingModel -> (Waiting) waitingModel)
                     .toList();
@@ -248,7 +283,41 @@ class RedisTemplateTest {
         assertThat(findResult.size()).isEqualTo(1);
 
         System.out.println(" elapsed time = " + Duration.between(start, end).toMillis());
-        // 400 ~500ms
+        // 11700 ~12000ms
+    }
+
+    @Test
+    @DisplayName("Waiting Redis 데이터 여러건 조회 - 캐스팅 사용 x")
+    void findAllByWaitingRedisTemplateAndNotCasting() {
+        // given
+        Waiting waiting = Waiting.builder()
+                .waitingNumber(1L)
+                .waitingOrder(1L)
+                .storeId(1L)
+                .createdDate(LocalDateTime.now())
+                .customerInfo(CustomerInfo.builder()
+                        .customerId(1L)
+                        .customerPhone("010-1234-1234")
+                        .peopleCount(1)
+                        .build())
+                .waitingStatus(WaitingStatus.WAITING)
+                .visitedTime(null)
+                .build();
+        waitingRedisTemplate.opsForHash().put("store:1", 1L, waiting);
+
+        // when
+        LocalTime start = LocalTime.now();
+        List<Waiting> findResult = null;
+        HashOperations<String, Long, Waiting> hashOperations = waitingRedisTemplate.opsForHash();
+        for (int i = 0; i < 100000; i++) {
+            findResult = hashOperations.values("store:1");
+        }
+        LocalTime end = LocalTime.now();
+        // then
+        assertThat(findResult.size()).isEqualTo(1);
+
+        System.out.println(" elapsed time = " + Duration.between(start, end).toMillis());
+        // 11400 ~11600 ms
     }
 
     @Test
