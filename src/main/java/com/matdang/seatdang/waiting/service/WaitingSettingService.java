@@ -63,7 +63,7 @@ public class WaitingSettingService {
     @DoNotUse(message = "이 메서드를 직접 사용하지 마세요.")
     @Transactional
     public void changeWaitingStatus(int status, Long storeId) {
-        String key = "store:" + storeId;
+        String key = "store:" + storeId + ":waiting";
         if (status == 1) {
             storeRepository.updateWaitingStatus(WaitingStatus.OPEN, storeId);
             return;
@@ -90,7 +90,7 @@ public class WaitingSettingService {
     }
 
     private Long decreaseWaitingOrder(Long storeId) {
-        String waitingOrderKey = "waitingOrder:" + storeId;
+        String waitingOrderKey = "store:" + storeId + ":waitingOrder";
         // Redis에서 waitingOrder 값을 1씩 감소시키고 반환
         return valueOps.increment(waitingOrderKey, -1);
     }

@@ -1,6 +1,5 @@
 package com.matdang.seatdang.waiting.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.store.vo.WaitingStatus;
@@ -8,12 +7,10 @@ import com.matdang.seatdang.waiting.redis.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStorage;
 import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
 import jakarta.annotation.PostConstruct;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,7 +44,7 @@ public class SchedulerService {
         for (Store store : stores) {
             if (store.getStoreSetting().getWaitingStatus() == WaitingStatus.CLOSE ||
                     store.getStoreSetting().getWaitingStatus() == WaitingStatus.UNAVAILABLE) {
-                String key = "store:"+ store.getStoreId();
+                String key = "store:"+ store.getStoreId() +":waiting";
                 List<WaitingStorage> waitings = waitingHashOps.values(key).stream()
                         .map(Waiting::convertToWaitingStorage) // Waiting 객체를 WaitingStorage 객체로 변환
                         .toList();
@@ -60,7 +57,6 @@ public class SchedulerService {
         log.info("=== delete Redis all data ===");
 
     }
-
 
     // 10분 마다 실행
     @Scheduled(cron = "0 0/10 * * * ?")

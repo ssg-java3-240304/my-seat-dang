@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class WaitingService {
     private final RedisTemplate<String, Object> redisTemplate;
-
     private final RedisTemplate<String, Waiting> waitingRedisTemplate;
     private HashOperations<String, Long, Waiting> waitingHashOps;
     private ValueOperations<String, Object> valueOps;
@@ -37,7 +36,8 @@ public class WaitingService {
     }
 
     public Page<WaitingDto> showWaiting(Long storeId, int status, int page) {
-        String key = "store:" + storeId;
+        String key = "store:" + storeId + ":waiting";
+        ;
         PageRequest pageable = PageRequest.of(page, 10);
 
         List<WaitingDto> waitingDtos = waitingHashOps.values(key).stream()
@@ -75,7 +75,8 @@ public class WaitingService {
     }
 
     public long countWaitingInStore(Long storeId) {
-        String key = "store:" + storeId;
+        String key = "store:" + storeId + ":waiting";
+        ;
 
         return waitingHashOps.values(key).stream()
                 .filter(waiting -> waiting.getWaitingStatus() == WaitingStatus.WAITING)
@@ -87,7 +88,8 @@ public class WaitingService {
      */
     @DoNotUse(message = "이 메서드를 직접 사용하지 마세요.")
     public void updateStatus(UpdateRequest updateRequest) {
-        String key = "store:" + updateRequest.getStoreId();
+        String key = "store:" + updateRequest.getStoreId() + ":waiting";
+        ;
 
         if (updateRequest.getChangeStatus() == 1) {
             Map<Long, Waiting> waitings = waitingHashOps.entries(key).entrySet().stream()
@@ -131,7 +133,7 @@ public class WaitingService {
     }
 
     private Long decreaseWaitingOrder(Long storeId) {
-        String waitingOrderKey = "waitingOrder:" + storeId;
+        String waitingOrderKey = "store:" + storeId + ":waitingOrder";
         // Redis에서 waitingOrder 값을 1씩 감소시키고 반환
         return valueOps.increment(waitingOrderKey, -1);
     }
