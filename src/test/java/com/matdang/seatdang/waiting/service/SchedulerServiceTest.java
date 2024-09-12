@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +47,8 @@ class SchedulerServiceTest {
     private RedissonLockWaitingCustomerFacade redissonLockWaitingCustomerFacade;
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+    @Autowired
+    private RedisTemplate<String, Waiting> waitingRedisTemplate;
     @Autowired
     private WaitingService waitingService;
     @MockBean
@@ -116,9 +119,10 @@ class SchedulerServiceTest {
 
         // then
         // storeA
-        List<Waiting> waitingsA = redisTemplate.opsForHash().values("store:" + storeA.getStoreId()).stream()
-                .map(waiting -> waitingService.convertStringToWaiting(waiting))
-                .toList();
+
+        HashOperations<String, Long, Waiting> hashOperations = waitingRedisTemplate.opsForHash();
+        List<Waiting> waitingsA = hashOperations.values("store:" + storeA.getStoreId());
+
         assertThat(waitingsA.size()).isZero();
 
         String maxAo = (String) redisTemplate.opsForValue().get("waitingOrder:" + storeA.getStoreId());
@@ -128,9 +132,8 @@ class SchedulerServiceTest {
 
 
         // storeB
-        List<Waiting> waitingsB = redisTemplate.opsForHash().values("store:" + storeB.getStoreId()).stream()
-                .map(waiting -> waitingService.convertStringToWaiting(waiting))
-                .toList();
+        List<Waiting> waitingsB = hashOperations.values("store:" + storeB.getStoreId());
+
         assertThat(waitingsB.size()).isZero();
 
         String maxBo = (String) redisTemplate.opsForValue().get("waitingOrder:" + storeB.getStoreId());
@@ -139,9 +142,8 @@ class SchedulerServiceTest {
         assertThat(maxBn).isNull();
 
         // storeC
-        List<Waiting> waitingsC = redisTemplate.opsForHash().values("store:" + storeC.getStoreId()).stream()
-                .map(waiting -> waitingService.convertStringToWaiting(waiting))
-                .toList();
+        List<Waiting> waitingsC = hashOperations.values("store:" + storeC.getStoreId());
+
         assertThat(waitingsC.size()).isEqualTo(50);
 
         String maxCo = (String) redisTemplate.opsForValue().get("waitingOrder:" + storeC.getStoreId());

@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 
 @SpringBootTest
@@ -29,6 +30,8 @@ class RedissonLockWaitingFacadeTest {
     private RedissonLockWaitingFacade redissonLockWaitingFacade;
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+    @Autowired
+    private RedisTemplate<String, Waiting> waitingRedisTemplate;
 
     @Autowired
     private WaitingService waitingService;
@@ -107,9 +110,9 @@ class RedissonLockWaitingFacadeTest {
         String max = (String) redisTemplate.opsForValue().get("waitingOrder:1");
         assertThat(Integer.parseInt(max)).isEqualTo(100);
 
-        List<Waiting> waitingList = redisTemplate.opsForHash().values("store:1").stream()
-                .map(waiting -> waitingService.convertStringToWaiting(waiting))
-                .toList();
+        HashOperations<String, Long, Waiting> hashOperations = waitingRedisTemplate.opsForHash();
+
+        List<Waiting> waitingList = hashOperations.values("store:1");
         int waitingCount = 0;
         int visitedCount = 0;
         int canceledCount =0;
@@ -201,9 +204,10 @@ class RedissonLockWaitingFacadeTest {
         String max = (String) redisTemplate.opsForValue().get("waitingOrder:1");
         assertThat(Integer.parseInt(max)).isEqualTo(100);
 
-        List<Waiting> waitingList = redisTemplate.opsForHash().values("store:1").stream()
-                .map(waiting -> waitingService.convertStringToWaiting(waiting))
-                .toList();
+
+        HashOperations<String, Long, Waiting> hashOperations = waitingRedisTemplate.opsForHash();
+
+        List<Waiting> waitingList = hashOperations.values("store:1");
         int waitingCount = 0;
         int customerCanceledCount =0;
         int shopCanceledCount = 0;

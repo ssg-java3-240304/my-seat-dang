@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +45,8 @@ class WaitingSettingServiceTest {
     private WaitingService waitingService;
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+    @Autowired
+    private RedisTemplate<String, Waiting> waitingRedisTemplate;
 
     @Test
     @DisplayName("존재하는 이용 가능한 웨이팅 시간 가져오기")
@@ -212,9 +215,9 @@ class WaitingSettingServiceTest {
         String max = (String) redisTemplate.opsForValue().get("waitingOrder:1");
         assertThat(Integer.parseInt(max)).isEqualTo(0);
 
-        List<Waiting> waitingList = redisTemplate.opsForHash().values("store:1").stream()
-                .map(waiting -> waitingService.convertStringToWaiting(waiting))
-                .toList();
+
+        HashOperations<String, Long, Waiting> hashOperations = waitingRedisTemplate.opsForHash();
+        List<Waiting> waitingList = hashOperations.values("store:1");
         int waitingCount = 0;
         int canceledCount = 0;
         for (Waiting waiting : waitingList) {

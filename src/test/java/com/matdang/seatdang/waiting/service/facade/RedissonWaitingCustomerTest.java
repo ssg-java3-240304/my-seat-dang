@@ -153,10 +153,14 @@ class RedissonWaitingCustomerTest {
         executorService.shutdown();
 
         // then
-        List<Waiting> waitings = redisTemplate.opsForHash().values("store:1").stream()
-                .map(waiting -> waitingService.convertStringToWaiting(waiting))
+
+
+        HashOperations<String, Long, Waiting> hashOperations = waitingRedisTemplate.opsForHash();
+
+        List<Waiting> waitings = hashOperations.values("store:1").stream()
                 .filter(waiting -> waiting.getWaitingStatus() == WaitingStatus.CUSTOMER_CANCELED)
                 .toList();
+
         assertThat(waitings.size()).isEqualTo(85);
 
         String max =(String) redisTemplate.opsForValue().get("waitingOrder:1");
@@ -213,8 +217,9 @@ class RedissonWaitingCustomerTest {
         executorService.shutdown();
 
         // then
-        List<Waiting> waitings = redisTemplate.opsForHash().values("store:1").stream()
-                .map(waiting -> waitingService.convertStringToWaiting(waiting))
+        HashOperations<String, Long, Waiting> hashOperations = waitingRedisTemplate.opsForHash();
+
+        List<Waiting> waitings = hashOperations.values("store:1").stream()
                 .toList();
         int waitingCount = 0;
         int canceledCount = 0;
