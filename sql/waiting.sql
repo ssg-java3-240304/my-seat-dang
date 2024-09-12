@@ -1,6 +1,9 @@
 ALTER TABLE waiting_storage
     MODIFY id BIGINT AUTO_INCREMENT;
 
+ALTER TABLE waiting_storage
+    MODIFY id BIGINT;
+
 
 -- 재귀 깊이를 늘려서 더 많은 데이터를 생성할 수 있도록 설정
 SET SESSION cte_max_recursion_depth = 1000000;
@@ -28,3 +31,6 @@ FROM cte;
 
 select count(*)
 from waiting_storage;
+
+show table status;
+

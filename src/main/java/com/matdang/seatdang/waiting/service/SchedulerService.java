@@ -7,9 +7,13 @@ import com.matdang.seatdang.store.vo.WaitingStatus;
 import com.matdang.seatdang.waiting.redis.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStorage;
 import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,12 +24,19 @@ import java.util.List;
 @Service
 @Transactional
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SchedulerService {
     private final StoreRepository storeRepository;
     private final WaitingStorageRepository waitingStorageRepository;
     private final RedisTemplate<String, Object> redisTemplate;
-    private final ObjectMapper objectMapper;
+    private final RedisTemplate<String, Waiting> waitingRedisTemplate;
+
+    private HashOperations<String, Long, Waiting> waitingHashOps;
+
+    @PostConstruct
+    public void init() {
+        this.waitingHashOps = waitingRedisTemplate.opsForHash();
+    }
 
     // 매일 오전 5시에 실행
     @Scheduled(cron = "0 0 5 * * ?")
@@ -37,35 +48,22 @@ public class SchedulerService {
             if (store.getStoreSetting().getWaitingStatus() == WaitingStatus.CLOSE ||
                     store.getStoreSetting().getWaitingStatus() == WaitingStatus.UNAVAILABLE) {
                 String key = "store:"+ store.getStoreId();
-                List<WaitingStorage> waitings = redisTemplate.opsForHash().values(key).stream()
-                        .map(this::convertStringToWaiting) // JSON 문자열을 Waiting 객체로 변환
+                List<WaitingStorage> waitings = waitingHashOps.values(key).stream()
                         .map(Waiting::convertToWaitingStorage) // Waiting 객체를 WaitingStorage 객체로 변환
                         .toList();
 
-
                 List<WaitingStorage> savedAll = waitingStorageRepository.saveAll(waitings);
                 log.info("=== save storeId = {}, size = {} ===", store.getStoreId(), savedAll.size());
-
-                redisTemplate.delete("waitingOrder:" + store.getStoreId());
-                redisTemplate.delete("waitingNumber:" + store.getStoreId());
-                redisTemplate.delete(key);
-                log.info("=== Redis data deleted for storeId = {} ===", store.getStoreId());
             }
         }
+        redisTemplate.getConnectionFactory().getConnection().flushAll();
+        log.info("=== delete Redis all data ===");
+
     }
 
-    public Waiting convertStringToWaiting(Object jsonString) {
-        try {
-            // JSON 문자열을 Waiting 객체로 역직렬화
-            return objectMapper.readValue((String) jsonString, Waiting.class);
-        } catch (Exception e) {
-            e.printStackTrace(); // 예외 처리: 로그 기록
-            return null;
-        }
-    }
 
     // 10분 마다 실행
-    @Scheduled(cron = "0 0/18 * * * ?")
+    @Scheduled(cron = "0 0/10 * * * ?")
     public void closeWaiting() {
         log.info("[Close Waiting] This runs every 10 minutes");
         LocalTime current = LocalTime.now();
