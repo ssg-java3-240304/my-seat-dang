@@ -105,7 +105,7 @@
         <h1>웨이팅 예약하기</h1>
 
         <div>
-            <p><span th:text="${readyWaitingResponse.storeName}"></span>에 예약하시겠습니까?</p>
+            <p><span th:text="${readyWaitingResponse.storeName}"></span>에 웨이팅 하시겠습니까?</p>
             <p>현재 대기팀: <span th:text="${waitingTeam}"></span></p>
         </div>
         <form id="waitingForm" action="/customer/waiting" method="post">

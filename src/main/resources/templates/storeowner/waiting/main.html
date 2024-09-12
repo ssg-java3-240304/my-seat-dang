@@ -75,12 +75,12 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th>대기 번호</th>
-                    <th th:if="${status != 1}">대기 순서</th>
+                    <th>웨이팅 번호</th>
+                    <th th:if="${status != 1}">웨이팅 순서</th>
                     <th>고객 전화번호</th>
                     <th>방문 인원수</th>
-                    <th>대기 상태</th>
-                    <th>생성일</th>
+                    <th>웨이팅 상태</th>
+                    <th>등록 시간</th>
                     <th th:if="${status == 1}">방문 시간</th>
                     <th th:if="${status >= 2}">취소 시간</th>
                     <th th:if="${status == 0}">상태 변경</th>
