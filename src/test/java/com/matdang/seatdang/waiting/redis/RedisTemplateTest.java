@@ -67,7 +67,7 @@ class RedisTemplateTest {
                 throw new RuntimeException(e);
             }
 
-            redisTemplate.opsForHash().put("store:1", "1", waitingJson);
+            redisTemplate.opsForHash().put("store:1:waiting", "1", waitingJson);
         }
 
         LocalTime end = LocalTime.now();
@@ -97,7 +97,7 @@ class RedisTemplateTest {
         // then
         LocalTime start = LocalTime.now();
         for (int i = 0; i < 1000; i++) {
-            waitingRedisTemplate.opsForHash().put("store:1", 1L, waiting);
+            waitingRedisTemplate.opsForHash().put("store:1:waiting", 1L, waiting);
         }
         LocalTime end = LocalTime.now();
 
@@ -122,13 +122,13 @@ class RedisTemplateTest {
                 .waitingStatus(WaitingStatus.WAITING)
                 .visitedTime(null)
                 .build();
-        waitingRedisTemplate.opsForHash().put("store:1", 1L, waiting);
+        waitingRedisTemplate.opsForHash().put("store:1:waiting", 1L, waiting);
 
         // when
         LocalTime start = LocalTime.now();
         Waiting findResult = null;
         for (int i = 0; i < 1000; i++) {
-            findResult = (Waiting) waitingRedisTemplate.opsForHash().get("store:1", 1L);
+            findResult = (Waiting) waitingRedisTemplate.opsForHash().get("store:1:waiting", 1L);
         }
         LocalTime end = LocalTime.now();
         // then
@@ -155,14 +155,14 @@ class RedisTemplateTest {
                 .waitingStatus(WaitingStatus.WAITING)
                 .visitedTime(null)
                 .build();
-        waitingRedisTemplate.opsForHash().put("store:1", 1L, waiting);
+        waitingRedisTemplate.opsForHash().put("store:1:waiting", 1L, waiting);
 
         // when
         LocalTime start = LocalTime.now();
         Waiting findResult = null;
         HashOperations<String, Long, Waiting> hashOperations = waitingRedisTemplate.opsForHash();
         for (int i = 0; i < 1000; i++) {
-            findResult = hashOperations.get("store:1", 1L);
+            findResult = hashOperations.get("store:1:waiting", 1L);
         }
         LocalTime end = LocalTime.now();
         // then
@@ -189,14 +189,14 @@ class RedisTemplateTest {
                 .waitingStatus(WaitingStatus.WAITING)
                 .visitedTime(null)
                 .build();
-        waitingRedisTemplate.opsForHash().put("store:1", 1L, waiting);
+        waitingRedisTemplate.opsForHash().put("store:1:waiting", 1L, waiting);
 
         // when
         LocalTime start = LocalTime.now();
         Waiting findResult = null;
         for (int i = 0; i < 1000; i++) {
             try {
-                findResult = objectMapper.readValue((String) redisTemplate.opsForHash().get("store:1", "1"),
+                findResult = objectMapper.readValue((String) redisTemplate.opsForHash().get("store:1:waiting", "1"),
                         Waiting.class);
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
@@ -227,14 +227,14 @@ class RedisTemplateTest {
                 .waitingStatus(WaitingStatus.WAITING)
                 .visitedTime(null)
                 .build();
-        waitingRedisTemplate.opsForHash().put("store:1", 1L, waiting);
+        waitingRedisTemplate.opsForHash().put("store:1:waiting", 1L, waiting);
 
         // when
         LocalTime start = LocalTime.now();
         List<Waiting> findResult = null;
 
         for (int i = 0; i < 100000; i++) {
-            findResult = redisTemplate.opsForHash().values("store:1").stream()
+            findResult = redisTemplate.opsForHash().values("store:1:waiting").stream()
                     .map(waitingModel -> {
                         try {
                             return objectMapper.readValue((String) waitingModel, Waiting.class);
@@ -270,14 +270,14 @@ class RedisTemplateTest {
                 .waitingStatus(WaitingStatus.WAITING)
                 .visitedTime(null)
                 .build();
-        waitingRedisTemplate.opsForHash().put("store:1", 1L, waiting);
+        waitingRedisTemplate.opsForHash().put("store:1:waiting", 1L, waiting);
 
         // when
         LocalTime start = LocalTime.now();
         List<Waiting> findResult = null;
 
         for (int i = 0; i < 100000; i++) {
-            findResult = waitingRedisTemplate.opsForHash().values("store:1").stream()
+            findResult = waitingRedisTemplate.opsForHash().values("store:1:waiting").stream()
                     .map(waitingModel -> (Waiting) waitingModel)
                     .toList();
         }
@@ -306,14 +306,14 @@ class RedisTemplateTest {
                 .waitingStatus(WaitingStatus.WAITING)
                 .visitedTime(null)
                 .build();
-        waitingRedisTemplate.opsForHash().put("store:1", 1L, waiting);
+        waitingRedisTemplate.opsForHash().put("store:1:waiting", 1L, waiting);
 
         // when
         LocalTime start = LocalTime.now();
         List<Waiting> findResult = null;
         HashOperations<String, Long, Waiting> hashOperations = waitingRedisTemplate.opsForHash();
         for (int i = 0; i < 100000; i++) {
-            findResult = hashOperations.values("store:1");
+            findResult = hashOperations.values("store:1:waiting");
         }
         LocalTime end = LocalTime.now();
         // then
@@ -327,7 +327,7 @@ class RedisTemplateTest {
     @DisplayName("WaitingNumber 생성 & 조회 - ObjectMapper 사용 o")
     void findWaitingNumberByRedisTemplate() {
         // given
-        String key = "customer:" + 1;
+        String key = "customer:1:waitingNumber";
         String field = "1";
         // when
 
@@ -372,7 +372,7 @@ class RedisTemplateTest {
     @DisplayName("WaitingNumber 생성 & 조회 - ObjectMapper 사용 x")
     void findWaitingNumberByWaitingNumbersRedisTemplate() {
         // given
-        String key = "customer:" + 1;
+        String key = "customer:1:waitingNumber";
         Long field = 1L;
         // when
 
@@ -403,7 +403,7 @@ class RedisTemplateTest {
     @DisplayName("waitingNumbersRedisTemplate 사용 속도 체크")
     void getAllWaitingNumbersByCustomerAndUsingRedisTemplate() {
         WaitingNumbers waitingNumbers = new WaitingNumbers();
-        String key = "customer:" + 1L;
+        String key = "customer:1:waitingNumber";
         for (long i = 0; i < 100; i++) {
             waitingNumbers.getWaitingNumbers().add(i);
         }
@@ -435,7 +435,7 @@ class RedisTemplateTest {
     @DisplayName("HashOperations 사용 속도 체크")
     void getAllWaitingNumbersByCustomerAndUsingHashOperations() {
         WaitingNumbers waitingNumbers = new WaitingNumbers();
-        String key = "customer:" + 1L;
+        String key = "customer:1:waitingNumber";
         for (long i = 0; i < 100; i++) {
             waitingNumbers.getWaitingNumbers().add(i);
         }

@@ -1,5 +1,8 @@
 package com.matdang.seatdang.waiting.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
 import com.matdang.seatdang.auth.service.AuthService;
 import com.matdang.seatdang.member.entity.Customer;
 import com.matdang.seatdang.store.entity.Store;
@@ -9,7 +12,6 @@ import com.matdang.seatdang.store.vo.StoreSetting;
 import com.matdang.seatdang.store.vo.WaitingTime;
 import com.matdang.seatdang.waiting.redis.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
-
 import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingCustomerFacade;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
@@ -20,13 +22,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @Transactional
@@ -41,8 +39,6 @@ class WaitingSettingServiceTest {
     private WaitingSettingService waitingSettingService;
     @Autowired
     private EntityManager em;
-    @Autowired
-    private WaitingService waitingService;
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
     @Autowired
@@ -211,13 +207,11 @@ class WaitingSettingServiceTest {
         assertThat(storeRepository.findByStoreId(store.getStoreId()).getStoreSetting().getWaitingStatus()).isEqualTo(
                 com.matdang.seatdang.store.vo.WaitingStatus.UNAVAILABLE);
 
-
-        String max = (String) redisTemplate.opsForValue().get("waitingOrder:1");
+        String max = (String) redisTemplate.opsForValue().get("store:1:waitingOrder");
         assertThat(Integer.parseInt(max)).isEqualTo(0);
 
-
         HashOperations<String, Long, Waiting> hashOperations = waitingRedisTemplate.opsForHash();
-        List<Waiting> waitingList = hashOperations.values("store:1");
+        List<Waiting> waitingList = hashOperations.values("store:1:waiting");
         int waitingCount = 0;
         int canceledCount = 0;
         for (Waiting waiting : waitingList) {

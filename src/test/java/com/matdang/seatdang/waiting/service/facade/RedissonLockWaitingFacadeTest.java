@@ -8,7 +8,6 @@ import com.matdang.seatdang.member.entity.Customer;
 import com.matdang.seatdang.waiting.dto.UpdateRequest;
 import com.matdang.seatdang.waiting.redis.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
-import com.matdang.seatdang.waiting.service.WaitingService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -32,9 +31,6 @@ class RedissonLockWaitingFacadeTest {
     private RedisTemplate<String, Object> redisTemplate;
     @Autowired
     private RedisTemplate<String, Waiting> waitingRedisTemplate;
-
-    @Autowired
-    private WaitingService waitingService;
     @MockBean
     private AuthService authService;
 
@@ -107,12 +103,12 @@ class RedissonLockWaitingFacadeTest {
         executorService.shutdown();
 
         // then
-        String max = (String) redisTemplate.opsForValue().get("waitingOrder:1");
+        String max = (String) redisTemplate.opsForValue().get("store:1:waitingOrder");
         assertThat(Integer.parseInt(max)).isEqualTo(100);
 
         HashOperations<String, Long, Waiting> hashOperations = waitingRedisTemplate.opsForHash();
 
-        List<Waiting> waitingList = hashOperations.values("store:1");
+        List<Waiting> waitingList = hashOperations.values("store:1:waiting");
         int waitingCount = 0;
         int visitedCount = 0;
         int canceledCount =0;
@@ -201,13 +197,13 @@ class RedissonLockWaitingFacadeTest {
         executorService.shutdown();
 
         // then
-        String max = (String) redisTemplate.opsForValue().get("waitingOrder:1");
+        String max = (String) redisTemplate.opsForValue().get("store:1:waitingOrder");
         assertThat(Integer.parseInt(max)).isEqualTo(100);
 
 
         HashOperations<String, Long, Waiting> hashOperations = waitingRedisTemplate.opsForHash();
 
-        List<Waiting> waitingList = hashOperations.values("store:1");
+        List<Waiting> waitingList = hashOperations.values("store:1:waiting");
         int waitingCount = 0;
         int customerCanceledCount =0;
         int shopCanceledCount = 0;
