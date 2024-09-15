@@ -1,7 +1,7 @@
 package com.matdang.seatdang.waiting.controller.dto;
 
 import com.matdang.seatdang.store.entity.Store;
-import com.matdang.seatdang.waiting.entity.Waiting;
+import com.matdang.seatdang.waiting.redis.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
 import com.matdang.seatdang.waiting.entity.WaitingStorage;
 import java.time.LocalDateTime;
@@ -29,7 +29,6 @@ public class AwaitingWaitingResponse {
     public static AwaitingWaitingResponse create(Object waiting, Store store) {
         AwaitingWaitingResponse awaitingWaitingResponse = new AwaitingWaitingResponse();
         if (waiting instanceof Waiting) {
-            awaitingWaitingResponse.waitingId = ((Waiting) waiting).getId();
             awaitingWaitingResponse.waitingNumber = ((Waiting) waiting).getWaitingNumber();
             awaitingWaitingResponse.waitingOrder = ((Waiting) waiting).getWaitingOrder();
             awaitingWaitingResponse.waitingStatus = ((Waiting) waiting).getWaitingStatus();
