@@ -1,28 +1,25 @@
-package com.matdang.seatdang.waiting.entity;
+package com.matdang.seatdang.waiting.redis;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.matdang.seatdang.waiting.entity.CustomerInfo;
+import com.matdang.seatdang.waiting.entity.WaitingStatus;
+import com.matdang.seatdang.waiting.entity.WaitingStorage;
 import lombok.*;
-
 import java.time.LocalDateTime;
 
-@Entity
 @Data
-//@Setter(AccessLevel.PRIVATE)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class Waiting  {
-    @Id @GeneratedValue
-    private Long id;
-
     private Long waitingNumber;
     private Long waitingOrder;
     private Long storeId;
 
-    @Embedded
     private CustomerInfo customerInfo;
-
-    @Enumerated(EnumType.STRING)
     private WaitingStatus waitingStatus;
 
     private LocalDateTime createdDate;
@@ -34,7 +31,7 @@ public class Waiting  {
                 .waitingNumber(this.waitingNumber)
                 .waitingOrder(this.waitingOrder)
                 .storeId(this.storeId)
-                .customerInfo(this.customerInfo) // Assuming CustomerInfo is directly usable
+                .customerInfo(this.customerInfo)
                 .createdDate(this.createdDate)
                 .waitingStatus(this.waitingStatus)
                 .visitedTime(this.visitedTime)
