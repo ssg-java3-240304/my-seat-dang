@@ -102,7 +102,7 @@
 <body>
 <main layout:fragment="main">
     <div>
-        <h1>웨이팅 예약하기</h1>
+        <h1>웨이팅 등록하기</h1>
 
         <div>
             <p><span th:text="${readyWaitingResponse.storeName}"></span>에 웨이팅 하시겠습니까?</p>
@@ -115,7 +115,7 @@
                 <input type="number" id="peopleCount" name="peopleCount" min="1"
                        th:max="${readyWaitingResponse.waitingPeopleCount}" value="2" required/>
             </div>
-            <button type="submit">예약</button>
+            <button type="submit">등록</button>
         </form>
         <a href="/customer">메인페이지로</a>
     </div>
