@@ -37,7 +37,6 @@ public class WaitingService {
 
     public Page<WaitingDto> showWaiting(Long storeId, int status, int page) {
         String key = "store:" + storeId + ":waiting";
-        ;
         PageRequest pageable = PageRequest.of(page, 10);
 
         List<WaitingDto> waitingDtos = waitingHashOps.values(key).stream()
@@ -76,7 +75,6 @@ public class WaitingService {
 
     public long countWaitingInStore(Long storeId) {
         String key = "store:" + storeId + ":waiting";
-        ;
 
         return waitingHashOps.values(key).stream()
                 .filter(waiting -> waiting.getWaitingStatus() == WaitingStatus.WAITING)
@@ -89,7 +87,6 @@ public class WaitingService {
     @DoNotUse(message = "이 메서드를 직접 사용하지 마세요.")
     public void updateStatus(UpdateRequest updateRequest) {
         String key = "store:" + updateRequest.getStoreId() + ":waiting";
-        ;
 
         if (updateRequest.getChangeStatus() == 1) {
             Map<Long, Waiting> waitings = waitingHashOps.entries(key).entrySet().stream()
