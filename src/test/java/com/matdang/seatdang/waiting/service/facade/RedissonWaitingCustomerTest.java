@@ -5,9 +5,8 @@ import static org.mockito.Mockito.when;
 
 import com.matdang.seatdang.auth.service.AuthService;
 import com.matdang.seatdang.member.entity.Customer;
-import com.matdang.seatdang.waiting.entity.Waiting;
+import com.matdang.seatdang.waiting.redis.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
-import com.matdang.seatdang.waiting.service.WaitingService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -18,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 
 @SpringBootTest
@@ -27,7 +27,7 @@ class RedissonWaitingCustomerTest {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
     @Autowired
-    private WaitingService waitingService;
+    private RedisTemplate<String, Waiting> waitingRedisTemplate;
     @MockBean
     private AuthService authService;
 
@@ -58,7 +58,7 @@ class RedissonWaitingCustomerTest {
         executorService.shutdown();
 
         // then
-        String max =(String) redisTemplate.opsForValue().get("waitingOrder:1");
+        String max =(String) redisTemplate.opsForValue().get("store:1:waitingOrder");
         assertThat(Integer.parseInt(max)).isEqualTo(threadCount);
         // 기존 Redisson Lock 사용시
         // 2174ms, 2040ms, 2030ms
@@ -67,6 +67,51 @@ class RedissonWaitingCustomerTest {
         // 싱글 스레드 Redis 사용 - Redisson Lock 사용 X
         // 675ms, 778ms, 766ms
 
+    }
+
+    @Test
+    @DisplayName("HashOperations를 공유하여 동시에 100개 조회")
+    void findWaitingByConcurrencyAndUseHashOperations() throws InterruptedException {
+        // given
+        int threadCount = 100;
+        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
+        CountDownLatch latch = new CountDownLatch(threadCount);
+
+        Customer mockCustomer = Customer.builder()
+                .memberId(1L)
+                .memberPhone("010-1234-1234")
+                .build();
+        when(authService.getAuthenticatedMember()).thenReturn(mockCustomer);
+        // when
+        for (int i = 0; i < threadCount; i++) {
+            executorService.execute(() -> {
+                try {
+                    redissonLockWaitingCustomerFacade.createWaiting(1L, 2);
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+        latch.await();
+        executorService.shutdown();
+
+        // then
+        HashOperations<String, Long, Waiting> hashOperations = waitingRedisTemplate.opsForHash();
+        ExecutorService executorService2 = Executors.newFixedThreadPool(threadCount);
+        CountDownLatch latch2 = new CountDownLatch(threadCount);
+
+        for (int i = 0; i < threadCount; i++) {
+            long waitingNumber =i+1;
+            executorService2.execute(() -> {
+                try {
+                    assertThat(hashOperations.get("store:1:waiting", waitingNumber).getWaitingNumber()).isEqualTo(waitingNumber);
+                } finally {
+                    latch2.countDown();
+                }
+            });
+        }
+        latch2.await();
+        executorService2.shutdown();
     }
 
     @Test
@@ -105,13 +150,17 @@ class RedissonWaitingCustomerTest {
         executorService.shutdown();
 
         // then
-        List<Waiting> waitings = redisTemplate.opsForHash().values("store:1").stream()
-                .map(waiting -> waitingService.convertStringToWaiting(waiting))
+
+
+        HashOperations<String, Long, Waiting> hashOperations = waitingRedisTemplate.opsForHash();
+
+        List<Waiting> waitings = hashOperations.values("store:1:waiting").stream()
                 .filter(waiting -> waiting.getWaitingStatus() == WaitingStatus.CUSTOMER_CANCELED)
                 .toList();
+
         assertThat(waitings.size()).isEqualTo(85);
 
-        String max =(String) redisTemplate.opsForValue().get("waitingOrder:1");
+        String max =(String) redisTemplate.opsForValue().get("store:1:waitingOrder");
         assertThat(Integer.parseInt(max)).isEqualTo(15);
 
 
@@ -165,8 +214,9 @@ class RedissonWaitingCustomerTest {
         executorService.shutdown();
 
         // then
-        List<Waiting> waitings = redisTemplate.opsForHash().values("store:1").stream()
-                .map(waiting -> waitingService.convertStringToWaiting(waiting))
+        HashOperations<String, Long, Waiting> hashOperations = waitingRedisTemplate.opsForHash();
+
+        List<Waiting> waitings = hashOperations.values("store:1:waiting").stream()
                 .toList();
         int waitingCount = 0;
         int canceledCount = 0;
@@ -182,7 +232,7 @@ class RedissonWaitingCustomerTest {
         assertThat(waitingCount).isEqualTo(100);
         assertThat(canceledCount).isEqualTo(50);
 
-        String max =(String) redisTemplate.opsForValue().get("waitingOrder:1");
+        String max =(String) redisTemplate.opsForValue().get("store:1:waitingOrder");
         assertThat(Integer.parseInt(max)).isEqualTo(100);
 
         // 싱글 스레드 Redis 사용 - Redisson Lock 사용 X

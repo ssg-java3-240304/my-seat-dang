@@ -46,7 +46,7 @@
         <div class="col">
             <div class="btn-group" role="group" aria-label="Status buttons">
                 <a href="#" th:href="@{/customer/waiting(status=0, when=${when})}"
-                   class="btn btn-outline-primary" th:classappend="${status == 0} ? 'active-button' : ''">방문예정</a>
+                   class="btn btn-outline-primary" th:classappend="${status == 0} ? 'active-button' : ''">방문 예정</a>
                 <a href="#" th:href="@{/customer/waiting(status=1, when=${when})}"
                    class="btn btn-outline-success" th:classappend="${status == 1} ? 'active-button' : ''">방문 완료</a>
                 <a href="#" th:href="@{/customer/waiting(status=2, when=${when})}"
@@ -83,7 +83,7 @@
             </thead>
             <tbody>
             <tr th:each="waiting : ${waitings}">
-                <td th:text="${waiting.storeName}">가게 명</td>
+                <td th:text="${waiting.storeName}">상점 명</td>
                 <td th:text="${waiting.waitingNumber}">웨이팅 번호</td>
                 <td th:text="${waiting.peopleCount}">인원 수</td>
                 <td th:text="${waiting.waitingStatus.status}">웨이팅 상태</td>

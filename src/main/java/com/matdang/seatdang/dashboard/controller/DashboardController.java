@@ -35,16 +35,16 @@ public class DashboardController {
 //        return ResponseEntity.ok(weeklyWaitingCnt);
 //    }
 
-    @GetMapping("/dashboard")
-    public String getWeeklyWaitingCnt(Model model){
-        StoreOwnerUserDetails userDetails = (StoreOwnerUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long storeId = userDetails.getStore().getStoreId();
-        Map<LocalDate, Long> weeklyWaitingCnt = dashboardService.getWeeklyWaitingCnt(storeId);
-        log.debug("storeId = {}", storeId);
-        model.addAttribute("weeklyWaitingCnt", weeklyWaitingCnt);
-        log.debug("weeklyWaitingCnt = {}", weeklyWaitingCnt);
-        return "storeowner/mypage/dashboard";
-    }
+//    @GetMapping("/dashboard")
+//    public String getWeeklyWaitingCnt(Model model){
+//        StoreOwnerUserDetails userDetails = (StoreOwnerUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        Long storeId = userDetails.getStore().getStoreId();
+//        Map<LocalDate, Long> weeklyWaitingCnt = dashboardService.getWeeklyWaitingCnt(storeId);
+//        log.debug("storeId = {}", storeId);
+//        model.addAttribute("weeklyWaitingCnt", weeklyWaitingCnt);
+//        log.debug("weeklyWaitingCnt = {}", weeklyWaitingCnt);
+//        return "storeowner/mypage/dashboard";
+//    }
 
 //    @GetMapping("/dashboard")
 //    public Map<String, Object> getWeeklyWaitingCnt(){

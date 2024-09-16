@@ -5,7 +5,6 @@ import com.matdang.seatdang.store.entity.Store;
 import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.waiting.controller.dto.*;
 import com.matdang.seatdang.waiting.dto.WaitingId;
-import com.matdang.seatdang.waiting.repository.WaitingRepository;
 import com.matdang.seatdang.waiting.repository.WaitingStorageRepository;
 import com.matdang.seatdang.waiting.repository.query.dto.WaitingInfoDto;
 import com.matdang.seatdang.waiting.service.WaitingCustomerService;
@@ -18,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.jaxb.SpringDataJaxb.PageDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +32,6 @@ public class WaitingCustomerController {
     private final RedissonLockWaitingCustomerFacade redissonLockWaitingCustomerFacade;
     private final WaitingCustomerService waitingCustomerService;
     private final WaitingStorageRepository waitingStorageRepository;
-    private final WaitingRepository waitingRepository;
     private final StoreRepository storeRepository;
     private final WaitingSettingService waitingSettingService;
     private final WaitingService waitingService;
@@ -103,9 +100,6 @@ public class WaitingCustomerController {
 
         PageRangeDto pageRangeDto = PageRangeDto.calculatePage(waitings);
 
-        System.out.println("isNotAwaiting = " + model.getAttribute("isNotAwaiting"));
-        System.out.println("waitings = " + waitings.getContent());
-        System.out.println("waitings = " + waitings.getTotalElements());
         model.addAttribute("when", when);
         model.addAttribute("status", status);
         model.addAttribute("waitings", waitings.getContent());
@@ -127,7 +121,6 @@ public class WaitingCustomerController {
                                 RedirectAttributes redirectAttributes) {
         if (waitingCustomerService.isNotAwaiting(storeId, waitingNumber)) {
             redirectAttributes.addFlashAttribute("isNotAwaiting", true);
-            System.out.println("hihi = ");
             return "redirect:/customer/waiting";
         }
         log.debug("=== cancel Waiting === {}", LocalDateTime.now());
