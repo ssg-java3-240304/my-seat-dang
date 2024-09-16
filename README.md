@@ -1,4 +1,4 @@
-![스크린샷 2024-08-29 121905](https://github.com/user-attachments/assets/a3d48da0-bca4-4294-85f6-44732364e26c)
+![마싯당메인.png](./readme/마싯당메인.png)
 
 고객 테스트 계정
 - customer1@naver.com
