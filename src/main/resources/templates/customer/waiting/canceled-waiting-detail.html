@@ -73,10 +73,10 @@
 <body>
 <main layout:fragment="main">
     <div>
-        <h1>취소한 웨이팅 상세보기</h1>
+        <h1>취소된 웨이팅 상세 정보</h1>
         <p><strong>웨이팅 번호:</strong> <span th:text="${waitingDetailResponse.waitingNumber}"></span></p>
         <p><strong>현재 웨이팅 상태:</strong> <span th:text="${waitingDetailResponse.waitingStatus.status}"></span></p>
-        <p><strong>웨이팅 등록일시:</strong>
+        <p><strong>웨이팅 등록 시간:</strong>
             <span th:text="${{waitingDetailResponse.createdDate}}"></span>
         </p>
         <p><strong>웨이팅 취소 시간 : </strong>

@@ -1,5 +1,8 @@
 package com.matdang.seatdang.waiting.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
 import com.matdang.seatdang.auth.service.AuthService;
 import com.matdang.seatdang.member.entity.Customer;
 import com.matdang.seatdang.store.entity.Store;
@@ -7,10 +10,8 @@ import com.matdang.seatdang.store.repository.StoreRepository;
 import com.matdang.seatdang.store.repository.query.dto.AvailableWaitingTime;
 import com.matdang.seatdang.store.vo.StoreSetting;
 import com.matdang.seatdang.store.vo.WaitingTime;
-import com.matdang.seatdang.waiting.entity.Waiting;
+import com.matdang.seatdang.waiting.redis.Waiting;
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
-import com.matdang.seatdang.waiting.repository.WaitingRepository;
-import com.matdang.seatdang.waiting.repository.query.WaitingQueryRepository;
 import com.matdang.seatdang.waiting.service.facade.RedissonLockWaitingCustomerFacade;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
@@ -18,15 +19,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @Transactional
@@ -40,15 +38,11 @@ class WaitingSettingServiceTest {
     @Autowired
     private WaitingSettingService waitingSettingService;
     @Autowired
-    private WaitingRepository waitingRepository;
-    @Autowired
-    private WaitingQueryRepository waitingQueryRepository;
-    @Autowired
     private EntityManager em;
     @Autowired
-    private WaitingService waitingService;
-    @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+    @Autowired
+    private RedisTemplate<String, Waiting> waitingRedisTemplate;
 
     @Test
     @DisplayName("존재하는 이용 가능한 웨이팅 시간 가져오기")
@@ -213,13 +207,11 @@ class WaitingSettingServiceTest {
         assertThat(storeRepository.findByStoreId(store.getStoreId()).getStoreSetting().getWaitingStatus()).isEqualTo(
                 com.matdang.seatdang.store.vo.WaitingStatus.UNAVAILABLE);
 
-
-        String max = (String) redisTemplate.opsForValue().get("waitingOrder:1");
+        String max = (String) redisTemplate.opsForValue().get("store:1:waitingOrder");
         assertThat(Integer.parseInt(max)).isEqualTo(0);
 
-        List<Waiting> waitingList = redisTemplate.opsForHash().values("store:1").stream()
-                .map(waiting -> waitingService.convertStringToWaiting(waiting))
-                .toList();
+        HashOperations<String, Long, Waiting> hashOperations = waitingRedisTemplate.opsForHash();
+        List<Waiting> waitingList = hashOperations.values("store:1:waiting");
         int waitingCount = 0;
         int canceledCount = 0;
         for (Waiting waiting : waitingList) {

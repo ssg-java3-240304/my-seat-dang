@@ -49,7 +49,7 @@ public class StoreService {
         }
     }
 
-    @Cacheable(value = "storeNames", key = "#storeId")
+    @Cacheable(cacheNames = "storeNames", key = "#storeId", cacheManager = "waitingCacheManager")
     public String findStoreNameByStoreId(Long storeId) {
         Store store = storeRepository.findByStoreId(storeId);
         return store.getStoreName();

@@ -1,12 +1,15 @@
 package com.matdang.seatdang.waiting.repository.query.dto;
 
 import com.matdang.seatdang.waiting.entity.WaitingStatus;
+import com.matdang.seatdang.waiting.redis.Waiting;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class WaitingInfoDto {
     private Long waitingNumber;
@@ -23,5 +26,14 @@ public class WaitingInfoDto {
         this.storeName = storeName;
         this.peopleCount = peopleCount;
         this.waitingStatus = waitingStatus;
+    }
+
+    public WaitingInfoDto(Waiting waiting, String storeName) {
+        this.waitingNumber = waiting.getWaitingNumber();
+        this.storeId = waiting.getStoreId();
+        this.storeName = storeName;
+        this.peopleCount = waiting.getCustomerInfo().getPeopleCount();
+        this.waitingStatus = waiting.getWaitingStatus();
+        this.createDate = waiting.getCreatedDate();
     }
 }
