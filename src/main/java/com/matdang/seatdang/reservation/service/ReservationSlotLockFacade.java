@@ -10,46 +10,60 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
-@Slf4j
+import java.util.concurrent.Semaphore;
+
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ReservationSlotLockFacade {
     private final ReservationSlotLockRepository lockRepository;
     private final ReservationSlotCommandService reservationSlotCommandService;
+    private final Semaphore semaphore = new Semaphore(3);
 
-    @Transactional
     public ReservationTicket getTicket(ReservationTicketRequestDTO ticketRequestDTO) {
         String key = "slot-" + ticketRequestDTO.getStoreId() + ticketRequestDTO.getDate() + ticketRequestDTO.getTime();
         ReservationTicket ticket = null;
         try {
-            // 락선점
-            Integer hasLock = lockRepository.getLock(key);
-            // 락을 획득한 경우에만 예약슬롯에 접근 가능
-            if(hasLock > 0) {
-                ticket = reservationSlotCommandService.getReservationTicket(ticketRequestDTO);
-            }else
-                throw new RuntimeException("예약슬롯 락 획득에 실패했습니다");
+            // 세마포어 획득 (트랜잭션 전에)
+            semaphore.acquire();
+
+            // 트랜잭션 내에서 DB 작업 실행
+            ticket = getTicketWithTransaction(ticketRequestDTO, key);
+
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         } finally {
-            // 락해제
+            // 락 해제 및 세마포어 반환
             lockRepository.releaseLock(key);
+            semaphore.release();
         }
         return ticket;
+    }
+
+    @Transactional
+    protected ReservationTicket getTicketWithTransaction(ReservationTicketRequestDTO ticketRequestDTO, String key) {
+        // 락 선점
+        Integer hasLock = lockRepository.getLock(key);
+        if (hasLock > 0) {
+            return reservationSlotCommandService.getReservationTicket(ticketRequestDTO);
+        } else {
+            throw new RuntimeException("예약슬롯 락 획득에 실패했습니다");
+        }
     }
 
     @Transactional
     public void releaseSlot(ReservationSlotReturnDto requestDTO) {
         String key = "slot-" + requestDTO.getStoreId() + requestDTO.getDate() + requestDTO.getTime();
         try {
-            // 락선점
+            // 락 선점
             Integer hasLock = lockRepository.getLock(key);
-            // 락을 획득한 경우에만 예약슬롯에 접근 가능
-            if(hasLock > 0) {
+            if (hasLock > 0) {
                 reservationSlotCommandService.releaseSlot(requestDTO);
-            }else
+            } else {
                 throw new RuntimeException("예약슬롯 락 획득에 실패했습니다");
+            }
         } finally {
-            // 락해제
+            // 락 해제
             lockRepository.releaseLock(key);
         }
     }

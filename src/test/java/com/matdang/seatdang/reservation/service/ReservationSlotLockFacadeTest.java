@@ -73,14 +73,14 @@ class ReservationSlotLockFacadeTest {
         executor.shutdown();
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @DisplayName("100건 동시 예약슬롯 획득 시도")
     @Test
     public void test2() throws InterruptedException {
         //given
         int numberOfRequests = 100;
         int maxReservation = 5;
-        Long storeId = 1L;
+        Long storeId = 2L;
         LocalDate date = LocalDate.now();
         LocalTime time = LocalTime.of(12, 30);
 
