@@ -71,8 +71,7 @@
 <Br>
 
 ### Skills
-<img alt="Java" src ="https://img.shields.io/badge/Java-007396.svg?&style=for-the-badge&logo=Java&logoColor=white"/>
-<img alt="MySQL" src ="https://img.shields.io/badge/mysql-4479A1.svg?&style=for-the-badge&logo=mysql&logoColor=white"/>
+<img alt="Java" src ="https://img.shields.io/badge/Java-007396.svg?&style=for-the-badge&logo=Java&logoColor=white"/> <img alt="MySQL" src ="https://img.shields.io/badge/mysql-4479A1.svg?&style=for-the-badge&logo=mysql&logoColor=white"/>
 <img alt="MongoDB" src="https://img.shields.io/badge/mongoDB-47A248?style=for-the-badge&logo=MongoDB&logoColor=white"/>
 <img alt="JPA" src ="https://img.shields.io/badge/jpa-6DB33F.svg?&style=for-the-badge&logo=jpa&logoColor=white"/>
 <img alt="Redis" src ="https://img.shields.io/badge/Redis-DC382D.svg?&style=for-the-badge&logo=redis&logoColor=white"/>
@@ -83,23 +82,12 @@
 <img alt="NGINX" src ="https://img.shields.io/badge/NGINX-009639.svg?&style=for-the-badge&logo=nginx&logoColor=white"/>
 <img alt="Thymeleaf" src="https://img.shields.io/badge/thymeleaf-%23005F0F.svg?&style=for-the-badge&logo=thymeleaf&logoColor=white"/>
 
-/**
-<img alt="AWS S3" src="https://img.shields.io/badge/AWS S3-569A31?logo=amazon s3&logoColor=fff&style=for-the-badge"/>
-### Development Tools
-<img alt="GitHub" src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
-<img alt="GitHub Actions" src="https://img.shields.io/badge/github actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white">
-<img alt="Google Drive" src="https://img.shields.io/badge/google%20drive-%234285F4.svg?&style=for-the-badge&logo=google%20drive&logoColor=white"/>
-<img alt="IntelliJ" src ="https://img.shields.io/badge/IntelliJ IDEA-000000.svg?&style=for-the-badge&logo=intellij idea&logoColor=white"/>
-<img alt="Postman" src ="https://img.shields.io/badge/Postman-ff6c37.svg?&style=for-the-badge&logo=postman&logoColor=white"/>
-**/
 
 ### 외부 API
 * DALL·E 3
 * Daum 주소찾기
 * Kakao Pay
 * Naver Map
-
-
 <br>
 
 ---
@@ -191,7 +179,8 @@
 
 ![img_11.png](./readme/img_11.png)
 
-+ 웨이팅
++ [고객] 웨이팅 등록, 취소
++ [점주] 웨이팅 입장, 취소, 웨이팅 설정
 
 <br>
 
@@ -317,7 +306,7 @@
 
 ![img_1.png](./readme/img_1.png)
 
-#### 저희 팀은 협업 방식으로 GitHub, Notion, Discord를 사용했습니다.
+#### GitHub, Notion, Discord 사용
 1. 먼저 요구사항명세서를 작성한 후 이를 기반으로 GitHub에 이슈를 생성하고, 칸반보드를 통해 모든 task들을 이번주에 개발해야할 기능, 개발 진행중, 개발 완료된 칸으로 옮기면서 한눈에 볼 수 있도록 진행했습니다.  
 2. Notion에서 데일리 스크럼을 작성하며 어제 한 일, 오늘 할 일, 겪은 어려움을 공유하고 매일 진행상황을 체크했습니다.
 3. 또한 수시로 발생하는 건에 대하여 주제별로 소통하기 쉽게 Discord에 채널을 생성하여 관리했습니다.
@@ -335,7 +324,7 @@
 
 ### 💎 왜 이 기술을 사용했는가? <a name = "why"></a>
 
-#### 웨이팅_Redisson의 pub/sub
+#### 웨이팅 Redis
 1. 초기 설계
 + 웨이팅 데이터를 디스크와 메모리 중 어디에 저장할지 고민하는 과정을 거침
 + 디스크 대비 메모리의 성능적 우위를 쉽게 판단하기 어려운 상황이었음
@@ -424,7 +413,7 @@
 JPA, Spring MVC 패턴과 DDD의 aggregate에 대해 종합적으로 설계하며 큰 경험을 얻었습니다.
 
 ## 변성일
-카카오 결제 API를 사용해보고 Redisson을 이용해서 웨이팅의 동시성 문제를 해결할 수 있는 경험을 얻어서 정말 좋았던 것 같습니다.
+카카오 결제 API를 사용해보고 Redis을 이용해서 웨이팅의 동시성 문제와 성능 이슈를 해결할 수 있는 경험을 얻어서 정말 좋았던 것 같습니다.
 
 ## 박정은
 JPA를 활용한 CRUD를 직접 구현해보며 흐름을 익히기 좋았습니다. 
