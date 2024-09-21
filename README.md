@@ -36,7 +36,6 @@
     - Front/Back-end
     - 카카오톡 결제, 환불
     - 웨이팅
-    - redis 문서화
 
 
 + [박정은](https://github.com/jeongeun1)
@@ -71,43 +70,28 @@
 
 <Br>
 
-### Languages
-
-<img alt="HTML5" src ="https://img.shields.io/badge/HTML5-E34F26.svg?&style=for-the-badge&logo=HTML5&logoColor=white"/>
-<img alt="CSS3" src ="https://img.shields.io/badge/CSS3-1572B6.svg?&style=for-the-badge&logo=CSS3&logoColor=white"/>
-<img alt="JavaScript" src ="https://img.shields.io/badge/JavaScript-F7DF1E.svg?&style=for-the-badge&logo=JavaScript&logoColor=white"/>
-<img alt="TypeScript" src ="https://img.shields.io/badge/TypeScript-3178C6.svg?&style=for-the-badge&logo=TypeScript&logoColor=white"/>
+### Skills
 <img alt="Java" src ="https://img.shields.io/badge/Java-007396.svg?&style=for-the-badge&logo=Java&logoColor=white"/>
-<img alt="mysql" src ="https://img.shields.io/badge/mysql-4479A1.svg?&style=for-the-badge&logo=mysql&logoColor=white"/>
-<img alt="Mongo DB" src="https://img.shields.io/badge/mongoDB-47A248?style=for-the-badge&logo=MongoDB&logoColor=white"/>
-
-<br>
-
-### Technologies
-<img alt="Linux" src ="https://img.shields.io/badge/Linux-FCC624.svg?&style=for-the-badge&logo=linux&logoColor=white"/>
-<img alt="Docker" src ="https://img.shields.io/badge/Docker-4479A1.svg?&style=for-the-badge&logo=Docker&logoColor=white"/>
-<img alt="NGINX" src ="https://img.shields.io/badge/NGINX-009639.svg?&style=for-the-badge&logo=nginx&logoColor=white"/>
+<img alt="MySQL" src ="https://img.shields.io/badge/mysql-4479A1.svg?&style=for-the-badge&logo=mysql&logoColor=white"/>
+<img alt="MongoDB" src="https://img.shields.io/badge/mongoDB-47A248?style=for-the-badge&logo=MongoDB&logoColor=white"/>
+<img alt="JPA" src ="https://img.shields.io/badge/jpa-6DB33F.svg?&style=for-the-badge&logo=jpa&logoColor=white"/>
+<img alt="Redis" src ="https://img.shields.io/badge/Redis-DC382D.svg?&style=for-the-badge&logo=redis&logoColor=white"/>
 <img alt="Spring Boot" src ="https://img.shields.io/badge/Spring Boot-6DB33F.svg?&style=for-the-badge&logo=springboot&logoColor=white"/>
 <img alt="Spring Security" src ="https://img.shields.io/badge/Spring Security-6DB33F.svg?&style=for-the-badge&logo=springsecurity&logoColor=white"/>
-<img alt="JPA" src ="https://img.shields.io/badge/jpa-6DB33F.svg?&style=for-the-badge&logo=jpa&logoColor=white"/>
-<img alt="JSON" src="https://img.shields.io/badge/JSON-000000?style=for-the-badge&logo=json&logoColor=white"/>
-<img alt="Redis" src ="https://img.shields.io/badge/Redis-DC382D.svg?&style=for-the-badge&logo=redis&logoColor=white"/>
-<img alt="Thymeleaf" src="https://img.shields.io/badge/thymeleaf-%23005F0F.svg?&style=for-the-badge&logo=thymeleaf&logoColor=white"/>
-<img alt="Gradle" src="https://img.shields.io/badge/gradle-%2302303A.svg?&style=for-the-badge&logo=gradle&logoColor=white"/>
-<img alt="Git" src ="https://img.shields.io/badge/Git-F05032.svg?&style=for-the-badge&logo=Git&logoColor=white"/>
 <img alt="Naver Cloud Platform" src="https://img.shields.io/badge/Naver Cloud Platform-03C75A?logo=naver&logoColor=fff&style=for-the-badge"/>
+<img alt="Docker" src ="https://img.shields.io/badge/Docker-4479A1.svg?&style=for-the-badge&logo=Docker&logoColor=white"/>
+<img alt="NGINX" src ="https://img.shields.io/badge/NGINX-009639.svg?&style=for-the-badge&logo=nginx&logoColor=white"/>
+<img alt="Thymeleaf" src="https://img.shields.io/badge/thymeleaf-%23005F0F.svg?&style=for-the-badge&logo=thymeleaf&logoColor=white"/>
+
+/**
 <img alt="AWS S3" src="https://img.shields.io/badge/AWS S3-569A31?logo=amazon s3&logoColor=fff&style=for-the-badge"/>
-
-<br>
-
 ### Development Tools
 <img alt="GitHub" src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
 <img alt="GitHub Actions" src="https://img.shields.io/badge/github actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white">
 <img alt="Google Drive" src="https://img.shields.io/badge/google%20drive-%234285F4.svg?&style=for-the-badge&logo=google%20drive&logoColor=white"/>
 <img alt="IntelliJ" src ="https://img.shields.io/badge/IntelliJ IDEA-000000.svg?&style=for-the-badge&logo=intellij idea&logoColor=white"/>
 <img alt="Postman" src ="https://img.shields.io/badge/Postman-ff6c37.svg?&style=for-the-badge&logo=postman&logoColor=white"/>
-
-<br>
+**/
 
 ### 외부 API
 * DALL·E 3
@@ -120,7 +104,7 @@
 
 ---
 
-# 📝 [목차](#index) <a name = "index"></a>
+### 📝 [목차](#index) <a name = "index"></a>
 
 - [개요](#outline)
 - [Pain Point](#pain_point)
@@ -134,24 +118,16 @@
 - [시연영상](#video)
 <br>
 
-# 📝 개요 <a name = "outline"></a>
-<details>
-   <summary> 본문 확인 (👈 Click)</summary>
-<br />
-'마싯당'은 베이커리 매니아층과 특별한 디저트를 원하는 고객들을 위한 제과점 예약 중개 플랫폼입니다.
+### 📝 개요 <a name = "outline"></a>
+- '마싯당'은 베이커리 매니아층과 특별한 디저트를 원하는 고객들을 위한 제과점 예약 중개 플랫폼입니다.
 최근 소셜 미디어에서 디저트 관련 언급량이 꾸준히 증가하고 있으며, 많은 사람들이 자발적으로 특별한 날을 기념하기 위해 디저트를 선택하고 있습니다. 
 이러한 디저트 소비의 수요로 인해 '마싯당' 서비스의 비즈니스적 가치가 충분히 보장된다고 판단했고, 
 아래 Pain Point를 해결함으로써 더 나은 서비스를 제공하려 합니다.
-</details>
-<br>
 
-# 🧐 Pain Point <a name = "pain_point"></a>
-<details>
-   <summary> 본문 확인 (👈 Click)</summary>
-<br />
 
-### 기존의 통합 서비스 부족 및 불편함
+### 🧐 Pain Point <a name = "pain_point"></a>
 
+#### 기존의 통합 서비스 부족 및 불편함
 + 현 시장 베이커리/디저트 통합 서비스 현황
   - 현재 베이커리/디저트 관련 매장을 모아놓은 통합 서비스를 찾기 힘듦
   - SNS 인기 매장의 경우, 빠른 품절로인해 소비자의 접근성이 떨어짐
@@ -160,44 +136,21 @@
 + 커스텀 케이크 주문 시 불편함
   - 주문자가 원하는 디자인으로 제작 가능한 커스텀 케이크의 경우, 온라인 주문시 채팅이 필수 → 여러 매장에 개별 연락 후 채팅플랫폼으로 별도 이동해야 하는 것이 번거로움
   - 원하는 디자인을 위해 매장-고객 간 소통 시 다소 시간과 노력이 소요될 수 있음
-</details>
-<br>
 
-# 💡 Idea / Solution <a name = "idea"></a>
-<details>
-   <summary> 본문 확인 (👈 Click)</summary>
-<br />
-
+### 💡 Idea / Solution <a name = "idea"></a>
 + 베이커리/디저트 통합 서비스 제공
   - 소비자의 수요를 반영하여 베이커리/디저트 매장을 모아놓은 통합 서비스를 제공
   - 지역별 매장 검색 및 지도를 통해 편리하게 이용 가능
-
 
 + 예약 시 채팅 및 AI시안생성 서비스 제공
   - 커스텀 케이크 예약 시 채팅창으로 이동하여 간편하게 문의 및 디테일한 주문요청 가능
   - 서비스 내 생성형 AI를 통해 케이크 시안을 만들고, 생성된 시안으로 빠른 예약 가능
 
-
 + 웨이팅 서비스 제공
   - 인기 매장이라도 직접 줄서지 않고, 집 등 외부 장소에서 웨이팅 후 매장 이용 가능
-</details>
-<br>
 
-# 📈 아키텍처  <a name = "structure"></a>
-<details>
-   <summary> 본문 확인 (👈 Click)</summary>
-<br />
-
+### 📈 아키텍처  <a name = "structure"></a>
 ![마싯당아키텍처.png](./readme/마싯당아키텍처.png)
-
-</details>
-<br>
-
-# 🎁 결과물  <a name = "outputs"></a>
-
-<details>
-   <summary> 본문 확인 (👈 Click)</summary>
-<br />
 
 ## [ 앱 ]
 ### 메인페이지
@@ -288,7 +241,7 @@
 
 ![img_16.png](./readme/img_16.png)
 
-+ 큐알코드 스캔 후 카카오페이 결제 가능
++ QR코드 스캔 후 카카오페이 결제 가능
 
 <br>
 
@@ -354,11 +307,9 @@
 </details>
 <br>
 
-# ⏰ 협업 방식 <a name = "work"></a>
+### ⏰ 협업 방식 <a name = "work"></a>
 
-<details>
-   <summary> 본문 확인 (👈 Click)</summary>
-<br />
+
 
 ![img_2.png](./readme/img_2.png)
 
@@ -371,14 +322,8 @@
 2. Notion에서 데일리 스크럼을 작성하며 어제 한 일, 오늘 할 일, 겪은 어려움을 공유하고 매일 진행상황을 체크했습니다.
 3. 또한 수시로 발생하는 건에 대하여 주제별로 소통하기 쉽게 Discord에 채널을 생성하여 관리했습니다.
 
-</details>
-<br>
 
-# 🎈 팀의 개발 문화 <a name = "culture"></a>
-
-<details>
-   <summary> 본문 확인 (👈 Click)</summary>
-<br />
+### 🎈 팀의 개발 문화 <a name = "culture"></a>
 
 #### 각자의 역량을 인지하고, 서로 돕기
 팀 프로젝트는 개인의 역량만으로는 완성될 수 없습니다.
@@ -388,16 +333,9 @@
 이러한 협력의 과정은 단순히 문제를 해결하는 데 그치지 않고, 팀워크를 강화하고 서로의 신뢰를 쌓는 중요한 기회가 되었습니다. 
 팀원 간의 상호 지원과 소통이 있었기에, 하나의 목표를 향해 힘을 합쳐 나아갈 수 있었습니다.
 
-</details>
-<br>
+### 💎 왜 이 기술을 사용했는가? <a name = "why"></a>
 
-# 💎 왜 이 기술을 사용했는가? <a name = "why"></a>
-
-<details>
-   <summary> 본문 확인 (👈 Click)</summary>
-<br />
-
-## 웨이팅_Redisson의 pub/sub
+#### 웨이팅_Redisson의 pub/sub
 1. 초기 설계
 + 웨이팅 데이터를 디스크와 메모리 중 어디에 저장할지 고민하는 과정을 거침
 + 디스크 대비 메모리의 성능적 우위를 쉽게 판단하기 어려운 상황이었음
@@ -429,7 +367,7 @@
 
 <br>
 
-## 예약_MySQL Named Lock
+#### 예약_MySQL Named Lock
 1. 예약 한도를 초과하는 예약 건수 발생시 문제
 + 예약한도가 2건인 매장에 같은 시간에 3건의 예약이 발생하면 DB 데이터 불일치 발생
 <br>
@@ -459,7 +397,7 @@
 ![img_34.png](./readme/img_34.png)
 ![img_35.png](./readme/img_35.png)
 
-## 채팅_SSE 기반 채팅
+#### 채팅_SSE 기반 채팅
 1. 사용 기술
 + SSE(Server-Side Event) : 서버가 클라이언트에 실시간으로 이벤트를 푸시하는 기술
 + Spring Web Flux : 비동기 처리와 논블로킹 입출력을 지원
@@ -477,15 +415,9 @@
 ![img_36.png](./readme/img_36.png)
 <Br>
 
+### 📌 소감 <a name = "retrospection"></a>
 
-</details>
-<br>
 
-# 📌 소감 <a name = "retrospection"></a>
-
-<details>
-   <summary> 본문 확인 (👈 Click)</summary>
-<br />
 
 ## 구민상
 온전히 동작하는 하나의 서비스를 완성하며 많은 것을 배울 수 있었습니다. 
@@ -505,16 +437,12 @@ JPA를 활용한 CRUD를 직접 구현해보며 흐름을 익히기 좋았습니
 로그인과 회원가입을 통해 기본적인 Spring Security와 OAUTH 2에 대해 숙지할 수 있었고, 
 DALL·E 3를 이용한 이미지 생성 기능 구현이 재밌었다고 생각합니다.
 
-</details>
-<br>
 
-# 🎬 시연 영상 <a name = "video"></a>
 
-<details>
-   <summary> 본문 확인 (👈 Click)</summary>
-<br />
+### 🎬 시연 영상 <a name = "video"></a>
+
 
 * 최종 발표에 사용한 영상 :
 [시연 영상 보러가기](https://www.youtube.com/watch?v=YKSOzH6zvcA&t=191s)  
 
-</details>
+
