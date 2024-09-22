@@ -127,8 +127,6 @@
 
 ### 웨이팅 - [웹 보러가기](#web_waiting)
 - 웹과 동일
-+ [고객] 웨이팅 등록, 취소
-+ [점주] 웨이팅 입장, 취소, 웨이팅 설정
 
 
 <br>
@@ -177,7 +175,7 @@
 
 ### 결제 - [웹 보러가기](#web_payment)
 - 웹과 동일
-+ QR코드 스캔 후 카카오페이 결제 가능
+
 
 <br>
 
@@ -204,6 +202,9 @@
 
 
 ### 웨이팅 <a name = "web_waiting"></a>
++ [고객] 웨이팅 등록, 취소
++ [점주] 웨이팅 입장, 취소, 웨이팅 설정
+
 #### 고객
 <img src="https://github.com/user-attachments/assets/d3159641-f7ad-4fdb-8ed4-34b97b07b671" width="500" height="350"/>
 <img src="https://github.com/user-attachments/assets/0495f403-0fb4-48c2-9bb2-a56868392b55" width="500" height="350"/>
@@ -247,7 +248,7 @@
 <br>
 
 ### 결제 <a name = "web_payment"></a>
-
++ QR코드 스캔 후 카카오페이 결제 가능
 ![img_27.png](./readme/img_27.png)
 ![img_16.png](./readme/img_16.png)
 
