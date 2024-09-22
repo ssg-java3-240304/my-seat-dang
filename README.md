@@ -1,64 +1,65 @@
+# 🍞 MySeatDang
+
+## 👨‍👩‍👧‍👦 팀명 : Amatdang(아맛당)
+
 ![마싯당메인.png](./readme/마싯당메인.png)
 
-고객 테스트 계정
-- customer1@naver.com
-- 1번부터 100번까지 계정이 준비되어 있습니다
-
-웨이팅 베이커리 
-- 상호 : 마싯당 1호점
-- 테스트 계정 : store1@naver.com
-
-예약 베이커리
-- 상호 : 마싯당 3호점
-- 테스트 계정 : store3@naver.com
-
-주문제작 베이커리
-- 상호 : 마싯당 5호점
-- 테스트 계정 : store5@naver.com
-
-
-### 🍰 팀명 : Amatdang(아맛당)
-
+## 📝 목차
+- [프로젝트 소개](#outline)
+- [역할](#role)
+- [Skill](#skill)
+- [외부 API](#api)
+- [아키텍처](#structure)
+- [협업 방식](#work)
+- [팀의 개발 문화](#culture)
+- [왜 이 기술을 사용했는가?](#why)
+- [성과 및 회고](#retrospection)
+- [시연영상](#video)
 <br>
 
-## 💁‍♂️ Role <a name = "role"></a>
+### 🎂 프로젝트 소개 <a name = "outline"></a>
+- '마싯당'은 생성형 AI를 활용하여 주문제작 케이크 디자인을 손쉽게 생성할 수 있는 베이커리 서비스입니다. 사용자는 이를 통해 편리하게 케이크를 예약할 수 있으며, 일반 케이크 예약 기능과 베이커리 웨이팅 서비스도 제공합니다.
 
+#### 💣 문제점 
+##### 기존의 통합 서비스 부족 및 불편함
+- 1️⃣ 베이커리 통합 서비스 부재
+  - 예약과 웨이팅 기능이 포함된 서비스는 현재 존재 하지 않음
+
+- 2️⃣ 주문제작 케이크 주문 시 불편함
+  - 주문제작 케이크 시안을 직접 손으로 그리거나, 원하는 시안을 위해 적지 않은 시간 동안 서칭하여 첨부해야 하는 불편함이 존재
+
+#### 🔫 해결
+- 1️⃣ 일반 케이크 예약과 베이커리 웨이팅 기능 추가
+
+- 2️⃣ 생성형 AI 도입
+  - 사용자가 쉽게 주문 제작 케이크를 예약할 수 있음
+
+## 💁‍♂️ 역할 <a name = "role"></a>
 + [구민상](https://github.com/CstoneKu)
-    - Front/Back-end
     - 매장(검색, 네이버 지도핀, 매장목록, 필터, 정렬)
     - 메뉴 등록, 수정
     - 예약
     - 더미 데이터 생성
 
-
 + [변성일](https://github.com/i-Veni-Vidi-Vici)
-    - Front/Back-end
     - 카카오톡 결제, 환불
     - 웨이팅
 
-
 + [박정은](https://github.com/jeongeun1)
-    - Front/Back-end
     - 매장 상세페이지
     - 매장 등록, 수정
 
-
 + [이용준](https://github.com/yongjun98)
-    - Front/Back-end
     - 초기 CI/CD 구축
     - 채팅(mongo DB)
     - 채팅 내 이미지 생성 및 결제요청
-    - mongo DB 관련 문서화
-
 
 + [김나경](https://github.com/nnieun)
-    - Front/Back-end
     - 프로젝트 주제 기획
     - 로그인 및 인증(security)
     - 회원가입 및 회원관리
     - 생성형 AI 적용
     - NCP 스토리지
-
 
 + 공통
     - 시장 및 유사 프로그램 분석
@@ -67,9 +68,7 @@
     - 엔티티 클래스 다이어그램
     - PPT 등
 
-<Br>
-
-### Skills
+### 🪓 Skill <a name = "skill"></a>
 <img alt="Java" src ="https://img.shields.io/badge/Java-007396.svg?&style=for-the-badge&logo=Java&logoColor=white"/> <img alt="MySQL" src ="https://img.shields.io/badge/mysql-4479A1.svg?&style=for-the-badge&logo=mysql&logoColor=white"/>
 <img alt="MongoDB" src="https://img.shields.io/badge/mongoDB-47A248?style=for-the-badge&logo=MongoDB&logoColor=white"/>
 <img alt="JPA" src ="https://img.shields.io/badge/jpa-6DB33F.svg?&style=for-the-badge&logo=jpa&logoColor=white"/>
@@ -82,61 +81,11 @@
 <img alt="NGINX" src ="https://img.shields.io/badge/NGINX-009639.svg?&style=for-the-badge&logo=nginx&logoColor=white"/>
 <img alt="Thymeleaf" src="https://img.shields.io/badge/thymeleaf-%23005F0F.svg?&style=for-the-badge&logo=thymeleaf&logoColor=white"/>
 
-
-
-### 외부 API
+### 🎨 외부 API <a name = "api"></a>
 * DALL·E 3
 * Daum 주소찾기
 * Kakao Pay
 * Naver Map
-<br>
-
----
-
-### 📝 [목차](#index) <a name = "index"></a>
-
-- [개요](#outline)
-- [Pain Point](#pain_point)
-- [Idea / Solution](#idea)
-- [아키텍처](#structure)
-- [결과물](#outputs)
-- [협업 방식](#work)
-- [팀의 개발 문화](#culture)
-- [왜 이 기술을 사용했는가?](#why)
-- [성과 및 회고](#retrospection)
-- [시연영상](#video)
-<br>
-
-### 📝 개요 <a name = "outline"></a>
-- '마싯당'은 베이커리 매니아층과 특별한 디저트를 원하는 고객들을 위한 제과점 예약 중개 플랫폼입니다.
-최근 소셜 미디어에서 디저트 관련 언급량이 꾸준히 증가하고 있으며, 많은 사람들이 자발적으로 특별한 날을 기념하기 위해 디저트를 선택하고 있습니다. 
-이러한 디저트 소비의 수요로 인해 '마싯당' 서비스의 비즈니스적 가치가 충분히 보장된다고 판단했고, 
-아래 Pain Point를 해결함으로써 더 나은 서비스를 제공하려 합니다.
-
-
-### 🧐 Pain Point <a name = "pain_point"></a>
-
-#### 기존의 통합 서비스 부족 및 불편함
-+ 현 시장 베이커리/디저트 통합 서비스 현황
-  - 현재 베이커리/디저트 관련 매장을 모아놓은 통합 서비스를 찾기 힘듦
-  - SNS 인기 매장의 경우, 빠른 품절로인해 소비자의 접근성이 떨어짐
-
-
-+ 커스텀 케이크 주문 시 불편함
-  - 주문자가 원하는 디자인으로 제작 가능한 커스텀 케이크의 경우, 온라인 주문시 채팅이 필수 → 여러 매장에 개별 연락 후 채팅플랫폼으로 별도 이동해야 하는 것이 번거로움
-  - 원하는 디자인을 위해 매장-고객 간 소통 시 다소 시간과 노력이 소요될 수 있음
-
-### 💡 Idea / Solution <a name = "idea"></a>
-+ 베이커리/디저트 통합 서비스 제공
-  - 소비자의 수요를 반영하여 베이커리/디저트 매장을 모아놓은 통합 서비스를 제공
-  - 지역별 매장 검색 및 지도를 통해 편리하게 이용 가능
-
-+ 예약 시 채팅 및 AI시안생성 서비스 제공
-  - 커스텀 케이크 예약 시 채팅창으로 이동하여 간편하게 문의 및 디테일한 주문요청 가능
-  - 서비스 내 생성형 AI를 통해 케이크 시안을 만들고, 생성된 시안으로 빠른 예약 가능
-
-+ 웨이팅 서비스 제공
-  - 인기 매장이라도 직접 줄서지 않고, 집 등 외부 장소에서 웨이팅 후 매장 이용 가능
 
 ### 📈 아키텍처  <a name = "structure"></a>
 ![마싯당아키텍처.png](./readme/마싯당아키텍처.png)
@@ -444,6 +393,25 @@ DALL·E 3를 이용한 이미지 생성 기능 구현이 재밌었다고 생각�
 
 
 * 최종 발표에 사용한 영상 :
-[시연 영상 보러가기](https://www.youtube.com/watch?v=YKSOzH6zvcA&t=191s)  
+[시연 영상 보러가기](https://www.youtube.com/watch?v=YKSOzH6zvcA&t=191s)
+
+
+<!--### 🎍 테스트 
+고객 테스트 계정
+- customer1@naver.com
+- 1번부터 100번까지 계정이 준비되어 있습니다
+
+웨이팅 베이커리 
+- 상호 : 마싯당 1호점
+- 테스트 계정 : store1@naver.com
+
+예약 베이커리
+- 상호 : 마싯당 3호점
+- 테스트 계정 : store3@naver.com
+
+주문제작 베이커리
+- 상호 : 마싯당 5호점
+- 테스트 계정 : store5@naver.com-->
+
 
 
