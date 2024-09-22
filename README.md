@@ -22,7 +22,6 @@
 <br>
 
 ## 💁‍♂️ Role <a name = "role"></a>
-** 각 팀원명 클릭시 GitHub 페이지 이동
 
 + [구민상](https://github.com/CstoneKu)
     - Front/Back-end
