@@ -125,12 +125,11 @@
 <br>
 
 
-### 웨이팅
-
-![img_11.png](./readme/img_11.png)
-
+### 웨이팅 - [웹 보러가기](#web_waiting)
+- 웹과 동일
 + [고객] 웨이팅 등록, 취소
 + [점주] 웨이팅 입장, 취소, 웨이팅 설정
+
 
 <br>
 
@@ -176,10 +175,8 @@
 
 <br>
 
-### 결제
-
-![img_16.png](./readme/img_16.png)
-
+### 결제 - [웹 보러가기](#web_payment)
+- 웹과 동일
 + QR코드 스캔 후 카카오페이 결제 가능
 
 <br>
@@ -206,9 +203,21 @@
 <br>
 
 
-### 웨이팅
+### 웨이팅 <a name = "web_waiting"></a>
+#### 고객
+<img src="https://github.com/user-attachments/assets/d3159641-f7ad-4fdb-8ed4-34b97b07b671" width="500" height="350"/>
+<img src="https://github.com/user-attachments/assets/0495f403-0fb4-48c2-9bb2-a56868392b55" width="500" height="350"/>
+<img src="https://github.com/user-attachments/assets/cb69e861-dfe1-43c8-93c3-73ed070b2dd5" width="500" height="350"/>
+<img src="https://github.com/user-attachments/assets/79a8c3e5-870c-4fb1-a595-4affbfaa7d15" width="500" height="350"/>
+<img src="https://github.com/user-attachments/assets/f6b1bf4c-9be2-424f-bc6b-e0ab3eeb1df7" width="500" height="350"/>
 
-![img_25.png](./readme/img_25.png)
+#### 점주
+<img src="https://github.com/user-attachments/assets/ee014252-0fba-449c-9504-a1ea5d64d577" width="500" height="350"/>
+<img src="https://github.com/user-attachments/assets/f119b459-72eb-4308-80db-c24f78c91d99" width="500" height="350"/>
+<img src="https://github.com/user-attachments/assets/baf13589-20c6-404f-a5eb-fc94e55d0b75" width="500" height="350"/>
+<img src="https://github.com/user-attachments/assets/5495b030-1845-41d0-a8b8-f59a56f4fc77" width="500" height="350"/>
+<img src="https://github.com/user-attachments/assets/188d1614-45e6-4dbd-8882-51841eb87a3f" width="500" height="350"/>
+<img src="https://github.com/user-attachments/assets/bffe4cbd-6a82-4cad-8017-c93f2d08a0fc" width="500" height="350"/>
 
 <br>
 
@@ -237,9 +246,10 @@
 
 <br>
 
-### 결제
+### 결제 <a name = "web_payment"></a>
 
 ![img_27.png](./readme/img_27.png)
+![img_16.png](./readme/img_16.png)
 
 <br>
 
