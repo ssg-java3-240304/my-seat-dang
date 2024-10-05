@@ -42,8 +42,9 @@
     - 더미 데이터 생성
 
 + [변성일](https://github.com/i-Veni-Vidi-Vici)
-    - 카카오톡 결제, 환불
-    - 웨이팅
+  - 웨이팅 기능(점주, 고객)
+  - DB, Data 마이그레이션
+  - Kakao Payment API 결제, 환불
 
 + [박정은](https://github.com/jeongeun1)
     - 매장 상세페이지
