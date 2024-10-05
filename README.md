@@ -88,7 +88,7 @@
 * Naver Map
 
 ### 📈 아키텍처  <a name = "structure"></a>
-![마싯당아키텍처.png](./readme/마싯당아키텍처.png)
+![마싯당아키텍처](https://github.com/user-attachments/assets/25188708-2fe2-44c2-afb1-18deaf95e459)
 
 ## [ 앱 ]
 ### 메인페이지
