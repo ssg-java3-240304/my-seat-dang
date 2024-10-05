@@ -83,7 +83,7 @@
 
 ### 🎨 외부 API <a name = "api"></a>
 * DALL·E 3
-* Daum 주소찾기
+* Daum 주소
 * Kakao Pay
 * Naver Map
 
